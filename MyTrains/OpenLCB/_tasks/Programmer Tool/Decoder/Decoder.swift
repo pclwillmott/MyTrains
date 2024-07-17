@@ -1848,6 +1848,341 @@ public class Decoder : NSObject {
       setBool(cv: .cv_000_000_124, mask: ByteMask.d6, value: value)
     }
   }
+  
+  public var steamChuffMode : SteamChuffMode {
+    get {
+      return (getUInt8(cv: .cv_000_000_057)! == 0) ? .useExternalWheelSensor : .playSteamChuffsAccordingToSpeed
+    }
+    set(value) {
+      if value != steamChuffMode {
+        setUInt8(cv: .cv_000_000_057, value: value == .useExternalWheelSensor ? 0 : 1)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+  
+  public var distanceOfSteamChuffsAtSpeedStep1 : UInt8 {
+    get {
+      return getUInt8(cv: .cv_000_000_057)!
+    }
+    set(value) {
+      if value != distanceOfSteamChuffsAtSpeedStep1 {
+        setUInt8(cv: .cv_000_000_057, value: value)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+  
+  public var distanceOfSteamChuffsAtSpeedStep1InSeconds : Double {
+    return Double(distanceOfSteamChuffsAtSpeedStep1) * 0.032
+  }
+  
+  public var steamChuffAdjustmentAtHigherSpeedSteps : UInt8 {
+    get {
+      return getUInt8(cv: .cv_000_000_058)!
+    }
+    set(value) {
+      if value != steamChuffAdjustmentAtHigherSpeedSteps {
+        setUInt8(cv: .cv_000_000_058, value: value)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+  
+  public var isSecondaryTrimmerEnabled : Bool {
+    get {
+      return getUInt8(cv: .cv_000_000_250)! != 0
+    }
+    set(value) {
+      if value != isSecondaryTrimmerEnabled {
+        setUInt8(cv: .cv_000_000_250, value: value ? 1 : 0)
+        delegate?.reloadSettings!(self)
+      }
+    }
+  }
+  
+  public var secondaryTriggerDistanceReduction : UInt8 {
+    get {
+      return getUInt8(cv: .cv_000_000_250)!
+    }
+    set(value) {
+      if value != secondaryTriggerDistanceReduction {
+        setUInt8(cv: .cv_000_000_250, value: value)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+
+  public var secondaryTriggerDistanceReductionAmount : Double {
+    return Double(secondaryTriggerDistanceReduction) * 0.001
+  }
+  
+  public var isMinimumDistanceOfSteamChuffsEnabled : Bool {
+    get {
+      return getUInt8(cv: .cv_000_000_249)! != 0
+    }
+    set(value) {
+      if value != isMinimumDistanceOfSteamChuffsEnabled {
+        setUInt8(cv: .cv_000_000_249, value: value ? 1 : 0)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+  
+  public var minimumDistanceOfSteamChuffs : UInt8 {
+    get {
+      return getUInt8(cv: .cv_000_000_249)!
+    }
+    set(value) {
+      if value != minimumDistanceOfSteamChuffs {
+        setUInt8(cv: .cv_000_000_249, value: value)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+
+  public var minimumDistanceOfSteamChuffsInSeconds : Double {
+    return Double(minimumDistanceOfSteamChuffs) * 0.001
+  }
+  
+  public var triggerImpulsesPerSteamChuff : UInt8 {
+    get {
+      return getUInt8(cv: .cv_000_000_058)!
+    }
+    set(value) {
+      if value != triggerImpulsesPerSteamChuff {
+        setUInt8(cv: .cv_000_000_058, value: value)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+  
+  public var divideTriggerImpulsesInTwoIfShuntingModeEnabled : Bool {
+    get {
+      return getBool(cv: .cv_000_000_122, mask: ByteMask.d3)!
+    }
+    set(value) {
+      setBool(cv: .cv_000_000_122, mask: ByteMask.d3, value: value)
+    }
+  }
+  
+  public var masterVolume : UInt8 {
+    get {
+      return getUInt8(cv: .cv_000_000_063)!
+    }
+    set(value) {
+      if value != masterVolume {
+        setUInt8(cv: .cv_000_000_063, value: value)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+
+  public var masterVolumePercentage : Double {
+    return Double(masterVolume) / 128.0 * 100.0
+  }
+  
+  public var fadeSoundVolumeReduction : UInt8 {
+    get {
+      return getUInt8(cv: .cv_000_000_133)!
+    }
+    set(value) {
+      if value != fadeSoundVolumeReduction {
+        setUInt8(cv: .cv_000_000_133, value: value)
+        delegate?.reloadSettings!(self)
+      }
+    }
+  }
+
+  public var fadeSoundVolumeReductionPercentage : Double {
+    return Double(fadeSoundVolumeReduction) / 128.0 * 100.0
+  }
+  
+  public var soundFadeInFadeOutTime : UInt8 {
+    get {
+      return getUInt8(cv: .cv_000_000_135)!
+    }
+    set(value) {
+      if value != soundFadeInFadeOutTime {
+        setUInt8(cv: .cv_000_000_135, value: value)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+  
+  public var soundFadeInFadeOutTimeInSeconds : Double {
+    return Double(soundFadeInFadeOutTime)
+  }
+
+  public var toneBass : UInt8 {
+    get {
+      return getUInt8(cv: .cv_000_000_196)!
+    }
+    set(value) {
+      if value != toneBass {
+        setUInt8(cv: .cv_000_000_196, value: value)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+
+  public var toneBassdB : Double {
+    return (Double(toneBass) - 16.0) * 10.0 / 16.0
+  }
+
+  public var toneTreble : UInt8 {
+    get {
+      return getUInt8(cv: .cv_000_000_197)!
+    }
+    set(value) {
+      if value != toneTreble {
+        setUInt8(cv: .cv_000_000_197, value: value)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+
+  public var toneTrebledB : Double {
+    return (Double(toneTreble) - 16.0) * 10.0 / 16.0
+  }
+  
+  public var brakeSoundSwitchingOnThreshold : UInt8 {
+    get {
+      return getUInt8(cv: .cv_000_000_064)!
+    }
+    set(value) {
+      if value != brakeSoundSwitchingOnThreshold {
+        setUInt8(cv: .cv_000_000_064, value: value)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+
+  public var brakeSoundSwitchingOffThreshold : UInt8 {
+    get {
+      return getUInt8(cv: .cv_000_000_065)!
+    }
+    set(value) {
+      if value != brakeSoundSwitchingOffThreshold {
+        setUInt8(cv: .cv_000_000_065, value: value)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+  
+  public var soundControlBasis : SoundControlBasis {
+    get {
+      return getUInt8(cv: .cv_000_000_200)! == 0 ? .accelerationAndBrakeTime : .accelerationAndBrakeTimeAndTrainLoad
+    }
+    set(value) {
+      if value != soundControlBasis {
+        setUInt8(cv: .cv_000_000_200, value: value == .accelerationAndBrakeTime ? 0 : 1)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+  
+  public var trainLoadAtLowSpeed : UInt8 {
+    get {
+      return getUInt8(cv: .cv_000_000_200)!
+    }
+    set(value) {
+      if value != trainLoadAtLowSpeed {
+        setUInt8(cv: .cv_000_000_200, value: value)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+
+  public var trainLoadAtLowSpeedPercentage : Double {
+    return Double(trainLoadAtLowSpeed) / 255.0 * 100.0
+  }
+  
+  public var trainLoadAtHighSpeed : UInt8 {
+    get {
+      return getUInt8(cv: .cv_000_000_201)!
+    }
+    set(value) {
+      if value != trainLoadAtHighSpeed {
+        setUInt8(cv: .cv_000_000_201, value: value)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+
+  public var trainLoadAtHighSpeedPercentage : Double {
+    return Double(trainLoadAtHighSpeed) / 255.0 * 100.0
+  }
+  
+  public var isThresholdForLoadOperationEnabled : Bool {
+    get {
+      return getUInt8(cv: .cv_000_000_202)! != 0
+    }
+    set(value) {
+      if value != isThresholdForLoadOperationEnabled {
+        setUInt8(cv: .cv_000_000_202, value: value ? 1 : 0)
+        delegate?.reloadSettings!(self)
+      }
+    }
+  }
+  
+  public var thresholdForLoadOperation : UInt8 {
+    get {
+      return getUInt8(cv: .cv_000_000_202)!
+    }
+    set(value) {
+      if value != thresholdForLoadOperation {
+        setUInt8(cv: .cv_000_000_202, value: value)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+  
+  public var loadOperationTriggeredFunction : TriggeredFunction {
+    get {
+      return TriggeredFunction(rawValue: getUInt8(cv: .cv_000_000_204)!)!
+    }
+    set(value) {
+      if value != loadOperationTriggeredFunction {
+        setUInt8(cv: .cv_000_000_204, value: value.rawValue)
+      }
+    }
+  }
+
+  public var isThresholdForIdleOperationEnabled : Bool {
+    get {
+      return getUInt8(cv: .cv_000_000_203)! != 0
+    }
+    set(value) {
+      if value != isThresholdForIdleOperationEnabled {
+        setUInt8(cv: .cv_000_000_203, value: value ? 1 : 0)
+        delegate?.reloadSettings!(self)
+      }
+    }
+  }
+  
+  public var thresholdForIdleOperation : UInt8 {
+    get {
+      return getUInt8(cv: .cv_000_000_203)!
+    }
+    set(value) {
+      if value != thresholdForIdleOperation {
+        setUInt8(cv: .cv_000_000_203, value: value)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+  
+  public var idleOperationTriggeredFunction : TriggeredFunction {
+    get {
+      return TriggeredFunction(rawValue: getUInt8(cv: .cv_000_000_205)!)!
+    }
+    set(value) {
+      if value != idleOperationTriggeredFunction {
+        setUInt8(cv: .cv_000_000_205, value: value.rawValue)
+      }
+    }
+  }
 
   // MARK: Private Methods
   
@@ -2276,6 +2611,56 @@ public class Decoder : NSObject {
       return "\(motorPulseFrequency)"
     case .enableAutomaticParkingBrake:
       return isAutomaticParkingBrakeEnabled ? "true" : "false"
+    case .steamChuffMode:
+      return steamChuffMode.title
+    case .distanceOfSteamChuffsAtSpeedStep1:
+      return "\(distanceOfSteamChuffsAtSpeedStep1)"
+    case .steamChuffAdjustmentAtHigherSpeedSteps:
+      return "\(steamChuffAdjustmentAtHigherSpeedSteps)"
+    case .triggerImpulsesPerSteamChuff:
+      return "\(triggerImpulsesPerSteamChuff)"
+    case .divideTriggerImpulsesInTwoIfShuntingModeEnabled:
+      return divideTriggerImpulsesInTwoIfShuntingModeEnabled ? "true" : "false"
+    case .enableSecondaryTrigger:
+      return isSecondaryTrimmerEnabled ? "true" : "false"
+    case .secondaryTriggerDistanceReduction:
+      return "\(secondaryTriggerDistanceReduction)"
+    case .enableMinimumDistanceOfSteamChuffs:
+      return isMinimumDistanceOfSteamChuffsEnabled ? "true" : "false"
+    case .minimumDistanceofSteamChuffs:
+      return "\(minimumDistanceOfSteamChuffs)"
+    case .masterVolume:
+      return "\(masterVolume)"
+    case .fadeSoundVolumeReduction:
+      return "\(fadeSoundVolumeReduction)"
+    case .soundFadeOutFadeInTime:
+      return "\(soundFadeInFadeOutTime)"
+    case .soundBass:
+      return "\(toneBass)"
+    case .soundTreble:
+      return "\(toneTreble)"
+    case .brakeSoundSwitchingOnThreshold:
+      return "\(brakeSoundSwitchingOnThreshold)"
+    case .brakeSoundSwitchingOffThreshold:
+      return "\(brakeSoundSwitchingOffThreshold)"
+    case .soundControlBasis:
+      return soundControlBasis.title
+    case .trainLoadAtLowSpeed:
+      return "\(trainLoadAtLowSpeed)"
+    case .trainLoadAtHighSpeed:
+      return "\(trainLoadAtHighSpeed)"
+    case .enableLoadOperationThreshold:
+      return isThresholdForLoadOperationEnabled ? "true" : "false"
+    case .loadOperationThreshold:
+      return "\(thresholdForLoadOperation)"
+    case .loadOperationTriggeredFunction:
+      return loadOperationTriggeredFunction.title
+    case .enableIdleOperationThreshold:
+      return isThresholdForIdleOperationEnabled ? "true" : "false"
+    case .idleOperationThreshold:
+      return "\(thresholdForIdleOperation)"
+    case .idleOperationTriggeredFunction:
+      return idleOperationTriggeredFunction.title
     }
   }
   
@@ -2474,6 +2859,47 @@ public class Decoder : NSObject {
       let x = motorPulseFrequencyInHertz
       formatter.maximumFractionDigits = 2
       return String(localized: "\(formatter.string(from: x as NSNumber)!)Hz")
+    case .distanceOfSteamChuffsAtSpeedStep1:
+      let x = UnitTime.convert(fromValue: distanceOfSteamChuffsAtSpeedStep1InSeconds, fromUnits: .seconds, toUnits: appNode!.unitsTime)
+      formatter.maximumFractionDigits = 2
+      return "\(formatter.string(from: x as NSNumber)!)\(appNode!.unitsTime.symbol)"
+    case .secondaryTriggerDistanceReduction:
+      let x = secondaryTriggerDistanceReductionAmount
+      formatter.maximumFractionDigits = 2
+      return "\(formatter.string(from: x as NSNumber)!)"
+    case .minimumDistanceofSteamChuffs:
+      let x = UnitTime.convert(fromValue: minimumDistanceOfSteamChuffsInSeconds, fromUnits: .seconds, toUnits: appNode!.unitsTime)
+      formatter.maximumFractionDigits = 2
+      return "\(formatter.string(from: x as NSNumber)!)\(appNode!.unitsTime.symbol)"
+    case .masterVolume:
+      let x = masterVolumePercentage
+      formatter.maximumFractionDigits = 2
+      return String(localized: "\(formatter.string(from: x as NSNumber)!)%")
+    case .fadeSoundVolumeReduction:
+      let x = fadeSoundVolumeReductionPercentage
+      formatter.maximumFractionDigits = 2
+      return String(localized: "\(formatter.string(from: x as NSNumber)!)%")
+    case .soundFadeOutFadeInTime:
+      let x = UnitTime.convert(fromValue: soundFadeInFadeOutTimeInSeconds, fromUnits: .seconds, toUnits: appNode!.unitsTime)
+      formatter.maximumFractionDigits = 2
+      return "\(formatter.string(from: x as NSNumber)!)\(appNode!.unitsTime.symbol)"
+    case .soundBass:
+      let x = toneBassdB
+      formatter.maximumFractionDigits = 2
+      return String(localized: "\(formatter.string(from: x as NSNumber)!)dB")
+    case .soundTreble:
+      let x = toneTrebledB
+      formatter.maximumFractionDigits = 2
+      return String(localized: "\(formatter.string(from: x as NSNumber)!)dB")
+    case .trainLoadAtLowSpeed:
+      let x = trainLoadAtLowSpeedPercentage
+      formatter.maximumFractionDigits = 2
+      return String(localized: "\(formatter.string(from: x as NSNumber)!)%")
+    case .trainLoadAtHighSpeed:
+      let x = trainLoadAtHighSpeedPercentage
+      formatter.maximumFractionDigits = 2
+      return String(localized: "\(formatter.string(from: x as NSNumber)!)%")
+
     default:
       return ""
     }
@@ -2491,7 +2917,7 @@ public class Decoder : NSObject {
       guard let _ = UInt32(hex:string) else {
         return false
       }
-    case .locomotiveAddressShort, .consistAddress, .waitingPeriodBeforeDirectionChange, .brakeDistanceLength, .brakeDistanceLengthBackwards, .stoppingPeriod, .accelerationRate, .decelerationRate, .forwardTrim, .reverseTrim, .gearboxBacklashCompensation, .accelerationAdjustment, .decelerationAdjustment, .shuntingModeTrim, .acAnalogModeStartVoltage, .acAnalogModeMaximumSpeedVoltage, .dcAnalogModeStartVoltage, .dcAnalogModeMaximumSpeedVoltage, .analogMotorHysteresisVoltage, .analogFunctionDifferenceVoltage, .voltageDifferenceIndicatingABCBrakeSection, .abcReducedSpeed, .hluSpeedLimit1, .hluSpeedLimit2, .hluSpeedLimit3, .hluSpeedLimit4, .hluSpeedLimit5, .delayTimeBeforeExitingBrakeSection, .brakeFunction1BrakeTimeReduction, .brakeFunction2BrakeTimeReduction, .brakeFunction3BrakeTimeReduction, .userId1, .userId2, .loadAdjustmentOptionalLoad, .loadAdjustmentPrimaryLoad, .timeToBridgePowerInterruption, .maximumSpeedWhenBrakeFunction1Active, .maximumSpeedWhenBrakeFunction2Active, .maximumSpeedWhenBrakeFunction3Active, .frequencyForBlinkingEffects, .gradeCrossingHoldingTime, .fadeInTimeOfLightEffects, .fadeOutTimeOfLightEffects, .logicalFunctionDimmerBrightnessReduction, .automaticUncouplingSpeed, .automaticUncouplingPushTime, .automaticUncouplingWaitTime, .automaticUncouplingMoveTime, .smokeUnitTimeUntilPowerOff, .smokeUnitFanSpeedTrim, .smokeUnitTemperatureTrim, .smokeUnitPreheatingTemperatureForSecondarySmokeUnits, .smokeChuffsDurationRelativeToTriggerDistance, .smokeChuffsMinimumDuration, .smokeChuffsMaximumDuration, .minimumSpeed, .maximumSpeed, .regulationReference, .regulationParameterK, .regulationParameterI, .regulationParameterKSlow, .largestInternalSpeedStepThatUsesKSlow, .regulationInfluenceDuringSlowSpeed, .slowSpeedBackEMFSamplingPeriod, .fullSpeedBackEMFSamplingPeriod, .slowSpeedLengthOfMeasurementGap, .fullSpeedLengthOfMeasurementGap, .motorCurrentLimiterLimit, .motorPulseFrequency:
+    case .locomotiveAddressShort, .consistAddress, .waitingPeriodBeforeDirectionChange, .brakeDistanceLength, .brakeDistanceLengthBackwards, .stoppingPeriod, .accelerationRate, .decelerationRate, .forwardTrim, .reverseTrim, .gearboxBacklashCompensation, .accelerationAdjustment, .decelerationAdjustment, .shuntingModeTrim, .acAnalogModeStartVoltage, .acAnalogModeMaximumSpeedVoltage, .dcAnalogModeStartVoltage, .dcAnalogModeMaximumSpeedVoltage, .analogMotorHysteresisVoltage, .analogFunctionDifferenceVoltage, .voltageDifferenceIndicatingABCBrakeSection, .abcReducedSpeed, .hluSpeedLimit1, .hluSpeedLimit2, .hluSpeedLimit3, .hluSpeedLimit4, .hluSpeedLimit5, .delayTimeBeforeExitingBrakeSection, .brakeFunction1BrakeTimeReduction, .brakeFunction2BrakeTimeReduction, .brakeFunction3BrakeTimeReduction, .userId1, .userId2, .loadAdjustmentOptionalLoad, .loadAdjustmentPrimaryLoad, .timeToBridgePowerInterruption, .maximumSpeedWhenBrakeFunction1Active, .maximumSpeedWhenBrakeFunction2Active, .maximumSpeedWhenBrakeFunction3Active, .frequencyForBlinkingEffects, .gradeCrossingHoldingTime, .fadeInTimeOfLightEffects, .fadeOutTimeOfLightEffects, .logicalFunctionDimmerBrightnessReduction, .automaticUncouplingSpeed, .automaticUncouplingPushTime, .automaticUncouplingWaitTime, .automaticUncouplingMoveTime, .smokeUnitTimeUntilPowerOff, .smokeUnitFanSpeedTrim, .smokeUnitTemperatureTrim, .smokeUnitPreheatingTemperatureForSecondarySmokeUnits, .smokeChuffsDurationRelativeToTriggerDistance, .smokeChuffsMinimumDuration, .smokeChuffsMaximumDuration, .minimumSpeed, .maximumSpeed, .regulationReference, .regulationParameterK, .regulationParameterI, .regulationParameterKSlow, .largestInternalSpeedStepThatUsesKSlow, .regulationInfluenceDuringSlowSpeed, .slowSpeedBackEMFSamplingPeriod, .fullSpeedBackEMFSamplingPeriod, .slowSpeedLengthOfMeasurementGap, .fullSpeedLengthOfMeasurementGap, .motorCurrentLimiterLimit, .motorPulseFrequency, .distanceOfSteamChuffsAtSpeedStep1, .steamChuffAdjustmentAtHigherSpeedSteps, .triggerImpulsesPerSteamChuff, .secondaryTriggerDistanceReduction, .minimumDistanceofSteamChuffs, .masterVolume, .soundFadeOutFadeInTime, .fadeSoundVolumeReduction, .soundBass, .soundTreble, .trainLoadAtLowSpeed, .trainLoadAtHighSpeed, .idleOperationThreshold, .loadOperationThreshold:
       guard let value = UInt8(string), Double(value) >= property.minValue && Double(value) <= property.maxValue else {
         return false
       }
@@ -2756,6 +3182,56 @@ public class Decoder : NSObject {
       motorPulseFrequency = UInt8(string)!
     case .enableAutomaticParkingBrake:
       isAutomaticParkingBrakeEnabled = string == "true"
+    case .steamChuffMode:
+      steamChuffMode = SteamChuffMode(title: string)!
+    case .distanceOfSteamChuffsAtSpeedStep1:
+      distanceOfSteamChuffsAtSpeedStep1 = UInt8(string)!
+    case .steamChuffAdjustmentAtHigherSpeedSteps:
+      steamChuffAdjustmentAtHigherSpeedSteps = UInt8(string)!
+    case .triggerImpulsesPerSteamChuff:
+      triggerImpulsesPerSteamChuff = UInt8(string)!
+    case .divideTriggerImpulsesInTwoIfShuntingModeEnabled:
+      divideTriggerImpulsesInTwoIfShuntingModeEnabled = string == "true"
+    case .enableSecondaryTrigger:
+      isSecondaryTrimmerEnabled = string == "true"
+    case .secondaryTriggerDistanceReduction:
+      secondaryTriggerDistanceReduction = UInt8(string)!
+    case .enableMinimumDistanceOfSteamChuffs:
+      isMinimumDistanceOfSteamChuffsEnabled = string == "true"
+    case .minimumDistanceofSteamChuffs:
+      minimumDistanceOfSteamChuffs = UInt8(string)!
+    case .masterVolume:
+      masterVolume = UInt8(string)!
+    case .fadeSoundVolumeReduction:
+      fadeSoundVolumeReduction = UInt8(string)!
+    case .soundFadeOutFadeInTime:
+      soundFadeInFadeOutTime = UInt8(string)!
+    case .soundBass:
+      toneBass = UInt8(string)!
+    case .soundTreble:
+      toneTreble = UInt8(string)!
+    case .brakeSoundSwitchingOnThreshold:
+      brakeSoundSwitchingOnThreshold = UInt8(string)!
+    case .brakeSoundSwitchingOffThreshold:
+      brakeSoundSwitchingOffThreshold = UInt8(string)!
+    case .soundControlBasis:
+      soundControlBasis = SoundControlBasis(title: string)!
+    case .trainLoadAtLowSpeed:
+      trainLoadAtLowSpeed = UInt8(string)!
+    case .trainLoadAtHighSpeed:
+      trainLoadAtHighSpeed = UInt8(string)!
+    case .enableLoadOperationThreshold:
+      isThresholdForLoadOperationEnabled = string == "true"
+    case .loadOperationThreshold:
+      thresholdForLoadOperation = UInt8(string)!
+    case .loadOperationTriggeredFunction:
+      loadOperationTriggeredFunction = TriggeredFunction(title: string)!
+    case .enableIdleOperationThreshold:
+      isThresholdForIdleOperationEnabled = string == "true"
+    case .idleOperationThreshold:
+      thresholdForIdleOperation = UInt8(string)!
+    case .idleOperationTriggeredFunction:
+      idleOperationTriggeredFunction = TriggeredFunction(title: string)!
     default:
       break
     }

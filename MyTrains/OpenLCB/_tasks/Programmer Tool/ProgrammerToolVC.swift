@@ -773,6 +773,44 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
     if !decoder.isMotorCurrentLimiterEnabled {
       commonProperties.remove(.motorCurrentLimiterLimit)
     }
+    
+    if decoder.steamChuffMode == .playSteamChuffsAccordingToSpeed {
+      commonProperties.remove(.triggerImpulsesPerSteamChuff)
+      commonProperties.remove(.divideTriggerImpulsesInTwoIfShuntingModeEnabled)
+    }
+    else {
+      commonProperties.remove(.distanceOfSteamChuffsAtSpeedStep1)
+      commonProperties.remove(.steamChuffAdjustmentAtHigherSpeedSteps)
+    }
+    
+    if !decoder.isSecondaryTrimmerEnabled {
+      commonProperties.remove(.secondaryTriggerDistanceReduction)
+    }
+    
+    if !decoder.isMinimumDistanceOfSteamChuffsEnabled {
+      commonProperties.remove(.minimumDistanceofSteamChuffs)
+    }
+    
+    if decoder.soundControlBasis == .accelerationAndBrakeTime {
+      commonProperties.remove(.trainLoadAtLowSpeed)
+      commonProperties.remove(.trainLoadAtHighSpeed)
+      commonProperties.remove(.enableLoadOperationThreshold)
+      commonProperties.remove(.loadOperationThreshold)
+      commonProperties.remove(.loadOperationTriggeredFunction)
+      commonProperties.remove(.enableIdleOperationThreshold)
+      commonProperties.remove(.idleOperationThreshold)
+      commonProperties.remove(.idleOperationTriggeredFunction)
+    }
+    else {
+      if !decoder.isThresholdForLoadOperationEnabled {
+        commonProperties.remove(.loadOperationThreshold)
+        commonProperties.remove(.loadOperationTriggeredFunction)
+      }
+      if !decoder.isThresholdForIdleOperationEnabled {
+        commonProperties.remove(.idleOperationThreshold)
+        commonProperties.remove(.idleOperationTriggeredFunction)
+      }
+    }
 
     var usedFields : [ProgrammerToolSettingsPropertyField] = []
     

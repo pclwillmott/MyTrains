@@ -34,6 +34,9 @@
 		DA0D3E0E2A487A780042748C /* ComboBoxSimpleDS.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0D3E0D2A487A780042748C /* ComboBoxSimpleDS.swift */; };
 		DA0D3E102A48AA6F0042748C /* OpenLCBThrottleState.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0D3E0F2A48AA6F0042748C /* OpenLCBThrottleState.swift */; };
 		DA0DD2152A2CA4AB003376F8 /* ViewNodeInfoMemorySpaceInfoTVDS.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0DD2142A2CA4AB003376F8 /* ViewNodeInfoMemorySpaceInfoTVDS.swift */; };
+		DA0F378E2C47D471002C66D8 /* SteamChuffMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0F378D2C47D471002C66D8 /* SteamChuffMode.swift */; };
+		DA0F37902C47E9D8002C66D8 /* SoundControlBasis.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0F378F2C47E9D8002C66D8 /* SoundControlBasis.swift */; };
+		DA0F37922C47EFA4002C66D8 /* TriggeredFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0F37912C47EFA4002C66D8 /* TriggeredFunction.swift */; };
 		DA1003232A7E81F7004CC86C /* OpenLCBProgrammingMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA1003222A7E81F7004CC86C /* OpenLCBProgrammingMode.swift */; };
 		DA1003252A7E8F62004CC86C /* LocoNetProgrammingMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA1003242A7E8F62004CC86C /* LocoNetProgrammingMode.swift */; };
 		DA123A512A50431B000E63E2 /* LocoNetGateway.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA123A502A50431B000E63E2 /* LocoNetGateway.swift */; };
@@ -498,6 +501,9 @@
 		DA0D3E0D2A487A780042748C /* ComboBoxSimpleDS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComboBoxSimpleDS.swift; sourceTree = "<group>"; };
 		DA0D3E0F2A48AA6F0042748C /* OpenLCBThrottleState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBThrottleState.swift; sourceTree = "<group>"; };
 		DA0DD2142A2CA4AB003376F8 /* ViewNodeInfoMemorySpaceInfoTVDS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewNodeInfoMemorySpaceInfoTVDS.swift; sourceTree = "<group>"; };
+		DA0F378D2C47D471002C66D8 /* SteamChuffMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SteamChuffMode.swift; sourceTree = "<group>"; };
+		DA0F378F2C47E9D8002C66D8 /* SoundControlBasis.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundControlBasis.swift; sourceTree = "<group>"; };
+		DA0F37912C47EFA4002C66D8 /* TriggeredFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TriggeredFunction.swift; sourceTree = "<group>"; };
 		DA1003222A7E81F7004CC86C /* OpenLCBProgrammingMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBProgrammingMode.swift; sourceTree = "<group>"; };
 		DA1003242A7E8F62004CC86C /* LocoNetProgrammingMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocoNetProgrammingMode.swift; sourceTree = "<group>"; };
 		DA123A502A50431B000E63E2 /* LocoNetGateway.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocoNetGateway.swift; sourceTree = "<group>"; };
@@ -1055,6 +1061,9 @@
 				DAE524FB2C454B66000FC319 /* ClassLightLogicSequenceLength.swift */,
 				DAE524FD2C454D60000FC319 /* DecoderSensorSettings.swift */,
 				DAE524FF2C459854000FC319 /* ESUDecoderPhysicalOutput.swift */,
+				DA0F378D2C47D471002C66D8 /* SteamChuffMode.swift */,
+				DA0F378F2C47E9D8002C66D8 /* SoundControlBasis.swift */,
+				DA0F37912C47EFA4002C66D8 /* TriggeredFunction.swift */,
 				DAE8DD52286751BE0097C2D1 /* xManufacturer.swift */,
 				DA5A9F8F295C89FC00950479 /* NumberBase.swift */,
 				DA6E28E0285F86B900772641 /* Orientation.swift */,
@@ -2251,6 +2260,8 @@
 				DAD394C12B2E238A00403040 /* OptionSwitch.swift in Sources */,
 				DAB4FF5E2854F8CF00D74920 /* LocomotiveType.swift in Sources */,
 				DA9FDD012B935908003C6672 /* MyTrainsViewController.swift in Sources */,
+				DA0F378E2C47D471002C66D8 /* SteamChuffMode.swift in Sources */,
+				DA0F37922C47EFA4002C66D8 /* TriggeredFunction.swift in Sources */,
 				DAA83DEB272C37670075CBCD /* AppDelegate.swift in Sources */,
 				DAF6778C2B432372009707A4 /* CDIStackViewManagerDelegate.swift in Sources */,
 				DAD7750A2BCFE73600D8AD55 /* SwitchboardItemPalette.swift in Sources */,
@@ -2281,6 +2292,7 @@
 				DA8C29EA2C382408001755AB /* ProgrammerToolSettingsGroup.swift in Sources */,
 				DAD554E82BCEBA6B004E17DF /* MyIcon.swift in Sources */,
 				DA1B949D2A3DE89300E2CE6A /* ClientConnection.swift in Sources */,
+				DA0F37902C47E9D8002C66D8 /* SoundControlBasis.swift in Sources */,
 				DA0DD2152A2CA4AB003376F8 /* ViewNodeInfoMemorySpaceInfoTVDS.swift in Sources */,
 				DA31688F2BCAE75100059B6C /* SwitchboardShape.swift in Sources */,
 				DAE8DD55286754C00097C2D1 /* TrackCode.swift in Sources */,

@@ -127,6 +127,21 @@
     " [CV56]" : {
 
     },
+    " [CV57]" : {
+
+    },
+    " [CV58]" : {
+
+    },
+    " [CV63]" : {
+
+    },
+    " [CV64]" : {
+
+    },
+    " [CV65]" : {
+
+    },
     " [CV66]" : {
 
     },
@@ -190,6 +205,9 @@
     " [CV122.2]" : {
 
     },
+    " [CV122.3]" : {
+
+    },
     " [CV122.5]" : {
 
     },
@@ -238,7 +256,13 @@
     " [CV132]" : {
 
     },
+    " [CV133]" : {
+
+    },
     " [CV134]" : {
+
+    },
+    " [CV135]" : {
 
     },
     " [CV138]" : {
@@ -304,7 +328,31 @@
     " [CV195, CV194, CV193, CV192]" : {
 
     },
+    " [CV196]" : {
+
+    },
+    " [CV197]" : {
+
+    },
     " [CV199]" : {
+
+    },
+    " [CV200]" : {
+
+    },
+    " [CV201]" : {
+
+    },
+    " [CV202]" : {
+
+    },
+    " [CV203]" : {
+
+    },
+    " [CV204]" : {
+
+    },
+    " [CV205]" : {
 
     },
     " [CV245]" : {
@@ -317,6 +365,12 @@
 
     },
     " [CV248]" : {
+
+    },
+    " [CV249]" : {
+
+    },
+    " [CV250]" : {
 
     },
     " [CV253]" : {
@@ -341,6 +395,9 @@
 
     },
     "%@°C" : {
+
+    },
+    "%@dB" : {
 
     },
     "%@Hz" : {
@@ -822,7 +879,13 @@
     "Acceleration Adjustment." : {
 
     },
+    "Acceleration and brake time" : {
+
+    },
     "Acceleration and Deceleration" : {
+
+    },
+    "Acceleration, brake time, and train load" : {
 
     },
     "Accept" : {
@@ -901,6 +964,12 @@
 
     },
     "Address for consist operation." : {
+
+    },
+    "Adjustment at Higher Speed Steps" : {
+
+    },
+    "Adjustment at higher speed steps." : {
 
     },
     "Agreement" : {
@@ -1331,6 +1400,12 @@
 
     },
     "Basic Settings" : {
+
+    },
+    "Bass" : {
+
+    },
+    "Bass." : {
 
     },
     "Bell" : {
@@ -3064,6 +3139,12 @@
     "Display Protocol" : {
 
     },
+    "Distance of Steam Chuffs at Speed Step 1" : {
+
+    },
+    "Distance of steam chuffs at speed step 1." : {
+
+    },
     "Ditch Lights" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
       "localizations" : {
@@ -3080,6 +3161,12 @@
           }
         }
       }
+    },
+    "Divide Trigger Impulses in Two if Shunting Mode Enabled" : {
+
+    },
+    "Divide trigger impulses in two if shunting mode enabled." : {
+
     },
     "Do not open" : {
 
@@ -3381,6 +3468,12 @@
     "Enable Märklin Motorola protocol." : {
 
     },
+    "Enable Minimum Distance of Steam Chuffs" : {
+
+    },
+    "Enable minimum distance of steam chuffs." : {
+
+    },
     "Enable Motor Current Limiter" : {
 
     },
@@ -3423,6 +3516,12 @@
     "Enable Reverse trimming." : {
 
     },
+    "Enable Secondary Trigger" : {
+
+    },
+    "Enable secondary trigger." : {
+
+    },
     "Enable Selectrix protocol." : {
 
     },
@@ -3430,6 +3529,18 @@
 
     },
     "Enable shunting mode trimming." : {
+
+    },
+    "Enable Threshold for Idle Operation" : {
+
+    },
+    "Enable threshold for idle operation." : {
+
+    },
+    "Enable Threshold for Load Operation" : {
+
+    },
+    "Enable threshold for load operation." : {
 
     },
     "Enabled" : {
@@ -3809,8 +3920,110 @@
     "Exit Zone" : {
       "comment" : "This is used for the title of an input field where the user can enter an event ID."
     },
+    "F0" : {
+
+    },
+    "F1" : {
+
+    },
+    "F2" : {
+
+    },
+    "F3" : {
+
+    },
+    "F4" : {
+
+    },
+    "F5" : {
+
+    },
+    "F6" : {
+
+    },
+    "F7" : {
+
+    },
+    "F8" : {
+
+    },
+    "F9" : {
+
+    },
+    "F10" : {
+
+    },
+    "F11" : {
+
+    },
+    "F12" : {
+
+    },
+    "F13" : {
+
+    },
+    "F14" : {
+
+    },
+    "F15" : {
+
+    },
+    "F16" : {
+
+    },
+    "F17" : {
+
+    },
+    "F18" : {
+
+    },
+    "F19" : {
+
+    },
+    "F20" : {
+
+    },
+    "F21" : {
+
+    },
+    "F22" : {
+
+    },
+    "F23" : {
+
+    },
+    "F24" : {
+
+    },
+    "F25" : {
+
+    },
+    "F26" : {
+
+    },
+    "F27" : {
+
+    },
+    "F28" : {
+
+    },
+    "F29" : {
+
+    },
+    "F30" : {
+
+    },
+    "F31" : {
+
+    },
     "Facing Direction" : {
       "comment" : "This is used for the title of combobox."
+    },
+    "Fade Sound Volume Reduction" : {
+
+    },
+    "Fade sound volume reduction." : {
+
     },
     "Fade-In Time of Light Effects" : {
 
@@ -5267,6 +5480,12 @@
         }
       }
     },
+    "Master Volume" : {
+
+    },
+    "Master volume." : {
+
+    },
     "Maximum Revs" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
       "localizations" : {
@@ -5445,6 +5664,12 @@
     },
     "Minimize" : {
       "comment" : "Used for a menu title"
+    },
+    "Minimum Distance of Steam Chuffs" : {
+
+    },
+    "Minimum distance of steam chuffs." : {
+
     },
     "Minimum period to profile one speed step." : {
       "comment" : "This is used for a tooltip."
@@ -6163,6 +6388,9 @@
     "Platform" : {
       "comment" : "This is used to describe a switchboard item."
     },
+    "Play steam chuffs according to speed" : {
+
+    },
     "Poland" : {
       "comment" : "This is the name of a country."
     },
@@ -6524,6 +6752,12 @@
     },
     "Red" : {
       "comment" : "The name of a color."
+    },
+    "Reduce Secondary Trigger Distance by:" : {
+
+    },
+    "Reduce secondary trigger distance by." : {
+
     },
     "Reed Switch" : {
 
@@ -7386,6 +7620,12 @@
         }
       }
     },
+    "Sound Control Basis" : {
+
+    },
+    "Sound control basis." : {
+
+    },
     "Sound Control Behaviour" : {
 
     },
@@ -7425,6 +7665,12 @@
           }
         }
       }
+    },
+    "Sound Fade-In and Fade-Out Time" : {
+
+    },
+    "Sound fade-in and fade-out time." : {
+
     },
     "Sound Lock" : {
 
@@ -7528,6 +7774,12 @@
           }
         }
       }
+    },
+    "Steam Chuff Mode" : {
+
+    },
+    "Steam chuff mode." : {
+
     },
     "Steam Chuffs" : {
 
@@ -7863,6 +8115,18 @@
           }
         }
       }
+    },
+    "Switching Off Threshold" : {
+
+    },
+    "Switching off threshold." : {
+
+    },
+    "Switching On Threshold" : {
+
+    },
+    "Switching on threshold." : {
+
     },
     "t" : {
       "comment" : "Used for the Throttle menu key equivalent",
@@ -8215,6 +8479,18 @@
         }
       }
     },
+    "Threshold for Idle Operation" : {
+
+    },
+    "Threshold for idle operation." : {
+
+    },
+    "Threshold for Load Operation" : {
+
+    },
+    "threshold for load operation." : {
+
+    },
     "Throttle" : {
       "comment" : "Used for a menu title\nUsed to create a default OpenLCB virtual name",
       "localizations" : {
@@ -8373,6 +8649,18 @@
     "Train direction or directions to profile." : {
       "comment" : "This is used for a tooltip."
     },
+    "Train Load at High Speed" : {
+
+    },
+    "Train load at high speed." : {
+
+    },
+    "Train Load at Low Speed" : {
+
+    },
+    "Train load at low speed." : {
+
+    },
     "Train Move Complete" : {
 
     },
@@ -8407,6 +8695,24 @@
           }
         }
       }
+    },
+    "Treble" : {
+
+    },
+    "Treble." : {
+
+    },
+    "Trigger Impulses per Steam Chuff" : {
+
+    },
+    "Trigger impulses per steam chuff." : {
+
+    },
+    "Triggered Function" : {
+
+    },
+    "Triggered function." : {
+
     },
     "Trimming" : {
 
@@ -8622,6 +8928,9 @@
 
     },
     "Use extended (long) address" : {
+
+    },
+    "Use external wheel sensor" : {
 
     },
     "Use high frequency PWM motor control." : {

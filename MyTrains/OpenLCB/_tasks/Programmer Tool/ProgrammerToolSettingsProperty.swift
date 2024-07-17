@@ -178,6 +178,35 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
   case m4MasterDecoderManufacturer = 90
   case m4MasterDecoderSerialNumber = 91
   
+  // Sound Settings
+  
+  case steamChuffMode = 133
+  case distanceOfSteamChuffsAtSpeedStep1 = 134
+  case triggerImpulsesPerSteamChuff = 140
+  case divideTriggerImpulsesInTwoIfShuntingModeEnabled = 141
+  case steamChuffAdjustmentAtHigherSpeedSteps = 135
+  case enableSecondaryTrigger = 136
+  case secondaryTriggerDistanceReduction = 137
+  case enableMinimumDistanceOfSteamChuffs = 138
+  case minimumDistanceofSteamChuffs = 139
+  case masterVolume = 142
+  case fadeSoundVolumeReduction = 143
+  case soundFadeOutFadeInTime = 144
+  case soundBass = 145
+  case soundTreble = 146
+  case brakeSoundSwitchingOnThreshold = 147
+  case brakeSoundSwitchingOffThreshold = 148
+  case soundControlBasis = 149
+  case trainLoadAtLowSpeed = 150
+  case trainLoadAtHighSpeed = 151
+  case enableLoadOperationThreshold = 152
+  case loadOperationThreshold = 153
+  case loadOperationTriggeredFunction = 154
+  case enableIdleOperationThreshold = 155
+  case idleOperationThreshold = 156
+  case idleOperationTriggeredFunction = 157
+
+  
   // MARK: Public Properties
   
   public var toolTip : String {
@@ -198,7 +227,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
   
   public var minValue : Double {
     switch self {
-    case .locomotiveAddressShort, .consistAddress, .waitingPeriodBeforeDirectionChange, .brakeDistanceLength, .brakeDistanceLengthBackwards, .stoppingPeriod, .accelerationRate, .decelerationRate, .forwardTrim, .reverseTrim, .gearboxBacklashCompensation, .shuntingModeTrim, .automaticUncouplingSpeed, .frequencyForBlinkingEffects, .minimumSpeed, .maximumSpeed, .motorCurrentLimiterLimit:
+    case .locomotiveAddressShort, .consistAddress, .waitingPeriodBeforeDirectionChange, .brakeDistanceLength, .brakeDistanceLengthBackwards, .stoppingPeriod, .accelerationRate, .decelerationRate, .forwardTrim, .reverseTrim, .gearboxBacklashCompensation, .shuntingModeTrim, .automaticUncouplingSpeed, .frequencyForBlinkingEffects, .minimumSpeed, .maximumSpeed, .motorCurrentLimiterLimit, .distanceOfSteamChuffsAtSpeedStep1, .steamChuffAdjustmentAtHigherSpeedSteps, .secondaryTriggerDistanceReduction, .minimumDistanceofSteamChuffs, .triggerImpulsesPerSteamChuff, .soundFadeOutFadeInTime, .trainLoadAtLowSpeed, .loadOperationThreshold, .idleOperationThreshold:
       return 1
     case .slowSpeedBackEMFSamplingPeriod, .fullSpeedBackEMFSamplingPeriod:
       return 25
@@ -219,7 +248,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
       return 126
     case .locomotiveAddressShort, .consistAddress, .accelerationAdjustment, .decelerationAdjustment, .fadeInTimeOfLightEffects, .fadeOutTimeOfLightEffects:
       return 127
-    case .shuntingModeTrim, .logicalFunctionDimmerBrightnessReduction:
+    case .shuntingModeTrim, .logicalFunctionDimmerBrightnessReduction, .fadeSoundVolumeReduction:
       return 128
     case .slowSpeedBackEMFSamplingPeriod, .fullSpeedBackEMFSamplingPeriod:
       return 200
@@ -227,6 +256,12 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
       return 40
     case .motorPulseFrequency:
       return 50
+    case .masterVolume:
+      return 192
+    case .soundFadeOutFadeInTime:
+      return 64
+    case .soundBass, .soundTreble:
+      return 32
     default:
       return 255
     }
@@ -1432,6 +1467,231 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
       .textField,
       []
     ),
+    .steamChuffMode
+    : (
+      String(localized:"Steam Chuff Mode"),
+      String(localized:"Steam chuff mode."),
+      String(localized:" [CV57]"),
+      .steamChuffs,
+      .comboBox,
+      []
+    ),
+    .distanceOfSteamChuffsAtSpeedStep1
+    : (
+      String(localized:"Distance of Steam Chuffs at Speed Step 1"),
+      String(localized:"Distance of steam chuffs at speed step 1."),
+      String(localized:" [CV57]"),
+      .steamChuffs,
+      .textFieldWithInfoWithSlider,
+      []
+    ),
+    .steamChuffAdjustmentAtHigherSpeedSteps
+    : (
+      String(localized:"Adjustment at Higher Speed Steps"),
+      String(localized:"Adjustment at higher speed steps."),
+      String(localized:" [CV58]"),
+      .steamChuffs,
+      .textFieldWithSlider,
+      []
+    ),
+    .triggerImpulsesPerSteamChuff
+    : (
+      String(localized:"Trigger Impulses per Steam Chuff"),
+      String(localized:"Trigger impulses per steam chuff."),
+      String(localized:" [CV58]"),
+      .steamChuffs,
+      .textFieldWithSlider,
+      []
+    ),
+    .divideTriggerImpulsesInTwoIfShuntingModeEnabled
+    : (
+      String(localized:"Divide Trigger Impulses in Two if Shunting Mode Enabled"),
+      String(localized:"Divide trigger impulses in two if shunting mode enabled."),
+      String(localized:" [CV122.3]"),
+      .steamChuffs,
+      .checkBox,
+      []
+    ),
+    .enableSecondaryTrigger
+    : (
+      String(localized:"Enable Secondary Trigger"),
+      String(localized:"Enable secondary trigger."),
+      String(localized:" [CV250]"),
+      .steamChuffs,
+      .checkBox,
+      []
+    ),
+    .secondaryTriggerDistanceReduction
+    : (
+      String(localized:"Reduce Secondary Trigger Distance by:"),
+      String(localized:"Reduce secondary trigger distance by."),
+      String(localized:" [CV250]"),
+      .steamChuffs,
+      .textFieldWithInfoWithSlider,
+      []
+    ),
+    .enableMinimumDistanceOfSteamChuffs
+    : (
+      String(localized:"Enable Minimum Distance of Steam Chuffs"),
+      String(localized:"Enable minimum distance of steam chuffs."),
+      String(localized:" [CV249]"),
+      .steamChuffs,
+      .checkBox,
+      []
+    ),
+    .minimumDistanceofSteamChuffs
+    : (
+      String(localized:"Minimum Distance of Steam Chuffs"),
+      String(localized:"Minimum distance of steam chuffs."),
+      String(localized:" [CV249]"),
+      .steamChuffs,
+      .textFieldWithInfoWithSlider,
+      []
+    ),
+    .masterVolume
+    : (
+      String(localized:"Master Volume"),
+      String(localized:"Master volume."),
+      String(localized:" [CV63]"),
+      .volume,
+      .textFieldWithInfoWithSlider,
+      []
+    ),
+    .fadeSoundVolumeReduction
+    : (
+      String(localized:"Fade Sound Volume Reduction"),
+      String(localized:"Fade sound volume reduction."),
+      String(localized:" [CV133]"),
+      .volume,
+      .textFieldWithInfoWithSlider,
+      []
+    ),
+    .soundFadeOutFadeInTime
+    : (
+      String(localized:"Sound Fade-In and Fade-Out Time"),
+      String(localized:"Sound fade-in and fade-out time."),
+      String(localized:" [CV135]"),
+      .volume,
+      .textFieldWithInfoWithSlider,
+      []
+    ),
+    .soundBass
+    : (
+      String(localized:"Bass"),
+      String(localized:"Bass."),
+      String(localized:" [CV196]"),
+      .toneControl,
+      .textFieldWithInfoWithSlider,
+      []
+    ),
+    .soundTreble
+    : (
+      String(localized:"Treble"),
+      String(localized:"Treble."),
+      String(localized:" [CV197]"),
+      .toneControl,
+      .textFieldWithInfoWithSlider,
+      []
+    ),
+    .brakeSoundSwitchingOnThreshold
+    : (
+      String(localized:"Switching On Threshold"),
+      String(localized:"Switching on threshold."),
+      String(localized:" [CV64]"),
+      .brakeSound,
+      .textFieldWithSlider,
+      []
+    ),
+    .brakeSoundSwitchingOffThreshold
+    : (
+      String(localized:"Switching Off Threshold"),
+      String(localized:"Switching off threshold."),
+      String(localized:" [CV65]"),
+      .brakeSound,
+      .textFieldWithSlider,
+      []
+    ),
+    .soundControlBasis
+    : (
+      String(localized:"Sound Control Basis"),
+      String(localized:"Sound control basis."),
+      String(localized:" [CV200]"),
+      .dynamicSoundControl,
+      .comboBox,
+      []
+    ),
+    .trainLoadAtLowSpeed
+    : (
+      String(localized:"Train Load at Low Speed"),
+      String(localized:"Train load at low speed."),
+      String(localized:" [CV200]"),
+      .dynamicSoundControl,
+      .textFieldWithInfoWithSlider,
+      []
+    ),
+    .trainLoadAtHighSpeed
+    : (
+      String(localized:"Train Load at High Speed"),
+      String(localized:"Train load at high speed."),
+      String(localized:" [CV201]"),
+      .dynamicSoundControl,
+      .textFieldWithInfoWithSlider,
+      []
+    ),
+    .enableLoadOperationThreshold
+    : (
+      String(localized:"Enable Threshold for Load Operation"),
+      String(localized:"Enable threshold for load operation."),
+      String(localized:" [CV202]"),
+      .dynamicSoundControl,
+      .checkBox,
+      []
+    ),
+    .loadOperationThreshold
+    : (
+      String(localized:"Threshold for Load Operation"),
+      String(localized:"threshold for load operation."),
+      String(localized:" [CV202]"),
+      .dynamicSoundControl,
+      .textFieldWithSlider,
+      []
+    ),
+    .loadOperationTriggeredFunction
+    : (
+      String(localized:"Triggered Function"),
+      String(localized:"Triggered function."),
+      String(localized:" [CV204]"),
+      .dynamicSoundControl,
+      .comboBox,
+      []
+    ),
+    .enableIdleOperationThreshold
+    : (
+      String(localized:"Enable Threshold for Idle Operation"),
+      String(localized:"Enable threshold for idle operation."),
+      String(localized:" [CV203]"),
+      .dynamicSoundControl,
+      .checkBox,
+      []
+    ),
+    .idleOperationThreshold
+    : (
+      String(localized:"Threshold for Idle Operation"),
+      String(localized:"Threshold for idle operation."),
+      String(localized:" [CV203]"),
+      .dynamicSoundControl,
+      .textFieldWithSlider,
+      []
+    ),
+    .idleOperationTriggeredFunction
+    : (
+      String(localized:"Triggered Function"),
+      String(localized:"Triggered function."),
+      String(localized:" [CV205]"),
+      .dynamicSoundControl,
+      .comboBox,
+      []
+    ),
 
   ]
 
@@ -1564,6 +1824,12 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
       ClassLightLogicSequenceLength.populate(comboBox: comboBox)
     case .decoderSensorSettings:
       DecoderSensorSettings.populate(comboBox: comboBox)
+    case .steamChuffMode:
+      SteamChuffMode.populate(comboBox: comboBox)
+    case .soundControlBasis:
+      SoundControlBasis.populate(comboBox: comboBox)
+    case .idleOperationTriggeredFunction, .loadOperationTriggeredFunction:
+      TriggeredFunction.populate(comboBox: comboBox)
     default:
       break
     }
