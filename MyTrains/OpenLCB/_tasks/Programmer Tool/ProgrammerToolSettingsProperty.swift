@@ -25,9 +25,11 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
   case enableDCCConsistAddress = 7
   case consistAddress = 8
   case consistReverseDirection = 9
+  case consistFunctions = 163
   
   // Analog Settings
   
+  case analogModeActiveFunctions = 164
   case enableACAnalogMode = 10
   case acAnalogModeStartVoltage = 11
   case acAnalogModeMaximumSpeedVoltage = 12
@@ -132,8 +134,18 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
   
   // Compatibility
   
+  case enableSerialFunctionModeF1toF8ForLGBMTS = 158
+  case enableSupportForBroadwayLimitedSteamEngineControl = 159
+  case enableSUSIMaster = 160
+  case susiWarning = 161
+  case enableSUSISlave = 162
+  
   // Motor Settings
   
+  case esuSpeedTable = 165
+  case speedTableIndex = 166
+  case speedTableEntryValue = 167
+  case speedTablePreset = 168
   case minimumSpeed = 112
   case maximumSpeed = 113
   case emfBasicSettings = 130
@@ -227,7 +239,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
   
   public var minValue : Double {
     switch self {
-    case .locomotiveAddressShort, .consistAddress, .waitingPeriodBeforeDirectionChange, .brakeDistanceLength, .brakeDistanceLengthBackwards, .stoppingPeriod, .accelerationRate, .decelerationRate, .forwardTrim, .reverseTrim, .gearboxBacklashCompensation, .shuntingModeTrim, .automaticUncouplingSpeed, .frequencyForBlinkingEffects, .minimumSpeed, .maximumSpeed, .motorCurrentLimiterLimit, .distanceOfSteamChuffsAtSpeedStep1, .steamChuffAdjustmentAtHigherSpeedSteps, .secondaryTriggerDistanceReduction, .minimumDistanceofSteamChuffs, .triggerImpulsesPerSteamChuff, .soundFadeOutFadeInTime, .trainLoadAtLowSpeed, .loadOperationThreshold, .idleOperationThreshold:
+    case .locomotiveAddressShort, .consistAddress, .waitingPeriodBeforeDirectionChange, .brakeDistanceLength, .brakeDistanceLengthBackwards, .stoppingPeriod, .accelerationRate, .decelerationRate, .forwardTrim, .reverseTrim, .gearboxBacklashCompensation, .shuntingModeTrim, .automaticUncouplingSpeed, .frequencyForBlinkingEffects, .minimumSpeed, .maximumSpeed, .motorCurrentLimiterLimit, .distanceOfSteamChuffsAtSpeedStep1, .steamChuffAdjustmentAtHigherSpeedSteps, .secondaryTriggerDistanceReduction, .minimumDistanceofSteamChuffs, .triggerImpulsesPerSteamChuff, .soundFadeOutFadeInTime, .trainLoadAtLowSpeed, .loadOperationThreshold, .idleOperationThreshold, .speedTableIndex, .speedTableEntryValue:
       return 1
     case .slowSpeedBackEMFSamplingPeriod, .fullSpeedBackEMFSamplingPeriod:
       return 25
@@ -262,6 +274,8 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
       return 64
     case .soundBass, .soundTreble:
       return 32
+    case .speedTableIndex:
+      return 28
     default:
       return 255
     }
@@ -358,6 +372,24 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
       String(localized:" [CV19.7]"),
       .dccConsistAddress,
       .checkBox,
+      []
+    ),
+    .consistFunctions
+    : (
+      String(localized:"Select the functions that should respond to the consist address"),
+      String(localized:"Select the functions that should respond to the consist address."),
+      String(localized:" [CV21, CV22, CV109, CV110]"),
+      .activateFunctionsInConsistMode,
+      .functionsConsistMode,
+      []
+    ),
+    .analogModeActiveFunctions
+    : (
+      String(localized:"Activate the following functions while driving in analog mode"),
+      String(localized:"Activate the following functions while driving in analog mode."),
+      String(localized:" [CV13, CV14]"),
+      .activeFunctionsInAnalogMode,
+      .functionsAnalogMode,
       []
     ),
     .enableACAnalogMode
@@ -1134,6 +1166,87 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
       .textField,
       []
     ),
+    .enableSerialFunctionModeF1toF8ForLGBMTS
+    : (
+      String(localized:"Serial Function Mode for LGB MTS"),
+      String(localized:"Serial function mode for LGB MTS."),
+      String(localized:" [CV49.5]"),
+      .settingsForCertainCommandStations,
+      .checkBox,
+      []
+    ),
+    .enableSupportForBroadwayLimitedSteamEngineControl
+    : (
+      String(localized:"Enable Support for Broadway Limited Steam Engine Control"),
+      String(localized:"Enable support for Broadway Limited Steam Engine Control."),
+      String(localized:" [CV122.7]"),
+      .broadwayLimitedSteamEngineControl,
+      .checkBox,
+      []
+    ),
+    .enableSUSIMaster
+    : (
+      String(localized:"Enable Serial User Standard Interface (SUSI Master)"),
+      String(localized:"Enable serial user standard interface (SUSI Master)."),
+      String(localized:" [CV124.3]"),
+      .serialUserStandardInterface,
+      .checkBox,
+      []
+    ),
+    .susiWarning
+    : (
+      String(localized:""),
+      String(localized:""),
+      String(localized:""),
+      .serialUserStandardInterface,
+      .warning,
+      []
+    ),
+    .enableSUSISlave
+    : (
+      String(localized:"Enable Serial User Standard Interface (SUSI Slave)"),
+      String(localized:"Enable serial user standard interface (SUSI Slave)."),
+      String(localized:" [CV124.1]"),
+      .serialUserStandardInterface,
+      .checkBox,
+      []
+    ),
+    .esuSpeedTable
+    : (
+      String(localized:""),
+      String(localized:""),
+      String(localized:" [CV67 to CV94]"),
+      .speedTable,
+      .esuSpeedTable,
+      []
+    ),
+    .speedTableIndex
+    : (
+      String(localized:"Speed Table Index"),
+      String(localized:"Speed table index"),
+      String(localized:""),
+      .speedTable,
+      .comboBox,
+      []
+    ),
+    .speedTableEntryValue
+    : (
+      String(localized:"Value"),
+      String(localized:"Value"),
+      String(localized:""),
+      .speedTable,
+      .textField,
+      []
+    ),
+    .speedTablePreset
+    : (
+      String(localized:"Preset"),
+      String(localized:"Preset"),
+      String(localized:""),
+      .speedTable,
+      .comboBox,
+      []
+    ),
     .minimumSpeed
     : (
       String(localized:"Minimum Speed"),
@@ -1750,6 +1863,10 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
         info.fontSize = textFontSize
         field.customView = info
         field.slider = NSSlider()
+      case .functionsConsistMode, .functionsAnalogMode:
+        field.customView = NSView()
+      case .esuSpeedTable:
+        field.customView = ESUSpeedTable()
       }
       
       /// https://manasaprema04.medium.com/autolayout-fundamental-522f0a6e5790
@@ -1830,6 +1947,13 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
       SoundControlBasis.populate(comboBox: comboBox)
     case .idleOperationTriggeredFunction, .loadOperationTriggeredFunction:
       TriggeredFunction.populate(comboBox: comboBox)
+    case .speedTableIndex:
+      comboBox.removeAllItems()
+      for index in 1 ... 28 {
+        comboBox.addItem(withObjectValue: "\(index)")
+      }
+    case .speedTablePreset:
+      SpeedTablePreset.populate(comboBox: comboBox)
     default:
       break
     }

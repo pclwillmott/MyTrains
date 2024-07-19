@@ -72,6 +72,8 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
     
     lblChangedCVs = nil
     
+    chkConsistModeFunctions.removeAll()
+    
   }
   
   // MARK: Controls
@@ -106,6 +108,8 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
   
   private var settingsConstraints : [NSLayoutConstraint] = []
   
+  private var settingsGroupStartIndex : [ProgrammerToolSettingsGroup:Int] = [:]
+  
   private var selectorStackView : ScrollVerticalStackView? = ScrollVerticalStackView()
   
   private var pnlSettings : NSView? = NSView()
@@ -121,6 +125,10 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
   private var changedCVsScrollView : NSScrollView? = NSScrollView()
   
   private var lblChangedCVs : NSTextField? = NSTextField(labelWithString: "")
+  
+  private var chkConsistModeFunctions : [NSButton] = []
+  
+  private var chkAnalogModeFunctions : [NSButton] = []
   
   private var decoder : Decoder? {
     didSet {
@@ -403,6 +411,10 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
     
     settingsFields = ProgrammerToolSettingsProperty.inspectorPropertyFields
     
+    var lastGroup : ProgrammerToolSettingsGroup?
+    
+    var groupIndex : Int = 0
+    
     for temp in settingsFields {
       if let comboBox = temp.control as? MyComboBox {
         comboBox.target = self
@@ -419,8 +431,27 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
         slider.target = self
         slider.action = #selector(sliderAction(_:))
       }
+      if temp.property.section.inspector != lastGroup {
+        lastGroup = temp.property.section.inspector
+        settingsGroupStartIndex[lastGroup!] = groupIndex
+      }
+      groupIndex += 1
     }
     
+    for item in FunctionConsistMode.allCases {
+      let button = NSButton(checkboxWithTitle: item.title, target: self, action: #selector(chkConsistModeFunctionAction(_:)))
+      button.translatesAutoresizingMaskIntoConstraints = false
+      button.tag = Int(item.rawValue)
+      chkConsistModeFunctions.append(button)
+    }
+
+    for item in FunctionAnalogMode.allCases {
+      let button = NSButton(checkboxWithTitle: item.title, target: self, action: #selector(chkAnalogModeFunctionAction(_:)))
+      button.translatesAutoresizingMaskIntoConstraints = false
+      button.tag = Int(item.rawValue)
+      chkAnalogModeFunctions.append(button)
+    }
+
     settingsGroupFields = ProgrammerToolSettingsSection.inspectorSectionFields
     
     settingsGroupSeparators = ProgrammerToolSettingsSection.inspectorSectionSeparators
@@ -470,6 +501,7 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
         lblGroups[index].textColor = nil
         pnlSettingsView[index].isHidden = true
       }
+      displaySettingsInspector()
       btnGroups[currentSelector.rawValue].contentTintColor = NSColor.systemBlue
       lblGroups[currentSelector.rawValue].textColor = NSColor.systemBlue
       pnlSettingsView[currentSelector.rawValue].isHidden = false
@@ -811,120 +843,233 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
         commonProperties.remove(.idleOperationTriggeredFunction)
       }
     }
+    
+    if !decoder.isSUSIMasterEnabled {
+      commonProperties.remove(.susiWarning)
+    }
 
     var usedFields : [ProgrammerToolSettingsPropertyField] = []
     
-    var index = 0
-    while index < settingsFields.count {
+    if let startIndex = settingsGroupStartIndex[currentSelector] {
       
-      let inspector = settingsFields[index].property.section.inspector
+      var index = startIndex
       
-      let view = pnlSettingsView[inspector.rawValue]
-      
-      if let stackView = (view as? ScrollVerticalStackView)?.stackView {
+      while index < settingsFields.count && settingsFields[index].property.section.inspector == currentSelector {
         
-        stackView.alignment = .right
+        let inspector = settingsFields[index].property.section.inspector
         
-        while index < settingsFields.count && settingsFields[index].property.section.inspector == inspector {
+        let view = pnlSettingsView[inspector.rawValue]
+        
+        if let stackView = (view as? ScrollVerticalStackView)?.stackView {
           
-          let group = settingsFields[index].property.section
+          stackView.alignment = .right
           
-          var showGroupHeader = true
-          var showGroupSeparator = false
-          
-          while index < settingsFields.count && settingsFields[index].property.section == group {
+          while index < settingsFields.count && settingsFields[index].property.section.inspector == inspector {
             
-            let field = settingsFields[index]
+            let group = settingsFields[index].property.section
             
-            if commonProperties.contains(field.property), let control = field.control, let view = field.view, let cvLabel = field.cvLabel {
+            var showGroupHeader = true
+            var showGroupSeparator = false
+            
+            while index < settingsFields.count && settingsFields[index].property.section == group {
               
-              if showGroupHeader {
-                stackView.addArrangedSubview(settingsGroupFields[group]!.view!)
-                showGroupHeader = false
-                showGroupSeparator = true
-              }
+              let field = settingsFields[index]
               
-              stackView.addArrangedSubview(view)
-              
-              cvLabel.stringValue = field.property.cvLabel
-              
-              /// Note to self: Views within a StackView must not have constraints to the outside world as this will lock the StackView size.
-              /// They must only have internal constraints to the view that is added to the StackView.
-              ///  https://manasaprema04.medium.com/autolayout-fundamental-522f0a6e5790
-
-              if let label = field.label {
-                settingsPropertyConstraints.append(label.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20))
-                settingsPropertyConstraints.append(label.topAnchor.constraint(equalTo: view.topAnchor))
-                settingsPropertyConstraints.append(view.heightAnchor.constraint(greaterThanOrEqualTo: label.heightAnchor))
-                settingsPropertyConstraints.append(control.topAnchor.constraint(equalToSystemSpacingBelow: label.bottomAnchor, multiplier: 1.0))
-              }
-              else {
-                settingsPropertyConstraints.append(control.topAnchor.constraint(equalTo: view.topAnchor))
-              }
-              settingsPropertyConstraints.append(view.bottomAnchor.constraint(greaterThanOrEqualTo: control.bottomAnchor))
-              settingsPropertyConstraints.append(cvLabel.topAnchor.constraint(equalTo: control.topAnchor))
-              settingsPropertyConstraints.append(view.bottomAnchor.constraint(greaterThanOrEqualTo: cvLabel.bottomAnchor))
-              settingsPropertyConstraints.append(cvLabel.leadingAnchor.constraint(greaterThanOrEqualToSystemSpacingAfter: control.trailingAnchor, multiplier: 1.0))
-              settingsPropertyConstraints.append(view.trailingAnchor.constraint(equalToSystemSpacingAfter: cvLabel.trailingAnchor, multiplier: 1.0))
-              
-              if let slider = field.slider {
-                settingsPropertyConstraints.append(slider.centerYAnchor.constraint(equalTo: control.centerYAnchor))
-                settingsPropertyConstraints.append(view.bottomAnchor.constraint(greaterThanOrEqualTo: slider.bottomAnchor))
-                settingsPropertyConstraints.append(slider.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20))
-                settingsPropertyConstraints.append(slider.widthAnchor.constraint(equalToConstant: 200))
-              }
-              
-              if let customView = field.customView {
-                settingsPropertyConstraints.append(customView.centerYAnchor.constraint(equalTo: control.centerYAnchor))
-                settingsPropertyConstraints.append(view.bottomAnchor.constraint(greaterThanOrEqualTo: customView.bottomAnchor))
-                settingsPropertyConstraints.append(cvLabel.leadingAnchor.constraint(greaterThanOrEqualToSystemSpacingAfter: customView.trailingAnchor, multiplier: 1.0))
-              }
-              
-              switch field.property.controlType {
-              case .textField:
-                settingsPropertyConstraints.append(control.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20))
-                settingsPropertyConstraints.append(control.widthAnchor.constraint(equalToConstant: 100))
-              case .textFieldWithSlider:
-                if let slider = field.slider {
-                  settingsPropertyConstraints.append(control.leadingAnchor.constraint(equalToSystemSpacingAfter: slider.trailingAnchor, multiplier: 1.0))
-                  settingsPropertyConstraints.append(control.widthAnchor.constraint(equalToConstant: 100))
+              if commonProperties.contains(field.property), let view = field.view, let cvLabel = field.cvLabel {
+                
+                if showGroupHeader {
+                  stackView.addArrangedSubview(settingsGroupFields[group]!.view!)
+                  showGroupHeader = false
+                  showGroupSeparator = true
                 }
-              case .warning:
-                if let customView = field.customView {
+                
+                stackView.addArrangedSubview(view)
+                
+                cvLabel.stringValue = field.property.cvLabel
+                
+                /// Note to self: Views within a StackView must not have constraints to the outside world as this will lock the StackView size.
+                /// They must only have internal constraints to the view that is added to the StackView.
+                ///  https://manasaprema04.medium.com/autolayout-fundamental-522f0a6e5790
+                
+                if let label = field.label {
+                  settingsPropertyConstraints.append(label.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20))
+                  settingsPropertyConstraints.append(label.topAnchor.constraint(equalTo: view.topAnchor))
+                  settingsPropertyConstraints.append(view.heightAnchor.constraint(greaterThanOrEqualTo: label.heightAnchor))
+                  if let control = field.control {
+                    settingsPropertyConstraints.append(control.topAnchor.constraint(equalToSystemSpacingBelow: label.bottomAnchor, multiplier: 1.0))
+                  }
+                }
+                else if let control = field.control {
+                  settingsPropertyConstraints.append(control.topAnchor.constraint(equalTo: view.topAnchor))
+                }
+                
+                if (field.property.controlType == .functionsConsistMode || field.property.controlType == .functionsAnalogMode), let customView = field.customView {
+                  
+                  let isConsistMode = field.property.controlType == .functionsConsistMode
+                  
+                  customView.subviews.removeAll()
+                  
+                  settingsPropertyConstraints.append(customView.topAnchor.constraint(equalToSystemSpacingBelow: field.label!.bottomAnchor, multiplier: 1.0))
+                  settingsPropertyConstraints.append(customView.leadingAnchor.constraint(equalTo: view.leadingAnchor))
+                  settingsPropertyConstraints.append(view.trailingAnchor.constraint(greaterThanOrEqualTo: customView.trailingAnchor))
+                  settingsPropertyConstraints.append(view.bottomAnchor.constraint(greaterThanOrEqualTo: customView.bottomAnchor))
+                  
+                  var checkBoxNumber = 0
+                  var lastCheckBox : NSButton?
+                  var lastYAnchor : NSLayoutYAxisAnchor?
+                  
+                  let functions : [NSButton] = isConsistMode ? chkConsistModeFunctions : chkAnalogModeFunctions
+                  
+                  for checkBox in functions {
+                    
+                    var include : Bool = false
+                    var state : NSControl.StateValue = .off
+                    
+                    if isConsistMode {
+                      if let function = FunctionConsistMode(rawValue: UInt8(Int(checkBox.tag))) {
+                        include = decoder.supportedFunctionsConsistMode.contains(function)
+                        state = decoder.getConsistFunctionState(function: function) ? .on : .off
+                      }
+                    }
+                    else {
+                      if let function = FunctionAnalogMode(rawValue: UInt8(Int(checkBox.tag))) {
+                        include = decoder.supportedFunctionsAnalogMode.contains(function)
+                        state = decoder.getAnalogFunctionState(function: function) ? .on : .off
+                      }
+                    }
+                    
+                    if include {
+                      
+                      customView.addSubview(checkBox)
+                      
+                      checkBox.state = state
+                      
+                      if let lastYAnchor {
+                        settingsPropertyConstraints.append(checkBox.topAnchor.constraint(equalToSystemSpacingBelow: lastYAnchor, multiplier: 1.0))
+                      }
+                      else {
+                        settingsPropertyConstraints.append(checkBox.topAnchor.constraint(equalTo: customView.topAnchor))
+                      }
+                      settingsPropertyConstraints.append(customView.bottomAnchor.constraint(greaterThanOrEqualTo: checkBox.bottomAnchor))
+                      
+                      if let lastCheckBox {
+                        settingsPropertyConstraints.append(checkBox.leadingAnchor.constraint(equalToSystemSpacingAfter: lastCheckBox.trailingAnchor, multiplier: 1.0))
+                      }
+                      else {
+                        settingsPropertyConstraints.append(checkBox.leadingAnchor.constraint(equalToSystemSpacingAfter: customView.leadingAnchor, multiplier: 1.0))
+                      }
+                      
+                      lastCheckBox = checkBox
+                      checkBoxNumber += 1
+                      
+                      if checkBoxNumber == 4 {
+                        settingsPropertyConstraints.append(customView.trailingAnchor.constraint(greaterThanOrEqualToSystemSpacingAfter: lastCheckBox!.trailingAnchor, multiplier: 1.0))
+                        lastCheckBox = nil
+                        checkBoxNumber = 0
+                        lastYAnchor = checkBox.bottomAnchor
+                      }
+                      
+                    }
+                    
+                  }
+                  
+                  for view1 in customView.subviews {
+                    for view2 in customView.subviews {
+                      if !(view1 === view2) {
+                        settingsPropertyConstraints.append(view1.widthAnchor.constraint(greaterThanOrEqualTo: view2.widthAnchor))
+                      }
+                    }
+                  }
+                  
+                  settingsPropertyConstraints.append(cvLabel.topAnchor.constraint(equalTo: customView.topAnchor))
+                  settingsPropertyConstraints.append(view.trailingAnchor.constraint(equalToSystemSpacingAfter: cvLabel.trailingAnchor, multiplier: 1.0))
+                  settingsPropertyConstraints.append(cvLabel.leadingAnchor.constraint(greaterThanOrEqualToSystemSpacingAfter: customView.trailingAnchor, multiplier: 1.0))
+                  
+                }
+                else if field.property.controlType == .esuSpeedTable, let customView = field.customView {
+                  settingsPropertyConstraints.append(customView.topAnchor.constraint(equalTo: view.topAnchor))
                   settingsPropertyConstraints.append(customView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20))
-                  settingsPropertyConstraints.append(control.leadingAnchor.constraint(equalToSystemSpacingAfter: customView.trailingAnchor, multiplier: 1.0))
+                  settingsPropertyConstraints.append(view.trailingAnchor.constraint(greaterThanOrEqualTo: customView.trailingAnchor))
+                  settingsPropertyConstraints.append(view.bottomAnchor.constraint(greaterThanOrEqualTo: customView.bottomAnchor))
+                  settingsPropertyConstraints.append(cvLabel.topAnchor.constraint(equalTo: customView.topAnchor))
+                  settingsPropertyConstraints.append(view.trailingAnchor.constraint(equalToSystemSpacingAfter: cvLabel.trailingAnchor, multiplier: 1.0))
+                  settingsPropertyConstraints.append(cvLabel.leadingAnchor.constraint(greaterThanOrEqualToSystemSpacingAfter: customView.trailingAnchor, multiplier: 1.0))
+                  settingsPropertyConstraints.append(customView.heightAnchor.constraint(equalToConstant: 400))
+                  settingsPropertyConstraints.append(customView.widthAnchor.constraint(equalToConstant: 600))
+                  (customView as? ESUSpeedTable)?.decoder = decoder
                 }
-              case .textFieldWithInfo:
-                if let customView = field.customView {
-                  settingsPropertyConstraints.append(control.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20))
-                  settingsPropertyConstraints.append(control.widthAnchor.constraint(equalToConstant: 100))
-                  settingsPropertyConstraints.append(customView.leadingAnchor.constraint(equalToSystemSpacingAfter: control.trailingAnchor, multiplier: 1.0))
+                else if let control = field.control {
+                  
+                  settingsPropertyConstraints.append(view.bottomAnchor.constraint(greaterThanOrEqualTo: control.bottomAnchor))
+                  settingsPropertyConstraints.append(cvLabel.topAnchor.constraint(equalTo: control.topAnchor))
+                  settingsPropertyConstraints.append(view.bottomAnchor.constraint(greaterThanOrEqualTo: cvLabel.bottomAnchor))
+                  settingsPropertyConstraints.append(cvLabel.leadingAnchor.constraint(greaterThanOrEqualToSystemSpacingAfter: control.trailingAnchor, multiplier: 1.0))
+                  settingsPropertyConstraints.append(view.trailingAnchor.constraint(equalToSystemSpacingAfter: cvLabel.trailingAnchor, multiplier: 1.0))
+                  
+                  if let slider = field.slider, let control = field.control {
+                    settingsPropertyConstraints.append(slider.centerYAnchor.constraint(equalTo: control.centerYAnchor))
+                    settingsPropertyConstraints.append(view.bottomAnchor.constraint(greaterThanOrEqualTo: slider.bottomAnchor))
+                    settingsPropertyConstraints.append(slider.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20))
+                    settingsPropertyConstraints.append(slider.widthAnchor.constraint(equalToConstant: 200))
+                  }
+                  
+                  if let customView = field.customView {
+                    if let control = field.control {
+                      settingsPropertyConstraints.append(customView.centerYAnchor.constraint(equalTo: control.centerYAnchor))
+                    }
+                    settingsPropertyConstraints.append(view.bottomAnchor.constraint(greaterThanOrEqualTo: customView.bottomAnchor))
+                    settingsPropertyConstraints.append(cvLabel.leadingAnchor.constraint(greaterThanOrEqualToSystemSpacingAfter: customView.trailingAnchor, multiplier: 1.0))
+                  }
+                  
+                  switch field.property.controlType {
+                  case .textField:
+                    settingsPropertyConstraints.append(control.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20))
+                    settingsPropertyConstraints.append(control.widthAnchor.constraint(equalToConstant: 100))
+                  case .textFieldWithSlider:
+                    if let slider = field.slider {
+                      settingsPropertyConstraints.append(control.leadingAnchor.constraint(equalToSystemSpacingAfter: slider.trailingAnchor, multiplier: 1.0))
+                      settingsPropertyConstraints.append(control.widthAnchor.constraint(equalToConstant: 100))
+                    }
+                  case .warning:
+                    if let customView = field.customView {
+                      settingsPropertyConstraints.append(customView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20))
+                      settingsPropertyConstraints.append(control.leadingAnchor.constraint(equalToSystemSpacingAfter: customView.trailingAnchor, multiplier: 1.0))
+                    }
+                  case .textFieldWithInfo:
+                    if let customView = field.customView {
+                      settingsPropertyConstraints.append(control.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20))
+                      settingsPropertyConstraints.append(control.widthAnchor.constraint(equalToConstant: 100))
+                      settingsPropertyConstraints.append(customView.leadingAnchor.constraint(equalToSystemSpacingAfter: control.trailingAnchor, multiplier: 1.0))
+                    }
+                  case .textFieldWithInfoWithSlider:
+                    if let customView = field.customView, let slider = field.slider {
+                      settingsPropertyConstraints.append(control.leadingAnchor.constraint(equalToSystemSpacingAfter: slider.trailingAnchor, multiplier: 1.0))
+                      settingsPropertyConstraints.append(control.widthAnchor.constraint(equalToConstant: 100))
+                      settingsPropertyConstraints.append(customView.leadingAnchor.constraint(equalToSystemSpacingAfter: control.trailingAnchor, multiplier: 1.0))
+                    }
+                    
+                  default:
+                    settingsPropertyConstraints.append(control.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20))
+                    settingsPropertyConstraints.append(control.widthAnchor.constraint(greaterThanOrEqualToConstant: 100))
+                    settingsPropertyConstraints.append(view.trailingAnchor.constraint(greaterThanOrEqualTo: control.trailingAnchor))
+                  }
+                  
                 }
-              case .textFieldWithInfoWithSlider:
-                if let customView = field.customView, let slider = field.slider {
-                  settingsPropertyConstraints.append(control.leadingAnchor.constraint(equalToSystemSpacingAfter: slider.trailingAnchor, multiplier: 1.0))
-                  settingsPropertyConstraints.append(control.widthAnchor.constraint(equalToConstant: 100))
-                  settingsPropertyConstraints.append(customView.leadingAnchor.constraint(equalToSystemSpacingAfter: control.trailingAnchor, multiplier: 1.0))
-                }
-
-              default:
-                settingsPropertyConstraints.append(control.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20))
-                settingsPropertyConstraints.append(control.widthAnchor.constraint(greaterThanOrEqualToConstant: 100))
-                settingsPropertyConstraints.append(view.trailingAnchor.constraint(greaterThanOrEqualTo: control.trailingAnchor))
+                
+                usedFields.append(field)
+                
+                setValue(field: field)
+                
               }
-
-              usedFields.append(field)
-                
-              setValue(field: field)
-                
+              
+              index += 1
+              
             }
             
-            index += 1
+            if showGroupSeparator {
+              stackView.addArrangedSubview(settingsGroupSeparators[group]!.view!)
+            }
             
-          }
-          
-          if showGroupSeparator {
-            stackView.addArrangedSubview(settingsGroupSeparators[group]!.view!)
           }
           
         }
@@ -932,15 +1077,7 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
       }
       
     }
-    /*
-    for field1 in usedFields {
-      for field2 in usedFields {
-        if !(field1.label! === field2.label) && field1.property.section.inspector == field2.property.section.inspector {
-          settingsPropertyConstraints.append(field1.label!.widthAnchor.constraint(greaterThanOrEqualTo: field2.label!.widthAnchor))
-        }
-      }
-    }
-    */
+    
     NSLayoutConstraint.activate(settingsPropertyConstraints)
     
   }
@@ -963,6 +1100,8 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
       if field.property.controlType == .textFieldWithInfo || field.property.controlType == .textFieldWithInfoWithSlider {
         (field.customView as? NSTextField)?.stringValue = decoder.getInfo(property: field.property)
       }
+    case .functionsConsistMode, .functionsAnalogMode, .esuSpeedTable:
+      break
     case .label, .warning, .description:
       (field.control as? NSTextField)?.stringValue = value
     case .checkBox:
@@ -1028,6 +1167,18 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
   @objc func sliderAction(_ sender: NSSlider) {
     if let decoder, let property = ProgrammerToolSettingsProperty(rawValue: sender.tag) {
       decoder.setValue(property: property, string: "\(sender.intValue)")
+    }
+  }
+  
+  @objc func chkConsistModeFunctionAction(_ sender:NSButton) {
+    if let function = FunctionConsistMode(rawValue:UInt8(exactly: sender.tag)!) {
+      decoder?.setConsistFunctionState(function: function, state: sender.state == .on)
+    }
+  }
+
+  @objc func chkAnalogModeFunctionAction(_ sender:NSButton) {
+    if let function = FunctionAnalogMode(rawValue:UInt8(exactly: sender.tag)!) {
+      decoder?.setAnalogFunctionState(function: function, state: sender.state == .on)
     }
   }
 

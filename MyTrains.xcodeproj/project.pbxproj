@@ -178,6 +178,10 @@
 		DA6A0ADF2753B5CF00913F2B /* UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA6A0ADE2753B5CF00913F2B /* UserDefaults.swift */; };
 		DA6A0BCC2A45C01E00BF40C9 /* DCCBinaryState.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA6A0BCB2A45C01E00BF40C9 /* DCCBinaryState.swift */; };
 		DA6A3DE82A2E3506002631FF /* OpenLCBMemorySpaceDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA6A3DE72A2E3506002631FF /* OpenLCBMemorySpaceDelegate.swift */; };
+		DA6BA50E2C4930A30028EDA0 /* FunctionConsistMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA6BA50D2C4930A30028EDA0 /* FunctionConsistMode.swift */; };
+		DA6BA5102C4931850028EDA0 /* FunctionAnalogMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA6BA50F2C4931850028EDA0 /* FunctionAnalogMode.swift */; };
+		DA6BA5122C4A9BF10028EDA0 /* ESUSpeedTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA6BA5112C4A9BF10028EDA0 /* ESUSpeedTable.swift */; };
+		DA6BA5142C4ADC270028EDA0 /* SpeedTablePreset.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA6BA5132C4ADC270028EDA0 /* SpeedTablePreset.swift */; };
 		DA6E28DF285F827600772641 /* SwitchboardItemType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA6E28DE285F827600772641 /* SwitchboardItemType.swift */; };
 		DA6E28E1285F86B900772641 /* Orientation.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA6E28E0285F86B900772641 /* Orientation.swift */; };
 		DA6E28E3285F8F1A00772641 /* TrackElectrificationType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA6E28E2285F8F1A00772641 /* TrackElectrificationType.swift */; };
@@ -646,6 +650,10 @@
 		DA6A0ADE2753B5CF00913F2B /* UserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaults.swift; sourceTree = "<group>"; };
 		DA6A0BCB2A45C01E00BF40C9 /* DCCBinaryState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DCCBinaryState.swift; sourceTree = "<group>"; };
 		DA6A3DE72A2E3506002631FF /* OpenLCBMemorySpaceDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBMemorySpaceDelegate.swift; sourceTree = "<group>"; };
+		DA6BA50D2C4930A30028EDA0 /* FunctionConsistMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FunctionConsistMode.swift; sourceTree = "<group>"; };
+		DA6BA50F2C4931850028EDA0 /* FunctionAnalogMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FunctionAnalogMode.swift; sourceTree = "<group>"; };
+		DA6BA5112C4A9BF10028EDA0 /* ESUSpeedTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ESUSpeedTable.swift; sourceTree = "<group>"; };
+		DA6BA5132C4ADC270028EDA0 /* SpeedTablePreset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedTablePreset.swift; sourceTree = "<group>"; };
 		DA6E28DE285F827600772641 /* SwitchboardItemType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchboardItemType.swift; sourceTree = "<group>"; };
 		DA6E28E0285F86B900772641 /* Orientation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Orientation.swift; sourceTree = "<group>"; };
 		DA6E28E2285F8F1A00772641 /* TrackElectrificationType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackElectrificationType.swift; sourceTree = "<group>"; };
@@ -1064,6 +1072,9 @@
 				DA0F378D2C47D471002C66D8 /* SteamChuffMode.swift */,
 				DA0F378F2C47E9D8002C66D8 /* SoundControlBasis.swift */,
 				DA0F37912C47EFA4002C66D8 /* TriggeredFunction.swift */,
+				DA6BA50D2C4930A30028EDA0 /* FunctionConsistMode.swift */,
+				DA6BA50F2C4931850028EDA0 /* FunctionAnalogMode.swift */,
+				DA6BA5132C4ADC270028EDA0 /* SpeedTablePreset.swift */,
 				DAE8DD52286751BE0097C2D1 /* xManufacturer.swift */,
 				DA5A9F8F295C89FC00950479 /* NumberBase.swift */,
 				DA6E28E0285F86B900772641 /* Orientation.swift */,
@@ -1221,6 +1232,7 @@
 				DAF6826E2BA33EB700E6D590 /* GatewayActivityView.swift */,
 				DA6239332BCD827C000E9018 /* MyComboBox.swift */,
 				DAD22F7C2BD574E100F396AD /* FlippedView.swift */,
+				DA6BA5112C4A9BF10028EDA0 /* ESUSpeedTable.swift */,
 			);
 			path = "_custom views";
 			sourceTree = "<group>";
@@ -1724,12 +1736,12 @@
 				DAA66BD02A09226E001804AC /* _extensions */,
 				DA3254E62A4704E2006DF357 /* _types */,
 				DAA83DEE272C37680075CBCD /* Assets.xcassets */,
+				DA434291283698CA00E8D555 /* MyTrains-Bridging-Header.h */,
 				DA58F00E2A45AE4400D36E90 /* DCC */,
 				DAA7BECA2B5072CE00508140 /* Info.plist */,
 				DA72DDE42A3C6E150027BE50 /* Interfaces */,
 				DAA7BEBA2B504EE900508140 /* Localizable.xcstrings */,
 				DABD4F2F2A3C99B1000A25AB /* LocoNet */,
-				DA434291283698CA00E8D555 /* MyTrains-Bridging-Header.h */,
 				DAA83DF3272C37680075CBCD /* MyTrains.entitlements */,
 				DA2CB4B22A071CC7000E197E /* OpenLCB */,
 				DA7B2D122B2F776A00327281 /* SoftFloat */,
@@ -2389,11 +2401,13 @@
 				DA6A3DE82A2E3506002631FF /* OpenLCBMemorySpaceDelegate.swift in Sources */,
 				DAEF18732A3DFEBF00AC227D /* LocoNetDeviceAttribute.swift in Sources */,
 				DA497BC32B9DDFDB00D96ACA /* MyTrainsViewType.swift in Sources */,
+				DA6BA5122C4A9BF10028EDA0 /* ESUSpeedTable.swift in Sources */,
 				DA1272C52A7576CD00AB42F6 /* OpenLCBFDIItem.swift in Sources */,
 				DA0D3E102A48AA6F0042748C /* OpenLCBThrottleState.swift in Sources */,
 				DA5550EA28392A6B00C4FE4E /* DigitraxProductCode.swift in Sources */,
 				DAA56B4F2BD9381600BAB6EF /* LayoutInspectorPropertyField.swift in Sources */,
 				DAD41AB82A3C9E54002EF847 /* DCCAddressPartition.swift in Sources */,
+				DA6BA5102C4931850028EDA0 /* FunctionAnalogMode.swift in Sources */,
 				DAB4A7392B3F0E7D00CD5256 /* CDIGroupView.swift in Sources */,
 				DA60140529F4162500AD9ACD /* ViewLCCNetworkTableViewDS.swift in Sources */,
 				DAB26FF92BD1362300AC1B29 /* SwitchboardEditorView.swift in Sources */,
@@ -2431,6 +2445,7 @@
 				DAA777D02A20D734008EAF02 /* OpenLCBClockState.swift in Sources */,
 				DA19A2642BD2D74F00296E15 /* NSTextFieldExtensions.swift in Sources */,
 				DA9CF8F9286089B000825FA9 /* NSButtonExtensions.swift in Sources */,
+				DA6BA5142C4ADC270028EDA0 /* SpeedTablePreset.swift in Sources */,
 				DA6E28DF285F827600772641 /* SwitchboardItemType.swift in Sources */,
 				DAFFB65F2B5D87C80035AC74 /* SelectLayoutVC.swift in Sources */,
 				DA8479972A34CA87003067E6 /* OpenLCBClockSubState.swift in Sources */,
@@ -2468,6 +2483,7 @@
 				DA7A127629E2E6DB000DCE1C /* OpenLCBCANControlFrameFormat.swift in Sources */,
 				DA73E5052C4154A0002AB3DF /* LocomotiveAddressType.swift in Sources */,
 				DA9787322C39A0B000765C83 /* CVFlag.swift in Sources */,
+				DA6BA50E2C4930A30028EDA0 /* FunctionConsistMode.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

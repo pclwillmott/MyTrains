@@ -197,6 +197,22 @@ public class Decoder : NSObject {
     
   }
   
+  public var supportedFunctionsConsistMode : Set<FunctionConsistMode> {
+    var result : Set<FunctionConsistMode> = []
+    for item in FunctionConsistMode.allCases {
+      result.insert(item)
+    }
+    return result
+  }
+  
+  public var supportedFunctionsAnalogMode : Set<FunctionAnalogMode> {
+    var result : Set<FunctionAnalogMode> = []
+    for item in FunctionAnalogMode.allCases {
+      result.insert(item)
+    }
+    return result
+  }
+  
   public var manufacturer : ManufacturerCode? {
     return ManufacturerCode(rawValue: UInt16(getUInt8(cv: .cv_000_000_008)!))
   }
@@ -2183,11 +2199,126 @@ public class Decoder : NSObject {
       }
     }
   }
+  
+  public var isSerialFunctionModeF1toF8ForLGBMTSEnabled : Bool {
+    get {
+      return getBool(cv: .cv_000_000_049, mask: ByteMask.d5)!
+    }
+    set(value) {
+      setBool(cv: .cv_000_000_049, mask: ByteMask.d5, value: value)
+    }
+  }
+  
+  public var isSupportForBroadwayLimitedSteamEngineControlEnabled : Bool {
+    get {
+      return getBool(cv: .cv_000_000_122, mask: ByteMask.d7)!
+    }
+    set(value) {
+      setBool(cv: .cv_000_000_122, mask: ByteMask.d7, value: value)
+    }
+  }
+  
+  public var isSUSIMasterEnabled : Bool {
+    get {
+      return getBool(cv: .cv_000_000_124, mask: ByteMask.d3)!
+    }
+    set(value) {
+      if value != isSUSIMasterEnabled {
+        setBool(cv: .cv_000_000_124, mask: ByteMask.d3, value: value)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+
+  public var isSUSISlaveEnabled : Bool {
+    get {
+      return getBool(cv: .cv_000_000_124, mask: ByteMask.d1)!
+    }
+    set(value) {
+      if value != isSUSISlaveEnabled {
+        setBool(cv: .cv_000_000_124, mask: ByteMask.d1, value: value)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+  
+  private var _speedTablePreset : SpeedTablePreset?
+  
+  private var speedTablePreset : SpeedTablePreset? {
+    get {
+      return _speedTablePreset
+    }
+    set(value) {
+      _speedTablePreset = value
+      if let _speedTablePreset {
+        let table = _speedTablePreset.speedTableValues
+        for index in 0 ... table.count - 1 {
+          setUInt8(cv: .cv_000_000_067 + index, value: table[index])
+        }
+      }
+      delegate?.reloadSettings!(self)
+    }
+  }
+  private var _speedTableIndex : Int = 1
+  
+  public var speedTableIndex : Int {
+    get {
+      return _speedTableIndex
+    }
+    set(value) {
+      if value != _speedTableIndex {
+        _speedTableIndex = value
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+  
+  public var speedTableValue : UInt8 {
+    get {
+      return getUInt8(cv: .cv_000_000_067 + (speedTableIndex - 1))!
+    }
+    set(value) {
+      if value != speedTableValue {
+        setUInt8(cv: .cv_000_000_067 + (speedTableIndex - 1), value: value)
+        if speedTableIndex > 2 {
+          for index in 2 ... speedTableIndex - 1 {
+            setUInt8(cv: .cv_000_000_067 + (index - 1), value: min(getUInt8(cv: .cv_000_000_067 + (index - 1))!, value))
+          }
+        }
+        if speedTableIndex < 27 {
+          for index in speedTableIndex + 1 ... 27 {
+            setUInt8(cv: .cv_000_000_067 + (index - 1), value: max(getUInt8(cv: .cv_000_000_067 + (index - 1))!, value))
+          }
+        }
+        delegate?.reloadSettings!(self)
+      }
+    }
+  }
 
   // MARK: Private Methods
   
   // MARK: Public Methods
   
+  public func getConsistFunctionState(function:FunctionConsistMode) -> Bool {
+    let cvMask = function.cvMask
+    return getBool(cv: cvMask.cv, mask: cvMask.mask)!
+  }
+  
+  public func setConsistFunctionState(function:FunctionConsistMode, state:Bool) {
+    let cvMask = function.cvMask
+    setBool(cv: cvMask.cv, mask: cvMask.mask, value: state)
+  }
+
+  public func getAnalogFunctionState(function:FunctionAnalogMode) -> Bool {
+    let cvMask = function.cvMask
+    return getBool(cv: cvMask.cv, mask: cvMask.mask)!
+  }
+  
+  public func setAnalogFunctionState(function:FunctionAnalogMode, state:Bool) {
+    let cvMask = function.cvMask
+    setBool(cv: cvMask.cv, mask: cvMask.mask, value: state)
+  }
+
   public func getSavedValue(cv:CV) -> UInt8? {
     
     guard let offset = indexLookup[cv.index] else {
@@ -2661,6 +2792,24 @@ public class Decoder : NSObject {
       return "\(thresholdForIdleOperation)"
     case .idleOperationTriggeredFunction:
       return idleOperationTriggeredFunction.title
+    case .enableSerialFunctionModeF1toF8ForLGBMTS:
+      return isSerialFunctionModeF1toF8ForLGBMTSEnabled ? "true" : "false"
+    case .enableSupportForBroadwayLimitedSteamEngineControl:
+      return isSupportForBroadwayLimitedSteamEngineControlEnabled ? "true" : "false"
+    case .enableSUSIMaster:
+      return isSUSIMasterEnabled ? "true" : "false"
+    case .susiWarning:
+      return String(localized:"AUX11 and AUX12 will not work while SUSI is enabled.")
+    case .enableSUSISlave:
+      return isSUSISlaveEnabled ? "true" : "false"
+    case .consistFunctions, .analogModeActiveFunctions, .esuSpeedTable:
+      return ""
+    case .speedTableIndex:
+      return "\(speedTableIndex)"
+    case .speedTableEntryValue:
+      return "\(speedTableValue)"
+    case .speedTablePreset:
+      return _speedTablePreset?.title ?? ""
     }
   }
   
@@ -2917,7 +3066,7 @@ public class Decoder : NSObject {
       guard let _ = UInt32(hex:string) else {
         return false
       }
-    case .locomotiveAddressShort, .consistAddress, .waitingPeriodBeforeDirectionChange, .brakeDistanceLength, .brakeDistanceLengthBackwards, .stoppingPeriod, .accelerationRate, .decelerationRate, .forwardTrim, .reverseTrim, .gearboxBacklashCompensation, .accelerationAdjustment, .decelerationAdjustment, .shuntingModeTrim, .acAnalogModeStartVoltage, .acAnalogModeMaximumSpeedVoltage, .dcAnalogModeStartVoltage, .dcAnalogModeMaximumSpeedVoltage, .analogMotorHysteresisVoltage, .analogFunctionDifferenceVoltage, .voltageDifferenceIndicatingABCBrakeSection, .abcReducedSpeed, .hluSpeedLimit1, .hluSpeedLimit2, .hluSpeedLimit3, .hluSpeedLimit4, .hluSpeedLimit5, .delayTimeBeforeExitingBrakeSection, .brakeFunction1BrakeTimeReduction, .brakeFunction2BrakeTimeReduction, .brakeFunction3BrakeTimeReduction, .userId1, .userId2, .loadAdjustmentOptionalLoad, .loadAdjustmentPrimaryLoad, .timeToBridgePowerInterruption, .maximumSpeedWhenBrakeFunction1Active, .maximumSpeedWhenBrakeFunction2Active, .maximumSpeedWhenBrakeFunction3Active, .frequencyForBlinkingEffects, .gradeCrossingHoldingTime, .fadeInTimeOfLightEffects, .fadeOutTimeOfLightEffects, .logicalFunctionDimmerBrightnessReduction, .automaticUncouplingSpeed, .automaticUncouplingPushTime, .automaticUncouplingWaitTime, .automaticUncouplingMoveTime, .smokeUnitTimeUntilPowerOff, .smokeUnitFanSpeedTrim, .smokeUnitTemperatureTrim, .smokeUnitPreheatingTemperatureForSecondarySmokeUnits, .smokeChuffsDurationRelativeToTriggerDistance, .smokeChuffsMinimumDuration, .smokeChuffsMaximumDuration, .minimumSpeed, .maximumSpeed, .regulationReference, .regulationParameterK, .regulationParameterI, .regulationParameterKSlow, .largestInternalSpeedStepThatUsesKSlow, .regulationInfluenceDuringSlowSpeed, .slowSpeedBackEMFSamplingPeriod, .fullSpeedBackEMFSamplingPeriod, .slowSpeedLengthOfMeasurementGap, .fullSpeedLengthOfMeasurementGap, .motorCurrentLimiterLimit, .motorPulseFrequency, .distanceOfSteamChuffsAtSpeedStep1, .steamChuffAdjustmentAtHigherSpeedSteps, .triggerImpulsesPerSteamChuff, .secondaryTriggerDistanceReduction, .minimumDistanceofSteamChuffs, .masterVolume, .soundFadeOutFadeInTime, .fadeSoundVolumeReduction, .soundBass, .soundTreble, .trainLoadAtLowSpeed, .trainLoadAtHighSpeed, .idleOperationThreshold, .loadOperationThreshold:
+    case .locomotiveAddressShort, .consistAddress, .waitingPeriodBeforeDirectionChange, .brakeDistanceLength, .brakeDistanceLengthBackwards, .stoppingPeriod, .accelerationRate, .decelerationRate, .forwardTrim, .reverseTrim, .gearboxBacklashCompensation, .accelerationAdjustment, .decelerationAdjustment, .shuntingModeTrim, .acAnalogModeStartVoltage, .acAnalogModeMaximumSpeedVoltage, .dcAnalogModeStartVoltage, .dcAnalogModeMaximumSpeedVoltage, .analogMotorHysteresisVoltage, .analogFunctionDifferenceVoltage, .voltageDifferenceIndicatingABCBrakeSection, .abcReducedSpeed, .hluSpeedLimit1, .hluSpeedLimit2, .hluSpeedLimit3, .hluSpeedLimit4, .hluSpeedLimit5, .delayTimeBeforeExitingBrakeSection, .brakeFunction1BrakeTimeReduction, .brakeFunction2BrakeTimeReduction, .brakeFunction3BrakeTimeReduction, .userId1, .userId2, .loadAdjustmentOptionalLoad, .loadAdjustmentPrimaryLoad, .timeToBridgePowerInterruption, .maximumSpeedWhenBrakeFunction1Active, .maximumSpeedWhenBrakeFunction2Active, .maximumSpeedWhenBrakeFunction3Active, .frequencyForBlinkingEffects, .gradeCrossingHoldingTime, .fadeInTimeOfLightEffects, .fadeOutTimeOfLightEffects, .logicalFunctionDimmerBrightnessReduction, .automaticUncouplingSpeed, .automaticUncouplingPushTime, .automaticUncouplingWaitTime, .automaticUncouplingMoveTime, .smokeUnitTimeUntilPowerOff, .smokeUnitFanSpeedTrim, .smokeUnitTemperatureTrim, .smokeUnitPreheatingTemperatureForSecondarySmokeUnits, .smokeChuffsDurationRelativeToTriggerDistance, .smokeChuffsMinimumDuration, .smokeChuffsMaximumDuration, .minimumSpeed, .maximumSpeed, .regulationReference, .regulationParameterK, .regulationParameterI, .regulationParameterKSlow, .largestInternalSpeedStepThatUsesKSlow, .regulationInfluenceDuringSlowSpeed, .slowSpeedBackEMFSamplingPeriod, .fullSpeedBackEMFSamplingPeriod, .slowSpeedLengthOfMeasurementGap, .fullSpeedLengthOfMeasurementGap, .motorCurrentLimiterLimit, .motorPulseFrequency, .distanceOfSteamChuffsAtSpeedStep1, .steamChuffAdjustmentAtHigherSpeedSteps, .triggerImpulsesPerSteamChuff, .secondaryTriggerDistanceReduction, .minimumDistanceofSteamChuffs, .masterVolume, .soundFadeOutFadeInTime, .fadeSoundVolumeReduction, .soundBass, .soundTreble, .trainLoadAtLowSpeed, .trainLoadAtHighSpeed, .idleOperationThreshold, .loadOperationThreshold, .speedTableIndex, .speedTableEntryValue:
       guard let value = UInt8(string), Double(value) >= property.minValue && Double(value) <= property.maxValue else {
         return false
       }
@@ -3232,6 +3381,20 @@ public class Decoder : NSObject {
       thresholdForIdleOperation = UInt8(string)!
     case .idleOperationTriggeredFunction:
       idleOperationTriggeredFunction = TriggeredFunction(title: string)!
+    case .enableSerialFunctionModeF1toF8ForLGBMTS:
+      isSerialFunctionModeF1toF8ForLGBMTSEnabled = string == "true"
+    case .enableSupportForBroadwayLimitedSteamEngineControl:
+      isSupportForBroadwayLimitedSteamEngineControlEnabled = string == "true"
+    case .enableSUSIMaster:
+      isSUSIMasterEnabled = string == "true"
+    case .enableSUSISlave:
+      isSUSISlaveEnabled = string == "true"
+    case .speedTableIndex:
+      speedTableIndex = Int(string)!
+    case .speedTableEntryValue:
+      speedTableValue = UInt8(string)!
+    case .speedTablePreset:
+      speedTablePreset = SpeedTablePreset(title: string)
     default:
       break
     }

@@ -22,6 +22,9 @@
     " [CV9]" : {
 
     },
+    " [CV13, CV14]" : {
+
+    },
     " [CV17, CV18]" : {
 
     },
@@ -29,6 +32,9 @@
 
     },
     " [CV19.7]" : {
+
+    },
+    " [CV21, CV22, CV109, CV110]" : {
 
     },
     " [CV23]" : {
@@ -106,6 +112,9 @@
     " [CV49.4]" : {
 
     },
+    " [CV49.5]" : {
+
+    },
     " [CV49.7, CV49.3]" : {
 
     },
@@ -143,6 +152,9 @@
 
     },
     " [CV66]" : {
+
+    },
+    " [CV67 to CV94]" : {
 
     },
     " [CV95]" : {
@@ -214,13 +226,22 @@
     " [CV122.6]" : {
 
     },
+    " [CV122.7]" : {
+
+    },
     " [CV123]" : {
 
     },
     " [CV124.0]" : {
 
     },
+    " [CV124.1]" : {
+
+    },
     " [CV124.2]" : {
+
+    },
+    " [CV124.3]" : {
 
     },
     " [CV124.4]" : {
@@ -919,6 +940,12 @@
     "Activate Latency (%%UNITS_TIME%%)" : {
       "comment" : "This is used for the title of an input field where the user enters the time delay between a sensor being activated and when it sends the event report. The %%UNITS_TIME%% will be replaced at runtime by the name of the user selected units of time - place this at an approprate position in the title for the language."
     },
+    "Activate the following functions while driving in analog mode" : {
+
+    },
+    "Activate the following functions while driving in analog mode." : {
+
+    },
     "Activated" : {
       "comment" : "This is used for the title of an input field where the user enters a specific event ID.\nUsed to indicate a layout's state",
       "localizations" : {
@@ -1339,6 +1366,9 @@
 
     },
     "AUX11" : {
+
+    },
+    "AUX11 and AUX12 will not work while SUSI is enabled." : {
 
     },
     "AUX12" : {
@@ -3525,10 +3555,28 @@
     "Enable Selectrix protocol." : {
 
     },
+    "Enable Serial User Standard Interface (SUSI Master)" : {
+
+    },
+    "Enable serial user standard interface (SUSI Master)." : {
+
+    },
+    "Enable Serial User Standard Interface (SUSI Slave)" : {
+
+    },
+    "Enable serial user standard interface (SUSI Slave)." : {
+
+    },
     "Enable Shunting Mode Trimming" : {
 
     },
     "Enable shunting mode trimming." : {
+
+    },
+    "Enable Support for Broadway Limited Steam Engine Control" : {
+
+    },
+    "Enable support for Broadway Limited Steam Engine Control." : {
 
     },
     "Enable Threshold for Idle Operation" : {
@@ -3920,6 +3968,12 @@
     "Exit Zone" : {
       "comment" : "This is used for the title of an input field where the user can enter an event ID."
     },
+    "Exponential 1" : {
+
+    },
+    "Exponential 2" : {
+
+    },
     "F0" : {
 
     },
@@ -4232,6 +4286,9 @@
 
     },
     "Frequency for blinking effects." : {
+
+    },
+    "Front Light" : {
 
     },
     "Front Light [1]" : {
@@ -5105,6 +5162,9 @@
         }
       }
     },
+    "Linear" : {
+
+    },
     "Link" : {
       "comment" : "This is used for the title of a combo box that the user selects which switchboard link this link connects to.\nThis is used to describe a switchboard item."
     },
@@ -5302,10 +5362,19 @@
         }
       }
     },
+    "Logarithmic 1" : {
+
+    },
+    "Logarithmic 2" : {
+
+    },
     "Logical Function Dimmer Brightness Reduction" : {
 
     },
     "Logical function dimmer brightness reduction." : {
+
+    },
+    "LokSound 4 3 Point" : {
 
     },
     "Long Curved Track" : {
@@ -6427,6 +6496,9 @@
     "Preserve direction when changing from analog to digital." : {
 
     },
+    "Preset" : {
+
+    },
     "Previous" : {
       "comment" : "Used to describe the direction of the previous block in respect of a train route",
       "localizations" : {
@@ -6724,6 +6796,9 @@
           }
         }
       }
+    },
+    "Rear Light" : {
+
     },
     "Rear Light [1]" : {
 
@@ -7194,6 +7269,12 @@
     "Select the end block for the route." : {
       "comment" : "This is used for a tooltip."
     },
+    "Select the functions that should respond to the consist address" : {
+
+    },
+    "Select the functions that should respond to the consist address." : {
+
+    },
     "Select the required route." : {
       "comment" : "This is used for a tooltip."
     },
@@ -7241,6 +7322,12 @@
     },
     "Sensors" : {
       "comment" : "Used for the title of a switchboard item palette in LayoutBuilder"
+    },
+    "Serial Function Mode for LGB MTS" : {
+
+    },
+    "Serial function mode for LGB MTS." : {
+
     },
     "Serial Number" : {
 
@@ -7709,6 +7796,12 @@
 
     },
     "Speed Table" : {
+
+    },
+    "Speed table index" : {
+
+    },
+    "Speed Table Index" : {
 
     },
     "Speed that the locomotive was commanded to travel at" : {

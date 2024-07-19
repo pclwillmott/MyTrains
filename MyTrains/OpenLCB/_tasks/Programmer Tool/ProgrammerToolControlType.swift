@@ -21,5 +21,8 @@ public enum ProgrammerToolControlType {
   case textFieldWithInfo
   case textFieldWithSlider
   case textFieldWithInfoWithSlider
+  case functionsConsistMode
+  case functionsAnalogMode
+  case esuSpeedTable
   
 }
