@@ -30,12 +30,19 @@ class ESUSpeedTable: NSView {
       return
     }
     
+    if speedTableIndex == nil {
+      values.removeAll()
+      for index in 0 ... 27 {
+        values.append(decoder.getUInt8(cv: .cv_000_000_067 + index)!)
+      }
+    }
+
     var lastX  : CGFloat = 0
     var lastY : CGFloat = 0
     
     for index in 0 ... 27 {
       
-      let value = decoder.getUInt8(cv: .cv_000_000_067 + index)!
+      let value = values[index]
       
       let dx = boxSize + CGFloat(index) * scaleWidth
       let dy = boxSize + CGFloat(value) * scaleHeight
@@ -58,7 +65,7 @@ class ESUSpeedTable: NSView {
 
     for index in 0 ... 27 {
       
-      let value = decoder.getUInt8(cv: .cv_000_000_067 + index)!
+      let value = values[index]
       
       let dx = boxSize + CGFloat(index) * scaleWidth
       let dy = boxSize + CGFloat(value) * scaleHeight
@@ -91,7 +98,7 @@ class ESUSpeedTable: NSView {
       path.stroke()
 
     }
-    
+    /*
     if isDrag {
       
       let dx = boxSize + CGFloat(decoder.speedTableIndex - 1) * scaleWidth
@@ -117,15 +124,15 @@ class ESUSpeedTable: NSView {
       path.stroke()
 
     }
-
+*/
 
   }
   
   // MARK: Private Properties
   
-  private var isDrag : Bool = false
+  private var values : [UInt8] = []
   
-  private var dragValue : UInt8 = 0
+  private var speedTableIndex : Int?
   
   private var boxSize : CGFloat {
     return 11
@@ -145,31 +152,52 @@ class ESUSpeedTable: NSView {
   
   // MARK: Private Methods
   
-  override func mouseDown(with event: NSEvent) {
-
-    if let pos = position(from: event), let decoder {
-      decoder.speedTableIndex = pos.x + 1
+  private func setValue(speedTableIndex:Int, value:UInt8) {
+  
+    values[speedTableIndex - 1] = value
+    
+    if speedTableIndex > 2 {
+      for index in 2 ... speedTableIndex - 1 {
+        values[index - 1] = min(values[index - 1], value)
+      }
+    }
+    if speedTableIndex < 27 {
+      for index in speedTableIndex + 1 ... 27 {
+        values[index - 1] = max(values[index - 1], value)
+      }
     }
 
-    needsDisplay = true
+  }
+  
+  override func mouseDown(with event: NSEvent) {
+
+    speedTableIndex = nil
+    
+    if let pos = position(from: event), let decoder {
+      speedTableIndex = pos.x + 1
+    }
 
   }
 
   override func mouseDragged(with event: NSEvent) {
-    isDrag = true
-    let cc = self.convert(event.locationInWindow, from: nil)
-    dragValue = UInt8(max(1,min(255,round((cc.y - boxSize) / scaleHeight))))
-    needsDisplay = true
+    if let speedTableIndex {
+      let cc = self.convert(event.locationInWindow, from: nil)
+      setValue(speedTableIndex: speedTableIndex, value: UInt8(max(1,min(255,round((cc.y - boxSize) / scaleHeight)))))
+      needsDisplay = true
+    }
   }
   
   override func mouseUp(with event: NSEvent) {
 
-    if isDrag, let decoder {
-      isDrag = false
+    if let speedTableIndex, let decoder {
       let cc = self.convert(event.locationInWindow, from: nil)
-      let value = max(1,min(255,round((cc.y - boxSize) / scaleHeight)))
-      decoder.speedTableValue = UInt8(value)
+      setValue(speedTableIndex: speedTableIndex, value: UInt8(max(1,min(255,round((cc.y - boxSize) / scaleHeight)))))
       needsDisplay = true
+      for index in 0 ... values.count - 1 {
+        decoder.setUInt8(cv: .cv_000_000_067 + index, value: values[index])
+      }
+      self.speedTableIndex = nil
+      decoder.speedTableIndex = speedTableIndex
     }
     
   }
@@ -186,7 +214,7 @@ class ESUSpeedTable: NSView {
       
       for index in 0 ... 27 {
         
-        let value = decoder.getUInt8(cv: .cv_000_000_067 + index)!
+        let value = values[index]
         
         let dx = boxSize + CGFloat(index) * scaleWidth
         let dy = boxSize + CGFloat(value) * scaleHeight

@@ -2754,6 +2754,15 @@ public enum CV : UInt64, CaseIterable {
     return UInt16((self.rawValue & 0x0000ffff00000000) >> 32) + 1
   }
   
+  public var cvLabel : String {
+    if cv31 == 0 && cv32 == 0 {
+      return "CV\(cv)"
+    }
+    else {
+      return "CV\(cv31).\(cv32).\(cv)"
+    }
+  }
+  
   public var index : UInt16 {
     return UInt16(self.rawValue >> 48)
   }

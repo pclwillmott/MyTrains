@@ -5165,6 +5165,9 @@
     "Linear" : {
 
     },
+    "Linear until first maximum value" : {
+
+    },
     "Link" : {
       "comment" : "This is used for the title of a combo box that the user selects which switchboard link this link connects to.\nThis is used to describe a switchboard item."
     },

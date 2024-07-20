@@ -12,13 +12,15 @@ public enum SpeedTablePreset : UInt8, CaseIterable {
   
   // MARK: Enumeration
   
-  case exponential1 = 0
-  case exponential2 = 1
-  case linear = 2
-  case logarithmic1 = 3
-  case logarithmic2 = 4
-  case lokSound43Point = 5
-  
+  case exponential1 = 1
+  case exponential2 = 2
+  case doNothing = 0
+  case linear = 3
+  case linearUntilFirstMaximumValue = 4
+  case logarithmic1 = 5
+  case logarithmic2 = 6
+  case lokSound43Point = 7
+
   // MARK: Constructors
   
   init?(title:String) {
@@ -36,12 +38,14 @@ public enum SpeedTablePreset : UInt8, CaseIterable {
   public var title : String {
     
     let titles : [SpeedTablePreset:String] = [
-      .exponential1    : String(localized:"Exponential 1"),
-      .exponential2    : String(localized:"Exponential 2"),
-      .linear          : String(localized:"Linear"),
-      .logarithmic1    : String(localized:"Logarithmic 1"),
-      .logarithmic2    : String(localized:"Logarithmic 2"),
-      .lokSound43Point : String(localized:"LokSound 4 3 Point"),
+      .doNothing                    : String(localized:"Identity"),
+      .linearUntilFirstMaximumValue : String(localized:"Linear until first maximum value"),
+      .exponential1                 : String(localized:"Exponential 1"),
+      .exponential2                 : String(localized:"Exponential 2"),
+      .linear                       : String(localized:"Linear"),
+      .logarithmic1                 : String(localized:"Logarithmic 1"),
+      .logarithmic2                 : String(localized:"Logarithmic 2"),
+      .lokSound43Point              : String(localized:"LokSound 4 3 Point"),
     ]
     
     return titles[self]!
@@ -51,6 +55,8 @@ public enum SpeedTablePreset : UInt8, CaseIterable {
   public var speedTableValues : [UInt8] {
     
     let values : [SpeedTablePreset:[UInt8]] = [
+      .doNothing : [],
+      .linearUntilFirstMaximumValue : [],
       .exponential1 : [
         1,
         2,

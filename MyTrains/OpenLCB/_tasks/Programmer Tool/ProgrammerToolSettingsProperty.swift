@@ -111,6 +111,45 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
   case preserveDirection = 81
   case enableStartingDelay = 82
   
+  // Function Outputs
+  
+  case physicalOutput = 165
+  case physicalOutputPowerOnDelay = 166
+  case physicalOutputPowerOffDelay = 167
+  case physicalOutputEnableFunctionTimeout = 168
+  case physicalOutputTimeUntilAutomaticPowerOff = 169
+  case physicalOutputOutputMode = 170
+  case physicalOutputBrightness = 171
+  case physicalOutputUseClassLightLogic = 198
+  case physicalOutputSequencePosition = 199
+  case physicalOutputPhaseShift = 172
+  case physicalOutputStartupTime = 173
+  case physicalOutputStartupDescription = 197
+  case physicalOutputLevel = 174
+  case physicalOutputSmokeUnitControlMode = 175
+  case physicalOutputSpeed = 176
+  case physicalOutputAccelerationRate = 177
+  case physicalOutputDecelerationRate = 178
+  case physicalOutputHeatWhileLocomotiveStands = 179
+  case physicalOutputMinimumHeatWhileLocomotiveDriving = 180
+  case physicalOutputMaximumHeatWhileLocomotiveDriving = 181
+  case physicalOutputChuffPower = 182
+  case physicalOutputFanPower = 183
+  case physicalOutputTimeout = 184
+  case physicalOutputServoDurationA = 185
+  case physicalOutputServoDurationB = 186
+  case physicalOutputServoPositionA = 187
+  case physicalOutputServoDoNotDisableServoPulseAtPositionA = 188
+  case physicalOutputServoPositionB = 189
+  case physicalOutputServoDoNotDisableServoPulseAtPositionB = 190
+  case physicalOutputCouplerForce = 191
+  case physicalOutputGradeCrossing = 196
+  case physicalOutputRule17Forward = 192
+  case physicalOutputRule17Reverse = 193
+  case physicalOutputDimmer = 194
+  case physicalOutputLEDMode = 195
+
+  
   // Function Settings
   
   case frequencyForBlinkingEffects = 92
@@ -142,10 +181,10 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
   
   // Motor Settings
   
-  case esuSpeedTable = 165
-  case speedTableIndex = 166
-  case speedTableEntryValue = 167
-  case speedTablePreset = 168
+  case esuSpeedTable = 200
+  case speedTableIndex = 201
+  case speedTableEntryValue = 202
+  case speedTablePreset = 203
   case minimumSpeed = 112
   case maximumSpeed = 113
   case emfBasicSettings = 130
@@ -1028,6 +1067,330 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
       String(localized:"Delay starting if drive sound is enabled."),
       String(localized:" [CV124.2]"),
       .startingDelay,
+      .checkBox,
+      []
+    ),
+    .physicalOutput
+    : (
+      String(localized:"Physical Output"),
+      String(localized:"Physical Output."),
+      String(localized:""),
+      .physicalOutputConfiguration,
+      .comboBox,
+      []
+    ),
+    .physicalOutputPowerOnDelay
+    : (
+      String(localized:"Power On Delay"),
+      String(localized:"Power on delay."),
+      String(localized:""),
+      .physicalOutputConfiguration,
+      .textFieldWithInfoWithSlider,
+      []
+    ),
+    .physicalOutputPowerOffDelay
+    : (
+      String(localized:"Power Off Delay"),
+      String(localized:"Power off delay."),
+      String(localized:""),
+      .physicalOutputConfiguration,
+      .textFieldWithInfoWithSlider,
+      []
+    ),
+    .physicalOutputEnableFunctionTimeout
+    : (
+      String(localized:"Enable Function Timeout"),
+      String(localized:"Enable function timeout."),
+      String(localized:""),
+      .physicalOutputConfiguration,
+      .checkBox,
+      []
+    ),
+    .physicalOutputTimeUntilAutomaticPowerOff
+    : (
+      String(localized:"Time until Automatic Power Off"),
+      String(localized:"Time until automatic power off."),
+      String(localized:""),
+      .physicalOutputConfiguration,
+      .textFieldWithInfoWithSlider,
+      []
+    ),
+    .physicalOutputOutputMode
+    : (
+      String(localized:"Output Mode (Effect)"),
+      String(localized:"Output mode (effect)."),
+      String(localized:""),
+      .physicalOutputConfiguration,
+      .comboBox,
+      []
+    ),
+    .physicalOutputBrightness
+    : (
+      String(localized:"Brightness"),
+      String(localized:"Brightness."),
+      String(localized:""),
+      .physicalOutputConfiguration,
+      .textFieldWithSlider,
+      []
+    ),
+    .physicalOutputPhaseShift
+    : (
+      String(localized:"Phase Shift"),
+      String(localized:"Phase shift."),
+      String(localized:""),
+      .physicalOutputConfiguration,
+      .textFieldWithSlider,
+      []
+    ),
+    .physicalOutputStartupTime
+    : (
+      String(localized:"Startup Time"),
+      String(localized:"Startup time."),
+      String(localized:""),
+      .physicalOutputConfiguration,
+      .textFieldWithSlider,
+      []
+    ),
+    .physicalOutputStartupTimeInfo
+    : (
+      String(localized:""),
+      String(localized:"."),
+      String(localized:""),
+      .physicalOutputConfiguration,
+      .description,
+      []
+    ),
+    .physicalOutputLevel
+    : (
+      String(localized:"Level"),
+      String(localized:"Level."),
+      String(localized:""),
+      .physicalOutputConfiguration,
+      .textFieldWithSlider,
+      []
+    ),
+    .physicalOutputSmokeUnitControlMode
+    : (
+      String(localized:"Phase Shift"),
+      String(localized:"Phase shift."),
+      String(localized:""),
+      .physicalOutputConfiguration,
+      .comboBox,
+      []
+    ),
+    .physicalOutputSpeed
+    : (
+      String(localized:"Speed"),
+      String(localized:"Speed."),
+      String(localized:""),
+      .physicalOutputConfiguration,
+      .textFieldWithSlider,
+      []
+    ),
+    .physicalOutputAccelerationRate
+    : (
+      String(localized:"Acceleration Rate"),
+      String(localized:"Acceleration Rate."),
+      String(localized:""),
+      .physicalOutputConfiguration,
+      .textFieldWithSlider,
+      []
+    ),
+    .physicalOutputDecelerationRate
+    : (
+      String(localized:"Deceleration Rate"),
+      String(localized:"Deceleration Rate."),
+      String(localized:""),
+      .physicalOutputConfiguration,
+      .textFieldWithSlider,
+      []
+    ),
+    .physicalOutputHeatWhileLocomotiveStands
+    : (
+      String(localized:"Heat while Locomotive Stands"),
+      String(localized:"Heat while locomotive stands."),
+      String(localized:""),
+      .physicalOutputConfiguration,
+      .textFieldWithSlider,
+      []
+    ),
+    .physicalOutputMinimumHeatWhileLocomotiveDriving
+    : (
+      String(localized:"Minimum Heat while Locomotive is Driving"),
+      String(localized:"Minimum heat while locomotive is driving."),
+      String(localized:""),
+      .physicalOutputConfiguration,
+      .textFieldWithSlider,
+      []
+    ),
+    .physicalOutputMaximumHeatWhileLocomotiveDriving
+    : (
+      String(localized:"Maximum Heat while Locomotive is Driving"),
+      String(localized:"Maximum heat while locomotive is driving."),
+      String(localized:""),
+      .physicalOutputConfiguration,
+      .textFieldWithSlider,
+      []
+    ),
+    .physicalOutputChuffPower
+    : (
+      String(localized:"Chuff Power"),
+      String(localized:"Chuff power."),
+      String(localized:""),
+      .physicalOutputConfiguration,
+      .textFieldWithSlider,
+      []
+    ),
+    .physicalOutputFanPower
+    : (
+      String(localized:"Fan Power"),
+      String(localized:"Fan power."),
+      String(localized:""),
+      .physicalOutputConfiguration,
+      .textFieldWithSlider,
+      []
+    ),
+    .physicalOutputTimeout
+    : (
+      String(localized:"Timeout"),
+      String(localized:"Timeout."),
+      String(localized:""),
+      .physicalOutputConfiguration,
+      .textFieldWithInfoWithSlider,
+      []
+    ),
+    .physicalOutputCouplerForce
+    : (
+      String(localized:"Coupler Force"),
+      String(localized:"Coupler force."),
+      String(localized:""),
+      .physicalOutputConfiguration,
+      .textFieldWithSlider,
+      []
+    ),
+    .physicalOutputServoDurationA
+    : (
+      String(localized:"Duration (speed) A"),
+      String(localized:"Duration (speed) A."),
+      String(localized:""),
+      .physicalOutputConfiguration,
+      .textFieldWithInfoWithSlider,
+      []
+    ),
+    .physicalOutputServoDurationB
+    : (
+      String(localized:"Duration (speed) B"),
+      String(localized:"Duration (speed) B."),
+      String(localized:""),
+      .physicalOutputConfiguration,
+      .textFieldWithInfoWithSlider,
+      []
+    ),
+    .physicalOutputServoPositionA
+    : (
+      String(localized:"Position A (Off)"),
+      String(localized:"Position A (off)."),
+      String(localized:""),
+      .physicalOutputConfiguration,
+      .textFieldWithSlider,
+      []
+    ),
+    .physicalOutputServoPositionB
+    : (
+      String(localized:"Position B (On)"),
+      String(localized:"Position B (on)."),
+      String(localized:""),
+      .physicalOutputConfiguration,
+      .textFieldWithSlider,
+      []
+    ),
+    .physicalOutputServoDoNotDisableServoPulseAtPositionA
+    : (
+      String(localized:"Do Not Disable Servo Pulse at Position A"),
+      String(localized:"Do not disable servo pulse at position A."),
+      String(localized:""),
+      .physicalOutputConfiguration,
+      .checkBox,
+      []
+    ),
+    .physicalOutputServoDoNotDisableServoPulseAtPositionB
+    : (
+      String(localized:"Do Not Disable Servo Pulse at Position B"),
+      String(localized:"Do not disable servo pulse at position B."),
+      String(localized:""),
+      .physicalOutputConfiguration,
+      .checkBox,
+      []
+    ),
+    .physicalOutputUseClassLightLogic
+    : (
+      String(localized:"Use Class Light Logic"),
+      String(localized:"Use class light logic."),
+      String(localized:""),
+      .physicalOutputConfiguration,
+      .checkBox,
+      []
+    ),
+    .physicalOutputSequencePosition
+    : (
+      String(localized:"Sequence Position"),
+      String(localized:"Sequence position."),
+      String(localized:""),
+      .physicalOutputConfiguration,
+      .textFieldWithSlider,
+      []
+    ),
+    .physicalOutputSpecialFunctions
+    : (
+      String(localized:"Rule 17 Forward"),
+      String(localized:"Rule 17 forward."),
+      String(localized:""),
+      .physicalOutputConfiguration,
+      .description,
+      []
+    ),
+    .physicalOutputGradeCrossing
+    : (
+      String(localized:"Grade Crossing"),
+      String(localized:"Grade Crossing."),
+      String(localized:""),
+      .physicalOutputConfiguration,
+      .checkBox,
+      []
+    ),
+    .physicalOutputRule17Forward
+    : (
+      String(localized:"Rule 17 Forward"),
+      String(localized:"Rule 17 forward."),
+      String(localized:""),
+      .physicalOutputConfiguration,
+      .checkBox,
+      []
+    ),
+    .physicalOutputRule17Reverse
+    : (
+      String(localized:"Rule 17 Reverse"),
+      String(localized:"Rule 17 Reverse."),
+      String(localized:""),
+      .physicalOutputConfiguration,
+      .checkBox,
+      []
+    ),
+    .physicalOutputDimmer
+    : (
+      String(localized:"Dimmer"),
+      String(localized:"Dimmer."),
+      String(localized:""),
+      .physicalOutputConfiguration,
+      .checkBox,
+      []
+    ),
+    .physicalOutputLEDMode
+    : (
+      String(localized:"LED Mode"),
+      String(localized:"LED mode."),
+      String(localized:""),
+      .physicalOutputConfiguration,
       .checkBox,
       []
     ),

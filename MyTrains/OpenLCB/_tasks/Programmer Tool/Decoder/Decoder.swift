@@ -2242,23 +2242,38 @@ public class Decoder : NSObject {
     }
   }
   
-  private var _speedTablePreset : SpeedTablePreset?
+  private var _speedTablePreset : SpeedTablePreset = .doNothing
   
-  private var speedTablePreset : SpeedTablePreset? {
+  private var speedTablePreset : SpeedTablePreset {
     get {
       return _speedTablePreset
     }
     set(value) {
       _speedTablePreset = value
-      if let _speedTablePreset {
+      if !_speedTablePreset.speedTableValues.isEmpty {
         let table = _speedTablePreset.speedTableValues
         for index in 0 ... table.count - 1 {
           setUInt8(cv: .cv_000_000_067 + index, value: table[index])
         }
       }
-      delegate?.reloadSettings!(self)
+      else if _speedTablePreset == .linearUntilFirstMaximumValue {
+        var firstMax : Int = 0
+        for index in 0 ... 27 {
+          if getUInt8(cv: .cv_000_000_067 + index)! == 255 {
+            firstMax = index
+            break
+          }
+        }
+        for index in 1 ... firstMax - 1 {
+          let value = UInt8(1 + (255 - 1) * Double(index) / Double(firstMax))
+          setUInt8(cv: .cv_000_000_067 + index, value: value)
+        }
+      }
+      _speedTablePreset = .doNothing
+      delegate?.reloadSettings?(self)
     }
   }
+  
   private var _speedTableIndex : Int = 1
   
   public var speedTableIndex : Int {
@@ -2294,7 +2309,187 @@ public class Decoder : NSObject {
       }
     }
   }
+  
+  private var _esuDecoderPhysicalOutput : ESUDecoderPhysicalOutput = .frontLight
+  
+  public var esuDecoderPhysicalOutput : ESUDecoderPhysicalOutput {
+    get {
+      return _esuDecoderPhysicalOutput
+    }
+    set(value) {
+      if value != esuDecoderPhysicalOutput {
+        _esuDecoderPhysicalOutput = value
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+  
+  private let physicalOutputCVs : [ProgrammerToolSettingsProperty:(cv:CV, mask:UInt8, shift:UInt8)] = [
+    .physicalOutputPowerOnDelay  : (cv: .cv_016_000_260, mask: 0b00001111, shift:0),
+    .physicalOutputPowerOffDelay : (cv: .cv_016_000_260, mask: 0b11110000 , shift: 4),
+    .physicalOutputEnableFunctionTimeout : (cv: .cv_016_000_261, mask: 0xff, shift:0),
+    .physicalOutputTimeUntilAutomaticPowerOff : (cv: .cv_016_000_261, mask: 0xff , shift:0),
+    .physicalOutputOutputMode : (cv: .cv_016_000_259, mask: 0xff , shift:0),
+    .physicalOutputBrightness : (cv:.cv_016_000_262, mask: 0b00011111, shift:0),
+    .physicalOutputUseClassLightLogic: (cv:.cv_016_000_258, mask: 0b11000000, shift:6),
+    .physicalOutputSequencePosition: (cv:.cv_016_000_262, mask: 0b11000000, shift:6),
+    .physicalOutputPhaseShift : (cv: .cv_016_000_258, mask: 0b00111111, shift:0),
+    .physicalOutputStartupTime : (cv: .cv_016_000_264, mask: 0xff, shift:0),
+    .physicalOutputLevel : (cv: .cv_016_000_264, mask: 0b01111111, shift:0),
+    .physicalOutputSmokeUnitControlMode : (cv: .cv_016_000_262, mask: ByteMask.d0, shift:0),
+    .physicalOutputSpeed : (cv: .cv_016_000_262, mask: 0b00011111, shift:0),
+    .physicalOutputAccelerationRate : (cv:.cv_016_000_263, mask: 0b00011111 , shift:0),
+    .physicalOutputDecelerationRate : (cv:.cv_016_000_264, mask: 0b00011111 , shift:0),
+    .physicalOutputHeatWhileLocomotiveStands : (cv: .cv_016_000_262, mask: 0b00011111 , shift:0),
+    .physicalOutputMinimumHeatWhileLocomotiveDriving : (cv: .cv_016_000_263, mask: 0b00011111, shift:0),
+    .physicalOutputMaximumHeatWhileLocomotiveDriving : (cv: .cv_016_000_264, mask: 0b00011111, shift:0),
+    .physicalOutputChuffPower : (cv: .cv_016_000_262, mask: 0b00011111, shift:0),
+    .physicalOutputFanPower : (cv:.cv_016_000_263, mask: 0b00011111, shift:0),
+    .physicalOutputTimeout : (cv: .cv_016_000_264, mask: 0xff , shift:0),
+    .physicalOutputServoDurationA : (cv:.cv_016_000_258, mask: 0b00111111, shift:0),
+    .physicalOutputServoDurationB : (cv:.cv_016_000_262, mask: 0b00111111 , shift:0),
+    .physicalOutputServoPositionA : (cv: .cv_016_000_263, mask: 0b00111111 , shift:0),
+    .physicalOutputServoDoNotDisableServoPulseAtPositionA : (cv:.cv_016_000_263, mask: 0b10000000, shift:0),
+    .physicalOutputServoPositionB : (cv:.cv_016_000_264, mask: 0b00111111, shift:0),
+    .physicalOutputServoDoNotDisableServoPulseAtPositionB : (cv: .cv_016_000_264, mask: 0b10000000, shift:0),
+    .physicalOutputCouplerForce : (cv: .cv_016_000_262, mask: 0b00011111, shift:0),
+    .physicalOutputRule17Forward : (cv: .cv_016_000_263, mask: ByteMask.d2 , shift:0),
+    .physicalOutputRule17Reverse : (cv: .cv_016_000_263, mask: ByteMask.d3 , shift:0),
+    .physicalOutputDimmer : (cv: .cv_016_000_263, mask: ByteMask.d4, shift:0),
+    .physicalOutputLEDMode : (cv: .cv_016_000_263, mask: ByteMask.d7, shift:0),
+    .physicalOutputGradeCrossing : (cv: .cv_016_000_263, mask: ByteMask.d1, shift:0),
+  ]
+  
+  public func physicalOutputCV(property:ProgrammerToolSettingsProperty) -> CV? {
+    
+    if let info = physicalOutputCVs[property] {
+      return info.cv + (Int(esuDecoderPhysicalOutput.rawValue) * 8)
+    }
+    
+    return nil
+    
+  }
+  
+  public func isPhysicalOutputBoolean(property:ProgrammerToolSettingsProperty) -> Bool? {
+    
+    if let info = physicalOutputCVs[property] {
+      
+      var mask : UInt8 = 0b10000000
+      
+      var firstBit : Int?
+      var lastBit : Int?
+      var index = 7
+      
+      while mask != 0 {
+        if firstBit == nil && (info.mask & mask) == mask {
+          firstBit = index
+        }
+        if (info.mask & mask) == mask {
+          lastBit = firstBit
+        }
+        mask >>= 1
+        index -= 1
+      }
+      
+      if let firstBit, let lastBit {
+        return firstBit == lastBit
+      }
+      
+    }
+    
+    return nil
+    
+  }
+  
+  public func getPhysicalOutputValue(property:ProgrammerToolSettingsProperty) -> UInt8? {
+    
+    if let cv = physicalOutputCV(property:property), let info = physicalOutputCVs[property], var value = getMaskedUInt8(cv: cv, mask: info.mask) {
+      
+      return value >> info.shift
+      
+    }
+    
+    return nil
+    
+  }
 
+  public func setPhysicalOutputValue(property:ProgrammerToolSettingsProperty, value:UInt8) {
+    
+    if getPhysicalOutputValue(property:property) != value, let cv = physicalOutputCV(property:property), let info = physicalOutputCVs[property] {
+      
+      setMaskedUInt8(cv: cv, mask: info.mask, value: value << info.shift)
+      
+      delegate?.reloadSettings?(self)
+      
+    }
+    
+  }
+
+  public func getPhysicalOutputBoolValue(property:ProgrammerToolSettingsProperty) -> Bool? {
+    
+    if let cv = physicalOutputCV(property:property), let info = physicalOutputCVs[property] {
+      
+      return getBool(cv: cv, mask: info.mask)
+      
+    }
+    
+    return nil
+    
+  }
+
+  public func setPhysicalOutputBoolValue(property:ProgrammerToolSettingsProperty, value:Bool) {
+    
+    if value != getPhysicalOutputBoolValue(property:property), let cv = physicalOutputCV(property:property), let info = physicalOutputCVs[property] {
+      
+      setBool(cv: cv, mask: info.mask, value: value)
+      
+      delegate?.reloadSettings!(self)
+      
+    }
+    
+  }
+
+  public func physicalOutputCVLabel(property:ProgrammerToolSettingsProperty) -> String {
+    
+    if let info = physicalOutputCVs[property] {
+      
+      var mask : UInt8 = 0b10000000
+      
+      var firstBit : Int?
+      var lastBit : Int?
+      var index = 7
+      
+      while mask != 0 {
+        if firstBit == nil && (info.mask & mask) == mask {
+          firstBit = index
+        }
+        if (info.mask & mask) == mask {
+          lastBit = firstBit
+        }
+        mask >>= 1
+        index -= 1
+      }
+      
+      if let cv = physicalOutputCV(property:property), let firstBit, let lastBit {
+        
+        if firstBit == 7 && lastBit == 0 {
+          return "[CV\(cv.cvLabel)]"
+        }
+        
+        if firstBit == lastBit {
+          return "[CV\(cv.cvLabel).\(firstBit)]"
+        }
+        
+        return "[CV\(cv.cvLabel).\(firstBit):\(lastBit)]"
+        
+      }
+      
+    }
+    
+    return "error"
+    
+  }
+  
   // MARK: Private Methods
   
   // MARK: Public Methods
@@ -2809,7 +3004,7 @@ public class Decoder : NSObject {
     case .speedTableEntryValue:
       return "\(speedTableValue)"
     case .speedTablePreset:
-      return _speedTablePreset?.title ?? ""
+      return speedTablePreset.title
     }
   }
   
@@ -3394,7 +3589,7 @@ public class Decoder : NSObject {
     case .speedTableEntryValue:
       speedTableValue = UInt8(string)!
     case .speedTablePreset:
-      speedTablePreset = SpeedTablePreset(title: string)
+      speedTablePreset = SpeedTablePreset(title: string)!
     default:
       break
     }

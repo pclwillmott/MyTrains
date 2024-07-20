@@ -86,7 +86,7 @@ public enum ESUDecoderPhysicalOutput : UInt8, CaseIterable {
   
   // MARK: Public Class Methods
   
-  public static func populate(comboBox:NSComboBox) {
+  public static func populate(comboBox:NSComboBox, decoder:Decoder) {
     comboBox.removeAllItems()
     for item in ESUDecoderPhysicalOutput.allCases {
       comboBox.addItem(withObjectValue: item.title)

@@ -1111,7 +1111,6 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
       if let comboBox = field.control as? NSComboBox {
         
         comboBox.stringValue = ""
-        
         if comboBox.numberOfItems > 0 {
           comboBox.selectItem(withObjectValue: value)
         }

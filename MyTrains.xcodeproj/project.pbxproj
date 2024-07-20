@@ -434,6 +434,7 @@
 		DAEA212E2A5186EA008545A6 /* OpenLCBDatagramTimeout.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAEA212D2A5186EA008545A6 /* OpenLCBDatagramTimeout.swift */; };
 		DAEA21372A51BE65008545A6 /* LocoNetGateway Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAEA21362A51BE65008545A6 /* LocoNetGateway Extensions.swift */; };
 		DAEA9CFA272D8FBE00C9B3EC /* LocoNetMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAEA9CF9272D8FBE00C9B3EC /* LocoNetMessage.swift */; };
+		DAEC694A2C4BEEFD008F1CFF /* ESUPhysicalOutputMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAEC69492C4BEEFD008F1CFF /* ESUPhysicalOutputMode.swift */; };
 		DAED17202A5ABC8D0051C9AF /* OpenLCBCANGateway.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAED171F2A5ABC8D0051C9AF /* OpenLCBCANGateway.swift */; };
 		DAED17222A5ABF4A0051C9AF /* MyTrains CAN Gateway.xml in Resources */ = {isa = PBXBuildFile; fileRef = DAED17212A5ABF4A0051C9AF /* MyTrains CAN Gateway.xml */; };
 		DAEF18712A3DFDE100AC227D /* LocoNetDeviceId.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAEF18702A3DFDE100AC227D /* LocoNetDeviceId.swift */; };
@@ -915,6 +916,7 @@
 		DAEA212D2A5186EA008545A6 /* OpenLCBDatagramTimeout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBDatagramTimeout.swift; sourceTree = "<group>"; };
 		DAEA21362A51BE65008545A6 /* LocoNetGateway Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LocoNetGateway Extensions.swift"; sourceTree = "<group>"; };
 		DAEA9CF9272D8FBE00C9B3EC /* LocoNetMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocoNetMessage.swift; sourceTree = "<group>"; };
+		DAEC69492C4BEEFD008F1CFF /* ESUPhysicalOutputMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ESUPhysicalOutputMode.swift; sourceTree = "<group>"; };
 		DAED171F2A5ABC8D0051C9AF /* OpenLCBCANGateway.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBCANGateway.swift; sourceTree = "<group>"; };
 		DAED17212A5ABF4A0051C9AF /* MyTrains CAN Gateway.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "MyTrains CAN Gateway.xml"; sourceTree = "<group>"; };
 		DAEF18702A3DFDE100AC227D /* LocoNetDeviceId.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocoNetDeviceId.swift; sourceTree = "<group>"; };
@@ -1069,6 +1071,7 @@
 				DAE524FB2C454B66000FC319 /* ClassLightLogicSequenceLength.swift */,
 				DAE524FD2C454D60000FC319 /* DecoderSensorSettings.swift */,
 				DAE524FF2C459854000FC319 /* ESUDecoderPhysicalOutput.swift */,
+				DAEC69492C4BEEFD008F1CFF /* ESUPhysicalOutputMode.swift */,
 				DA0F378D2C47D471002C66D8 /* SteamChuffMode.swift */,
 				DA0F378F2C47E9D8002C66D8 /* SoundControlBasis.swift */,
 				DA0F37912C47EFA4002C66D8 /* TriggeredFunction.swift */,
@@ -2358,6 +2361,7 @@
 				DA73666D2C2082950074697B /* SpeedProfilerInspectorGroup.swift in Sources */,
 				DA17297F2B25E7330013301B /* OpenLCBLocationServicesContentBlock.swift in Sources */,
 				DA0D3E0C2A485E9A0042748C /* OpenLCBSearchMatchTarget.swift in Sources */,
+				DAEC694A2C4BEEFD008F1CFF /* ESUPhysicalOutputMode.swift in Sources */,
 				DA8601BB2B7E268A00B73C16 /* OpenLCBNodeVisibility.swift in Sources */,
 				DA5B4607276F6917005CA03C /* ComboBoxDBDS.swift in Sources */,
 				DAA56B532BD93A7900BAB6EF /* InspectorControlType.swift in Sources */,
