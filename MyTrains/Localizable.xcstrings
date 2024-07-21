@@ -403,6 +403,12 @@
     " [CV255]" : {
 
     },
+    "." : {
+
+    },
+    "(disabled)" : {
+
+    },
     "%@" : {
 
     },
@@ -581,6 +587,9 @@
           }
         }
       }
+    },
+    "16 2/3 Hz flickering" : {
+
     },
     "20 seconds" : {
       "comment" : "Used to select a sampling period",
@@ -904,6 +913,12 @@
 
     },
     "Acceleration and Deceleration" : {
+
+    },
+    "Acceleration Rate" : {
+
+    },
+    "Acceleration Rate." : {
 
     },
     "Acceleration, brake time, and train load" : {
@@ -1299,6 +1314,9 @@
         }
       }
     },
+    "Autocoupler coil #2" : {
+
+    },
     "Automatic Parking Brake" : {
 
     },
@@ -1609,6 +1627,9 @@
     "Brake if right rail signal in driving direction is more positive than the left rail." : {
 
     },
+    "Brake light" : {
+
+    },
     "Brake on Forward DC Polarity" : {
 
     },
@@ -1678,6 +1699,12 @@
     },
     "Brazil" : {
       "comment" : "This is the name of a country."
+    },
+    "Brightness" : {
+
+    },
+    "Brightness." : {
+
     },
     "Bring All to Front" : {
       "comment" : "Used for a menu title"
@@ -1859,6 +1886,12 @@
     },
     "China" : {
       "comment" : "This is the name of a country."
+    },
+    "Chuff Power" : {
+
+    },
+    "Chuff power." : {
+
     },
     "Class Light Logic Sequence Length" : {
 
@@ -2430,6 +2463,12 @@
     "Control Basis" : {
       "comment" : "This is used for the title of combobox."
     },
+    "Control Mode" : {
+
+    },
+    "Control mode." : {
+
+    },
     "Copy" : {
       "comment" : "Used for a menu title\nUsed for the title of a button copies to the clipboard"
     },
@@ -2450,6 +2489,9 @@
         }
       }
     },
+    "Coupler" : {
+
+    },
     "Coupler Clank" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
       "localizations" : {
@@ -2466,6 +2508,12 @@
           }
         }
       }
+    },
+    "Coupler Force" : {
+
+    },
+    "Coupler force." : {
+
     },
     "Create" : {
       "comment" : "Used for the Create Application Node button title",
@@ -2829,6 +2877,12 @@
     "Deceleration Adjustment." : {
 
     },
+    "Deceleration Rate" : {
+
+    },
+    "Deceleration Rate." : {
+
+    },
     "Decimal" : {
       "comment" : "Used by combobox to select number base for display",
       "localizations" : {
@@ -3108,6 +3162,12 @@
     "Digitrax DT200" : {
 
     },
+    "Dimmable headlight" : {
+
+    },
+    "Dimmable headlight (fade in/out)" : {
+
+    },
     "Dimmer" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
       "localizations" : {
@@ -3124,6 +3184,9 @@
           }
         }
       }
+    },
+    "Dimmer." : {
+
     },
     "Direction Next" : {
       "comment" : "This is used for the title of the Speed Constraints Direction Next section in the Layout Builder."
@@ -3175,6 +3238,12 @@
     "Distance of steam chuffs at speed step 1." : {
 
     },
+    "Ditch light type 1" : {
+
+    },
+    "Ditch light type 2" : {
+
+    },
     "Ditch Lights" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
       "localizations" : {
@@ -3196,6 +3265,18 @@
 
     },
     "Divide trigger impulses in two if shunting mode enabled." : {
+
+    },
+    "Do Not Disable Servo Pulse at Position A" : {
+
+    },
+    "Do not disable servo pulse at position A." : {
+
+    },
+    "Do Not Disable Servo Pulse at Position B" : {
+
+    },
+    "Do not disable servo pulse at position B." : {
 
     },
     "Do not open" : {
@@ -3226,6 +3307,9 @@
     },
     "Double Slip" : {
       "comment" : "This is used to describe a piece of track."
+    },
+    "Double strobe" : {
+
     },
     "Drive Hold" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
@@ -3271,6 +3355,18 @@
 
     },
     "Duplicate Node ID Detected" : {
+
+    },
+    "Duration (speed) A" : {
+
+    },
+    "Duration (speed) A." : {
+
+    },
+    "Duration (speed) B" : {
+
+    },
+    "Duration (speed) B." : {
 
     },
     "Duration of Steam Chuffs Relative to Trigger Distance" : {
@@ -3480,6 +3576,12 @@
     "Enable forward trimming." : {
 
     },
+    "Enable Function Timeout" : {
+
+    },
+    "Enable function timeout." : {
+
+    },
     "Enable Gearbox Backlash Compensation" : {
 
     },
@@ -3614,6 +3716,9 @@
     "End Block" : {
       "comment" : "This is used for the title of a combobox."
     },
+    "End of train flasher" : {
+
+    },
     "End User License Agreement" : {
 
     },
@@ -3695,6 +3800,15 @@
 
     },
     "Error Information Report 3" : {
+
+    },
+    "ESU Coupler" : {
+
+    },
+    "ESU coupler 1" : {
+
+    },
+    "ESU coupler 2" : {
 
     },
     "ESU Smoke Unit" : {
@@ -3974,6 +4088,15 @@
     "Exponential 2" : {
 
     },
+    "External controlled smoke unit" : {
+
+    },
+    "External Smoke Unit Type" : {
+
+    },
+    "External smoke unit type." : {
+
+    },
     "F0" : {
 
     },
@@ -4091,6 +4214,9 @@
     "Fade-out time of light effects." : {
 
     },
+    "Fan control" : {
+
+    },
     "Fan Operation" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
       "localizations" : {
@@ -4107,6 +4233,12 @@
           }
         }
       }
+    },
+    "Fan Power" : {
+
+    },
+    "Fan power." : {
+
     },
     "Fan Speed Trim" : {
 
@@ -4180,6 +4312,9 @@
         }
       }
     },
+    "Firebox" : {
+
+    },
     "Firmware Corrupted" : {
 
     },
@@ -4222,6 +4357,9 @@
       }
     },
     "Flash" : {
+
+    },
+    "Flash light" : {
 
     },
     "Forward" : {
@@ -4476,10 +4614,16 @@
         }
       }
     },
+    "Grade Crossing" : {
+
+    },
     "Grade Crossing Holding Time" : {
 
     },
     "Grade crossing holding time." : {
+
+    },
+    "Grade Crossing." : {
 
     },
     "Gray" : {
@@ -4514,6 +4658,9 @@
         }
       }
     },
+    "Gyra light" : {
+
+    },
     "h" : {
       "comment" : "Used for the abbreviation of hours"
     },
@@ -4536,6 +4683,15 @@
           }
         }
       }
+    },
+    "Heat while Locomotive Stands" : {
+
+    },
+    "Heat while locomotive stands." : {
+
+    },
+    "Heating control" : {
+
     },
     "Heavy Load" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
@@ -4908,11 +5064,20 @@
         }
       }
     },
+    "KISS" : {
+
+    },
     "km" : {
       "comment" : "Used for the abbreviation of kilometers"
     },
     "km/h" : {
       "comment" : "Used for the abbreviation of kilometers per hour"
+    },
+    "KM1 (other)" : {
+
+    },
+    "KM1 BR 41 / BR 44" : {
+
     },
     "l" : {
       "comment" : "Used for the Select Layout menu key equivalent",
@@ -5033,6 +5198,12 @@
     "Learn Event" : {
 
     },
+    "LED Mode" : {
+
+    },
+    "LED mode." : {
+
+    },
     "Left Curved Turnout" : {
       "comment" : "This is used to describe a piece of track."
     },
@@ -5101,6 +5272,12 @@
     },
     "Length of through route" : {
       "comment" : "This is used for a tooltip."
+    },
+    "Level" : {
+
+    },
+    "Level." : {
+
     },
     "License Agreement" : {
 
@@ -5403,6 +5580,9 @@
     "Loop" : {
 
     },
+    "Low energy light" : {
+
+    },
     "m" : {
       "comment" : "Used for the abbreviation of meters"
     },
@@ -5518,6 +5698,9 @@
     "Marklin-Motorola II" : {
 
     },
+    "Mars light" : {
+
+    },
     "Master" : {
       "comment" : "Used to indicate that the workstation is the master mode",
       "localizations" : {
@@ -5556,6 +5739,12 @@
 
     },
     "Master volume." : {
+
+    },
+    "Maximum Heat while Locomotive is Driving" : {
+
+    },
+    "Maximum heat while locomotive is driving." : {
 
     },
     "Maximum Revs" : {
@@ -5743,6 +5932,12 @@
     "Minimum distance of steam chuffs." : {
 
     },
+    "Minimum Heat while Locomotive is Driving" : {
+
+    },
+    "Minimum heat while locomotive is driving." : {
+
+    },
     "Minimum period to profile one speed step." : {
       "comment" : "This is used for a tooltip."
     },
@@ -5902,6 +6097,9 @@
       "comment" : "This is used for a tooltip."
     },
     "Native OpenLCB" : {
+
+    },
+    "Neon light" : {
 
     },
     "New" : {
@@ -6247,7 +6445,16 @@
     "Orientation" : {
       "comment" : "This is used for the title of a combo box where the user can select the orientation/rotation state of the switchboard item."
     },
+    "Oscillating headlight" : {
+
+    },
     "Other" : {
+
+    },
+    "Output Mode (Effect)" : {
+
+    },
+    "Output mode (effect)." : {
 
     },
     "Overhead" : {
@@ -6331,6 +6538,12 @@
           }
         }
       }
+    },
+    "Pantograph 1" : {
+
+    },
+    "Pantograph 2" : {
+
     },
     "Passenger Door Slams" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
@@ -6451,11 +6664,26 @@
     "Persistent Speed" : {
 
     },
+    "Phase Shift" : {
+
+    },
+    "Phase shift." : {
+
+    },
+    "Physical Output" : {
+
+    },
     "Physical Output Configuration" : {
+
+    },
+    "Physical Output." : {
 
     },
     "Pink" : {
       "comment" : "The name of a color."
+    },
+    "PLACEHOLDER" : {
+
     },
     "Platform" : {
       "comment" : "This is used to describe a switchboard item."
@@ -6469,10 +6697,37 @@
     "Position (%%UNITS_ACTUAL_DISTANCE%%)" : {
       "comment" : "This is used for the title of an input field that the user enters the position of a sensor device."
     },
+    "Position A (Off)" : {
+
+    },
+    "Position A (off)." : {
+
+    },
+    "Position B (On)" : {
+
+    },
+    "Position B (on)." : {
+
+    },
     "Post Office" : {
 
     },
+    "Power Off Delay" : {
+
+    },
+    "Power off delay." : {
+
+    },
+    "Power On Delay" : {
+
+    },
+    "Power on delay." : {
+
+    },
     "Power Pack" : {
+
+    },
+    "Power pack control" : {
 
     },
     "Power Supply Brownout Detected Node" : {
@@ -7048,8 +7303,14 @@
     "Right Diverging Route (%%UNITS_ACTUAL_LENGTH%%)" : {
       "comment" : "This is used for the title of an input field where the user enters the length of the specified route. The %%UNITS_ACTUAL_LENGTH%% will be replaced at runtime by the name of the user selected units of length - place this at an approprate position in the title for the language."
     },
+    "Roco coupler" : {
+
+    },
     "Romania" : {
       "comment" : "This is the name of a country."
+    },
+    "Rotary beacon" : {
+
     },
     "Rotate Clockwise" : {
 
@@ -7097,6 +7358,18 @@
           }
         }
       }
+    },
+    "Rule 17 Forward" : {
+
+    },
+    "Rule 17 forward." : {
+
+    },
+    "Rule 17 Reverse" : {
+
+    },
+    "Rule 17 Reverse." : {
+
     },
     "Running" : {
       "comment" : "Used to indicate a clock is running",
@@ -7326,6 +7599,12 @@
     "Sensors" : {
       "comment" : "Used for the title of a switchboard item palette in LayoutBuilder"
     },
+    "Sequence Position" : {
+
+    },
+    "Sequence position." : {
+
+    },
     "Serial Function Mode for LGB MTS" : {
 
     },
@@ -7336,6 +7615,51 @@
 
     },
     "Serial User Standard Interface" : {
+
+    },
+    "Servo output" : {
+
+    },
+    "Servo output 1" : {
+
+    },
+    "Servo output 1 Steam engine Johnson Bar Control" : {
+
+    },
+    "Servo output 2" : {
+
+    },
+    "Servo output 2 Steam engine Johnson Bar Control" : {
+
+    },
+    "Servo output 3" : {
+
+    },
+    "Servo output 3 Steam engine Johnson Bar Control" : {
+
+    },
+    "Servo output 4" : {
+
+    },
+    "Servo output 4 Steam engine Johnson Bar Control" : {
+
+    },
+    "Servo output 5" : {
+
+    },
+    "Servo output 5 Steam engine Johnson Bar Control" : {
+
+    },
+    "Servo output 6" : {
+
+    },
+    "Servo output 6 Steam engine Johnson Bar Control" : {
+
+    },
+    "Servo output steam engine Johnson bar control" : {
+
+    },
+    "Servo power" : {
 
     },
     "Set Aspect #1" : {
@@ -7435,6 +7759,9 @@
       "comment" : "This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."
     },
     "Settings for certain Command Stations" : {
+
+    },
+    "Seuthe smoke unit" : {
 
     },
     "Short Whistle" : {
@@ -7606,6 +7933,12 @@
     "Single Slip" : {
       "comment" : "This is used to describe a piece of track."
     },
+    "Single strobe" : {
+
+    },
+    "Single strobe random" : {
+
+    },
     "Slave (consumer)" : {
       "comment" : "Used to indicate a clock's operating mode",
       "localizations" : {
@@ -7664,6 +7997,9 @@
     "Smaller Radius Route (%%UNITS_ACTUAL_LENGTH%%)" : {
       "comment" : "This is used for the title of an input field where the user enters the length of the specified route. The %%UNITS_ACTUAL_LENGTH%% will be replaced at runtime by the name of the user selected units of length - place this at an approprate position in the title for the language."
     },
+    "Smart firebox" : {
+
+    },
     "Smoke" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
       "localizations" : {
@@ -7685,6 +8021,9 @@
 
     },
     "Smoke Unit" : {
+
+    },
+    "Smoke unit (controlled by sound)" : {
 
     },
     "Smoke Unit Operating Time" : {
@@ -7783,7 +8122,13 @@
     "Spain" : {
       "comment" : "This is the name of a country."
     },
+    "Special Functions" : {
+
+    },
     "Special Options" : {
+
+    },
+    "Speed" : {
 
     },
     "Speed Constraints" : {
@@ -7814,6 +8159,9 @@
 
     },
     "Speed that the train actually travelled at in the reverse direction" : {
+
+    },
+    "Speed." : {
 
     },
     "Spirax Valve" : {
@@ -7852,6 +8200,15 @@
 
     },
     "Starting Delay" : {
+
+    },
+    "Startup Time" : {
+
+    },
+    "Startup time = 255 means defective Neon lamp." : {
+
+    },
+    "Startup time." : {
 
     },
     "Steam" : {
@@ -7985,6 +8342,9 @@
     },
     "Straight Track" : {
       "comment" : "This is used to describe a piece of track."
+    },
+    "Strato light" : {
+
     },
     "Stream Data               " : {
 
@@ -8661,10 +9021,19 @@
     "Time to bridge power interruption." : {
 
     },
+    "Time until Automatic Power Off" : {
+
+    },
+    "Time until automatic power off." : {
+
+    },
     "Time until Smoke Unit Automatic Power Off" : {
 
     },
     "Time until smoke unit automatic power off." : {
+
+    },
+    "Timeout" : {
 
     },
     "Timeout - write failed" : {
@@ -8682,6 +9051,9 @@
           }
         }
       }
+    },
+    "Timeout." : {
+
     },
     "Tone Control" : {
 
@@ -8802,6 +9174,9 @@
 
     },
     "Trigger impulses per steam chuff." : {
+
+    },
+    "Trigger smoke chuff" : {
 
     },
     "Triggered Function" : {
@@ -9017,6 +9392,12 @@
     "Use 28 or 128 Speed Steps" : {
 
     },
+    "Use Class Light Logic" : {
+
+    },
+    "Use class light logic." : {
+
+    },
     "Use Custom Dimensions" : {
       "comment" : "Used as the title for custom dimensions of a track part."
     },
@@ -9138,6 +9519,9 @@
       }
     },
     "Value" : {
+
+    },
+    "Ventilator" : {
 
     },
     "Verified Node ID Full Protocol Required" : {

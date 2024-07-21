@@ -9,9 +9,6 @@ import Foundation
 
 public func esuCVExtract() {
   
-//  let x = Decoder(decoderType: .lokSound5)
-//  debugLog("Here")
-  
   var sort : [ManufacturerInfo] = []
   
   for (_, item) in NMRA.manufacturers {

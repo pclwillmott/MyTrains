@@ -369,6 +369,8 @@
 		DAAC7E952A7966EE001A424E /* ProgrammerTool.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DAAC7E942A7966EE001A424E /* ProgrammerTool.storyboard */; };
 		DAAC7E972A796705001A424E /* ProgrammerToolVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAAC7E962A796705001A424E /* ProgrammerToolVC.swift */; };
 		DAACFC742A4336F7001743DA /* OpenLCBTractionManagementType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAACFC732A4336F7001743DA /* OpenLCBTractionManagementType.swift */; };
+		DAAE3E3D2C4D261400F129B7 /* SmokeUnitControlMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAAE3E3C2C4D261400F129B7 /* SmokeUnitControlMode.swift */; };
+		DAAE3E3F2C4D2B8A00F129B7 /* ExternalSmokeUnitType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAAE3E3E2C4D2B8A00F129B7 /* ExternalSmokeUnitType.swift */; };
 		DAB07498276EB6C3003278BE /* Sqlite.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAB07497276EB6C3003278BE /* Sqlite.swift */; };
 		DAB0749A276EB8B1003278BE /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAB07499276EB8B1003278BE /* Database.swift */; };
 		DAB163ED2C3EB60C00D7F23E /* ProgrammerToolInspectorPropertyField.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAB163EC2C3EB60C00D7F23E /* ProgrammerToolInspectorPropertyField.swift */; };
@@ -849,6 +851,8 @@
 		DAAC7E942A7966EE001A424E /* ProgrammerTool.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = ProgrammerTool.storyboard; sourceTree = "<group>"; };
 		DAAC7E962A796705001A424E /* ProgrammerToolVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgrammerToolVC.swift; sourceTree = "<group>"; };
 		DAACFC732A4336F7001743DA /* OpenLCBTractionManagementType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBTractionManagementType.swift; sourceTree = "<group>"; };
+		DAAE3E3C2C4D261400F129B7 /* SmokeUnitControlMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmokeUnitControlMode.swift; sourceTree = "<group>"; };
+		DAAE3E3E2C4D2B8A00F129B7 /* ExternalSmokeUnitType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalSmokeUnitType.swift; sourceTree = "<group>"; };
 		DAB07497276EB6C3003278BE /* Sqlite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sqlite.swift; sourceTree = "<group>"; };
 		DAB07499276EB8B1003278BE /* Database.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
 		DAB163EC2C3EB60C00D7F23E /* ProgrammerToolInspectorPropertyField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgrammerToolInspectorPropertyField.swift; sourceTree = "<group>"; };
@@ -1073,6 +1077,8 @@
 				DAE524FF2C459854000FC319 /* ESUDecoderPhysicalOutput.swift */,
 				DAEC69492C4BEEFD008F1CFF /* ESUPhysicalOutputMode.swift */,
 				DA0F378D2C47D471002C66D8 /* SteamChuffMode.swift */,
+				DAAE3E3C2C4D261400F129B7 /* SmokeUnitControlMode.swift */,
+				DAAE3E3E2C4D2B8A00F129B7 /* ExternalSmokeUnitType.swift */,
 				DA0F378F2C47E9D8002C66D8 /* SoundControlBasis.swift */,
 				DA0F37912C47EFA4002C66D8 /* TriggeredFunction.swift */,
 				DA6BA50D2C4930A30028EDA0 /* FunctionConsistMode.swift */,
@@ -1227,11 +1233,11 @@
 			children = (
 				DADC21CD2944ABE2008A2F33 /* ClockView.swift */,
 				DA95D6C42809C00600D9F1B6 /* SignalStrengthView.swift */,
+				DA48DA712BA201BD0009FEBF /* LEDView.swift */,
 				DA7F238F2B331B88001E5C8C /* ScrollVerticalStackView.swift */,
 				DA5225F82B307B09005DCBF4 /* MultiTabView.swift */,
 				DA48DA6F2BA1FA1C0009FEBF /* FrameView.swift */,
 				DAD22F762BD517FC00F396AD /* SeparatorView.swift */,
-				DA48DA712BA201BD0009FEBF /* LEDView.swift */,
 				DAF6826E2BA33EB700E6D590 /* GatewayActivityView.swift */,
 				DA6239332BCD827C000E9018 /* MyComboBox.swift */,
 				DAD22F7C2BD574E100F396AD /* FlippedView.swift */,
@@ -2301,6 +2307,7 @@
 				DA0949482B81085C00545650 /* mtpipe.c in Sources */,
 				DA595E142B890AD700ADF87B /* OpenLCBNodeVirtual - Messages - Memory Configuration.swift in Sources */,
 				DAE44C5B2BB031A400BBCCE9 /* SoftUIntX.swift in Sources */,
+				DAAE3E3F2C4D2B8A00F129B7 /* ExternalSmokeUnitType.swift in Sources */,
 				DA48EE29293CEF16006C26A0 /* DayOfWeek.swift in Sources */,
 				DAAC7E932A79514E001A424E /* OpenLCBProgrammerToolDelegate.swift in Sources */,
 				DA9787302C3993BB00765C83 /* CVList.swift in Sources */,
@@ -2443,6 +2450,7 @@
 				DAE8DD53286751BE0097C2D1 /* xManufacturer.swift in Sources */,
 				DAA56B512BD938AE00BAB6EF /* LayoutInspectorGroupField.swift in Sources */,
 				DAB163ED2C3EB60C00D7F23E /* ProgrammerToolInspectorPropertyField.swift in Sources */,
+				DAAE3E3D2C4D261400F129B7 /* SmokeUnitControlMode.swift in Sources */,
 				DA5BC9912A1A4CDF00D67ABE /* FileHandleExtensions.swift in Sources */,
 				DAFBC3ED29EC39A6003336BE /* OpenLCBErrorCode.swift in Sources */,
 				DA441D282C1C978000AF0165 /* SwitchboardMode.swift in Sources */,

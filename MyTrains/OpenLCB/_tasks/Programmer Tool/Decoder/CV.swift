@@ -2756,10 +2756,10 @@ public enum CV : UInt64, CaseIterable {
   
   public var cvLabel : String {
     if cv31 == 0 && cv32 == 0 {
-      return "CV\(cv)"
+      return "CV\(cv)%%BITS%%"
     }
     else {
-      return "CV\(cv31).\(cv32).\(cv)"
+      return "CV\(cv)%%BITS%% (CV31 = \(cv31), CV32 = \(cv32))"
     }
   }
   

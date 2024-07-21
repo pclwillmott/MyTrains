@@ -684,11 +684,19 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
     ]
     
     for property in ProgrammerToolSettingsProperty.allCases {
-      if decoder.decoderType.isSettingsPropertySupported(property: property) {
+      if decoder.decoderType.isSettingsPropertySupported(property: property) && decoder.isPropertySupported(property: property) {
         commonProperties.insert(property)
       }
     }
     
+    if !decoder.showPhysicalOutputPropertiesForThisOutput {
+      for property in commonProperties {
+        if decoder.isPhysicalOutputProperty(property: property) {
+          commonProperties.remove(property)
+        }
+      }
+    }
+
     if decoder.locomotiveAddressType == .extended {
       commonProperties.remove(.locomotiveAddressShort)
       commonProperties.remove(.marklinConsecutiveAddresses)
@@ -847,6 +855,14 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
     if !decoder.isSUSIMasterEnabled {
       commonProperties.remove(.susiWarning)
     }
+    
+    if decoder.getPhysicalOutputValue(property: .physicalOutputTimeUntilAutomaticPowerOff)! == 0 {
+      commonProperties.remove(.physicalOutputTimeUntilAutomaticPowerOff)
+    }
+
+    if decoder.getPhysicalOutputValue(property: .physicalOutputSequencePosition)! == 0 {
+      commonProperties.remove(.physicalOutputSequencePosition)
+    }
 
     var usedFields : [ProgrammerToolSettingsPropertyField] = []
     
@@ -885,8 +901,12 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
                 
                 stackView.addArrangedSubview(view)
                 
-                cvLabel.stringValue = field.property.cvLabel
-                
+                if field.property.controlType == .description {
+                  cvLabel.stringValue = ""
+                }
+                else {
+                  cvLabel.stringValue = decoder.isPhysicalOutputProperty(property: field.property) ? decoder.physicalOutputCVLabel(property: field.property) : field.property.cvLabel
+                }
                 /// Note to self: Views within a StackView must not have constraints to the outside world as this will lock the StackView size.
                 /// They must only have internal constraints to the view that is added to the StackView.
                 ///  https://manasaprema04.medium.com/autolayout-fundamental-522f0a6e5790
@@ -1057,6 +1077,21 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
                 }
                 
                 usedFields.append(field)
+                
+                if let comboBox = field.control as? NSComboBox {
+                  
+                  switch field.property {
+                  case .physicalOutput:
+                    ESUDecoderPhysicalOutput.populate(comboBox: comboBox, decoder: decoder)
+                  case .physicalOutputOutputMode:
+                    ESUPhysicalOutputMode.populate(comboBox: comboBox, decoder: decoder)
+                  default:
+                    break
+                  }
+                  
+                  settingsPropertyConstraints.append(comboBox.widthAnchor.constraint(greaterThanOrEqualToConstant: 300))
+                  
+                }
                 
                 setValue(field: field)
                 

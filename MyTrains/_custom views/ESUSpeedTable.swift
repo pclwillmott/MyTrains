@@ -15,7 +15,10 @@ class ESUSpeedTable: NSView {
   override func draw(_ dirtyRect: NSRect) {
     
     super.draw(dirtyRect)
-    
+
+    NSColor.white.setFill()
+    bounds.fill()
+
     NSColor.black.setStroke()
 
     let path = NSBezierPath()
@@ -84,7 +87,7 @@ class ESUSpeedTable: NSView {
       path.line(to: NSMakePoint(dxRight, dyBottom))
       path.close()
       
-      if (index + 1) == decoder.speedTableIndex {
+      if (index + 1) == (speedTableIndex == nil ? decoder.speedTableIndex : speedTableIndex!) {
         NSColor.systemBlue.setFill()
       }
       else if index == 0 || index == 27 {

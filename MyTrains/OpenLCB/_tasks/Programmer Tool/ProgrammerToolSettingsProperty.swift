@@ -124,6 +124,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
   case physicalOutputSequencePosition = 199
   case physicalOutputPhaseShift = 172
   case physicalOutputStartupTime = 173
+  case physicalOutputStartupTimeInfo = 206
   case physicalOutputStartupDescription = 197
   case physicalOutputLevel = 174
   case physicalOutputSmokeUnitControlMode = 175
@@ -143,6 +144,8 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
   case physicalOutputServoPositionB = 189
   case physicalOutputServoDoNotDisableServoPulseAtPositionB = 190
   case physicalOutputCouplerForce = 191
+  case physicalOutputExternalSmokeUnitType = 204
+  case physicalOutputSpecialFunctions = 205
   case physicalOutputGradeCrossing = 196
   case physicalOutputRule17Forward = 192
   case physicalOutputRule17Reverse = 193
@@ -278,7 +281,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
   
   public var minValue : Double {
     switch self {
-    case .locomotiveAddressShort, .consistAddress, .waitingPeriodBeforeDirectionChange, .brakeDistanceLength, .brakeDistanceLengthBackwards, .stoppingPeriod, .accelerationRate, .decelerationRate, .forwardTrim, .reverseTrim, .gearboxBacklashCompensation, .shuntingModeTrim, .automaticUncouplingSpeed, .frequencyForBlinkingEffects, .minimumSpeed, .maximumSpeed, .motorCurrentLimiterLimit, .distanceOfSteamChuffsAtSpeedStep1, .steamChuffAdjustmentAtHigherSpeedSteps, .secondaryTriggerDistanceReduction, .minimumDistanceofSteamChuffs, .triggerImpulsesPerSteamChuff, .soundFadeOutFadeInTime, .trainLoadAtLowSpeed, .loadOperationThreshold, .idleOperationThreshold, .speedTableIndex, .speedTableEntryValue:
+    case .locomotiveAddressShort, .consistAddress, .waitingPeriodBeforeDirectionChange, .brakeDistanceLength, .brakeDistanceLengthBackwards, .stoppingPeriod, .accelerationRate, .decelerationRate, .forwardTrim, .reverseTrim, .gearboxBacklashCompensation, .shuntingModeTrim, .automaticUncouplingSpeed, .frequencyForBlinkingEffects, .minimumSpeed, .maximumSpeed, .motorCurrentLimiterLimit, .distanceOfSteamChuffsAtSpeedStep1, .steamChuffAdjustmentAtHigherSpeedSteps, .secondaryTriggerDistanceReduction, .minimumDistanceofSteamChuffs, .triggerImpulsesPerSteamChuff, .soundFadeOutFadeInTime, .trainLoadAtLowSpeed, .loadOperationThreshold, .idleOperationThreshold, .speedTableIndex, .speedTableEntryValue, .physicalOutputTimeUntilAutomaticPowerOff, .physicalOutputSequencePosition:
       return 1
     case .slowSpeedBackEMFSamplingPeriod, .fullSpeedBackEMFSamplingPeriod:
       return 25
@@ -297,7 +300,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     switch self {
     case .maximumSpeedWhenBrakeFunction1Active, .maximumSpeedWhenBrakeFunction2Active, .maximumSpeedWhenBrakeFunction3Active:
       return 126
-    case .locomotiveAddressShort, .consistAddress, .accelerationAdjustment, .decelerationAdjustment, .fadeInTimeOfLightEffects, .fadeOutTimeOfLightEffects:
+    case .locomotiveAddressShort, .consistAddress, .accelerationAdjustment, .decelerationAdjustment, .fadeInTimeOfLightEffects, .fadeOutTimeOfLightEffects, .physicalOutputLevel:
       return 127
     case .shuntingModeTrim, .logicalFunctionDimmerBrightnessReduction, .fadeSoundVolumeReduction:
       return 128
@@ -315,6 +318,14 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
       return 32
     case .speedTableIndex:
       return 28
+    case .physicalOutputPowerOnDelay, .physicalOutputPowerOffDelay:
+      return 15
+    case .physicalOutputCouplerForce, .physicalOutputBrightness, .physicalOutputSpeed, .physicalOutputAccelerationRate, .physicalOutputDecelerationRate, .physicalOutputHeatWhileLocomotiveStands, .physicalOutputMinimumHeatWhileLocomotiveDriving, .physicalOutputMaximumHeatWhileLocomotiveDriving, .physicalOutputChuffPower, .physicalOutputFanPower:
+      return 31
+    case .physicalOutputSequencePosition:
+      return 3
+    case .physicalOutputPhaseShift, .physicalOutputServoDurationA, .physicalOutputServoDurationB, .physicalOutputServoPositionA, .physicalOutputServoPositionB:
+      return 63
     default:
       return 255
     }
@@ -348,6 +359,15 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
       String(localized:" [CV29.5]"),
       .locomotiveAddress,
       .comboBox,
+      []
+    ),
+    .physicalOutputStartupDescription
+    : (
+      String(localized:""),
+      String(localized:""),
+      String(localized:""),
+      .physicalOutputConfiguration,
+      .description,
       []
     ),
     .locomotiveAddressShort
@@ -1171,8 +1191,8 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     ),
     .physicalOutputSmokeUnitControlMode
     : (
-      String(localized:"Phase Shift"),
-      String(localized:"Phase shift."),
+      String(localized:"Control Mode"),
+      String(localized:"Control mode."),
       String(localized:""),
       .physicalOutputConfiguration,
       .comboBox,
@@ -1329,6 +1349,15 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
       String(localized:""),
       .physicalOutputConfiguration,
       .checkBox,
+      []
+    ),
+    .physicalOutputExternalSmokeUnitType
+    : (
+      String(localized:"External Smoke Unit Type"),
+      String(localized:"External smoke unit type."),
+      String(localized:""),
+      .physicalOutputConfiguration,
+      .comboBox,
       []
     ),
     .physicalOutputSequencePosition
@@ -2310,6 +2339,10 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
       SoundControlBasis.populate(comboBox: comboBox)
     case .idleOperationTriggeredFunction, .loadOperationTriggeredFunction:
       TriggeredFunction.populate(comboBox: comboBox)
+    case .physicalOutputSmokeUnitControlMode:
+      SmokeUnitControlMode.populate(comboBox: comboBox)
+    case .physicalOutputExternalSmokeUnitType:
+      ExternalSmokeUnitType.populate(comboBox: comboBox)
     case .speedTableIndex:
       comboBox.removeAllItems()
       for index in 1 ... 28 {

@@ -2324,6 +2324,51 @@ public class Decoder : NSObject {
     }
   }
   
+  public var esuDecoderPhysicalOutputMode : ESUPhysicalOutputMode {
+    get {
+      return ESUPhysicalOutputMode(rawValue: getPhysicalOutputValue(property: .physicalOutputOutputMode)!)!
+    }
+    set(value) {
+      if value != esuDecoderPhysicalOutputMode {
+        setPhysicalOutputValue(property: .physicalOutputOutputMode, value: value.rawValue)
+        delegate?.reloadSettings!(self)
+      }
+    }
+  }
+  
+  public func isPropertySupported(property:ProgrammerToolSettingsProperty) -> Bool {
+    if isPhysicalOutputProperty(property: property) {
+      return esuDecoderPhysicalOutputMode.supportedProperties.contains(property)
+    }
+    return true
+  }
+  
+  public var smokeUnitControlMode : SmokeUnitControlMode {
+    get {
+      return SmokeUnitControlMode(rawValue: getPhysicalOutputValue(property: .physicalOutputSmokeUnitControlMode)!)!
+    }
+    set(value) {
+      if value != smokeUnitControlMode {
+        setPhysicalOutputValue(property: .physicalOutputSmokeUnitControlMode, value: value.rawValue)
+      }
+    }
+  }
+  
+  public var externalSmokeUnitType : ExternalSmokeUnitType {
+    get {
+      return ExternalSmokeUnitType(rawValue: getPhysicalOutputValue(property: .physicalOutputExternalSmokeUnitType)!)!
+    }
+    set(value) {
+      if value != externalSmokeUnitType {
+        setPhysicalOutputValue(property: .physicalOutputExternalSmokeUnitType, value: value.rawValue)
+      }
+    }
+  }
+  
+  public func isPhysicalOutputProperty(property:ProgrammerToolSettingsProperty) -> Bool {
+    return physicalOutputCVs.keys.contains(property)
+  }
+  
   private let physicalOutputCVs : [ProgrammerToolSettingsProperty:(cv:CV, mask:UInt8, shift:UInt8)] = [
     .physicalOutputPowerOnDelay  : (cv: .cv_016_000_260, mask: 0b00001111, shift:0),
     .physicalOutputPowerOffDelay : (cv: .cv_016_000_260, mask: 0b11110000 , shift: 4),
@@ -2358,6 +2403,10 @@ public class Decoder : NSObject {
     .physicalOutputDimmer : (cv: .cv_016_000_263, mask: ByteMask.d4, shift:0),
     .physicalOutputLEDMode : (cv: .cv_016_000_263, mask: ByteMask.d7, shift:0),
     .physicalOutputGradeCrossing : (cv: .cv_016_000_263, mask: ByteMask.d1, shift:0),
+    .physicalOutputExternalSmokeUnitType : (cv: .cv_016_000_262, mask: 0b00000011, shift:0),
+    .physicalOutputSpecialFunctions : (cv: .cv_000_000_001, mask: 0, shift:0),
+    .physicalOutputStartupTimeInfo : (cv: .cv_000_000_001, mask: 0, shift:0),
+    .physicalOutputStartupDescription : (cv: .cv_000_000_001, mask: 0, shift:0),
   ]
   
   public func physicalOutputCV(property:ProgrammerToolSettingsProperty) -> CV? {
@@ -2403,9 +2452,10 @@ public class Decoder : NSObject {
   
   public func getPhysicalOutputValue(property:ProgrammerToolSettingsProperty) -> UInt8? {
     
-    if let cv = physicalOutputCV(property:property), let info = physicalOutputCVs[property], var value = getMaskedUInt8(cv: cv, mask: info.mask) {
-      
-      return value >> info.shift
+    if let cv = physicalOutputCV(property:property) {
+      if let info = physicalOutputCVs[property], var value = getMaskedUInt8(cv: cv, mask: info.mask) {
+        return value >> info.shift
+      }
       
     }
     
@@ -2415,7 +2465,7 @@ public class Decoder : NSObject {
 
   public func setPhysicalOutputValue(property:ProgrammerToolSettingsProperty, value:UInt8) {
     
-    if getPhysicalOutputValue(property:property) != value, let cv = physicalOutputCV(property:property), let info = physicalOutputCVs[property] {
+    if value != getPhysicalOutputValue(property: property), let cv = physicalOutputCV(property:property), let info = physicalOutputCVs[property] {
       
       setMaskedUInt8(cv: cv, mask: info.mask, value: value << info.shift)
       
@@ -2439,7 +2489,7 @@ public class Decoder : NSObject {
 
   public func setPhysicalOutputBoolValue(property:ProgrammerToolSettingsProperty, value:Bool) {
     
-    if value != getPhysicalOutputBoolValue(property:property), let cv = physicalOutputCV(property:property), let info = physicalOutputCVs[property] {
+    if value != getPhysicalOutputBoolValue(property: property)!, let cv = physicalOutputCV(property:property), let info = physicalOutputCVs[property] {
       
       setBool(cv: cv, mask: info.mask, value: value)
       
@@ -2464,7 +2514,7 @@ public class Decoder : NSObject {
           firstBit = index
         }
         if (info.mask & mask) == mask {
-          lastBit = firstBit
+          lastBit = index
         }
         mask >>= 1
         index -= 1
@@ -2473,15 +2523,15 @@ public class Decoder : NSObject {
       if let cv = physicalOutputCV(property:property), let firstBit, let lastBit {
         
         if firstBit == 7 && lastBit == 0 {
-          return "[CV\(cv.cvLabel)]"
+          return ("\(cv.cvLabel)").replacingOccurrences(of: "%%BITS%%", with: "")
         }
         
         if firstBit == lastBit {
-          return "[CV\(cv.cvLabel).\(firstBit)]"
+          return ("\(cv.cvLabel)").replacingOccurrences(of: "%%BITS%%", with: ".\(firstBit)")
         }
         
-        return "[CV\(cv.cvLabel).\(firstBit):\(lastBit)]"
-        
+        return ("\(cv.cvLabel)").replacingOccurrences(of: "%%BITS%%", with: ".\(firstBit):\(lastBit)")
+
       }
       
     }
@@ -2645,6 +2695,19 @@ public class Decoder : NSObject {
     
   }
   
+  public var showPhysicalOutputPropertiesForThisOutput : Bool {
+    
+    switch esuDecoderPhysicalOutput {
+    case .aux10:
+      return decoderSensorSettings != .useDigitalWheelSensor
+    case .aux11, .aux12:
+      return !isSUSIMasterEnabled
+    default:
+      return true
+    }
+    
+  }
+  
   public func cvTextList(list:[(cv:CV, value:UInt8)]) -> String {
     
     var result = ""
@@ -2675,6 +2738,8 @@ public class Decoder : NSObject {
   public func getValue(property:ProgrammerToolSettingsProperty) -> String {
     
     switch property {
+    case .physicalOutputExternalSmokeUnitType:
+      return externalSmokeUnitType.title
     case .locomotiveAddressType:
       return "\(locomotiveAddressType.title)"
     case .locomotiveAddressShort:
@@ -3005,6 +3070,82 @@ public class Decoder : NSObject {
       return "\(speedTableValue)"
     case .speedTablePreset:
       return speedTablePreset.title
+    case .physicalOutput:
+      return esuDecoderPhysicalOutput.title
+    case .physicalOutputPowerOnDelay:
+      return "\(getPhysicalOutputValue(property: .physicalOutputPowerOnDelay)!)"
+    case .physicalOutputPowerOffDelay:
+      return "\(getPhysicalOutputValue(property: .physicalOutputPowerOffDelay)!)"
+    case .physicalOutputEnableFunctionTimeout:
+      return getPhysicalOutputValue(property: .physicalOutputTimeUntilAutomaticPowerOff)! != 0 ? "true" : "false"
+    case .physicalOutputTimeUntilAutomaticPowerOff:
+      return "\(getPhysicalOutputValue(property: .physicalOutputTimeUntilAutomaticPowerOff)!)"
+    case .physicalOutputOutputMode:
+      return esuDecoderPhysicalOutputMode.title(decoder: self)
+    case .physicalOutputCouplerForce:
+      return "\(getPhysicalOutputValue(property: .physicalOutputCouplerForce)!)"
+    case .physicalOutputBrightness:
+      return "\(getPhysicalOutputValue(property: .physicalOutputBrightness)!)"
+    case .physicalOutputUseClassLightLogic:
+      return getPhysicalOutputValue(property: .physicalOutputSequencePosition)! != 0 ? "true" : "false"
+    case .physicalOutputSequencePosition:
+      return "\(getPhysicalOutputValue(property: .physicalOutputSequencePosition)!)"
+    case .physicalOutputSpecialFunctions:
+      return String(localized: "Special Functions")
+    case .physicalOutputRule17Forward:
+      return getPhysicalOutputBoolValue(property: .physicalOutputRule17Forward)! ? "true" : "false"
+    case .physicalOutputRule17Reverse:
+      return getPhysicalOutputBoolValue(property: .physicalOutputRule17Reverse)! ? "true" : "false"
+    case .physicalOutputDimmer:
+      return getPhysicalOutputBoolValue(property: .physicalOutputDimmer)! ? "true" : "false"
+    case .physicalOutputLEDMode:
+      return getPhysicalOutputBoolValue(property: .physicalOutputLEDMode)! ? "true" : "false"
+    case .physicalOutputPhaseShift:
+      return "\(getPhysicalOutputValue(property: .physicalOutputPhaseShift)!)"
+    case .physicalOutputGradeCrossing:
+      return getPhysicalOutputBoolValue(property: .physicalOutputGradeCrossing)! ? "true" : "false"
+    case .physicalOutputStartupTime:
+      return "\(getPhysicalOutputValue(property: .physicalOutputStartupTime)!)"
+    case .physicalOutputStartupDescription:
+      return String(localized: "Startup time = 255 means defective Neon lamp.")
+    case .physicalOutputLevel:
+      return "\(getPhysicalOutputValue(property: .physicalOutputLevel)!)"
+    case .physicalOutputSmokeUnitControlMode:
+      return smokeUnitControlMode.title
+    case .physicalOutputSpeed:
+      return "\(getPhysicalOutputValue(property: .physicalOutputSpeed)!)"
+    case .physicalOutputAccelerationRate:
+      return "\(getPhysicalOutputValue(property: .physicalOutputAccelerationRate)!)"
+    case .physicalOutputDecelerationRate:
+      return "\(getPhysicalOutputValue(property: .physicalOutputDecelerationRate)!)"
+    case .physicalOutputHeatWhileLocomotiveStands:
+      return "\(getPhysicalOutputValue(property: .physicalOutputHeatWhileLocomotiveStands)!)"
+    case .physicalOutputMinimumHeatWhileLocomotiveDriving:
+      return "\(getPhysicalOutputValue(property: .physicalOutputMinimumHeatWhileLocomotiveDriving)!)"
+    case .physicalOutputMaximumHeatWhileLocomotiveDriving:
+      return "\(getPhysicalOutputValue(property: .physicalOutputMaximumHeatWhileLocomotiveDriving)!)"
+    case .physicalOutputChuffPower:
+      return "\(getPhysicalOutputValue(property: .physicalOutputChuffPower)!)"
+    case .physicalOutputFanPower:
+      return "\(getPhysicalOutputValue(property: .physicalOutputFanPower)!)"
+    case .physicalOutputTimeout:
+      return "\(getPhysicalOutputValue(property: .physicalOutputTimeout)!)"
+    case .physicalOutputExternalSmokeUnitType:
+      return externalSmokeUnitType.title
+    case .physicalOutputServoDurationA:
+      return "\(getPhysicalOutputValue(property: .physicalOutputServoDurationA)!)"
+    case .physicalOutputServoDurationB:
+      return "\(getPhysicalOutputValue(property: .physicalOutputServoDurationB)!)"
+    case .physicalOutputServoPositionA:
+      return "\(getPhysicalOutputValue(property: .physicalOutputServoPositionA)!)"
+    case .physicalOutputServoPositionB:
+      return "\(getPhysicalOutputValue(property: .physicalOutputServoPositionB)!)"
+    case .physicalOutputServoDoNotDisableServoPulseAtPositionA:
+      return getPhysicalOutputBoolValue(property: .physicalOutputServoDoNotDisableServoPulseAtPositionA)! ? "true" : "false"
+    case .physicalOutputServoDoNotDisableServoPulseAtPositionB:
+      return getPhysicalOutputBoolValue(property: .physicalOutputServoDoNotDisableServoPulseAtPositionB)! ? "true" : "false"
+    case .physicalOutputStartupTimeInfo:
+      return String(localized: "PLACEHOLDER")
     }
   }
   
@@ -3243,6 +3384,30 @@ public class Decoder : NSObject {
       let x = trainLoadAtHighSpeedPercentage
       formatter.maximumFractionDigits = 2
       return String(localized: "\(formatter.string(from: x as NSNumber)!)%")
+    case .physicalOutputPowerOnDelay:
+      let x = UnitTime.convert(fromValue: Double(getPhysicalOutputValue(property: .physicalOutputPowerOnDelay)!) * 0.40933333, fromUnits: .seconds, toUnits: appNode!.unitsTime)
+      formatter.maximumFractionDigits = 2
+      return "\(formatter.string(from: x as NSNumber)!)\(appNode!.unitsTime.symbol)"
+    case .physicalOutputPowerOffDelay:
+      let x = UnitTime.convert(fromValue: Double(getPhysicalOutputValue(property: .physicalOutputPowerOffDelay)!) * 0.40933333, fromUnits: .seconds, toUnits: appNode!.unitsTime)
+      formatter.maximumFractionDigits = 2
+      return "\(formatter.string(from: x as NSNumber)!)\(appNode!.unitsTime.symbol)"
+    case .physicalOutputTimeUntilAutomaticPowerOff:
+      let x = UnitTime.convert(fromValue: Double(getPhysicalOutputValue(property: .physicalOutputTimeUntilAutomaticPowerOff)!) * 0.41, fromUnits: .seconds, toUnits: appNode!.unitsTime)
+      formatter.maximumFractionDigits = 2
+      return "\(formatter.string(from: x as NSNumber)!)\(appNode!.unitsTime.symbol)"
+    case .physicalOutputTimeout:
+      let x = UnitTime.convert(fromValue: Double(getPhysicalOutputValue(property: .physicalOutputTimeout)!) * 0.256, fromUnits: .seconds, toUnits: appNode!.unitsTime)
+      formatter.maximumFractionDigits = 2
+      return "\(formatter.string(from: x as NSNumber)!)\(appNode!.unitsTime.symbol)"
+    case .physicalOutputServoDurationA:
+      let x = UnitTime.convert(fromValue: Double(getPhysicalOutputValue(property: .physicalOutputServoDurationA)!) * 0.25, fromUnits: .seconds, toUnits: appNode!.unitsTime)
+      formatter.maximumFractionDigits = 2
+      return "\(formatter.string(from: x as NSNumber)!)\(appNode!.unitsTime.symbol)"
+    case .physicalOutputServoDurationB:
+      let x = UnitTime.convert(fromValue: Double(getPhysicalOutputValue(property: .physicalOutputServoDurationB)!) * 0.25, fromUnits: .seconds, toUnits: appNode!.unitsTime)
+      formatter.maximumFractionDigits = 2
+      return "\(formatter.string(from: x as NSNumber)!)\(appNode!.unitsTime.symbol)"
 
     default:
       return ""
@@ -3261,7 +3426,7 @@ public class Decoder : NSObject {
       guard let _ = UInt32(hex:string) else {
         return false
       }
-    case .locomotiveAddressShort, .consistAddress, .waitingPeriodBeforeDirectionChange, .brakeDistanceLength, .brakeDistanceLengthBackwards, .stoppingPeriod, .accelerationRate, .decelerationRate, .forwardTrim, .reverseTrim, .gearboxBacklashCompensation, .accelerationAdjustment, .decelerationAdjustment, .shuntingModeTrim, .acAnalogModeStartVoltage, .acAnalogModeMaximumSpeedVoltage, .dcAnalogModeStartVoltage, .dcAnalogModeMaximumSpeedVoltage, .analogMotorHysteresisVoltage, .analogFunctionDifferenceVoltage, .voltageDifferenceIndicatingABCBrakeSection, .abcReducedSpeed, .hluSpeedLimit1, .hluSpeedLimit2, .hluSpeedLimit3, .hluSpeedLimit4, .hluSpeedLimit5, .delayTimeBeforeExitingBrakeSection, .brakeFunction1BrakeTimeReduction, .brakeFunction2BrakeTimeReduction, .brakeFunction3BrakeTimeReduction, .userId1, .userId2, .loadAdjustmentOptionalLoad, .loadAdjustmentPrimaryLoad, .timeToBridgePowerInterruption, .maximumSpeedWhenBrakeFunction1Active, .maximumSpeedWhenBrakeFunction2Active, .maximumSpeedWhenBrakeFunction3Active, .frequencyForBlinkingEffects, .gradeCrossingHoldingTime, .fadeInTimeOfLightEffects, .fadeOutTimeOfLightEffects, .logicalFunctionDimmerBrightnessReduction, .automaticUncouplingSpeed, .automaticUncouplingPushTime, .automaticUncouplingWaitTime, .automaticUncouplingMoveTime, .smokeUnitTimeUntilPowerOff, .smokeUnitFanSpeedTrim, .smokeUnitTemperatureTrim, .smokeUnitPreheatingTemperatureForSecondarySmokeUnits, .smokeChuffsDurationRelativeToTriggerDistance, .smokeChuffsMinimumDuration, .smokeChuffsMaximumDuration, .minimumSpeed, .maximumSpeed, .regulationReference, .regulationParameterK, .regulationParameterI, .regulationParameterKSlow, .largestInternalSpeedStepThatUsesKSlow, .regulationInfluenceDuringSlowSpeed, .slowSpeedBackEMFSamplingPeriod, .fullSpeedBackEMFSamplingPeriod, .slowSpeedLengthOfMeasurementGap, .fullSpeedLengthOfMeasurementGap, .motorCurrentLimiterLimit, .motorPulseFrequency, .distanceOfSteamChuffsAtSpeedStep1, .steamChuffAdjustmentAtHigherSpeedSteps, .triggerImpulsesPerSteamChuff, .secondaryTriggerDistanceReduction, .minimumDistanceofSteamChuffs, .masterVolume, .soundFadeOutFadeInTime, .fadeSoundVolumeReduction, .soundBass, .soundTreble, .trainLoadAtLowSpeed, .trainLoadAtHighSpeed, .idleOperationThreshold, .loadOperationThreshold, .speedTableIndex, .speedTableEntryValue:
+    case .locomotiveAddressShort, .consistAddress, .waitingPeriodBeforeDirectionChange, .brakeDistanceLength, .brakeDistanceLengthBackwards, .stoppingPeriod, .accelerationRate, .decelerationRate, .forwardTrim, .reverseTrim, .gearboxBacklashCompensation, .accelerationAdjustment, .decelerationAdjustment, .shuntingModeTrim, .acAnalogModeStartVoltage, .acAnalogModeMaximumSpeedVoltage, .dcAnalogModeStartVoltage, .dcAnalogModeMaximumSpeedVoltage, .analogMotorHysteresisVoltage, .analogFunctionDifferenceVoltage, .voltageDifferenceIndicatingABCBrakeSection, .abcReducedSpeed, .hluSpeedLimit1, .hluSpeedLimit2, .hluSpeedLimit3, .hluSpeedLimit4, .hluSpeedLimit5, .delayTimeBeforeExitingBrakeSection, .brakeFunction1BrakeTimeReduction, .brakeFunction2BrakeTimeReduction, .brakeFunction3BrakeTimeReduction, .userId1, .userId2, .loadAdjustmentOptionalLoad, .loadAdjustmentPrimaryLoad, .timeToBridgePowerInterruption, .maximumSpeedWhenBrakeFunction1Active, .maximumSpeedWhenBrakeFunction2Active, .maximumSpeedWhenBrakeFunction3Active, .frequencyForBlinkingEffects, .gradeCrossingHoldingTime, .fadeInTimeOfLightEffects, .fadeOutTimeOfLightEffects, .logicalFunctionDimmerBrightnessReduction, .automaticUncouplingSpeed, .automaticUncouplingPushTime, .automaticUncouplingWaitTime, .automaticUncouplingMoveTime, .smokeUnitTimeUntilPowerOff, .smokeUnitFanSpeedTrim, .smokeUnitTemperatureTrim, .smokeUnitPreheatingTemperatureForSecondarySmokeUnits, .smokeChuffsDurationRelativeToTriggerDistance, .smokeChuffsMinimumDuration, .smokeChuffsMaximumDuration, .minimumSpeed, .maximumSpeed, .regulationReference, .regulationParameterK, .regulationParameterI, .regulationParameterKSlow, .largestInternalSpeedStepThatUsesKSlow, .regulationInfluenceDuringSlowSpeed, .slowSpeedBackEMFSamplingPeriod, .fullSpeedBackEMFSamplingPeriod, .slowSpeedLengthOfMeasurementGap, .fullSpeedLengthOfMeasurementGap, .motorCurrentLimiterLimit, .motorPulseFrequency, .distanceOfSteamChuffsAtSpeedStep1, .steamChuffAdjustmentAtHigherSpeedSteps, .triggerImpulsesPerSteamChuff, .secondaryTriggerDistanceReduction, .minimumDistanceofSteamChuffs, .masterVolume, .soundFadeOutFadeInTime, .fadeSoundVolumeReduction, .soundBass, .soundTreble, .trainLoadAtLowSpeed, .trainLoadAtHighSpeed, .idleOperationThreshold, .loadOperationThreshold, .speedTableIndex, .speedTableEntryValue, .physicalOutputPowerOnDelay, .physicalOutputPowerOffDelay, .physicalOutputEnableFunctionTimeout, .physicalOutputCouplerForce, .physicalOutputSequencePosition, .physicalOutputBrightness, .physicalOutputPhaseShift, .physicalOutputStartupTime, .physicalOutputLevel, .physicalOutputSpeed, .physicalOutputAccelerationRate, .physicalOutputDecelerationRate, .physicalOutputHeatWhileLocomotiveStands, .physicalOutputMinimumHeatWhileLocomotiveDriving, .physicalOutputMaximumHeatWhileLocomotiveDriving, .physicalOutputChuffPower, .physicalOutputFanPower, .physicalOutputTimeout, .physicalOutputServoDurationA, .physicalOutputServoDurationB, .physicalOutputServoPositionA, .physicalOutputServoPositionB:
       guard let value = UInt8(string), Double(value) >= property.minValue && Double(value) <= property.maxValue else {
         return false
       }
@@ -3590,6 +3755,77 @@ public class Decoder : NSObject {
       speedTableValue = UInt8(string)!
     case .speedTablePreset:
       speedTablePreset = SpeedTablePreset(title: string)!
+    case .physicalOutput:
+      esuDecoderPhysicalOutput = ESUDecoderPhysicalOutput(title: string)!
+    case .physicalOutputPowerOnDelay:
+      setPhysicalOutputValue(property: .physicalOutputPowerOnDelay, value: UInt8(string)!)
+    case .physicalOutputPowerOffDelay:
+      setPhysicalOutputValue(property: .physicalOutputPowerOffDelay, value: UInt8(string)!)
+    case .physicalOutputEnableFunctionTimeout:
+      setPhysicalOutputValue(property: .physicalOutputTimeUntilAutomaticPowerOff, value: (string == "true" ? 1 : 0))
+    case .physicalOutputTimeUntilAutomaticPowerOff:
+      setPhysicalOutputValue(property: .physicalOutputTimeUntilAutomaticPowerOff, value: UInt8(string)!)
+    case .physicalOutputOutputMode:
+      esuDecoderPhysicalOutputMode = ESUPhysicalOutputMode(title: string, decoder: self)!
+    case .physicalOutputBrightness:
+      setPhysicalOutputValue(property: .physicalOutputBrightness, value: UInt8(string)!)
+    case .physicalOutputUseClassLightLogic:
+      setPhysicalOutputValue(property: .physicalOutputSequencePosition, value: (string == "true" ? 1 : 0))
+    case .physicalOutputSequencePosition:
+      setPhysicalOutputValue(property: .physicalOutputSequencePosition, value: UInt8(string)!)
+    case .physicalOutputRule17Forward:
+      setPhysicalOutputBoolValue(property: .physicalOutputRule17Forward, value: string == "true")
+    case .physicalOutputRule17Reverse:
+      setPhysicalOutputBoolValue(property: .physicalOutputRule17Reverse, value: string == "true")
+    case .physicalOutputDimmer:
+      setPhysicalOutputBoolValue(property: .physicalOutputDimmer, value: string == "true")
+    case .physicalOutputLEDMode:
+      setPhysicalOutputBoolValue(property: .physicalOutputLEDMode, value: string == "true")
+    case .physicalOutputGradeCrossing:
+      setPhysicalOutputBoolValue(property: .physicalOutputGradeCrossing, value: string == "true")
+    case .physicalOutputPhaseShift:
+      setPhysicalOutputValue(property: .physicalOutputPhaseShift, value: UInt8(string)!)
+    case .physicalOutputStartupTime:
+      setPhysicalOutputValue(property: .physicalOutputStartupTime, value: UInt8(string)!)
+    case .physicalOutputSmokeUnitControlMode:
+      smokeUnitControlMode = SmokeUnitControlMode(title: string)!
+    case .physicalOutputSpeed:
+      setPhysicalOutputValue(property: .physicalOutputSpeed, value: UInt8(string)!)
+    case .physicalOutputAccelerationRate:
+      setPhysicalOutputValue(property: .physicalOutputAccelerationRate, value: UInt8(string)!)
+    case .physicalOutputDecelerationRate:
+      setPhysicalOutputValue(property: .physicalOutputDecelerationRate, value: UInt8(string)!)
+    case .physicalOutputHeatWhileLocomotiveStands:
+      setPhysicalOutputValue(property: .physicalOutputHeatWhileLocomotiveStands, value: UInt8(string)!)
+    case .physicalOutputMinimumHeatWhileLocomotiveDriving:
+      setPhysicalOutputValue(property: .physicalOutputMinimumHeatWhileLocomotiveDriving, value: UInt8(string)!)
+    case .physicalOutputMaximumHeatWhileLocomotiveDriving:
+      setPhysicalOutputValue(property: .physicalOutputMaximumHeatWhileLocomotiveDriving, value: UInt8(string)!)
+    case .physicalOutputChuffPower:
+      setPhysicalOutputValue(property: .physicalOutputChuffPower, value: UInt8(string)!)
+    case .physicalOutputFanPower:
+      setPhysicalOutputValue(property: .physicalOutputFanPower, value: UInt8(string)!)
+    case .physicalOutputTimeout:
+      setPhysicalOutputValue(property: .physicalOutputTimeout, value: UInt8(string)!)
+    case .physicalOutputLevel:
+      setPhysicalOutputValue(property: .physicalOutputLevel, value: UInt8(string)!)
+    case .physicalOutputCouplerForce:
+      setPhysicalOutputValue(property: .physicalOutputCouplerForce, value: UInt8(string)!)
+    case .physicalOutputServoDurationA:
+      setPhysicalOutputValue(property: .physicalOutputServoDurationA, value: UInt8(string)!)
+    case .physicalOutputServoDurationB:
+      setPhysicalOutputValue(property: .physicalOutputServoDurationB, value: UInt8(string)!)
+    case .physicalOutputServoPositionA:
+      setPhysicalOutputValue(property: .physicalOutputServoPositionA, value: UInt8(string)!)
+    case .physicalOutputServoPositionB:
+      setPhysicalOutputValue(property: .physicalOutputServoPositionB, value: UInt8(string)!)
+    case .physicalOutputServoDoNotDisableServoPulseAtPositionA:
+      setPhysicalOutputBoolValue(property: .physicalOutputServoDoNotDisableServoPulseAtPositionA, value: string == "true")
+    case .physicalOutputServoDoNotDisableServoPulseAtPositionB:
+      setPhysicalOutputBoolValue(property: .physicalOutputServoDoNotDisableServoPulseAtPositionB, value: string == "true")
+    case .physicalOutputExternalSmokeUnitType:
+      externalSmokeUnitType = ExternalSmokeUnitType(title: string)!
+
     default:
       break
     }
