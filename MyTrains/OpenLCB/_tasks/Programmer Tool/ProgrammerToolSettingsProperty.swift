@@ -2206,109 +2206,110 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     
     var result : [ProgrammerToolSettingsPropertyField] = []
     
-    let labelFontSize : CGFloat = 10.0
+//    let labelFontSize : CGFloat = 10.0
     let textFontSize  : CGFloat = 11.0
     
     for item in ProgrammerToolSettingsProperty.allCases {
       
-      var field : ProgrammerToolSettingsPropertyField = (view:nil, label:nil, control:nil, item, customView:nil, cvLabel:nil, slider:nil)
-      
-      if item.controlType != .checkBox && item.controlType != .description && item.controlType != .warning {
-        field.label = NSTextField(labelWithString: item.label)
+      if let definition = ProgrammerToolSettingsProperty.definitions[item] {
+        
+        var field : ProgrammerToolSettingsPropertyField = (view:nil, label:nil, control:nil, item, customView:nil, cvLabel:nil, slider:nil)
+        
+        if definition.controlType != .checkBox && definition.controlType != .description && definition.controlType != .warning {
+          field.label = NSTextField(labelWithString: item.label)
+        }
+        
+        switch definition.controlType {
+        case .checkBox:
+          let checkBox = NSButton()
+          checkBox.setButtonType(.switch)
+          checkBox.title = item.label
+          field.control = checkBox
+        case .comboBox:
+          let comboBox = MyComboBox()
+          comboBox.isEditable = false
+          field.control = comboBox
+          initComboBox(property: field.property, comboBox: comboBox)
+        case .warning:
+          field.customView = NSImageView(image: MyIcon.warning.image!)
+          field.control = NSTextField(labelWithString: "")
+        case .label:
+          field.control = NSTextField(labelWithString: "")
+        case .description:
+          let textField = NSTextField(labelWithString: definition.title)
+          textField.lineBreakMode = .byWordWrapping
+          textField.maximumNumberOfLines = 0
+          textField.preferredMaxLayoutWidth = 400.0
+          field.control = textField
+        case .textField:
+          field.control = NSTextField()
+        case .textFieldWithSlider:
+          field.control = NSTextField()
+          field.slider = NSSlider()
+        case .functionsConsistMode, .functionsAnalogMode:
+          field.customView = NSView()
+        case .esuSpeedTable:
+          field.customView = ESUSpeedTable()
+        default:
+          break
+        }
+        
+        if definition.infoType != .none {
+          let info = NSTextField(labelWithString: "")
+          info.fontSize = textFontSize
+          field.customView = info
+        }
+        
+        /// https://manasaprema04.medium.com/autolayout-fundamental-522f0a6e5790
+        
+        let view = NSView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.setContentHuggingPriority(NSLayoutConstraint.Priority(rawValue: 500), for: .horizontal)
+        field.view = view
+        
+        if let label = field.label {
+          label.stringValue = definition.title
+          label.translatesAutoresizingMaskIntoConstraints = false
+          label.setContentHuggingPriority(NSLayoutConstraint.Priority(rawValue: 250), for: .horizontal)
+          view.addSubview(label)
+        }
+        
+        if let slider = field.slider {
+          slider.translatesAutoresizingMaskIntoConstraints = false
+          slider.altIncrementValue = 1
+          slider.minValue = definition.minValue!
+          slider.maxValue = definition.maxValue!
+          slider.tag = item.rawValue
+          view.addSubview(slider)
+        }
+        
+        if let control = field.control {
+          control.translatesAutoresizingMaskIntoConstraints = false
+          control.setContentHuggingPriority(NSLayoutConstraint.Priority(rawValue: 1), for: .horizontal)
+          control.tag = item.rawValue
+          view.addSubview(control)
+        }
+        
+        if let customView = field.customView {
+          customView.translatesAutoresizingMaskIntoConstraints = false
+          view.addSubview(customView)
+        }
+        
+        if let cv = definition.cv {
+          
+          field.cvLabel = NSTextField(labelWithString: "")
+          
+          if let cvLabel = field.cvLabel {
+            cvLabel.translatesAutoresizingMaskIntoConstraints = false
+            cvLabel.alignment = .right
+            view.addSubview(cvLabel)
+          }
+          
+        }
+        
+        result.append(field)
+        
       }
-      
-      switch item.controlType {
-      case .checkBox:
-        let checkBox = NSButton()
-        checkBox.setButtonType(.switch)
-        checkBox.title = item.label
-        field.control = checkBox
-      case .comboBox:
-        let comboBox = MyComboBox()
-        comboBox.isEditable = false
-        field.control = comboBox
-        initComboBox(property: field.property, comboBox: comboBox)
-      case .warning:
-        field.customView = NSImageView(image: MyIcon.warning.image!)
-        field.control = NSTextField(labelWithString: "")
-      case .label:
-        field.control = NSTextField(labelWithString: "")
-      case .description:
-        let textField = NSTextField(labelWithString: "")
-        textField.lineBreakMode = .byWordWrapping
-        textField.maximumNumberOfLines = 0
-        textField.preferredMaxLayoutWidth = 400.0
-        field.control = textField
-      case .textField:
-        field.control = NSTextField()
-      case .textFieldWithInfo:
-        field.control = NSTextField()
-        let info = NSTextField(labelWithString: "")
-        info.fontSize = textFontSize
-        field.customView = info
-      case .textFieldWithSlider:
-        field.control = NSTextField()
-        field.slider = NSSlider()
-      case .textFieldWithInfoWithSlider:
-        field.control = NSTextField()
-        let info = NSTextField(labelWithString: "")
-        info.fontSize = textFontSize
-        field.customView = info
-        field.slider = NSSlider()
-      case .functionsConsistMode, .functionsAnalogMode:
-        field.customView = NSView()
-      case .esuSpeedTable:
-        field.customView = ESUSpeedTable()
-      }
-      
-      /// https://manasaprema04.medium.com/autolayout-fundamental-522f0a6e5790
-      
-      let view = NSView()
-      view.translatesAutoresizingMaskIntoConstraints = false
-      view.setContentHuggingPriority(NSLayoutConstraint.Priority(rawValue: 500), for: .horizontal)
-      field.view = view
-
-      if let label = field.label {
-        label.translatesAutoresizingMaskIntoConstraints = false
- //       label.fontSize = labelFontSize
- //       label.alignment = .right
-        label.setContentHuggingPriority(NSLayoutConstraint.Priority(rawValue: 250), for: .horizontal)
-        view.addSubview(label)
-      }
-      
-      if let slider = field.slider {
-        slider.translatesAutoresizingMaskIntoConstraints = false
-        slider.altIncrementValue = 1
-        slider.minValue = item.minValue
-        slider.maxValue = item.maxValue
-        slider.tag = item.rawValue
-        view.addSubview(slider)
-      }
-      
-      if let control = field.control {
-        control.translatesAutoresizingMaskIntoConstraints = false
-  //      control.fontSize = textFontSize
-        control.setContentHuggingPriority(NSLayoutConstraint.Priority(rawValue: 1), for: .horizontal)
-        control.toolTip = item.toolTip
-        control.tag = item.rawValue
-        view.addSubview(control)
-      }
-      
-      if let customView = field.customView {
-        customView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(customView)
-      }
-
-      field.cvLabel = NSTextField(labelWithString: "")
-
-      if let cvLabel = field.cvLabel {
-        cvLabel.translatesAutoresizingMaskIntoConstraints = false
-  //      cvLabel.fontSize = labelFontSize
-        cvLabel.alignment = .right
-        view.addSubview(cvLabel)
-      }
-      
-      result.append(field)
       
     }
     

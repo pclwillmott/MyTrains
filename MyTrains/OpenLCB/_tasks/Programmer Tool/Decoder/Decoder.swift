@@ -2369,7 +2369,7 @@ public class Decoder : NSObject {
     return physicalOutputCVs.keys.contains(property)
   }
   
-  private let physicalOutputCVs : [ProgrammerToolSettingsProperty:(cv:CV, mask:UInt8, shift:UInt8)] = [
+  public let physicalOutputCVs : [ProgrammerToolSettingsProperty:(cv:CV, mask:UInt8, shift:UInt8)] = [
     .physicalOutputPowerOnDelay  : (cv: .cv_016_000_260, mask: 0b00001111, shift:0),
     .physicalOutputPowerOffDelay : (cv: .cv_016_000_260, mask: 0b11110000 , shift: 4),
     .physicalOutputEnableFunctionTimeout : (cv: .cv_016_000_261, mask: 0xff, shift:0),
@@ -2418,7 +2418,11 @@ public class Decoder : NSObject {
     return nil
     
   }
-  
+
+  public func esuPhysicalOutputCV(cv:CV) -> CV? {
+    return cv + (Int(esuDecoderPhysicalOutput.rawValue) * 8)
+  }
+
   public func isPhysicalOutputBoolean(property:ProgrammerToolSettingsProperty) -> Bool? {
     
     if let info = physicalOutputCVs[property] {
@@ -2447,6 +2451,23 @@ public class Decoder : NSObject {
     }
     
     return nil
+    
+  }
+  
+  public func getPropertyByteValue(property:ProgrammerToolSettingsProperty, propertyDefinition:ProgrammerToolSettingsPropertyDefinition? = nil) -> UInt8? {
+    
+    guard let definition = propertyDefinition == nil ? ProgrammerToolSettingsProperty.definitions[property] : propertyDefinition, let cvs = definition.cv, let masks = definition.mask, let shifts = definition.shift else {
+      return nil
+    }
+    
+    var cv : CV
+    
+    switch definition.cvIndexingMethod {
+    case .standard:
+      cv = cvs[0]
+    case .esuDecoderPhysicalOutput:
+      cv = esuPhysicalOutputCV(cv:cvs[0])!
+    }
     
   }
   
@@ -2736,6 +2757,20 @@ public class Decoder : NSObject {
   }
   
   public func getValue(property:ProgrammerToolSettingsProperty) -> String {
+    
+    guard let definition = ProgrammerToolSettingsProperty.definitions[property] else {
+      return "error"
+    }
+    
+    switch definition.encoding {
+    case .none:
+      return ""
+    case .boolBit:
+      
+    case .boolNZ:
+    case .byte:
+    case .custom:
+    }
     
     switch property {
     case .physicalOutputExternalSmokeUnitType:
@@ -3148,11 +3183,11 @@ public class Decoder : NSObject {
       return String(localized: "PLACEHOLDER")
     }
   }
+
+  let formatter = NumberFormatter()
   
   public func getInfo(property:ProgrammerToolSettingsProperty) -> String {
 
-    let formatter = NumberFormatter()
-    
     formatter.usesGroupingSeparator = true
     formatter.groupingSize = 3
 

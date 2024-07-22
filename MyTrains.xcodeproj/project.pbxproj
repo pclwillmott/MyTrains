@@ -203,6 +203,8 @@
 		DA7A127429E2DCCD000DCE1C /* UIntExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA7A127229E2DCB0000DCE1C /* UIntExtensions.swift */; };
 		DA7A127629E2E6DB000DCE1C /* OpenLCBCANControlFrameFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA7A127529E2E6DB000DCE1C /* OpenLCBCANControlFrameFormat.swift */; };
 		DA7A127829E32E99000DCE1C /* OpenLCBMessageCANFrameType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA7A127729E32E99000DCE1C /* OpenLCBMessageCANFrameType.swift */; };
+		DA7AFCA32C4E71350074A45D /* ProgrammerToolSettingsPropertyDefinition.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA7AFCA22C4E71350074A45D /* ProgrammerToolSettingsPropertyDefinition.swift */; };
+		DA7AFCA52C4EC1B40074A45D /* ProgrammerToolSettingsPropertyExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA7AFCA42C4EC1B40074A45D /* ProgrammerToolSettingsPropertyExtension.swift */; };
 		DA7B2D152B2F776A00327281 /* softfloat.c in Sources */ = {isa = PBXBuildFile; fileRef = DA7B2D132B2F776A00327281 /* softfloat.c */; };
 		DA7B4727273803BA00BCD587 /* LocomotiveStateWithTimeStamp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA7B4726273803BA00BCD587 /* LocomotiveStateWithTimeStamp.swift */; };
 		DA7C509A2BD688EB0079E876 /* LayoutInspectorProperty.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA7C50992BD688EB0079E876 /* LayoutInspectorProperty.swift */; };
@@ -678,6 +680,8 @@
 		DA7A127229E2DCB0000DCE1C /* UIntExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIntExtensions.swift; sourceTree = "<group>"; };
 		DA7A127529E2E6DB000DCE1C /* OpenLCBCANControlFrameFormat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBCANControlFrameFormat.swift; sourceTree = "<group>"; };
 		DA7A127729E32E99000DCE1C /* OpenLCBMessageCANFrameType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBMessageCANFrameType.swift; sourceTree = "<group>"; };
+		DA7AFCA22C4E71350074A45D /* ProgrammerToolSettingsPropertyDefinition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgrammerToolSettingsPropertyDefinition.swift; sourceTree = "<group>"; };
+		DA7AFCA42C4EC1B40074A45D /* ProgrammerToolSettingsPropertyExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgrammerToolSettingsPropertyExtension.swift; sourceTree = "<group>"; };
 		DA7B2D132B2F776A00327281 /* softfloat.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = softfloat.c; sourceTree = "<group>"; };
 		DA7B2D142B2F776A00327281 /* softfloat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = softfloat.h; sourceTree = "<group>"; };
 		DA7B4726273803BA00BCD587 /* LocomotiveStateWithTimeStamp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocomotiveStateWithTimeStamp.swift; sourceTree = "<group>"; };
@@ -1319,6 +1323,8 @@
 				DA8C29E92C382408001755AB /* ProgrammerToolSettingsGroup.swift */,
 				DAB163EE2C3EE20000D7F23E /* ProgrammerToolSettingsSection.swift */,
 				DAB163F02C3EE25500D7F23E /* ProgrammerToolSettingsProperty.swift */,
+				DA7AFCA42C4EC1B40074A45D /* ProgrammerToolSettingsPropertyExtension.swift */,
+				DA7AFCA22C4E71350074A45D /* ProgrammerToolSettingsPropertyDefinition.swift */,
 				DAB163F42C3EEEA600D7F23E /* ProgrammerToolSettingsPropertyField.swift */,
 				DAB163F22C3EE5ED00D7F23E /* ProgrammerToolControlType.swift */,
 				DAB163F62C3EF31600D7F23E /* ProgrammerToolSettingsSectionField.swift */,
@@ -2361,6 +2367,7 @@
 				DAA66BD22A092DC2001804AC /* StringExtensions.swift in Sources */,
 				DAAA9C212A0FAE0100A5B9D6 /* OpenLCBDatagramType.swift in Sources */,
 				DA51FB9C29D88320002CAAC1 /* LCCCANFrame.swift in Sources */,
+				DA7AFCA32C4E71350074A45D /* ProgrammerToolSettingsPropertyDefinition.swift in Sources */,
 				DA56261529E1BE7800D465CC /* OpenLCBMTI.swift in Sources */,
 				DA347B6C2B9F43A00089CED9 /* OpenLCBConfigurationToolManager.swift in Sources */,
 				DAE2BADB2B091EB200FC587A /* OpenLCBStandardContentBlockType.swift in Sources */,
@@ -2418,6 +2425,7 @@
 				DA5550EA28392A6B00C4FE4E /* DigitraxProductCode.swift in Sources */,
 				DAA56B4F2BD9381600BAB6EF /* LayoutInspectorPropertyField.swift in Sources */,
 				DAD41AB82A3C9E54002EF847 /* DCCAddressPartition.swift in Sources */,
+				DA7AFCA52C4EC1B40074A45D /* ProgrammerToolSettingsPropertyExtension.swift in Sources */,
 				DA6BA5102C4931850028EDA0 /* FunctionAnalogMode.swift in Sources */,
 				DAB4A7392B3F0E7D00CD5256 /* CDIGroupView.swift in Sources */,
 				DA60140529F4162500AD9ACD /* ViewLCCNetworkTableViewDS.swift in Sources */,

@@ -16,13 +16,17 @@ public enum ProgrammerToolControlType {
   case label
   case checkBox
   case comboBox
+  case comboBoxDynamic
   case description
   case warning
-  case textFieldWithInfo
   case textFieldWithSlider
-  case textFieldWithInfoWithSlider
   case functionsConsistMode
   case functionsAnalogMode
   case esuSpeedTable
+
+  // Deprecated
   
+  case textFieldWithInfo
+  case textFieldWithInfoWithSlider
+
 }
