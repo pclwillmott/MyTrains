@@ -2244,7 +2244,7 @@ public class Decoder : NSObject {
   
   private var _speedTablePreset : SpeedTablePreset = .doNothing
   
-  private var speedTablePreset : SpeedTablePreset {
+  private var speedTablePreset : SpeedTablePreset { // *** KEEP ***
     get {
       return _speedTablePreset
     }
@@ -2276,7 +2276,7 @@ public class Decoder : NSObject {
   
   private var _speedTableIndex : Int = 1
   
-  public var speedTableIndex : Int {
+  public var speedTableIndex : Int { // *** KEEP ***
     get {
       return _speedTableIndex
     }
@@ -2312,7 +2312,7 @@ public class Decoder : NSObject {
   
   private var _esuDecoderPhysicalOutput : ESUDecoderPhysicalOutput = .frontLight
   
-  public var esuDecoderPhysicalOutput : ESUDecoderPhysicalOutput {
+  public var esuDecoderPhysicalOutput : ESUDecoderPhysicalOutput { // *** KEEP ***
     get {
       return _esuDecoderPhysicalOutput
     }
@@ -2454,23 +2454,70 @@ public class Decoder : NSObject {
     
   }
   
-  public func getPropertyByteValue(property:ProgrammerToolSettingsProperty, propertyDefinition:ProgrammerToolSettingsPropertyDefinition? = nil) -> UInt8? {
+  public func cvIndexOffset(indexingMethod:CVIndexingMethod) -> Int {
     
-    guard let definition = propertyDefinition == nil ? ProgrammerToolSettingsProperty.definitions[property] : propertyDefinition, let cvs = definition.cv, let masks = definition.mask, let shifts = definition.shift else {
-      return nil
-    }
-    
-    var cv : CV
-    
-    switch definition.cvIndexingMethod {
+    switch indexingMethod {
     case .standard:
-      cv = cvs[0]
+      return 0
     case .esuDecoderPhysicalOutput:
-      cv = esuPhysicalOutputCV(cv:cvs[0])!
+      return Int(esuDecoderPhysicalOutput.rawValue) * 8
     }
     
   }
+
+  public func getProperty(property:ProgrammerToolSettingsProperty, propertyDefinition:ProgrammerToolSettingsPropertyDefinition? = nil) -> [UInt8] {
+    
+    var result : [UInt8] = []
+    
+    guard let definition = propertyDefinition == nil ? ProgrammerToolSettingsProperty.definitions[property] : propertyDefinition, let cvs = definition.cv, let masks = definition.mask, let shifts = definition.shift, let cvIndexingMethod = definition.cvIndexingMethod else {
+      return result
+    }
+    
+    let indexOffset = cvIndexOffset(indexingMethod: cvIndexingMethod)
+    
+    for index in 0 ... cvs.count - 1 {
+      
+      let cv = cvs[index] + indexOffset
+      
+      if let offset = indexLookup[cv.index] {
+        
+        result.append((modifiedBlocks[offset + Int(cv.cv) - 1 - (cv.isIndexed ? 256 : 0)] & masks[index]) >> shifts[index])
+        
+      }
+      
+    }
+    
+    return result
+    
+  }
+
+  private var inSetProperty = false
   
+  public func setProperty(property:ProgrammerToolSettingsProperty, values:[UInt8], propertyDefinition:ProgrammerToolSettingsPropertyDefinition? = nil) {
+    
+    guard let definition = propertyDefinition == nil ? ProgrammerToolSettingsProperty.definitions[property] : propertyDefinition, let cvs = definition.cv, let masks = definition.mask, let shifts = definition.shift, let cvIndexingMethod = definition.cvIndexingMethod else {
+      return
+    }
+    
+    let indexOffset = cvIndexOffset(indexingMethod: cvIndexingMethod)
+    
+    for index in 0 ... cvs.count - 1 {
+      
+      let cv = cvs[index] + indexOffset
+      
+      if let offset = indexLookup[cv.index] {
+        
+        let position = offset + Int(cv.cv) - 1 - (cv.isIndexed ? 256 : 0)
+        
+        modifiedBlocks[position] = (modifiedBlocks[position] & ~masks[index]) | ((values[index] << shifts[index]) & masks[index])
+        
+      }
+      
+    }
+
+  }
+
+
   public func getPhysicalOutputValue(property:ProgrammerToolSettingsProperty) -> UInt8? {
     
     if let cv = physicalOutputCV(property:property) {
@@ -2758,719 +2805,148 @@ public class Decoder : NSObject {
   
   public func getValue(property:ProgrammerToolSettingsProperty) -> String {
     
-    guard let definition = ProgrammerToolSettingsProperty.definitions[property] else {
-      return "error"
+    let excludedEncodings : Set<ProgrammerToolEncodingType> = [
+      .custom,
+      .none,
+    ]
+    
+    guard let definition = ProgrammerToolSettingsProperty.definitions[property], !excludedEncodings.contains(definition.encoding) else {
+      return ""
     }
+    
+    let values = getProperty(property: property, propertyDefinition: definition)
     
     switch definition.encoding {
-    case .none:
-      return ""
-    case .boolBit:
-      
-    case .boolNZ:
     case .byte:
-    case .custom:
-    }
-    
-    switch property {
-    case .physicalOutputExternalSmokeUnitType:
-      return externalSmokeUnitType.title
+      return "\(values[0])"
+    case .boolBit:
+      return values[0] == definition.mask![0] ? "true" : "false"
+    case .boolNZ:
+      return values[0] != 0 ? "true" : "false"
     case .locomotiveAddressType:
-      return "\(locomotiveAddressType.title)"
-    case .locomotiveAddressShort:
-      return "\(primaryAddress)"
-    case .locomotiveAddressLong:
-      return "\(extendedAddress)"
-    case .marklinConsecutiveAddresses:
-      return "\(marklinConsecutiveAddresses.title)"
-    case .locomotiveAddressWarning:
-      return String(localized:"The decoder will only respond to DCC commands!")
-    case .enableDCCConsistAddress:
-      return isConsistAddressEnabled ? "true" : "false"
-    case .consistAddress:
-      return "\(consistAddress)"
-    case .consistReverseDirection:
-      return isConsistReverseDirection ? "true" : "false"
-    case .enableACAnalogMode:
-      return isACAnalogModeEnabled ? "true" : "false"
-    case .acAnalogModeStartVoltage:
-      return "\(analogModeACStartVoltage)"
-    case .acAnalogModeMaximumSpeedVoltage:
-      return "\(analogModeACMaximumSpeedVoltage)"
-    case .enableDCAnalogMode:
-      return isDCAnalogModeEnabled ? "true" : "false"
-    case .dcAnalogModeStartVoltage:
-      return "\(analogModeDCStartVoltage)"
-    case .dcAnalogModeMaximumSpeedVoltage:
-      return "\(analogModeDCMaximumSpeedVoltage)"
-    case .enableQuantumEngineer:
-      return isQuantumEngineerEnabled ? "true" : "false"
-    case .ignoreAccelerationDecelerationInSoundSchedule:
-      return ignoreAccelerationDecelerationInSoundSchedule ? "true" : "false"
-    case .useHighFrequencyPWMMotorControl:
-      return useHighFrequencyPWMMotorControl ? "true" : "false"
-    case .analogVoltageHysteresisDescription:
-      return String(localized:"The motor will stop when the voltage falls below start voltage minus the motor hysteresis voltage. Functions will be activated when the voltage reaches the motor start voltage minus the function difference voltage.")
-    case .analogMotorHysteresisVoltage:
-      return "\(analogMotorHysteresisVoltage)"
-    case .analogFunctionDifferenceVoltage:
-      return "\(analogFunctionDifferenceVoltage)"
-    case .enableABCBrakeMode:
-      return String(localized: "Enable ABC brake mode (asymmetrical DCC signal):")
-    case .emfBasicSettings:
-      return String(localized: "Basic Settings")
-    case .emfSlowSpeedSettings:
-      return String(localized: "Slow Speed Settings")
-    case .emfBackEMFSettings:
-      return String(localized: "Back EMF Settings")
-    case .brakeIfRightRailSignalPositive:
-      return abcBrakeIfRightRailMorePositive ? "true" : "false"
-    case .brakeIfLeftRailSignalPositive:
-      return abcBrakeIfLeftRailMorePositive ? "true" : "false"
-    case .voltageDifferenceIndicatingABCBrakeSection:
-      return "\(voltageDifferenceIndicatingABCBrakeSection)"
-    case .abcReducedSpeed:
-      return "\(abcReducedSpeed)"
-    case .enableABCShuttleTrain:
-      return isABCShuttleTrainEnabled ? "true" : "false"
-    case .waitingPeriodBeforeDirectionChange:
-      return "\(abcWaitingTime)"
-    case .hluAllowZIMO:
-      return allowZIMOBrakeSections ? "true" : "false"
-    case .hluSendZIMOZACKSignals:
-      return sendZIMOZACKSignals ? "true" : "false"
-    case .hluSpeedLimit1:
-      return "\(hluSpeedLimit1)"
-    case .hluSpeedLimit2:
-      return "\(hluSpeedLimit2)"
-    case .hluSpeedLimit3:
-      return "\(hluSpeedLimit3)"
-    case .hluSpeedLimit4:
-      return "\(hluSpeedLimit4)"
-    case .hluSpeedLimit5:
-      return "\(hluSpeedLimit5)"
-    case .brakeOnForwardPolarity:
-      return brakeOnForwardDCPolarity ? "true" : "false"
-    case .brakeOnReversePolarity:
-      return brakeOnReverseDCPolarity ? "true" : "false"
-    case .selectrixBrakeOnForwardPolarity:
-      return selectrixBrakeOnForwardPolarity ? "true" : "false"
-    case .selectrixBrakeOnReversePolarity:
-      return selectrixBrakeOnReversePolarity ? "true" : "false"
-    case .enableConstantBrakeDistance:
-      return isConstantBrakeDistanceEnabled ? "true" : "false"
-    case .brakeDistanceLength:
-      return "\(brakeDistanceLength)"
-    case .differentBrakeDistanceBackwards:
-      return isDifferentBrakeDistanceBackwards ? "true" : "false"
-    case .brakeDistanceLengthBackwards:
-      return "\(brakeDistanceLengthBackwards)"
-    case .driveUntilLocomotiveStopsInSpecifiedPeriod:
-      return driveUntilLocomotiveStopsInSpecifiedPeriod ? "true" : "false"
-    case .stoppingPeriod:
-      return "\(stoppingPeriod)"
-    case .constantBrakeDistanceOnSpeedStep0:
-      return constantBrakeDistanceOnSpeedStep0 ? "true" : "false"
-    case .delayTimeBeforeExitingBrakeSection:
-      return "\(delayBeforeExitingBrakeSection)"
-    case .brakeFunction1BrakeTimeReduction:
-      return "\(brakeFunction1BrakeTimeReduction)"
-    case .maximumSpeedWhenBrakeFunction1Active:
-      return "\(maximumSpeedWhenBrakeFunction1Active)"
-    case .brakeFunction2BrakeTimeReduction:
-      return "\(brakeFunction2BrakeTimeReduction)"
-    case .maximumSpeedWhenBrakeFunction2Active:
-      return "\(maximumSpeedWhenBrakeFunction2Active)"
-    case .brakeFunction3BrakeTimeReduction:
-      return "\(brakeFunction3BrakeTimeReduction)"
-    case .maximumSpeedWhenBrakeFunction3Active:
-      return "\(maximumSpeedWhenBrakeFunction3Active)"
-    case .enableRailComFeedback:
-      return isRailComFeedbackEnabled ? "true" : "false"
-    case .enableRailComPlusAutomaticAnnouncement:
-      return isRailComPlusAutomaticAnnouncementEnabled ? "true" : "false"
-    case .sendFollowingToCommandStation:
-      return "Send following information to the command station:"
-    case .sendAddressViaBroadcastOnChannel1:
-      return sendAddressViaBroadcastOnChannel1 ? "true" : "false"
-    case .allowDataTransmissionOnChannel2:
-      return allowDataTransmissionOnChannel2 ? "true" : "false"
-    case .detectSpeedStepModeAutomatically:
-      return detectSpeedStepModeAutomatically ? "true" : "false"
-    case .speedStepMode:
-      return speedStepMode.title
-    case .enableAcceleration:
-      return isAccelerationEnabled ? "true" : "false"
-    case .accelerationRate:
-      return "\(accelerationRate)"
-    case .accelerationAdjustment:
-      return "\(accelerationAdjustment)"
-    case .enableDeceleration:
-      return isDecelerationEnabled ? "true" : "false"
-    case .decelerationRate:
-      return "\(decelerationRate)"
-    case .decelerationAdjustment:
-      return "\(decelerationAdjustment)"
-    case .reverseMode:
-      return isReversed ? "true" : "false"
-    case .enableForwardTrim:
-      return isForwardTrimEnabled ? "true" : "false"
-    case .forwardTrim:
-      return "\(forwardTrim)"
-    case .enableReverseTrim:
-      return isReverseTrimEnabled ? "true" : "false"
-    case .reverseTrim:
-      return "\(reverseTrim)"
-    case .enableShuntingModeTrim:
-      return isShuntingModeTrimEnabled ? "true" : "false"
-    case .shuntingModeTrim:
-      return "\(shuntingModeTrim)"
-    case .loadAdjustmentOptionalLoad:
-      return "\(loadAdjustmentOptionalLoad)"
-    case .loadAdjustmentPrimaryLoad:
-      return "\(loadAdjustmentPrimaryLoad)"
-    case .enableGearboxBacklashCompensation:
-      return isGearboxBacklashCompensationEnabled ? "true" : "false"
-    case .gearboxBacklashCompensation:
-      return "\(gearboxBacklashCompensation)"
-    case .timeToBridgePowerInterruption:
-      return "\(timeToBridgePowerInterruption)"
-    case .preserveDirection:
-      return isDirectionPreserved ? "true" : "false"
-    case .enableStartingDelay:
-      return isStartingDelayEnabled ? "true" : "false"
-    case .userId1:
-      return "\(userId1)"
-    case .userId2:
-      return "\(userId2)"
-    case .enableDCCProtocol:
-      return isDCCProtocolEnabled ? "true" : "false"
-    case .enableMarklinMotorolaProtocol:
-      return isMarklinMotorolaProtocolEnabled ? "true" : "false"
-    case .enableSelectrixProtocol:
-      return isSelectrixProtocolEnabled ? "true" : "false"
-    case .enableM4Protocol:
-      return isM4ProtocolEnabled ? "true" : "false"
-    case .memoryPersistentFunction:
-      return isMemoryPersistentFunctionEnabled ? "true" : "false"
-    case .memoryPersistentSpeed:
-      return isMemoryPersistentSpeedEnabled ? "true" : "false"
-    case .enableRailComPlusSynchronization:
-      return isDecoderSynchronizedWithMasterDecoder ? "true" : "false"
-    case .m4MasterDecoderManufacturer:
-      return m4MasterDecoderManufacturerId.title
-    case .m4MasterDecoderSerialNumber:
-      return m4MasterDecoderSerialNumber.toHex(numberOfDigits: 8)
-    case .frequencyForBlinkingEffects:
-      return "\(frequencyForBlinkingEffects)"
-    case .gradeCrossingHoldingTime:
-      return "\(gradeCrossingHoldingTime)"
-    case .fadeInTimeOfLightEffects:
-      return "\(fadeInTimeOfLightEffects)"
-    case .fadeOutTimeOfLightEffects:
-      return "\(fadeOutTimeOfLightEffects)"
-    case .logicalFunctionDimmerBrightnessReduction:
-      return "\(logicalFunctionDimmerBrightnessReduction)"
-    case .classLightLogicSequenceLength:
-      return classLightLogicSequenceLength.title
-    case .enforceSlaveCommunicationOnAUX3AndAUX4:
-      return isSlaveCommunicationOnAUX3andAUX4Enforced ? "true" : "false"
-    case .decoderSensorSettings:
-      return decoderSensorSettings.title
-    case .enableAutomaticUncoupling:
-      return isAutomaticUncouplingEnabled ? "true" : "false"
-    case .automaticUncouplingSpeed:
-      return "\(automaticUncouplingSpeed)"
-    case .automaticUncouplingPushTime:
-      return "\(automaticUncouplingPushTime)"
-    case .automaticUncouplingWaitTime:
-      return "\(automaticUncouplingWaitTime)"
-    case .automaticUncouplingMoveTime:
-      return "\(automaticUncouplingMoveTime)"
-    case .smokeUnitTimeUntilPowerOff:
-      return "\(smokeUnitTimeUntilAutomaticPowerOff)"
-    case .smokeUnitFanSpeedTrim:
-      return "\(smokeUnitFanSpeedTrim)"
-    case .smokeUnitTemperatureTrim:
-      return "\(smokeUnitTemperatureTrim)"
-    case .smokeUnitPreheatingTemperatureForSecondarySmokeUnits:
-      return "\(smokeUnitPreheatingTemperatureForSecondarySmokeUnits)"
-    case .smokeChuffsDurationRelativeToTriggerDistance:
-      return "\(smokeChuffsDurationRelativeToTriggerDistance)"
-    case .smokeChuffsMinimumDuration:
-      return "\(smokeChuffsMinimumDuration)"
-    case .smokeChuffsMaximumDuration:
-      return "\(smokeChuffsMaximumDuration)"
-    case .minimumSpeed:
-      return "\(minimumSpeed)"
-    case .maximumSpeed:
-      return "\(maximumSpeed)"
-    case .enableLoadControlBackEMF:
-      return isLoadControlBackEMFEnabled ? "true" : "false"
-    case .regulationReference:
-      return "\(regulationReference)"
-    case .regulationParameterK:
-      return "\(regulationParameterK)"
-    case .regulationParameterI:
-      return "\(regulationParameterI)"
-    case .regulationParameterKSlow:
-      return "\(regulationParameterKSlow)"
-    case .largestInternalSpeedStepThatUsesKSlow:
-      return "\(largestInternalSpeedStepThatUsesKSlow)"
-    case .regulationInfluenceDuringSlowSpeed:
-      return "\(regulationInfluenceDuringSlowSpeed)"
-    case .slowSpeedBackEMFSamplingPeriod:
-      return "\(slowSpeedBackEMFSamplingPeriod)"
-    case .fullSpeedBackEMFSamplingPeriod:
-      return "\(fullSpeedBackEMFSamplingPeriod)"
-    case .slowSpeedLengthOfMeasurementGap:
-      return "\(slowSpeedLengthOfMeasurementGap)"
-    case .fullSpeedLengthOfMeasurementGap:
-      return "\(fullSpeedLengthOfMeasurementGap)"
-    case .enableMotorOverloadProtection:
-      return isMotorOverloadProtectionEnabled ? "true" : "false"
-    case .enableMotorCurrentLimiter:
-      return isMotorCurrentLimiterEnabled ? "true" : "false"
-    case .motorCurrentLimiterLimit:
-      return "\(motorCurrentLimiterLimit)"
-    case .motorPulseFrequency:
-      return "\(motorPulseFrequency)"
-    case .enableAutomaticParkingBrake:
-      return isAutomaticParkingBrakeEnabled ? "true" : "false"
-    case .steamChuffMode:
-      return steamChuffMode.title
-    case .distanceOfSteamChuffsAtSpeedStep1:
-      return "\(distanceOfSteamChuffsAtSpeedStep1)"
-    case .steamChuffAdjustmentAtHigherSpeedSteps:
-      return "\(steamChuffAdjustmentAtHigherSpeedSteps)"
-    case .triggerImpulsesPerSteamChuff:
-      return "\(triggerImpulsesPerSteamChuff)"
-    case .divideTriggerImpulsesInTwoIfShuntingModeEnabled:
-      return divideTriggerImpulsesInTwoIfShuntingModeEnabled ? "true" : "false"
-    case .enableSecondaryTrigger:
-      return isSecondaryTrimmerEnabled ? "true" : "false"
-    case .secondaryTriggerDistanceReduction:
-      return "\(secondaryTriggerDistanceReduction)"
-    case .enableMinimumDistanceOfSteamChuffs:
-      return isMinimumDistanceOfSteamChuffsEnabled ? "true" : "false"
-    case .minimumDistanceofSteamChuffs:
-      return "\(minimumDistanceOfSteamChuffs)"
-    case .masterVolume:
-      return "\(masterVolume)"
-    case .fadeSoundVolumeReduction:
-      return "\(fadeSoundVolumeReduction)"
-    case .soundFadeOutFadeInTime:
-      return "\(soundFadeInFadeOutTime)"
-    case .soundBass:
-      return "\(toneBass)"
-    case .soundTreble:
-      return "\(toneTreble)"
-    case .brakeSoundSwitchingOnThreshold:
-      return "\(brakeSoundSwitchingOnThreshold)"
-    case .brakeSoundSwitchingOffThreshold:
-      return "\(brakeSoundSwitchingOffThreshold)"
-    case .soundControlBasis:
-      return soundControlBasis.title
-    case .trainLoadAtLowSpeed:
-      return "\(trainLoadAtLowSpeed)"
-    case .trainLoadAtHighSpeed:
-      return "\(trainLoadAtHighSpeed)"
-    case .enableLoadOperationThreshold:
-      return isThresholdForLoadOperationEnabled ? "true" : "false"
-    case .loadOperationThreshold:
-      return "\(thresholdForLoadOperation)"
-    case .loadOperationTriggeredFunction:
-      return loadOperationTriggeredFunction.title
-    case .enableIdleOperationThreshold:
-      return isThresholdForIdleOperationEnabled ? "true" : "false"
-    case .idleOperationThreshold:
-      return "\(thresholdForIdleOperation)"
-    case .idleOperationTriggeredFunction:
-      return idleOperationTriggeredFunction.title
-    case .enableSerialFunctionModeF1toF8ForLGBMTS:
-      return isSerialFunctionModeF1toF8ForLGBMTSEnabled ? "true" : "false"
-    case .enableSupportForBroadwayLimitedSteamEngineControl:
-      return isSupportForBroadwayLimitedSteamEngineControlEnabled ? "true" : "false"
-    case .enableSUSIMaster:
-      return isSUSIMasterEnabled ? "true" : "false"
-    case .susiWarning:
-      return String(localized:"AUX11 and AUX12 will not work while SUSI is enabled.")
-    case .enableSUSISlave:
-      return isSUSISlaveEnabled ? "true" : "false"
-    case .consistFunctions, .analogModeActiveFunctions, .esuSpeedTable:
-      return ""
+      return (values[0] == definition.mask![0] ? LocomotiveAddressType.extended : LocomotiveAddressType.primary).title
+    case .extendedAddress:
+      return "\((( UInt16(values[0]) << 8) | UInt16(values[1])) - 49152)"
+    case .specialInt8:
+      return "\(Int8(values[0] & 0x7f) * (((values[0] & ByteMask.d7) == ByteMask.d7) ? -1 : 1))"
+    case .esuExternalSmokeUnitType:
+      return ExternalSmokeUnitType(rawValue: values[0])!.title
+    case .esuMarklinConsecutiveAddresses:
+      return MarklinConsecutiveAddresses(rawValue: values[0])!.title
+    case .esuSpeedStepMode:
+      return SpeedStepMode(rawValue: values[0])!.title
+    case .manufacturerCode:
+      return ManufacturerCode(rawValue:UInt16(values[0]))!.title
+    case .esuDecoderSensorSettings:
+      return DecoderSensorSettings(rawValue: values[0])!.title
+    case .esuSteamChuffMode:
+      return (values[0] == 0 ? SteamChuffMode.useExternalWheelSensor : SteamChuffMode.playSteamChuffsAccordingToSpeed).title
+    case .esuSoundControlBasis:
+      return (values[0] == 0 ? SoundControlBasis.accelerationAndBrakeTime : SoundControlBasis.accelerationAndBrakeTimeAndTrainLoad).title
+    case .esuSpeedTablePreset:
+      return speedTablePreset.title
+    case .esuDecoderPhysicalOutput:
+      return esuDecoderPhysicalOutput.title
+    case .esuSmokeUnitControlMode:
+      return SmokeUnitControlMode(rawValue: values[0])!.title
+    case .esuPhysicalOutputMode:
+      return ESUPhysicalOutputMode(rawValue: values[0])!.title(decoder: self)
+    case .esuClassLightLogicLength:
+      return ClassLightLogicSequenceLength(rawValue: values[0])!.title
     case .speedTableIndex:
       return "\(speedTableIndex)"
-    case .speedTableEntryValue:
-      return "\(speedTableValue)"
-    case .speedTablePreset:
-      return speedTablePreset.title
-    case .physicalOutput:
-      return esuDecoderPhysicalOutput.title
-    case .physicalOutputPowerOnDelay:
-      return "\(getPhysicalOutputValue(property: .physicalOutputPowerOnDelay)!)"
-    case .physicalOutputPowerOffDelay:
-      return "\(getPhysicalOutputValue(property: .physicalOutputPowerOffDelay)!)"
-    case .physicalOutputEnableFunctionTimeout:
-      return getPhysicalOutputValue(property: .physicalOutputTimeUntilAutomaticPowerOff)! != 0 ? "true" : "false"
-    case .physicalOutputTimeUntilAutomaticPowerOff:
-      return "\(getPhysicalOutputValue(property: .physicalOutputTimeUntilAutomaticPowerOff)!)"
-    case .physicalOutputOutputMode:
-      return esuDecoderPhysicalOutputMode.title(decoder: self)
-    case .physicalOutputCouplerForce:
-      return "\(getPhysicalOutputValue(property: .physicalOutputCouplerForce)!)"
-    case .physicalOutputBrightness:
-      return "\(getPhysicalOutputValue(property: .physicalOutputBrightness)!)"
-    case .physicalOutputUseClassLightLogic:
-      return getPhysicalOutputValue(property: .physicalOutputSequencePosition)! != 0 ? "true" : "false"
-    case .physicalOutputSequencePosition:
-      return "\(getPhysicalOutputValue(property: .physicalOutputSequencePosition)!)"
-    case .physicalOutputSpecialFunctions:
-      return String(localized: "Special Functions")
-    case .physicalOutputRule17Forward:
-      return getPhysicalOutputBoolValue(property: .physicalOutputRule17Forward)! ? "true" : "false"
-    case .physicalOutputRule17Reverse:
-      return getPhysicalOutputBoolValue(property: .physicalOutputRule17Reverse)! ? "true" : "false"
-    case .physicalOutputDimmer:
-      return getPhysicalOutputBoolValue(property: .physicalOutputDimmer)! ? "true" : "false"
-    case .physicalOutputLEDMode:
-      return getPhysicalOutputBoolValue(property: .physicalOutputLEDMode)! ? "true" : "false"
-    case .physicalOutputPhaseShift:
-      return "\(getPhysicalOutputValue(property: .physicalOutputPhaseShift)!)"
-    case .physicalOutputGradeCrossing:
-      return getPhysicalOutputBoolValue(property: .physicalOutputGradeCrossing)! ? "true" : "false"
-    case .physicalOutputStartupTime:
-      return "\(getPhysicalOutputValue(property: .physicalOutputStartupTime)!)"
-    case .physicalOutputStartupDescription:
-      return String(localized: "Startup time = 255 means defective Neon lamp.")
-    case .physicalOutputLevel:
-      return "\(getPhysicalOutputValue(property: .physicalOutputLevel)!)"
-    case .physicalOutputSmokeUnitControlMode:
-      return smokeUnitControlMode.title
-    case .physicalOutputSpeed:
-      return "\(getPhysicalOutputValue(property: .physicalOutputSpeed)!)"
-    case .physicalOutputAccelerationRate:
-      return "\(getPhysicalOutputValue(property: .physicalOutputAccelerationRate)!)"
-    case .physicalOutputDecelerationRate:
-      return "\(getPhysicalOutputValue(property: .physicalOutputDecelerationRate)!)"
-    case .physicalOutputHeatWhileLocomotiveStands:
-      return "\(getPhysicalOutputValue(property: .physicalOutputHeatWhileLocomotiveStands)!)"
-    case .physicalOutputMinimumHeatWhileLocomotiveDriving:
-      return "\(getPhysicalOutputValue(property: .physicalOutputMinimumHeatWhileLocomotiveDriving)!)"
-    case .physicalOutputMaximumHeatWhileLocomotiveDriving:
-      return "\(getPhysicalOutputValue(property: .physicalOutputMaximumHeatWhileLocomotiveDriving)!)"
-    case .physicalOutputChuffPower:
-      return "\(getPhysicalOutputValue(property: .physicalOutputChuffPower)!)"
-    case .physicalOutputFanPower:
-      return "\(getPhysicalOutputValue(property: .physicalOutputFanPower)!)"
-    case .physicalOutputTimeout:
-      return "\(getPhysicalOutputValue(property: .physicalOutputTimeout)!)"
-    case .physicalOutputExternalSmokeUnitType:
-      return externalSmokeUnitType.title
-    case .physicalOutputServoDurationA:
-      return "\(getPhysicalOutputValue(property: .physicalOutputServoDurationA)!)"
-    case .physicalOutputServoDurationB:
-      return "\(getPhysicalOutputValue(property: .physicalOutputServoDurationB)!)"
-    case .physicalOutputServoPositionA:
-      return "\(getPhysicalOutputValue(property: .physicalOutputServoPositionA)!)"
-    case .physicalOutputServoPositionB:
-      return "\(getPhysicalOutputValue(property: .physicalOutputServoPositionB)!)"
-    case .physicalOutputServoDoNotDisableServoPulseAtPositionA:
-      return getPhysicalOutputBoolValue(property: .physicalOutputServoDoNotDisableServoPulseAtPositionA)! ? "true" : "false"
-    case .physicalOutputServoDoNotDisableServoPulseAtPositionB:
-      return getPhysicalOutputBoolValue(property: .physicalOutputServoDoNotDisableServoPulseAtPositionB)! ? "true" : "false"
-    case .physicalOutputStartupTimeInfo:
-      return String(localized: "PLACEHOLDER")
+    case .esuTriggeredFunction:
+      return TriggeredFunction(rawValue: values[0])!.title
+    case .dWordHex:
+      return UInt32(bigEndianData: values.reversed())!.toHex(numberOfDigits: 8)
+    default:
+      break
     }
+    
+    return ""
+    
   }
 
   let formatter = NumberFormatter()
   
   public func getInfo(property:ProgrammerToolSettingsProperty) -> String {
 
-    formatter.usesGroupingSeparator = true
-    formatter.groupingSize = 3
-
-    formatter.alwaysShowsDecimalSeparator = false
-    formatter.minimumFractionDigits = 0
-
-    switch property {
-    case .dcAnalogModeStartVoltage:
-      return "\(analogModeDCStartVoltageInVolts)V"
-    case .acAnalogModeStartVoltage:
-      return "\(analogModeACStartVoltageInVolts)V"
-    case .dcAnalogModeMaximumSpeedVoltage:
-      return "\(analogModeDCMaximumSpeedVoltageInVolts)V"
-    case .acAnalogModeMaximumSpeedVoltage:
-      return "\(analogModeACMaximumSpeedVoltageInVolts)V"
-    case .analogMotorHysteresisVoltage:
-      return "\(analogMotorHysteresisVoltageInVolts)V"
-    case .analogFunctionDifferenceVoltage:
-      return "\(analogFunctionDifferenceVoltageInVolts)V"
-    case .waitingPeriodBeforeDirectionChange:
-      let x = UnitTime.convert(fromValue: abcWaitingTimeInSeconds, fromUnits: .seconds, toUnits: appNode!.unitsTime)
-      formatter.maximumFractionDigits = 2
-      return "\(formatter.string(from: x as NSNumber)!)\(appNode!.unitsTime.symbol)"
-    case .stoppingPeriod:
-      let x = UnitTime.convert(fromValue: stoppingPeriodInSeconds, fromUnits: .seconds, toUnits: appNode!.unitsTime)
-      formatter.maximumFractionDigits = 2
-      return "\(formatter.string(from: x as NSNumber)!)\(appNode!.unitsTime.symbol)"
-    case .delayTimeBeforeExitingBrakeSection:
-      let x = UnitTime.convert(fromValue: delayBeforeExitingBrakeSectionInSeconds, fromUnits: .seconds, toUnits: appNode!.unitsTime)
-      formatter.maximumFractionDigits = 2
-      return "\(formatter.string(from: x as NSNumber)!)\(appNode!.unitsTime.symbol)"
-    case .brakeFunction1BrakeTimeReduction:
-      let x = brakeFunction1BrakeTimeReductionPercentage
-      formatter.maximumFractionDigits = 2
-      return "\(formatter.string(from: x as NSNumber)!)%"
-    case .brakeFunction2BrakeTimeReduction:
-      let x = brakeFunction2BrakeTimeReductionPercentage
-      formatter.maximumFractionDigits = 2
-      return "\(formatter.string(from: x as NSNumber)!)%"
-    case .brakeFunction3BrakeTimeReduction:
-      let x = brakeFunction3BrakeTimeReductionPercentage
-      formatter.maximumFractionDigits = 2
-      return "\(formatter.string(from: x as NSNumber)!)%"
-    case .accelerationRate:
-      let x = UnitTime.convert(fromValue: accelerationRateInSeconds, fromUnits: .seconds, toUnits: appNode!.unitsTime)
-      formatter.maximumFractionDigits = 2
-      return "\(formatter.string(from: x as NSNumber)!)\(appNode!.unitsTime.symbol)"
-    case .accelerationAdjustment:
-      let x = UnitTime.convert(fromValue: accelerationAdjustmentInSeconds, fromUnits: .seconds, toUnits: appNode!.unitsTime)
-      formatter.maximumFractionDigits = 2
-      return "\(formatter.string(from: x as NSNumber)!)\(appNode!.unitsTime.symbol)"
-    case .decelerationRate:
-      let x = UnitTime.convert(fromValue: decelerationRateInSeconds, fromUnits: .seconds, toUnits: appNode!.unitsTime)
-      formatter.maximumFractionDigits = 2
-      return "\(formatter.string(from: x as NSNumber)!)\(appNode!.unitsTime.symbol)"
-    case .decelerationAdjustment:
-      let x = UnitTime.convert(fromValue: decelerationAdjustmentInSeconds, fromUnits: .seconds, toUnits: appNode!.unitsTime)
-      formatter.maximumFractionDigits = 2
-      return "\(formatter.string(from: x as NSNumber)!)\(appNode!.unitsTime.symbol)"
-    case .forwardTrim:
-      let x = forwardTrimMultiplier
-      formatter.maximumFractionDigits = 2
-      return String(localized: "\(formatter.string(from: x as NSNumber)!) × Voltage")
-    case .reverseTrim:
-      let x = reverseTrimMultiplier
-      formatter.maximumFractionDigits = 2
-      return String(localized: "\(formatter.string(from: x as NSNumber)!) × Voltage")
-    case .shuntingModeTrim:
-      let x = shuntingModeTrimMultiplier
-      formatter.maximumFractionDigits = 2
-      return String(localized: "\(formatter.string(from: x as NSNumber)!) × Drive Level")
-    case .loadAdjustmentOptionalLoad:
-      let x = loadAdjustmentOptionalLoadMultiplier
-      formatter.maximumFractionDigits = 2
-      return String(localized: "\(formatter.string(from: x as NSNumber)!)")
-    case .loadAdjustmentPrimaryLoad:
-      let x = loadAdjustmentPrimaryLoadMultiplier
-      formatter.maximumFractionDigits = 2
-      return String(localized: "\(formatter.string(from: x as NSNumber)!)")
-    case .gearboxBacklashCompensation:
-      let x = UnitTime.convert(fromValue: gearboxBacklashCompensationInSeconds, fromUnits: .seconds, toUnits: appNode!.unitsTime)
-      formatter.maximumFractionDigits = 2
-      return "\(formatter.string(from: x as NSNumber)!)\(appNode!.unitsTime.symbol)"
-    case .timeToBridgePowerInterruption:
-      let x = UnitTime.convert(fromValue: timeToBridgePowerInterruptionInSeconds, fromUnits: .seconds, toUnits: appNode!.unitsTime)
-      formatter.maximumFractionDigits = 2
-      return "\(formatter.string(from: x as NSNumber)!)\(appNode!.unitsTime.symbol)"
-    case .frequencyForBlinkingEffects:
-      let x = UnitTime.convert(fromValue: frequencyForBlinkingEffectsInSeconds, fromUnits: .seconds, toUnits: appNode!.unitsTime)
-      formatter.maximumFractionDigits = 2
-      return "\(formatter.string(from: x as NSNumber)!)\(appNode!.unitsTime.symbol)"
-    case .gradeCrossingHoldingTime:
-      let x = UnitTime.convert(fromValue: gradeCrossingHoldingTimeInSeconds, fromUnits: .seconds, toUnits: appNode!.unitsTime)
-      formatter.maximumFractionDigits = 2
-      return "\(formatter.string(from: x as NSNumber)!)\(appNode!.unitsTime.symbol)"
-    case .fadeInTimeOfLightEffects:
-      let x = UnitTime.convert(fromValue: fadeInTimeOfLightEffectsInSeconds, fromUnits: .seconds, toUnits: appNode!.unitsTime)
-      formatter.maximumFractionDigits = 2
-      return "\(formatter.string(from: x as NSNumber)!)\(appNode!.unitsTime.symbol)"
-    case .fadeOutTimeOfLightEffects:
-      let x = UnitTime.convert(fromValue: fadeOutTimeOfLightEffectsInSeconds, fromUnits: .seconds, toUnits: appNode!.unitsTime)
-      formatter.maximumFractionDigits = 2
-      return "\(formatter.string(from: x as NSNumber)!)\(appNode!.unitsTime.symbol)"
-    case .logicalFunctionDimmerBrightnessReduction:
-      let x = logicalFunctionDimmerBrightnessReductionPercentage
-      formatter.maximumFractionDigits = 2
-      return String(localized: "\(formatter.string(from: x as NSNumber)!)%")
-    case .automaticUncouplingPushTime:
-      let x = UnitTime.convert(fromValue: automaticUncouplingPushTimeInSeconds, fromUnits: .seconds, toUnits: appNode!.unitsTime)
-      formatter.maximumFractionDigits = 2
-      return "\(formatter.string(from: x as NSNumber)!)\(appNode!.unitsTime.symbol)"
-    case .automaticUncouplingWaitTime:
-      let x = UnitTime.convert(fromValue: automaticUncouplingWaitTimeInSeconds, fromUnits: .seconds, toUnits: appNode!.unitsTime)
-      formatter.maximumFractionDigits = 2
-      return "\(formatter.string(from: x as NSNumber)!)\(appNode!.unitsTime.symbol)"
-    case .automaticUncouplingMoveTime:
-      let x = UnitTime.convert(fromValue: automaticUncouplingMoveTimeInSeconds, fromUnits: .seconds, toUnits: appNode!.unitsTime)
-      formatter.maximumFractionDigits = 2
-      return "\(formatter.string(from: x as NSNumber)!)\(appNode!.unitsTime.symbol)"
-    case .smokeUnitTimeUntilPowerOff:
-      let x = UnitTime.convert(fromValue: smokeUnitTimeUntilAutomaticPowerOffInSeconds, fromUnits: .seconds, toUnits: appNode!.unitsTime)
-      formatter.maximumFractionDigits = 2
-      return "\(formatter.string(from: x as NSNumber)!)\(appNode!.unitsTime.symbol)"
-    case .smokeUnitFanSpeedTrim:
-      let x = smokeUnitFanSpeedTrimPercentage
-      formatter.maximumFractionDigits = 2
-      return String(localized: "\(formatter.string(from: x as NSNumber)!)%")
-    case .smokeUnitTemperatureTrim:
-      let x = smokeUnitTemperatureTrimPercentage
-      formatter.maximumFractionDigits = 2
-      return String(localized: "\(formatter.string(from: x as NSNumber)!)%")
-    case .smokeUnitPreheatingTemperatureForSecondarySmokeUnits:
-      let x = smokeUnitPreheatingTemperatureForSecondarySmokeUnitsInCelsius
-      formatter.maximumFractionDigits = 2
-      return String(localized: "\(formatter.string(from: x as NSNumber)!)°C")
-    case .smokeChuffsDurationRelativeToTriggerDistance:
-      let x = smokeChuffsDurationRelativeToTriggerDistancePercentage
-      formatter.maximumFractionDigits = 2
-      return String(localized: "\(formatter.string(from: x as NSNumber)!)%")
-    case .smokeChuffsMinimumDuration:
-      let x = UnitTime.convert(fromValue: smokeChuffsMinimumDurationInSeconds, fromUnits: .seconds, toUnits: appNode!.unitsTime)
-      formatter.maximumFractionDigits = 2
-      return "\(formatter.string(from: x as NSNumber)!)\(appNode!.unitsTime.symbol)"
-    case .smokeChuffsMaximumDuration:
-      let x = UnitTime.convert(fromValue: smokeChuffsMaximumDurationInSeconds, fromUnits: .seconds, toUnits: appNode!.unitsTime)
-      formatter.maximumFractionDigits = 2
-      return "\(formatter.string(from: x as NSNumber)!)\(appNode!.unitsTime.symbol)"
-    case .minimumSpeed:
-      let x = minimumSpeedPercentage
-      formatter.maximumFractionDigits = 2
-      return String(localized: "\(formatter.string(from: x as NSNumber)!)%")
-    case .maximumSpeed:
-      let x = maximumSpeedPercentage
-      formatter.maximumFractionDigits = 2
-      return String(localized: "\(formatter.string(from: x as NSNumber)!)%")
-    case .regulationReference:
-      let x = regulationReferenceInVolts
-      formatter.maximumFractionDigits = 2
-      return String(localized: "\(formatter.string(from: x as NSNumber)!)V")
-    case .regulationParameterI:
-      let x = UnitTime.convert(fromValue: regulationParameterIInSeconds, fromUnits: .seconds, toUnits: appNode!.unitsTime)
-      formatter.maximumFractionDigits = 2
-      return "\(formatter.string(from: x as NSNumber)!)\(appNode!.unitsTime.symbol)"
-    case .regulationInfluenceDuringSlowSpeed:
-      let x = regulationInfluenceDuringSlowSpeedPercentage
-      formatter.maximumFractionDigits = 2
-      return String(localized: "\(formatter.string(from: x as NSNumber)!)%")
-    case .slowSpeedBackEMFSamplingPeriod:
-      let x = UnitTime.convert(fromValue: slowSpeedBackEMFSamplingPeriodInSeconds, fromUnits: .seconds, toUnits: appNode!.unitsTime)
-      formatter.maximumFractionDigits = 2
-      return "\(formatter.string(from: x as NSNumber)!)\(appNode!.unitsTime.symbol)"
-    case .fullSpeedBackEMFSamplingPeriod:
-      let x = UnitTime.convert(fromValue: fullSpeedBackEMFSamplingPeriodInSeconds, fromUnits: .seconds, toUnits: appNode!.unitsTime)
-      formatter.maximumFractionDigits = 2
-      return "\(formatter.string(from: x as NSNumber)!)\(appNode!.unitsTime.symbol)"
-    case .slowSpeedLengthOfMeasurementGap:
-      let x = UnitTime.convert(fromValue: slowSpeedLengthOfMeasurementGapInSeconds, fromUnits: .seconds, toUnits: appNode!.unitsTime)
-      formatter.maximumFractionDigits = 2
-      return "\(formatter.string(from: x as NSNumber)!)\(appNode!.unitsTime.symbol)"
-    case .fullSpeedLengthOfMeasurementGap:
-      let x = UnitTime.convert(fromValue: fullSpeedLengthOfMeasurementGapInSeconds, fromUnits: .seconds, toUnits: appNode!.unitsTime)
-      formatter.maximumFractionDigits = 2
-      return "\(formatter.string(from: x as NSNumber)!)\(appNode!.unitsTime.symbol)"
-    case .motorCurrentLimiterLimit:
-      let x = motorCurrentLimiterLimitPercentage
-      formatter.maximumFractionDigits = 2
-      return String(localized: "\(formatter.string(from: x as NSNumber)!)%")
-    case .motorPulseFrequency:
-      let x = motorPulseFrequencyInHertz
-      formatter.maximumFractionDigits = 2
-      return String(localized: "\(formatter.string(from: x as NSNumber)!)Hz")
-    case .distanceOfSteamChuffsAtSpeedStep1:
-      let x = UnitTime.convert(fromValue: distanceOfSteamChuffsAtSpeedStep1InSeconds, fromUnits: .seconds, toUnits: appNode!.unitsTime)
-      formatter.maximumFractionDigits = 2
-      return "\(formatter.string(from: x as NSNumber)!)\(appNode!.unitsTime.symbol)"
-    case .secondaryTriggerDistanceReduction:
-      let x = secondaryTriggerDistanceReductionAmount
-      formatter.maximumFractionDigits = 2
-      return "\(formatter.string(from: x as NSNumber)!)"
-    case .minimumDistanceofSteamChuffs:
-      let x = UnitTime.convert(fromValue: minimumDistanceOfSteamChuffsInSeconds, fromUnits: .seconds, toUnits: appNode!.unitsTime)
-      formatter.maximumFractionDigits = 2
-      return "\(formatter.string(from: x as NSNumber)!)\(appNode!.unitsTime.symbol)"
-    case .masterVolume:
-      let x = masterVolumePercentage
-      formatter.maximumFractionDigits = 2
-      return String(localized: "\(formatter.string(from: x as NSNumber)!)%")
-    case .fadeSoundVolumeReduction:
-      let x = fadeSoundVolumeReductionPercentage
-      formatter.maximumFractionDigits = 2
-      return String(localized: "\(formatter.string(from: x as NSNumber)!)%")
-    case .soundFadeOutFadeInTime:
-      let x = UnitTime.convert(fromValue: soundFadeInFadeOutTimeInSeconds, fromUnits: .seconds, toUnits: appNode!.unitsTime)
-      formatter.maximumFractionDigits = 2
-      return "\(formatter.string(from: x as NSNumber)!)\(appNode!.unitsTime.symbol)"
-    case .soundBass:
-      let x = toneBassdB
-      formatter.maximumFractionDigits = 2
-      return String(localized: "\(formatter.string(from: x as NSNumber)!)dB")
-    case .soundTreble:
-      let x = toneTrebledB
-      formatter.maximumFractionDigits = 2
-      return String(localized: "\(formatter.string(from: x as NSNumber)!)dB")
-    case .trainLoadAtLowSpeed:
-      let x = trainLoadAtLowSpeedPercentage
-      formatter.maximumFractionDigits = 2
-      return String(localized: "\(formatter.string(from: x as NSNumber)!)%")
-    case .trainLoadAtHighSpeed:
-      let x = trainLoadAtHighSpeedPercentage
-      formatter.maximumFractionDigits = 2
-      return String(localized: "\(formatter.string(from: x as NSNumber)!)%")
-    case .physicalOutputPowerOnDelay:
-      let x = UnitTime.convert(fromValue: Double(getPhysicalOutputValue(property: .physicalOutputPowerOnDelay)!) * 0.40933333, fromUnits: .seconds, toUnits: appNode!.unitsTime)
-      formatter.maximumFractionDigits = 2
-      return "\(formatter.string(from: x as NSNumber)!)\(appNode!.unitsTime.symbol)"
-    case .physicalOutputPowerOffDelay:
-      let x = UnitTime.convert(fromValue: Double(getPhysicalOutputValue(property: .physicalOutputPowerOffDelay)!) * 0.40933333, fromUnits: .seconds, toUnits: appNode!.unitsTime)
-      formatter.maximumFractionDigits = 2
-      return "\(formatter.string(from: x as NSNumber)!)\(appNode!.unitsTime.symbol)"
-    case .physicalOutputTimeUntilAutomaticPowerOff:
-      let x = UnitTime.convert(fromValue: Double(getPhysicalOutputValue(property: .physicalOutputTimeUntilAutomaticPowerOff)!) * 0.41, fromUnits: .seconds, toUnits: appNode!.unitsTime)
-      formatter.maximumFractionDigits = 2
-      return "\(formatter.string(from: x as NSNumber)!)\(appNode!.unitsTime.symbol)"
-    case .physicalOutputTimeout:
-      let x = UnitTime.convert(fromValue: Double(getPhysicalOutputValue(property: .physicalOutputTimeout)!) * 0.256, fromUnits: .seconds, toUnits: appNode!.unitsTime)
-      formatter.maximumFractionDigits = 2
-      return "\(formatter.string(from: x as NSNumber)!)\(appNode!.unitsTime.symbol)"
-    case .physicalOutputServoDurationA:
-      let x = UnitTime.convert(fromValue: Double(getPhysicalOutputValue(property: .physicalOutputServoDurationA)!) * 0.25, fromUnits: .seconds, toUnits: appNode!.unitsTime)
-      formatter.maximumFractionDigits = 2
-      return "\(formatter.string(from: x as NSNumber)!)\(appNode!.unitsTime.symbol)"
-    case .physicalOutputServoDurationB:
-      let x = UnitTime.convert(fromValue: Double(getPhysicalOutputValue(property: .physicalOutputServoDurationB)!) * 0.25, fromUnits: .seconds, toUnits: appNode!.unitsTime)
-      formatter.maximumFractionDigits = 2
-      return "\(formatter.string(from: x as NSNumber)!)\(appNode!.unitsTime.symbol)"
-
-    default:
+    guard let definition = ProgrammerToolSettingsProperty.definitions[property], definition.infoType != .none, let maximumFractionDigits = definition.infoMaxDecimalPlaces, let infoFactor = definition.infoFactor, let appNode else {
       return ""
     }
+
+    formatter.usesGroupingSeparator = true
+    formatter.groupingSize = 3
+    formatter.alwaysShowsDecimalSeparator = false
+    formatter.minimumFractionDigits = 0
+    formatter.maximumFractionDigits = maximumFractionDigits
+
+    let values = getProperty(property: property, propertyDefinition: definition)
+
+    var doubleValue : Double
+
+    if definition.encoding == .specialInt8 {
+      doubleValue = Double((Int8(values[0] & 0x7f) * (((values[0] & ByteMask.d7) == ByteMask.d7) ? -1 : 1)))
+    }
+    else {
+      doubleValue = Double(values[0])
+    }
+
+    doubleValue *= infoFactor
+
+    var symbol = ""
     
+    switch definition.infoType {
+    case .decibel:
+      doubleValue = (Double(values[0]) - 16.0) * infoFactor
+      symbol = String(localized:"dB")
+    case .frequency:
+      doubleValue = UnitFrequency.convert(fromValue: doubleValue, fromUnits: .hertz, toUnits: appNode.unitsFrequency)
+      symbol = appNode.unitsFrequency.symbol
+    case .percentage:
+      symbol = String(localized:"%")
+    case .temperature:
+      doubleValue = UnitTemperature.convert(fromValue: doubleValue, fromUnits: .celsius, toUnits: appNode.unitsTemperature)
+      symbol = appNode.unitsTemperature.symbol
+    case .time:
+      doubleValue = UnitTime.convert(fromValue: doubleValue, fromUnits: .seconds, toUnits: appNode.unitsTime)
+      symbol = appNode.unitsTime.symbol
+    case .voltage:
+      doubleValue = UnitVoltage.convert(fromValue: doubleValue, fromUnits: .volts, toUnits: appNode.unitsVoltage)
+      symbol = appNode.unitsVoltage.symbol
+    default:
+      break
+    }
+    
+    let number = formatter.string(from: doubleValue as NSNumber)!
+    
+    if let format = definition.infoFormat {
+      return format.replacingOccurrences(of: "%%VALUE%%", with: number)
+    }
+    
+    return "\(number)\(symbol)"
+        
   }
   
   public func isValid(property:ProgrammerToolSettingsProperty, string:String) -> Bool {
     
-    switch property {
-    case .locomotiveAddressLong:
-      guard let value = UInt16(string), value > 0 && value < 10240 else {
-        return false
-      }
-    case .m4MasterDecoderSerialNumber:
+    guard let definition = ProgrammerToolSettingsProperty.definitions[property], let maxValue = definition.maxValue, let minValue = definition.minValue else {
+      return true
+    }
+    
+    switch definition.encoding {
+    case .dWordHex:
       guard let _ = UInt32(hex:string) else {
         return false
       }
-    case .locomotiveAddressShort, .consistAddress, .waitingPeriodBeforeDirectionChange, .brakeDistanceLength, .brakeDistanceLengthBackwards, .stoppingPeriod, .accelerationRate, .decelerationRate, .forwardTrim, .reverseTrim, .gearboxBacklashCompensation, .accelerationAdjustment, .decelerationAdjustment, .shuntingModeTrim, .acAnalogModeStartVoltage, .acAnalogModeMaximumSpeedVoltage, .dcAnalogModeStartVoltage, .dcAnalogModeMaximumSpeedVoltage, .analogMotorHysteresisVoltage, .analogFunctionDifferenceVoltage, .voltageDifferenceIndicatingABCBrakeSection, .abcReducedSpeed, .hluSpeedLimit1, .hluSpeedLimit2, .hluSpeedLimit3, .hluSpeedLimit4, .hluSpeedLimit5, .delayTimeBeforeExitingBrakeSection, .brakeFunction1BrakeTimeReduction, .brakeFunction2BrakeTimeReduction, .brakeFunction3BrakeTimeReduction, .userId1, .userId2, .loadAdjustmentOptionalLoad, .loadAdjustmentPrimaryLoad, .timeToBridgePowerInterruption, .maximumSpeedWhenBrakeFunction1Active, .maximumSpeedWhenBrakeFunction2Active, .maximumSpeedWhenBrakeFunction3Active, .frequencyForBlinkingEffects, .gradeCrossingHoldingTime, .fadeInTimeOfLightEffects, .fadeOutTimeOfLightEffects, .logicalFunctionDimmerBrightnessReduction, .automaticUncouplingSpeed, .automaticUncouplingPushTime, .automaticUncouplingWaitTime, .automaticUncouplingMoveTime, .smokeUnitTimeUntilPowerOff, .smokeUnitFanSpeedTrim, .smokeUnitTemperatureTrim, .smokeUnitPreheatingTemperatureForSecondarySmokeUnits, .smokeChuffsDurationRelativeToTriggerDistance, .smokeChuffsMinimumDuration, .smokeChuffsMaximumDuration, .minimumSpeed, .maximumSpeed, .regulationReference, .regulationParameterK, .regulationParameterI, .regulationParameterKSlow, .largestInternalSpeedStepThatUsesKSlow, .regulationInfluenceDuringSlowSpeed, .slowSpeedBackEMFSamplingPeriod, .fullSpeedBackEMFSamplingPeriod, .slowSpeedLengthOfMeasurementGap, .fullSpeedLengthOfMeasurementGap, .motorCurrentLimiterLimit, .motorPulseFrequency, .distanceOfSteamChuffsAtSpeedStep1, .steamChuffAdjustmentAtHigherSpeedSteps, .triggerImpulsesPerSteamChuff, .secondaryTriggerDistanceReduction, .minimumDistanceofSteamChuffs, .masterVolume, .soundFadeOutFadeInTime, .fadeSoundVolumeReduction, .soundBass, .soundTreble, .trainLoadAtLowSpeed, .trainLoadAtHighSpeed, .idleOperationThreshold, .loadOperationThreshold, .speedTableIndex, .speedTableEntryValue, .physicalOutputPowerOnDelay, .physicalOutputPowerOffDelay, .physicalOutputEnableFunctionTimeout, .physicalOutputCouplerForce, .physicalOutputSequencePosition, .physicalOutputBrightness, .physicalOutputPhaseShift, .physicalOutputStartupTime, .physicalOutputLevel, .physicalOutputSpeed, .physicalOutputAccelerationRate, .physicalOutputDecelerationRate, .physicalOutputHeatWhileLocomotiveStands, .physicalOutputMinimumHeatWhileLocomotiveDriving, .physicalOutputMaximumHeatWhileLocomotiveDriving, .physicalOutputChuffPower, .physicalOutputFanPower, .physicalOutputTimeout, .physicalOutputServoDurationA, .physicalOutputServoDurationB, .physicalOutputServoPositionA, .physicalOutputServoPositionB:
-      guard let value = UInt8(string), Double(value) >= property.minValue && Double(value) <= property.maxValue else {
+    default:
+      guard let value = Int(string), value >= Int(minValue) && value <= Int(maxValue) else {
         return false
       }
-    default:
-      break
     }
 
     return true
-
+    
   }
   
   public func setValue(property: ProgrammerToolSettingsProperty, string: String) {

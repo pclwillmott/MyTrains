@@ -8,7 +8,9 @@
 import Foundation
 import AppKit
 
-public enum UnitSpeed : UInt8 {
+public enum UnitSpeed : UInt8, CaseIterable {
+  
+  // MARK: Enumeration
   
   case centimetersPerSecond = 0
   case metersPerSecond = 1
@@ -20,67 +22,40 @@ public enum UnitSpeed : UInt8 {
   // MARK: Public Properties
   
   public var title : String {
-    return UnitSpeed.titles[Int(self.rawValue)]
+    
+    let titles : [UnitSpeed:String] = [
+      .centimetersPerSecond : String(localized: "Centimeters/Second"),
+      .metersPerSecond : String(localized: "Meters/Second"),
+      .kilometersPerHour : String(localized: "Kilometers/Hour"),
+      .inchesPerSecond : String(localized: "Inches/Second"),
+      .feetPerSecond : String(localized: "Feet/Second"),
+      .milesPerHour : String(localized: "Miles/Hour"),
+    ]
+
+    return titles[self]!
   }
 
   public var symbol : String {
-    return UnitSpeed.symbols[Int(self.rawValue)]
+    
+    let symbols : [UnitSpeed:String] = [
+      .centimetersPerSecond : String(localized: "cm/s", comment: "Used for the abbreviation of centimeters per second"),
+      .metersPerSecond : String(localized: "m/s", comment: "Used for the abbreviation of meters per second"),
+      .kilometersPerHour : String(localized: "km/h", comment: "Used for the abbreviation of kilometers per hour"),
+      .inchesPerSecond : String(localized: "ips", comment: "Used for the abbreviation of inches per second"),
+      .feetPerSecond : String(localized: "ft/s", comment: "Used for the abbreviation of feet (length) per second"),
+      .milesPerHour : String(localized: "mph", comment: "Used for the abbreviation of miles per hour"),
+    ]
+
+    return symbols[self]!
   }
 
-  public var toCMS : Double {
-    var temp = UnitSpeed.toCMS(units: self)
-    if self == .kilometersPerHour || self == .milesPerHour {
-//      if let layout = myTrainsController.layout {
-//        temp /= layout.scale
-//      }
-    }
-    return temp
-  }
-  
-  public var fromCMS : Double {
-    var temp = UnitSpeed.fromCMS(units: self)
-    if self == .kilometersPerHour || self == .milesPerHour {
-  //    if let layout = myTrainsController.layout {
-  //      temp *= layout.scale
-  //    }
-    }
-    return temp
-  }
-  
   // MARK: Private Class Properties
-  
-  private static let titles = [
-    String(localized: "Centimeters/Second"),
-    String(localized: "Meters/Second"),
-    String(localized: "Kilometers/Hour"),
-    String(localized: "Inches/Second"),
-    String(localized: "Feet/Second"),
-    String(localized: "Miles/Hour"),
-  ]
-
-  private static let symbols = [
-    String(localized: "cm/s", comment: "Used for the abbreviation of centimeters per second"),
-    String(localized: "m/s", comment: "Used for the abbreviation of meters per second"),
-    String(localized: "km/h", comment: "Used for the abbreviation of kilometers per hour"),
-    String(localized: "ips", comment: "Used for the abbreviation of inches per second"),
-    String(localized: "ft/s", comment: "Used for the abbreviation of feet (length) per second"),
-    String(localized: "mph", comment: "Used for the abbreviation of miles per hour"),
-  ]
 
   private static var map : String {
     
-    let items : [UnitSpeed] = [
-      .centimetersPerSecond,
-      .metersPerSecond,
-      .kilometersPerHour,
-      .inchesPerSecond,
-      .feetPerSecond,
-      .milesPerHour,
-    ]
-    
     var map = "<default>\(defaultValue.rawValue)</default>\n<map>\n"
 
-    for item in items {
+    for item in UnitSpeed.allCases {
       map += "<relation><property>\(item.rawValue)</property><value>\(item.title)</value></relation>\n"
     }
 
@@ -136,7 +111,9 @@ public enum UnitSpeed : UInt8 {
 
   public static func populate(comboBox: NSComboBox) {
     comboBox.removeAllItems()
-    comboBox.addItems(withObjectValues: titles)
+    for item in UnitSpeed.allCases {
+      comboBox.addItem(withObjectValue: item.title)
+    }
     select(comboBox: comboBox, value: defaultValue)
   }
   

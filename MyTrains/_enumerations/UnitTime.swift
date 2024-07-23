@@ -6,8 +6,11 @@
 //
 
 import Foundation
+import AppKit
 
-public enum UnitTime : UInt8 {
+public enum UnitTime : UInt8, CaseIterable {
+  
+  // MARK: Enumeration
   
   case milliseconds = 0
   case seconds      = 1
@@ -16,38 +19,35 @@ public enum UnitTime : UInt8 {
   // MARK: Public Properties
   
   public var title : String {
-    return UnitTime.titles[Int(self.rawValue)]
+    
+    let titles : [UnitTime:String] = [
+      .milliseconds : String(localized: "Milliseconds"),
+      .seconds      : String(localized: "Seconds"),
+      .hours        : String(localized: "Hours"),
+    ]
+
+
+    return titles[self]!
   }
 
   public var symbol : String {
-    return UnitTime.symbols[Int(self.rawValue)]
+
+    let symbols : [UnitTime:String] = [
+      .milliseconds : String(localized: "ms", comment: "Used for the abbreviation of milliseconds"),
+      .seconds : String(localized: "s", comment: "Used for the abbreviation of seconds"),
+      .hours : String(localized: "h", comment: "Used for the abbreviation of hours"),
+    ]
+
+    return symbols[self]!
   }
 
   // MARK: Private Class Properties
   
-  private static let titles = [
-    String(localized: "Milliseconds"),
-    String(localized: "Seconds"),
-    String(localized: "Hours"),
-  ]
-
-  private static let symbols = [
-    String(localized: "ms", comment: "Used for the abbreviation of milliseconds"),
-    String(localized: "s", comment: "Used for the abbreviation of seconds"),
-    String(localized: "h", comment: "Used for the abbreviation of hours"),
-  ]
-
   private static var map : String {
-    
-    let items : [UnitTime] = [
-      .milliseconds,
-      .seconds,
-      .hours,
-    ]
     
     var map = "<default>\(defaultValue.rawValue)</default>\n<map>\n"
 
-    for item in items {
+    for item in UnitTime.allCases {
       map += "<relation><property>\(item.rawValue)</property><value>\(item.title)</value></relation>\n"
     }
 

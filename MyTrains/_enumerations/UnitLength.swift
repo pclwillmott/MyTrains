@@ -8,7 +8,9 @@
 import Foundation
 import AppKit
 
-public enum UnitLength : UInt8 {
+public enum UnitLength : UInt8, CaseIterable {
+  
+  // MARK: Enumeration
   
   case millimeters = 0
   case centimeters = 1
@@ -22,53 +24,45 @@ public enum UnitLength : UInt8 {
   // MARK: Public Properties
   
   public var title : String {
-    return UnitLength.titles[Int(self.rawValue)]
+    
+    let titles : [UnitLength:String] = [
+      .millimeters : String(localized: "Millimeters"),
+      .centimeters :  String(localized: "Centimeters"),
+      .meters : String(localized: "Meters"),
+      .kilometers :  String(localized: "Kilometers"),
+      .inches : String(localized: "Inches"),
+      .feet : String(localized: "Feet"),
+      .miles : String(localized: "Miles"),
+      .mileschains : String(localized: "Miles.Chains"),
+    ]
+
+    return titles[self]!
+    
   }
 
   public var symbol : String {
-    return UnitLength.symbols[Int(self.rawValue)]
+    
+    let symbols : [UnitLength:String] = [
+      .millimeters : String(localized: "mm", comment: "Used for the abbreviation of millimeters"),
+      .centimeters : String(localized: "cm", comment: "Used for the abbreviation of centimeters"),
+      .meters : String(localized: "m", comment: "Used for the abbreviation of meters"),
+      .kilometers : String(localized: "km", comment: "Used for the abbreviation of kilometers"),
+      .inches : String(localized: "in.", comment: "Used for the abbreviation of inches"),
+      .feet : String(localized: "ft.", comment: "Used for the abbreviation of feet (length)"),
+      .miles : String(localized: "mi.", comment: "Used for the abbreviation of miles"),
+      .mileschains : String(localized: "mi.ch", comment: "Used for the abbreviation of miles.chains"),
+    ]
+
+    return symbols[self]!
   }
 
   // MARK: Private Class Properties
   
-  private static let titles = [
-    String(localized: "Millimeters"),
-    String(localized: "Centimeters"),
-    String(localized: "Meters"),
-    String(localized: "Kilometers"),
-    String(localized: "Inches"),
-    String(localized: "Feet"),
-    String(localized: "Miles"),
-    String(localized: "Miles.Chains"),
-  ]
-
-  private static let symbols = [
-    String(localized: "mm", comment: "Used for the abbreviation of millimeters"),
-    String(localized: "cm", comment: "Used for the abbreviation of centimeters"),
-    String(localized: "m", comment: "Used for the abbreviation of meters"),
-    String(localized: "km", comment: "Used for the abbreviation of kilometers"),
-    String(localized: "in.", comment: "Used for the abbreviation of inches"),
-    String(localized: "ft.", comment: "Used for the abbreviation of feet (length)"),
-    String(localized: "mi.", comment: "Used for the abbreviation of miles"),
-    String(localized: "mi.ch", comment: "Used for the abbreviation of miles.chains"),
-  ]
-
   private static var map : String {
-    
-    let items : [UnitLength] = [
-      .millimeters,
-      .centimeters,
-      .meters,
-      .kilometers,
-      .inches,
-      .feet,
-      .miles,
-      .mileschains,
-    ]
     
     var map = "<default>\(defaultValue.rawValue)</default>\n<map>\n"
 
-    for item in items {
+    for item in UnitLength.allCases {
       map += "<relation><property>\(item.rawValue)</property><value>\(item.title)</value></relation>\n"
     }
 
@@ -152,7 +146,9 @@ public enum UnitLength : UInt8 {
 
   public static func populate(comboBox: NSComboBox) {
     comboBox.removeAllItems()
-    comboBox.addItems(withObjectValues: titles)
+    for item in UnitLength.allCases {
+      comboBox.addItem(withObjectValue: item.title)
+    }
     select(comboBox: comboBox, value: defaultValue)
   }
   

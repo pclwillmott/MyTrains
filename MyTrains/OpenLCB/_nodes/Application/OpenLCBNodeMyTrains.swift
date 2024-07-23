@@ -291,6 +291,22 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
     }
   }
   
+  public var unitsFrequency : UnitFrequency {
+    return .hertz
+  }
+  
+  public var unitsTemperature : UnitTemperature {
+    return .celsius
+  }
+  
+  public var unitsVoltage : UnitVoltage {
+    return .volts
+  }
+  
+  public var unitsCurrent : UnitCurrent {
+    return .amps
+  }
+  
   public var maximumNumberOfGateways : UInt8 {
     get {
       return configuration!.getUInt8(address: addressMaxNumberOfGateways)!

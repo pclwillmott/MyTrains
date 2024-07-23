@@ -49,16 +49,12 @@ public enum ProgrammerToolEncodingType : Int, CaseIterable {
   
   case none            // No encoding - property is a description or warning
   case byte            // Byte, Min, Max, Mask, Shift
-//  case word            // Word, Min, Max
-//  case dword           // DWord, Min, Max
-//  case qword           // QWord, Min, Max
   case boolBit         // Bit of Byte, Mask
   case boolNZ          // Byte, Non-Zero means true, 0 means false
-//  case extendedAddress // Word DCC long address encoding
-//  case specialInt8     // Byte +/- 127 with bit 7 as sign (not 2s complement)
+  case extendedAddress // Word DCC long address encoding
+  case specialInt8     // Byte +/- 127 with bit 7 as sign (not 2s complement)
   case custom          // Decoding/Encoding is handled by separate code
-//  case string          // UTF8 Encoding, must fit in number of CVs
-//  case hexadecimal     // Hex I/O, size based on number of CVs
+  case dWordHex        // 4 byte value in hex, little endian
   
   // Selection Encodings (ComboBox)
   
@@ -70,8 +66,14 @@ public enum ProgrammerToolEncodingType : Int, CaseIterable {
   case esuSoundControlBasis
   case esuTriggeredFunction
   case esuSpeedTablePreset
-  case esuTRAP
-  
+  case locomotiveAddressType
+  case esuMarklinConsecutiveAddresses
+  case esuSpeedStepMode
+  case manufacturerCode
+  case esuDecoderSensorSettings
+  case esuClassLightLogicLength
+  case speedTableIndex
+
 }
 
 public enum CVIndexingMethod {

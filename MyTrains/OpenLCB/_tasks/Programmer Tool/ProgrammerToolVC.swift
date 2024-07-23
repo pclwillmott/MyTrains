@@ -368,7 +368,7 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
       }
       
       if controlType == .comboBox {
-        encoding = .esuTRAP
+ //       encoding = .esuTRAP
       }
       
       item += "    .\(property) : (\n"

@@ -409,28 +409,13 @@
     "(disabled)" : {
 
     },
-    "%@" : {
+    "%" : {
 
     },
-    "%@ × Drive Level" : {
+    "%%VALUE%% × Drive Level" : {
 
     },
-    "%@ × Voltage" : {
-
-    },
-    "%@%%" : {
-
-    },
-    "%@°C" : {
-
-    },
-    "%@dB" : {
-
-    },
-    "%@Hz" : {
-
-    },
-    "%@V" : {
+    "%%VALUE%% × Voltage" : {
 
     },
     "%lld bytes %@" : {
@@ -472,6 +457,12 @@
           }
         }
       }
+    },
+    "°C" : {
+      "comment" : "Used for the abbreviation of Degrees Celsius"
+    },
+    "°F" : {
+      "comment" : "Used for the abbreviation of Degrees Fahrenheit"
     },
     "0°" : {
       "comment" : "Used to indicate a rotation angle in degrees",
@@ -846,6 +837,9 @@
         }
       }
     },
+    "A" : {
+      "comment" : "Used for the abbreviation of Ampere"
+    },
     "A 3-way turnout is controlled with two switches. Switch #1 is the switch nearest the toe of the turnout. Select the applicable turnout control methods - manual, solenoid, or slow motion. The application requires this information for timing purposes. If the turnout is to be controlled by the application then the enter the applicable event ids for the throw and close actions. These events will be sent to the node controlling the switch when the application needs to change the selected route throgh the turnout. The thrown and closed events are sent by a node monitoring the current state of the turnout to tell the application that a throw or close action was successful. If no node is monitoring the state of the turnout then leave these events blank and the application will assume that all throw and close actions are always successful. " : {
 
     },
@@ -1142,6 +1136,9 @@
           }
         }
       }
+    },
+    "Ampere" : {
+
     },
     "Analog Mode Motor Control" : {
 
@@ -1822,6 +1819,9 @@
           }
         }
       }
+    },
+    "Celsius" : {
+
     },
     "Centimeters" : {
       "localizations" : {
@@ -2669,6 +2669,9 @@
 
     },
     "Datagram Type Unknown: %@ " : {
+
+    },
+    "dB" : {
 
     },
     "DC Analog Mode" : {
@@ -4214,6 +4217,9 @@
     "Fade-out time of light effects." : {
 
     },
+    "Fahrenheit" : {
+
+    },
     "Fan control" : {
 
     },
@@ -4710,6 +4716,9 @@
         }
       }
     },
+    "Hertz" : {
+
+    },
     "Hex" : {
       "comment" : "Used by combobox to select number base for display",
       "localizations" : {
@@ -4806,6 +4815,9 @@
     },
     "Hours" : {
 
+    },
+    "Hz" : {
+      "comment" : "Used for the abbreviation of Hertz"
     },
     "ID of the parent panel for this switchboard item." : {
       "comment" : "This is used for a tooltip."
@@ -5031,6 +5043,18 @@
     },
     "Japan" : {
       "comment" : "This is the name of a country."
+    },
+    "K" : {
+      "comment" : "Used for the abbreviation of Kelvin"
+    },
+    "Kelvin" : {
+
+    },
+    "kHz" : {
+      "comment" : "Used for the abbreviation of Kilohertz"
+    },
+    "Kilohertz" : {
+
     },
     "Kilometers" : {
       "localizations" : {
@@ -5592,6 +5616,9 @@
     "M4 Protocol" : {
 
     },
+    "mA" : {
+      "comment" : "Used for the abbreviation of milliampere"
+    },
     "Machine Room Lights" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
       "localizations" : {
@@ -5815,6 +5842,9 @@
     "Maximum steam chuff duration." : {
 
     },
+    "Megahertz" : {
+
+    },
     "Memory Configuration Protocol" : {
 
     },
@@ -5846,6 +5876,9 @@
     },
     "MFX/M4 Track Protocol" : {
 
+    },
+    "MHz" : {
+      "comment" : "Used for the abbreviation of Megahertz"
     },
     "mi." : {
       "comment" : "Used for the abbreviation of miles"
@@ -5904,6 +5937,9 @@
         }
       }
     },
+    "Milliampere" : {
+
+    },
     "Millimeters" : {
       "localizations" : {
         "en" : {
@@ -5921,6 +5957,9 @@
       }
     },
     "Milliseconds" : {
+
+    },
+    "Millivolts" : {
 
     },
     "Minimize" : {
@@ -6062,6 +6101,9 @@
           }
         }
       }
+    },
+    "mV" : {
+      "comment" : "Used for the abbreviation of millivolt"
     },
     "MyTrains" : {
       "comment" : "Used for a menu title"
@@ -7567,6 +7609,9 @@
 
     },
     "Send address via broadcast on channel 1." : {
+
+    },
+    "Send following information to the command station:" : {
 
     },
     "Send ZIMO ZACK Signals" : {
@@ -9518,6 +9563,9 @@
         }
       }
     },
+    "V" : {
+      "comment" : "Used for the abbreviation of volt"
+    },
     "Value" : {
 
     },
@@ -9697,6 +9745,9 @@
 
     },
     "Voltage difference indicating an ABC brake section." : {
+
+    },
+    "Volts" : {
 
     },
     "Volume" : {
