@@ -101,7 +101,7 @@ class SelectLayoutVC: MyTrainsViewController, MyTrainsAppDelegate {
     cboLayout.removeAllItems()
     layoutList.removeAll()
     
-    debugLog("\(appNode.layoutList)")
+//    debugLog("\(appNode.layoutList)")
     for (_, item) in appNode.layoutList {
       layoutList.append(item)
       cboLayout.addItem(withObjectValue: item.layoutName)

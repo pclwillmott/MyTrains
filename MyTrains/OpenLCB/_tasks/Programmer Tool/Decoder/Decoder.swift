@@ -213,43 +213,11 @@ public class Decoder : NSObject {
     return result
   }
   
-  public var manufacturer : ManufacturerCode? {
-    return ManufacturerCode(rawValue: UInt16(getUInt8(cv: .cv_000_000_008)!))
+  public var locomotiveAddressType : LocomotiveAddressType { // KEEP
+    return LocomotiveAddressType(title: getValue(property: .locomotiveAddressType))!
   }
   
-  public var locomotiveAddressType : LocomotiveAddressType {
-    get {
-      return getBool(cv: .cv_000_000_029, mask: ByteMask.d5)! ? .extended : .primary
-    }
-    set(value) {
-      if value != locomotiveAddressType {
-        setBool(cv: .cv_000_000_029, mask: ByteMask.d5, value: value == .extended)
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-  
-  public var primaryAddress : UInt8 {
-    get {
-      return getUInt8(cv: .cv_000_000_001)! & 0x7f
-    }
-    set(value) {
-      setMaskedUInt8(cv: .cv_000_000_001, mask: 0x7f, value: value)
-    }
-  }
-  
-  public var extendedAddress : UInt16 {
-    get {
-      return ((UInt16(getUInt8(cv: .cv_000_000_017)!) << 8) | UInt16(getUInt8(cv: .cv_000_000_018)!)) - 49152
-    }
-    set(value) {
-      let temp = value + 49152
-      setUInt8(cv: .cv_000_000_017, value: UInt8(temp >> 8))
-      setUInt8(cv: .cv_000_000_018, value: UInt8(temp & 0xff))
-    }
-  }
-  
-  public var marklinConsecutiveAddresses : MarklinConsecutiveAddresses {
+  public var marklinConsecutiveAddresses : MarklinConsecutiveAddresses { // *** KEEP ***
     get {
       return MarklinConsecutiveAddresses(rawValue: getUInt8(cv: .cv_000_000_049)! & MarklinConsecutiveAddresses.mask)!
     }
@@ -258,1988 +226,128 @@ public class Decoder : NSObject {
     }
   }
   
-  public var isConsistAddressEnabled : Bool {
-    get {
-      return consistAddress != 0
-    }
-    set(value) {
-      if value != isConsistAddressEnabled {
-        consistAddress = value ? 1 : 0
-        delegate?.reloadSettings?(self)
-      }
-    }
+  public var isConsistAddressEnabled : Bool { // KEEP
+    return getValue(property: .enableDCCConsistAddress) == "true"
   }
   
-  public var consistAddress : UInt8 {
-    get {
-      return getMaskedUInt8(cv: .cv_000_000_019, mask: 0b01111111)!
-    }
-    set(value) {
-      setMaskedUInt8(cv: .cv_000_000_019, mask: 0b01111111, value: value)
-    }
+  public var isACAnalogModeEnabled : Bool { // KEEP
+    return getValue(property: .enableACAnalogMode) == "true"
   }
-  
-  public var isConsistReverseDirection : Bool {
-    get {
-      return getMaskedUInt8(cv: .cv_000_000_019, mask: ByteMask.d7)! == ByteMask.d7
-    }
-    set(value) {
-      setMaskedUInt8(cv: .cv_000_000_019, mask: ByteMask.d7, value: value ? ByteMask.d7 : 0)
-    }
-  }
-  
-  public var isAnalogModeEnabled : Bool {
-    get {
-      return getBool(cv: .cv_000_000_029, mask: ByteMask.d2)!
-    }
-    set(value) {
-      setMaskedUInt8(cv: .cv_000_000_029, mask: ByteMask.d2, value: value ? ByteMask.d2 : 0)
-    }
-  }
-  
-  public var isACAnalogModeEnabled : Bool {
-    get {
-      return getBool(cv: .cv_000_000_050, mask: ByteMask.d0)!
-    }
-    set(value) {
-      if value != isACAnalogModeEnabled {
-        setMaskedUInt8(cv: .cv_000_000_050, mask: ByteMask.d0, value: value ? ByteMask.d0 : 0)
-        if value {
-          isAnalogModeEnabled = true
-        }
-        else if !isDCAnalogModeEnabled {
-          isAnalogModeEnabled = false
-        }
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-
-  public var isDCAnalogModeEnabled : Bool {
-    get {
-      return getBool(cv: .cv_000_000_050, mask: ByteMask.d1)!
-    }
-    set(value) {
-      if value != isDCAnalogModeEnabled {
-        setMaskedUInt8(cv: .cv_000_000_050, mask: ByteMask.d1, value: value ? ByteMask.d1 : 0)
-        if value {
-          isAnalogModeEnabled = true
-        }
-        else if !isACAnalogModeEnabled {
-          isAnalogModeEnabled = false
-        }
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-  
-  public var analogModeACStartVoltage : UInt8 {
-    get {
-      return getUInt8(cv: .cv_000_000_127)!
-    }
-    set(value) {
-      if value != analogModeACStartVoltage {
-        setUInt8(cv: .cv_000_000_127, value: value)
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-
-  public var analogModeACStartVoltageInVolts : Double {
-    return Double(analogModeACStartVoltage) / 10.0
-  }
-
-  public var analogModeACMaximumSpeedVoltage : UInt8 {
-    get {
-      return getUInt8(cv: .cv_000_000_128)!
-    }
-    set(value) {
-      if value != analogModeACMaximumSpeedVoltage {
-        setUInt8(cv: .cv_000_000_128, value: value)
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-
-  public var analogModeACMaximumSpeedVoltageInVolts : Double {
-    return Double(analogModeACMaximumSpeedVoltage) / 10.0
-  }
-
-  public var analogModeDCStartVoltage : UInt8 {
-    get {
-      return getUInt8(cv: .cv_000_000_125)!
-    }
-    set(value) {
-      if value != analogModeDCStartVoltage {
-        setUInt8(cv: .cv_000_000_125, value: value)
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-
-  public var analogModeDCStartVoltageInVolts : Double {
-    return Double(analogModeDCStartVoltage) / 10.0
-  }
-
-  public var analogModeDCMaximumSpeedVoltage : UInt8 {
-    get {
-      return getUInt8(cv: .cv_000_000_126)!
-    }
-    set(value) {
-      if value != analogModeDCMaximumSpeedVoltage {
-        setUInt8(cv: .cv_000_000_126, value: value)
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-
-  public var analogModeDCMaximumSpeedVoltageInVolts : Double {
-    return Double(analogModeDCMaximumSpeedVoltage) / 10.0
-  }
-  
-  public var isQuantumEngineerEnabled : Bool {
-    get {
-      return getBool(cv: .cv_000_000_050, mask: ByteMask.d2)!
-    }
-    set(value) {
-      setBool(cv: .cv_000_000_050, mask: ByteMask.d2, value: value)
-    }
-  }
-  
-  public var ignoreAccelerationDecelerationInSoundSchedule : Bool {
-    get {
-      return getBool(cv: .cv_000_000_122, mask: ByteMask.d5)!
-    }
-    set(value) {
-      setBool(cv: .cv_000_000_122, mask: ByteMask.d5, value: value)
-    }
-  }
-  
-  public var useHighFrequencyPWMMotorControl : Bool {
-    get {
-      return getBool(cv: .cv_000_000_122, mask: ByteMask.d6)!
-    }
-    set(value) {
-      setBool(cv: .cv_000_000_122, mask: ByteMask.d6, value: value)
-    }
-  }
-  
-  public var analogMotorHysteresisVoltage : UInt8 {
-    get {
-      return getUInt8(cv: .cv_000_000_130)!
-    }
-    set(value) {
-      if value != analogMotorHysteresisVoltage {
-        setUInt8(cv: .cv_000_000_130, value: value)
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-
-  public var analogMotorHysteresisVoltageInVolts : Double {
-    return Double(analogMotorHysteresisVoltage) / 10.0
-  }
-  
-  public var analogFunctionDifferenceVoltage : UInt8 {
-    get {
-      return getUInt8(cv: .cv_000_000_129)!
-    }
-    set(value) {
-      if value != analogFunctionDifferenceVoltage {
-        setUInt8(cv: .cv_000_000_129, value: value)
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-  
-  public var analogFunctionDifferenceVoltageInVolts : Double {
-    return Double(analogFunctionDifferenceVoltage) / 10.0
-  }
-
-  public var abcBrakeIfRightRailMorePositive : Bool {
-    get {
-      return getBool(cv: .cv_000_000_027, mask: ByteMask.d0)!
-    }
-    set(value) {
-      if value != abcBrakeIfRightRailMorePositive {
-        setBool(cv: .cv_000_000_027, mask: ByteMask.d0, value: value)
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-  
-  public var abcBrakeIfLeftRailMorePositive : Bool {
-    get {
-      return getBool(cv: .cv_000_000_027, mask: ByteMask.d1)!
-    }
-    set(value) {
-      if value != abcBrakeIfLeftRailMorePositive {
-        setBool(cv: .cv_000_000_027, mask: ByteMask.d1, value: value)
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-  
-  public var voltageDifferenceIndicatingABCBrakeSection : UInt8 {
-    get {
-      return getUInt8(cv: .cv_000_000_134)!
-    }
-    set(value) {
-      if value != voltageDifferenceIndicatingABCBrakeSection {
-        setUInt8(cv: .cv_000_000_134, value: value)
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-  
-  public var abcReducedSpeed : UInt8 {
-    get {
-      return getUInt8(cv: .cv_000_000_123)!
-    }
-    set(value) {
-      if value != abcReducedSpeed {
-        setUInt8(cv: .cv_000_000_123, value: value)
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-  
-  public var isABCShuttleTrainEnabled : Bool {
-    get {
-      return getUInt8(cv: .cv_000_000_149)! != 0
-    }
-    set(value) {
-      if value != isABCShuttleTrainEnabled {
-        setUInt8(cv: .cv_000_000_149, value: value ? 1 : 0)
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-
-  public var abcWaitingTime : UInt8 {
-    get {
-      return getUInt8(cv: .cv_000_000_149)!
-    }
-    set(value) {
-      if value != abcWaitingTime {
-        setUInt8(cv: .cv_000_000_149, value: value)
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-
-  public var abcWaitingTimeInSeconds : TimeInterval {
-    return Double(abcWaitingTime)
-  }
-
-  public var allowZIMOBrakeSections : Bool {
-    get {
-      return getBool(cv: .cv_000_000_027, mask: ByteMask.d2)!
-    }
-    set(value) {
-      setBool(cv: .cv_000_000_027, mask: ByteMask.d2, value: value)
-    }
-  }
-
-  public var sendZIMOZACKSignals : Bool {
-    get {
-      return getBool(cv: .cv_000_000_122, mask: ByteMask.d2)!
-    }
-    set(value) {
-      setBool(cv: .cv_000_000_122, mask: ByteMask.d2, value: value)
-    }
-  }
-
-  public var hluSpeedLimit1 : UInt8 {
-    get {
-      return getUInt8(cv: .cv_000_000_150)!
-    }
-    set(value) {
-      if value != hluSpeedLimit1 {
-        setUInt8(cv: .cv_000_000_150, value: value)
-        hluSpeedLimit2 = max(hluSpeedLimit2, value)
-        hluSpeedLimit3 = max(hluSpeedLimit3, value)
-        hluSpeedLimit4 = max(hluSpeedLimit4, value)
-        hluSpeedLimit5 = max(hluSpeedLimit5, value)
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-
-  public var hluSpeedLimit2 : UInt8 {
-    get {
-      return getUInt8(cv: .cv_000_000_151)!
-    }
-    set(value) {
-      if value != hluSpeedLimit2 {
-        setUInt8(cv: .cv_000_000_151, value: value)
-        hluSpeedLimit1 = min(hluSpeedLimit1, value)
-        hluSpeedLimit3 = max(hluSpeedLimit3, value)
-        hluSpeedLimit4 = max(hluSpeedLimit4, value)
-        hluSpeedLimit5 = max(hluSpeedLimit5, value)
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-
-  public var hluSpeedLimit3 : UInt8 {
-    get {
-      return getUInt8(cv: .cv_000_000_152)!
-    }
-    set(value) {
-      if value != hluSpeedLimit3 {
-        setUInt8(cv: .cv_000_000_152, value: value)
-        hluSpeedLimit1 = min(hluSpeedLimit1, value)
-        hluSpeedLimit2 = min(hluSpeedLimit2, value)
-        hluSpeedLimit4 = max(hluSpeedLimit4, value)
-        hluSpeedLimit5 = max(hluSpeedLimit5, value)
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-
-  public var hluSpeedLimit4 : UInt8 {
-    get {
-      return getUInt8(cv: .cv_000_000_153)!
-    }
-    set(value) {
-      if value != hluSpeedLimit4 {
-        setUInt8(cv: .cv_000_000_153, value: value)
-        hluSpeedLimit1 = min(hluSpeedLimit1, value)
-        hluSpeedLimit2 = min(hluSpeedLimit2, value)
-        hluSpeedLimit3 = min(hluSpeedLimit3, value)
-        hluSpeedLimit5 = max(hluSpeedLimit5, value)
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-
-  public var hluSpeedLimit5 : UInt8 {
-    get {
-      return getUInt8(cv: .cv_000_000_154)!
-    }
-    set(value) {
-      if value != hluSpeedLimit5 {
-        setUInt8(cv: .cv_000_000_154, value: value)
-        hluSpeedLimit1 = min(hluSpeedLimit1, value)
-        hluSpeedLimit2 = min(hluSpeedLimit2, value)
-        hluSpeedLimit3 = min(hluSpeedLimit3, value)
-        hluSpeedLimit4 = min(hluSpeedLimit4, value)
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-
-  public var brakeOnForwardDCPolarity : Bool {
-    get {
-      return getBool(cv: .cv_000_000_027, mask: ByteMask.d4)!
-    }
-    set(value) {
-      setBool(cv: .cv_000_000_027, mask: ByteMask.d4, value: value)
-    }
-  }
-
-  public var brakeOnReverseDCPolarity : Bool {
-    get {
-      return getBool(cv: .cv_000_000_027, mask: ByteMask.d3)!
-    }
-    set(value) {
-      setBool(cv: .cv_000_000_027, mask: ByteMask.d3, value: value)
-    }
-  }
-
-  public var selectrixBrakeOnForwardPolarity : Bool {
-    get {
-      return getBool(cv: .cv_000_000_027, mask: ByteMask.d6)!
-    }
-    set(value) {
-      setBool(cv: .cv_000_000_027, mask: ByteMask.d6, value: value)
-    }
-  }
-
-  public var selectrixBrakeOnReversePolarity : Bool {
-    get {
-      return getBool(cv: .cv_000_000_027, mask: ByteMask.d5)!
-    }
-    set(value) {
-      setBool(cv: .cv_000_000_027, mask: ByteMask.d5, value: value)
-    }
-  }
-
-  public var isConstantBrakeDistanceEnabled : Bool {
-    get {
-      return getUInt8(cv: .cv_000_000_254)! != 0
-    }
-    set(value) {
-      if value != isConstantBrakeDistanceEnabled {
-        setUInt8(cv: .cv_000_000_254, value: value ? 1 : 0)
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-
-  public var brakeDistanceLength : UInt8 {
-    get {
-      return getUInt8(cv: .cv_000_000_254)!
-    }
-    set(value) {
-      if value != brakeDistanceLength {
-        setUInt8(cv: .cv_000_000_254, value: value)
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-
-  public var isDifferentBrakeDistanceBackwards : Bool {
-    get {
-      return getUInt8(cv: .cv_000_000_255)! != 0
-    }
-    set(value) {
-      if value != isDifferentBrakeDistanceBackwards {
-        setUInt8(cv: .cv_000_000_255, value: value ? 1 : 0)
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-
-  public var brakeDistanceLengthBackwards : UInt8 {
-    get {
-      return getUInt8(cv: .cv_000_000_255)!
-    }
-    set(value) {
-      if value != brakeDistanceLengthBackwards {
-        setUInt8(cv: .cv_000_000_255, value: value)
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-
-  public var driveUntilLocomotiveStopsInSpecifiedPeriod : Bool {
-    get {
-      return getUInt8(cv: .cv_000_000_253)! != 0
-    }
-    set(value) {
-      if value != driveUntilLocomotiveStopsInSpecifiedPeriod {
-        setUInt8(cv: .cv_000_000_253, value: value ? 1 : 0)
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-
-  public var stoppingPeriod : UInt8 {
-    get {
-      return getUInt8(cv: .cv_000_000_253)!
-    }
-    set(value) {
-      if value != stoppingPeriod {
-        setUInt8(cv: .cv_000_000_253, value: value)
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-
-  public var stoppingPeriodInSeconds : TimeInterval {
-    return Double(stoppingPeriod) / 4.0
-  }
-
-  public var constantBrakeDistanceOnSpeedStep0 : Bool {
-    get {
-      return getBool(cv: .cv_000_000_027, mask: ByteMask.d7)!
-    }
-    set(value) {
-      setBool(cv: .cv_000_000_027, mask: ByteMask.d7, value: value)
-    }
-  }
-
-  public var delayBeforeExitingBrakeSection : UInt8 {
-    get {
-      return getUInt8(cv: .cv_000_000_102)!
-    }
-    set(value) {
-      if value != delayBeforeExitingBrakeSection {
-        setUInt8(cv: .cv_000_000_102, value: value)
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-
-  public var delayBeforeExitingBrakeSectionInSeconds : TimeInterval {
-    /// The NMRA spec says that the multipler should be 0.016s, the 61.0 factor
-    /// was derived from LokProgrammer app.
-    return Double(delayBeforeExitingBrakeSection) / 61.0
-  }
-
-  public var brakeFunction1BrakeTimeReduction : UInt8 {
-    get {
-      return getUInt8(cv: .cv_000_000_179)!
-    }
-    set(value) {
-      if value != brakeFunction1BrakeTimeReduction {
-        setUInt8(cv: .cv_000_000_179, value: value)
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-
-  public var brakeFunction1BrakeTimeReductionPercentage : Double {
-    return Double(brakeFunction1BrakeTimeReduction) / 255.0 * 100.0
-  }
-  
-  public var maximumSpeedWhenBrakeFunction1Active : UInt8 {
-    get {
-      return getUInt8(cv: .cv_000_000_182)!
-    }
-    set(value) {
-      if value != maximumSpeedWhenBrakeFunction1Active {
-        setUInt8(cv: .cv_000_000_182, value: value)
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-
-  public var brakeFunction2BrakeTimeReduction : UInt8 {
-    get {
-      return getUInt8(cv: .cv_000_000_180)!
-    }
-    set(value) {
-      if value != brakeFunction2BrakeTimeReduction {
-        setUInt8(cv: .cv_000_000_180, value: value)
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-
-  public var brakeFunction2BrakeTimeReductionPercentage : Double {
-    return Double(brakeFunction2BrakeTimeReduction) / 255.0 * 100.0
-  }
-  
-  public var maximumSpeedWhenBrakeFunction2Active : UInt8 {
-    get {
-      return getUInt8(cv: .cv_000_000_183)!
-    }
-    set(value) {
-      if value != maximumSpeedWhenBrakeFunction2Active {
-        setUInt8(cv: .cv_000_000_183, value: value)
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-
-  public var brakeFunction3BrakeTimeReduction : UInt8 {
-    get {
-      return getUInt8(cv: .cv_000_000_181)!
-    }
-    set(value) {
-      if value != brakeFunction3BrakeTimeReduction {
-        setUInt8(cv: .cv_000_000_181, value: value)
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-
-  public var brakeFunction3BrakeTimeReductionPercentage : Double {
-    return Double(brakeFunction3BrakeTimeReduction) / 255.0 * 100.0
-  }
-  
-  public var maximumSpeedWhenBrakeFunction3Active : UInt8 {
-    get {
-      return getUInt8(cv: .cv_000_000_184)!
-    }
-    set(value) {
-      if value != maximumSpeedWhenBrakeFunction3Active {
-        setUInt8(cv: .cv_000_000_184, value: value)
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-  
-  public var isRailComFeedbackEnabled : Bool {
-    get {
-      return getBool(cv: .cv_000_000_029, mask: ByteMask.d3)!
-    }
-    set(value) {
-      if value != isRailComFeedbackEnabled {
-        setBool(cv: .cv_000_000_029, mask: ByteMask.d3, value: value)
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-
-  public var isRailComPlusAutomaticAnnouncementEnabled : Bool {
-    get {
-      return getBool(cv: .cv_000_000_028, mask: ByteMask.d7)!
-    }
-    set(value) {
-      if value != isRailComPlusAutomaticAnnouncementEnabled {
-        setBool(cv: .cv_000_000_028, mask: ByteMask.d7, value: value)
-      }
-    }
-  }
-
-  public var sendAddressViaBroadcastOnChannel1 : Bool {
-    get {
-      return getBool(cv: .cv_000_000_028, mask: ByteMask.d0)!
-    }
-    set(value) {
-      if value != sendAddressViaBroadcastOnChannel1 {
-        setBool(cv: .cv_000_000_028, mask: ByteMask.d0, value: value)
-      }
-    }
-  }
-
-  public var allowDataTransmissionOnChannel2 : Bool {
-    get {
-      return getBool(cv: .cv_000_000_028, mask: ByteMask.d1)!
-    }
-    set(value) {
-      if value != allowDataTransmissionOnChannel2 {
-        setBool(cv: .cv_000_000_028, mask: ByteMask.d1, value: value)
-      }
-    }
-  }
-
-  public var detectSpeedStepModeAutomatically : Bool {
-    get {
-      return getBool(cv: .cv_000_000_049, mask: ByteMask.d4)!
-    }
-    set(value) {
-      if value != detectSpeedStepModeAutomatically {
-        setBool(cv: .cv_000_000_049, mask: ByteMask.d4, value: value)
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-  
-  public var speedStepMode : SpeedStepMode {
-    get {
-      return SpeedStepMode(rawValue: getMaskedUInt8(cv: .cv_000_000_029, mask: SpeedStepMode.mask)!)!
-    }
-    set(value) {
-      if value != speedStepMode {
-        setMaskedUInt8(cv: .cv_000_000_029, mask: SpeedStepMode.mask, value: value.rawValue)
-      }
-    }
-  }
-  
-  public var userId1 : UInt8 {
-    get {
-      return getUInt8(cv: .cv_000_000_105)!
-    }
-    set(value) {
-      setUInt8(cv: .cv_000_000_105, value: value)
-    }
-  }
-
-  public var userId2 : UInt8 {
-    get {
-      return getUInt8(cv: .cv_000_000_106)!
-    }
-    set(value) {
-      setUInt8(cv: .cv_000_000_106, value: value)
-    }
-  }
-  
-  public var isAccelerationEnabled : Bool {
-    get {
-      return getUInt8(cv: .cv_000_000_003)! != 0
-    }
-    set(value) {
-      if value != isAccelerationEnabled {
-        setUInt8(cv: .cv_000_000_003, value: value ? 40 : 0)
-        delegate?.reloadSettings!(self)
-      }
-    }
-  }
-  
-  public var accelerationRate : UInt8 {
-    get {
-      return getUInt8(cv: .cv_000_000_003)!
-    }
-    set(value) {
-      if value != accelerationRate {
-        setUInt8(cv: .cv_000_000_003, value: value)
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-  
-  public var accelerationRateInSeconds : TimeInterval {
-    return Double(accelerationRate) * 0.25
-  }
-  
-  public var accelerationAdjustment : Int8 {
-    get {
-      let value = getUInt8(cv: .cv_000_000_023)!
-      return Int8(value & 0x7f) * (((value & ByteMask.d7) == ByteMask.d7) ? -1 : 1)
-    }
-    set(value) {
-      if value != accelerationAdjustment {
-        setUInt8(cv: .cv_000_000_023, value: UInt8(abs(value)) | (value < 0 ? ByteMask.d7 : 0))
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-  
-  public var accelerationAdjustmentInSeconds : TimeInterval {
-    return Double(accelerationAdjustment) * 0.25
-  }
-
-  public var isDecelerationEnabled : Bool {
-    get {
-      return getUInt8(cv: .cv_000_000_004)! != 0
-    }
-    set(value) {
-      if value != isDecelerationEnabled {
-        setUInt8(cv: .cv_000_000_004, value: value ? 40 : 0)
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-
-  public var decelerationRate : UInt8 {
-    get {
-      return getUInt8(cv: .cv_000_000_004)!
-    }
-    set(value) {
-      if value != decelerationRate {
-        setUInt8(cv: .cv_000_000_004, value: value)
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-  
-  public var decelerationRateInSeconds : TimeInterval {
-    return Double(decelerationRate) * 0.25
-  }
-  
-  public var decelerationAdjustment : Int8 {
-    get {
-      let value = getUInt8(cv: .cv_000_000_024)!
-      return Int8(value & 0x7f) * (((value & ByteMask.d7) == ByteMask.d7) ? -1 : 1)
-    }
-    set(value) {
-      if decelerationAdjustment != value {
-        setUInt8(cv: .cv_000_000_024, value: UInt8(abs(value)) | (value < 0 ? ByteMask.d7 : 0))
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-
-  public var decelerationAdjustmentInSeconds : TimeInterval {
-    return Double(decelerationAdjustment) * 0.25
-  }
-  
-  public var isReversed : Bool {
-    get {
-      return getBool(cv: .cv_000_000_029, mask: ByteMask.d0)!
-    }
-    set(value) {
-      setBool(cv: .cv_000_000_029, mask: ByteMask.d0, value: value)
-    }
-  }
-  
-  public var isForwardTrimEnabled : Bool {
-    get {
-      return getUInt8(cv: .cv_000_000_066)! != 0
-    }
-    set(value) {
-      if value != isForwardTrimEnabled {
-        setUInt8(cv: .cv_000_000_066, value: value ? 128 : 0)
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-  
-  public var forwardTrim : UInt8 {
-    get {
-      return getUInt8(cv: .cv_000_000_066)!
-    }
-    set(value) {
-      if value != forwardTrim {
-        setUInt8(cv: .cv_000_000_066, value: value)
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-  
-  public var forwardTrimMultiplier : Double {
-    return Double(forwardTrim) / 128.0
-  }
-
-  public var isReverseTrimEnabled : Bool {
-    get {
-      return getUInt8(cv: .cv_000_000_095)! != 0
-    }
-    set(value) {
-      if value != isReverseTrimEnabled {
-        setUInt8(cv: .cv_000_000_095, value: value ? 128 : 0)
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-  
-  public var reverseTrim : UInt8 {
-    get {
-      return getUInt8(cv: .cv_000_000_095)!
-    }
-    set(value) {
-      if value != reverseTrim {
-        setUInt8(cv: .cv_000_000_095, value: value)
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-  
-  public var reverseTrimMultiplier : Double {
-    return Double(reverseTrim) / 128.0
-  }
-
-  public var isShuntingModeTrimEnabled : Bool {
-    get {
-      return getUInt8(cv: .cv_000_000_101)! != 0
-    }
-    set(value) {
-      if value != isShuntingModeTrimEnabled {
-        setUInt8(cv: .cv_000_000_101, value: value ? 64 : 0)
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-  
-  public var shuntingModeTrim : UInt8 {
-    get {
-      return getUInt8(cv: .cv_000_000_101)!
-    }
-    set(value) {
-      if value != shuntingModeTrim {
-        setUInt8(cv: .cv_000_000_101, value: value)
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-  
-  public var shuntingModeTrimMultiplier : Double {
-    return Double(shuntingModeTrim) / 128.0
-  }
-  
-  public var loadAdjustmentOptionalLoad : UInt8 {
-    get {
-      return getUInt8(cv: .cv_000_000_103)!
-    }
-    set(value) {
-      if value != loadAdjustmentOptionalLoad {
-        setUInt8(cv: .cv_000_000_103, value: value)
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-  
-  public var loadAdjustmentOptionalLoadMultiplier : Double {
-    return Double(loadAdjustmentOptionalLoad) / 128.0
-  }
-
-  public var loadAdjustmentPrimaryLoad : UInt8 {
-    get {
-      return getUInt8(cv: .cv_000_000_104)!
-    }
-    set(value) {
-      if value != loadAdjustmentPrimaryLoad {
-        setUInt8(cv: .cv_000_000_104, value: value)
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-  
-  public var loadAdjustmentPrimaryLoadMultiplier : Double {
-    return Double(loadAdjustmentPrimaryLoad) / 128.0
-  }
-
-  public var isGearboxBacklashCompensationEnabled : Bool {
-    get {
-      return getUInt8(cv: .cv_000_000_111)! != 0
-    }
-    set(value) {
-      if value != isGearboxBacklashCompensationEnabled {
-        setUInt8(cv: .cv_000_000_111, value: value ? 1 : 0)
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-  
-  public var gearboxBacklashCompensation : UInt8 {
-    get {
-      return getUInt8(cv: .cv_000_000_111)!
-    }
-    set(value) {
-      if value != gearboxBacklashCompensation {
-        setUInt8(cv: .cv_000_000_111, value: value)
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-  
-  public var gearboxBacklashCompensationInSeconds : Double {
-    return Double(gearboxBacklashCompensation) / 61.0
-  }
-  
-  public var timeToBridgePowerInterruption : UInt8 {
-    get {
-      return getUInt8(cv: .cv_000_000_113)!
-    }
-    set(value) {
-      if value != timeToBridgePowerInterruption {
-        setUInt8(cv: .cv_000_000_113, value: value)
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-  
-  public var timeToBridgePowerInterruptionInSeconds : TimeInterval {
-    return Double(timeToBridgePowerInterruption) * 0.032768
-  }
-
-  public var isDirectionPreserved : Bool {
-    get {
-      return getBool(cv: .cv_000_000_124, mask: ByteMask.d0)!
-    }
-    set(value) {
-      setBool(cv: .cv_000_000_124, mask: ByteMask.d0, value: value)
-    }
-  }
-  
-  public var isStartingDelayEnabled : Bool {
-    get {
-      return getBool(cv: .cv_000_000_124, mask: ByteMask.d2)!
-    }
-    set(value) {
-      setBool(cv: .cv_000_000_124, mask: ByteMask.d2, value: value)
-    }
-  }
-  
-  public var isDCCProtocolEnabled : Bool {
-    get {
-      return getBool(cv: .cv_000_000_047, mask: ByteMask.d0)!
-    }
-    set(value) {
-      setBool(cv: .cv_000_000_047, mask: ByteMask.d0, value: value)
-    }
-  }
-  
-  public var isMarklinMotorolaProtocolEnabled : Bool {
-    get {
-      return getBool(cv: .cv_000_000_047, mask: ByteMask.d2)!
-    }
-    set(value) {
-      setBool(cv: .cv_000_000_047, mask: ByteMask.d2, value: value)
-    }
-  }
-  
-  public var isSelectrixProtocolEnabled : Bool {
-    get {
-      return getBool(cv: .cv_000_000_047, mask: ByteMask.d3)!
-    }
-    set(value) {
-      setBool(cv: .cv_000_000_047, mask: ByteMask.d3, value: value)
-    }
-  }
-  
-  public var isM4ProtocolEnabled : Bool {
-    get {
-      return getBool(cv: .cv_000_000_047, mask: ByteMask.d1)!
-    }
-    set(value) {
-      setBool(cv: .cv_000_000_047, mask: ByteMask.d1, value: value)
-    }
-  }
-
-  public var isMemoryPersistentFunctionEnabled : Bool {
-    get {
-      return getBool(cv: .cv_000_000_122, mask: ByteMask.d0)!
-    }
-    set(value) {
-      setBool(cv: .cv_000_000_122, mask: ByteMask.d0, value: value)
-    }
-  }
-  
-  public var isMemoryPersistentSpeedEnabled : Bool {
-    get {
-      return getBool(cv: .cv_000_000_122, mask: ByteMask.d1)!
-    }
-    set(value) {
-      setBool(cv: .cv_000_000_122, mask: ByteMask.d1, value: value)
-    }
-  }
-  
-  public var isDecoderSynchronizedWithMasterDecoder : Bool {
-    get {
-      return m4MasterDecoderManufacturerId != .noneSelected
-    }
-    set(value) {
-      if value != isDecoderSynchronizedWithMasterDecoder {
-        if !value {
-          m4MasterDecoderManufacturerId = .noneSelected
-          m4MasterDecoderSerialNumber = 0
-        }
-        else {
-          m4MasterDecoderManufacturerId = .cMLElectronicsLimited
-        }
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-  
-  public var m4MasterDecoderManufacturerId : ManufacturerCode {
-    get {
-      return ManufacturerCode(rawValue: UInt16(getUInt8(cv: .cv_000_000_191)!))!
-    }
-    set(value) {
-      setUInt8(cv: .cv_000_000_191, value: UInt8(value.rawValue & 0xff))
-    }
-  }
-  
-  public var m4MasterDecoderSerialNumber : UInt32 {
-    get {
-      return getUInt32(cv: .cv_000_000_192)!
-    }
-    set(value) {
-      setUInt32(cv: .cv_000_000_192, value: value)
-    }
-  }
-  
-  public var frequencyForBlinkingEffects : UInt8 {
-    get {
-      return getUInt8(cv: .cv_000_000_112)!
-    }
-    set(value) {
-      if value != frequencyForBlinkingEffects {
-        setUInt8(cv: .cv_000_000_112, value: value)
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-  
-  public var frequencyForBlinkingEffectsInSeconds : TimeInterval {
-    /// The multipler value is for ESU decoders and is different from NMRA value
-    return Double(frequencyForBlinkingEffects) / 20.0
-  }
-  
-  public var gradeCrossingHoldingTime : UInt8 {
-    get {
-      return getUInt8(cv: .cv_000_000_132)!
-    }
-    set(value) {
-      if value != gradeCrossingHoldingTime {
-        setUInt8(cv: .cv_000_000_132, value: value)
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-  
-  public var gradeCrossingHoldingTimeInSeconds : TimeInterval {
-    return Double(gradeCrossingHoldingTime) * 0.065536
-  }
-  
-  public var fadeInTimeOfLightEffects : UInt8 {
-    get {
-      return getUInt8(cv: .cv_000_000_114)!
-    }
-    set(value) {
-      if value != fadeInTimeOfLightEffects {
-        setUInt8(cv: .cv_000_000_114, value: value)
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-  
-  public var fadeInTimeOfLightEffectsInSeconds : TimeInterval {
-    /// This is an approximation from LokProgrammer
-    return Double(fadeInTimeOfLightEffects) * 0.008189
-  }
-  
-  public var fadeOutTimeOfLightEffects : UInt8 {
-    get {
-      return getUInt8(cv: .cv_000_000_115)!
-    }
-    set(value) {
-      if value != fadeOutTimeOfLightEffects {
-        setUInt8(cv: .cv_000_000_115, value: value)
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-  
-  public var fadeOutTimeOfLightEffectsInSeconds : TimeInterval {
-    /// This is an approximation from LokProgrammer
-    return Double(fadeOutTimeOfLightEffects) * 0.008189
-  }
-  
-  public var logicalFunctionDimmerBrightnessReduction : UInt8 {
-    get {
-      return getUInt8(cv: .cv_000_000_131)!
-    }
-    set(value) {
-      if value != logicalFunctionDimmerBrightnessReduction {
-        setUInt8(cv: .cv_000_000_131, value: value)
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-  
-  public var logicalFunctionDimmerBrightnessReductionPercentage : Double {
-    return Double(logicalFunctionDimmerBrightnessReduction) / 128.0 * 100.0
-  }
-  
-  public var classLightLogicSequenceLength : ClassLightLogicSequenceLength {
-    get {
-      return ClassLightLogicSequenceLength(rawValue: getMaskedUInt8(cv: .cv_000_000_199, mask: ClassLightLogicSequenceLength.mask)!)!
-    }
-    set(value) {
-      setMaskedUInt8(cv: .cv_000_000_199, mask: ClassLightLogicSequenceLength.mask, value: value.rawValue)
-    }
-  }
-  
-  public var isSlaveCommunicationOnAUX3andAUX4Enforced : Bool {
-    get {
-      return getBool(cv: .cv_000_000_122, mask: ByteMask.d4)!
-    }
-    set(value) {
-      setBool(cv: .cv_000_000_122, mask: ByteMask.d4, value: value)
-    }
-  }
-  
-  public var decoderSensorSettings : DecoderSensorSettings {
-    get {
-      return DecoderSensorSettings(rawValue: getMaskedUInt8(cv: .cv_000_000_124, mask: DecoderSensorSettings.mask)!)!
-    }
-    set(value) {
-      setMaskedUInt8(cv: .cv_000_000_124, mask: DecoderSensorSettings.mask, value: value.rawValue)
-    }
-  }
-  
-  public var isAutomaticUncouplingEnabled : Bool {
-    get {
-      return getUInt8(cv: .cv_000_000_246)! != 0
-    }
-    set(value) {
-      if value != isAutomaticUncouplingEnabled {
-        setUInt8(cv: .cv_000_000_246, value: value ? 1 : 0)
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-  
-  public var automaticUncouplingSpeed : UInt8 {
-    get {
-      return getUInt8(cv: .cv_000_000_246)!
-    }
-    set(value) {
-      if value != automaticUncouplingSpeed {
-        setUInt8(cv: .cv_000_000_246, value: value)
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-
-  public var automaticUncouplingPushTime : UInt8 {
-    get {
-      return getUInt8(cv: .cv_000_000_248)!
-    }
-    set(value) {
-      if value != automaticUncouplingPushTime {
-        setUInt8(cv: .cv_000_000_248, value: value)
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-  
-  public var automaticUncouplingPushTimeInSeconds : TimeInterval {
-    ///multiplier derived from LokProgramme; not NMRA value
-    return Double(automaticUncouplingPushTime) / 61.0
-  }
-
-  public var automaticUncouplingWaitTime : UInt8 {
-    get {
-      return getUInt8(cv: .cv_000_000_245)!
-    }
-    set(value) {
-      if value != automaticUncouplingWaitTime {
-        setUInt8(cv: .cv_000_000_245, value: value)
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-
-  public var automaticUncouplingWaitTimeInSeconds : TimeInterval {
-    ///multiplier derived from LokProgramme; not NMRA value
-    return Double(automaticUncouplingWaitTime) / 61.0
-  }
-
-  public var automaticUncouplingMoveTime : UInt8 {
-    get {
-      return getUInt8(cv: .cv_000_000_247)!
-    }
-    set(value) {
-      if value != automaticUncouplingMoveTime {
-        setUInt8(cv: .cv_000_000_247, value: value)
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-
-  public var automaticUncouplingMoveTimeInSeconds : TimeInterval {
-    ///multiplier derived from LokProgramme; not NMRA value
-    return Double(automaticUncouplingMoveTime) / 61.0
-  }
-  
-  public var smokeUnitTimeUntilAutomaticPowerOff : UInt8 {
-    get {
-      return getUInt8(cv: .cv_000_000_140)!
-    }
-    set(value) {
-      if value != smokeUnitTimeUntilAutomaticPowerOff {
-        setUInt8(cv: .cv_000_000_140, value: value)
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-  
-  public var smokeUnitTimeUntilAutomaticPowerOffInSeconds : TimeInterval {
-    return Double(smokeUnitTimeUntilAutomaticPowerOff) * 5.0
-  }
-  
-  public var smokeUnitFanSpeedTrim : UInt8 {
-    get {
-      return getUInt8(cv: .cv_000_000_138)!
-    }
-    set(value) {
-      if value != smokeUnitFanSpeedTrim {
-        setUInt8(cv: .cv_000_000_138, value: value)
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-  
-  public var smokeUnitFanSpeedTrimPercentage : Double {
-    return Double(smokeUnitFanSpeedTrim) / 128.0 * 100.0
-  }
-  
-  public var smokeUnitTemperatureTrim : UInt8 {
-    get {
-      return getUInt8(cv: .cv_000_000_139)!
-    }
-    set(value) {
-      if value != smokeUnitTemperatureTrim {
-        setUInt8(cv: .cv_000_000_139, value: value)
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-  
-  public var smokeUnitTemperatureTrimPercentage : Double {
-    return Double(smokeUnitTemperatureTrim) / 128.0 * 100.0
-  }
-  
-  public var smokeUnitPreheatingTemperatureForSecondarySmokeUnits : UInt8 {
-    get {
-      return getUInt8(cv: .cv_000_000_144)!
-    }
-    set(value) {
-      if value != smokeUnitPreheatingTemperatureForSecondarySmokeUnits {
-        setUInt8(cv: .cv_000_000_144, value: value)
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-  
-  public var smokeUnitPreheatingTemperatureForSecondarySmokeUnitsInCelsius : Double {
-    return Double(smokeUnitPreheatingTemperatureForSecondarySmokeUnits)
-  }
-  
-  public var smokeChuffsDurationRelativeToTriggerDistance : UInt8 {
-    get {
-      return getUInt8(cv: .cv_000_000_143)!
-    }
-    set(value) {
-      if value != smokeChuffsDurationRelativeToTriggerDistance {
-        setUInt8(cv: .cv_000_000_143, value: value)
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-  
-  public var smokeChuffsDurationRelativeToTriggerDistancePercentage : Double {
-    return Double(smokeChuffsDurationRelativeToTriggerDistance) / 255.0 * 100.0
-  }
-  
-  public var smokeChuffsMinimumDuration : UInt8 {
-    get {
-      return getUInt8(cv: .cv_000_000_141)!
-    }
-    set(value) {
-      if value != smokeChuffsMinimumDuration {
-        setUInt8(cv: .cv_000_000_141, value: value)
-        smokeChuffsMaximumDuration = max(smokeChuffsMaximumDuration, value)
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-
-  public var smokeChuffsMinimumDurationInSeconds : TimeInterval {
-    /// This is the NMRA multiplier, the Lokprogrammer version was 0.004078
-    return Double(smokeChuffsMinimumDuration) * 0.041
-  }
-
-  public var smokeChuffsMaximumDuration : UInt8 {
-    get {
-      return getUInt8(cv: .cv_000_000_142)!
-    }
-    set(value) {
-      if value != smokeChuffsMaximumDuration {
-        setUInt8(cv: .cv_000_000_142, value: value)
-        smokeChuffsMinimumDuration = min(smokeChuffsMinimumDuration, value)
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-
-  public var smokeChuffsMaximumDurationInSeconds : TimeInterval {
-    /// This is the NMRA multiplier, the Lokprogrammer version was 0.004078
-    return Double(smokeChuffsMaximumDuration) * 0.041
-  }
-  
-  public var minimumSpeed : UInt8 {
-    get {
-      return getUInt8(cv: .cv_000_000_002)!
-    }
-    set(value) {
-      if value != minimumSpeed {
-        setUInt8(cv: .cv_000_000_002, value: value)
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-  
-  public var minimumSpeedPercentage : Double {
-    return Double(minimumSpeed) / 255 * 100.0
-  }
-
-  public var maximumSpeed : UInt8 {
-    get {
-      return getUInt8(cv: .cv_000_000_005)!
-    }
-    set(value) {
-      if value != maximumSpeed {
-        setUInt8(cv: .cv_000_000_005, value: value)
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-  
-  public var maximumSpeedPercentage : Double {
-    return Double(maximumSpeed) / 255 * 100.0
-  }
-  
-  public var isLoadControlBackEMFEnabled : Bool {
-    get {
-      return getBool(cv: .cv_000_000_049, mask: ByteMask.d0)!
-    }
-    set(value) {
-      if value != isLoadControlBackEMFEnabled {
-        setBool(cv: .cv_000_000_049, mask: ByteMask.d0, value: value)
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-  
-  public var regulationReference : UInt8 {
-    get {
-      return getUInt8(cv: .cv_000_000_053)!
-    }
-    set(value) {
-      if value != regulationReference {
-        setUInt8(cv: .cv_000_000_053, value: value)
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-  
-  public var regulationReferenceInVolts : Double {
-    return Double(regulationReference) / 10.0
-  }
-  
-  public var regulationParameterK : UInt8 {
-    get {
-      return getUInt8(cv: .cv_000_000_054)!
-    }
-    set(value) {
-      if value != regulationParameterK {
-        setUInt8(cv: .cv_000_000_054, value: value)
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-
-  public var regulationParameterI : UInt8 {
-    get {
-      return getUInt8(cv: .cv_000_000_055)!
-    }
-    set(value) {
-      if value != regulationParameterI {
-        setUInt8(cv: .cv_000_000_055, value: value)
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-  
-  public var regulationParameterIInSeconds : Double {
-    return Double(regulationParameterI) * 2.0 / 1000.0
-  }
-
-  public var regulationParameterKSlow : UInt8 {
-    get {
-      return getUInt8(cv: .cv_000_000_052)!
-    }
-    set(value) {
-      if value != regulationParameterKSlow {
-        setUInt8(cv: .cv_000_000_052, value: value)
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-  
-  public var largestInternalSpeedStepThatUsesKSlow : UInt8 {
-    get {
-      return getUInt8(cv: .cv_000_000_051)!
-    }
-    set(value) {
-      if value != largestInternalSpeedStepThatUsesKSlow {
-        setUInt8(cv: .cv_000_000_051, value: value)
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
 
-  public var regulationInfluenceDuringSlowSpeed : UInt8 {
-    get {
-      return getUInt8(cv: .cv_000_000_056)!
-    }
-    set(value) {
-      if value != regulationInfluenceDuringSlowSpeed {
-        setUInt8(cv: .cv_000_000_056, value: value)
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-
-  public var regulationInfluenceDuringSlowSpeedPercentage : Double {
-    return Double(regulationInfluenceDuringSlowSpeed) / 255.0 * 100.0
-  }
-  
-  public var slowSpeedBackEMFSamplingPeriod : UInt8 {
-    get {
-      return getUInt8(cv: .cv_000_000_116)!
-    }
-    set(value) {
-      if value != slowSpeedBackEMFSamplingPeriod {
-        setUInt8(cv: .cv_000_000_116, value: value)
-        fullSpeedBackEMFSamplingPeriod = max(fullSpeedBackEMFSamplingPeriod, value)
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-  
-  public var slowSpeedBackEMFSamplingPeriodInSeconds : Double {
-    return Double(slowSpeedBackEMFSamplingPeriod) / 10000.0
+  public var isDCAnalogModeEnabled : Bool { // KEEP
+    return getValue(property: .enableDCAnalogMode) == "true"
   }
   
-  public var fullSpeedBackEMFSamplingPeriod : UInt8 {
-    get {
-      return getUInt8(cv: .cv_000_000_117)!
-    }
-    set(value) {
-      if value != fullSpeedBackEMFSamplingPeriod {
-        setUInt8(cv: .cv_000_000_117, value: value)
-        slowSpeedBackEMFSamplingPeriod = min(slowSpeedBackEMFSamplingPeriod, value)
-        delegate?.reloadSettings?(self)
-      }
-    }
+  public var abcBrakeIfRightRailMorePositive : Bool { // KEEP
+    return getValue(property: .brakeIfRightRailSignalPositive) == "true"
   }
   
-  public var fullSpeedBackEMFSamplingPeriodInSeconds : Double {
-    return Double(fullSpeedBackEMFSamplingPeriod) / 10000.0
+  public var abcBrakeIfLeftRailMorePositive : Bool { // KEEP
+    return getValue(property: .brakeIfLeftRailSignalPositive) == "true"
   }
   
-  public var slowSpeedLengthOfMeasurementGap : UInt8 {
-    get {
-      return getUInt8(cv: .cv_000_000_118)!
-    }
-    set(value) {
-      if value != slowSpeedLengthOfMeasurementGap {
-        setUInt8(cv: .cv_000_000_118, value: value)
-        fullSpeedLengthOfMeasurementGap = max(fullSpeedLengthOfMeasurementGap, value)
-        delegate?.reloadSettings?(self)
-      }
-    }
+  public var isABCShuttleTrainEnabled : Bool { // KEEP
+    return getValue(property: .enableABCShuttleTrain) == "true"
   }
 
-  public var slowSpeedLengthOfMeasurementGapInSeconds : Double {
-    return Double(slowSpeedLengthOfMeasurementGap) / 10000.0
+  public var isConstantBrakeDistanceEnabled : Bool { // KEEP
+    return getValue(property: .enableConstantBrakeDistance) == "true"
   }
 
-  public var fullSpeedLengthOfMeasurementGap : UInt8 {
-    get {
-      return getUInt8(cv: .cv_000_000_119)!
-    }
-    set(value) {
-      if value != fullSpeedLengthOfMeasurementGap {
-        setUInt8(cv: .cv_000_000_119, value: value)
-        slowSpeedLengthOfMeasurementGap = min(slowSpeedLengthOfMeasurementGap, value)
-        delegate?.reloadSettings?(self)
-      }
-    }
+  public var isDifferentBrakeDistanceBackwards : Bool { // KEEP
+    return getValue(property: .differentBrakeDistanceBackwards) == "true"
   }
 
-  public var fullSpeedLengthOfMeasurementGapInSeconds : Double {
-    return Double(fullSpeedLengthOfMeasurementGap) / 10000.0
-  }
-  
-  public var isMotorOverloadProtectionEnabled : Bool {
-    get {
-      return getBool(cv: .cv_000_000_124, mask: ByteMask.d5)!
-    }
-    set(value) {
-      setBool(cv: .cv_000_000_124, mask: ByteMask.d5, value: value)
-    }
-  }
-  
-  public var isMotorCurrentLimiterEnabled : Bool {
-    get {
-      return getUInt8(cv: .cv_000_000_100)! != 0
-    }
-    set(value) {
-      if value != isMotorCurrentLimiterEnabled {
-        setUInt8(cv: .cv_000_000_100, value: value ? 1 : 0)
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-  
-  public var motorCurrentLimiterLimit : UInt8 {
-    get {
-      getUInt8(cv: .cv_000_000_100)!
-    }
-    set(value) {
-      if value != motorCurrentLimiterLimit {
-        setUInt8(cv: .cv_000_000_100, value: value)
-        delegate?.reloadSettings?(self)
-      }
-    }
+  public var driveUntilLocomotiveStopsInSpecifiedPeriod : Bool { // KEEP
+    return getValue(property: .driveUntilLocomotiveStopsInSpecifiedPeriod) == "true"
   }
 
-  public var motorCurrentLimiterLimitPercentage : Double {
-    return Double(motorCurrentLimiterLimit) / 255.0 * 100.0
-  }
-  
-  public var motorPulseFrequency : UInt8 {
-    get {
-      return getUInt8(cv: .cv_000_000_009)!
-    }
-    set(value) {
-      if value != motorPulseFrequency {
-        setUInt8(cv: .cv_000_000_009, value: value)
-        delegate?.reloadSettings?(self)
-      }
-    }
+  public var isRailComPlusAutomaticAnnouncementEnabled : Bool { // KEEP
+    return getValue(property: .enableRailComPlusAutomaticAnnouncement) == "true"
   }
 
-  public var motorPulseFrequencyInHertz : Double {
-    return Double(motorPulseFrequency) * 1000.0
-  }
-  
-  public var isAutomaticParkingBrakeEnabled : Bool {
-    get {
-      return getBool(cv: .cv_000_000_124, mask: ByteMask.d6)!
-    }
-    set(value) {
-      setBool(cv: .cv_000_000_124, mask: ByteMask.d6, value: value)
-    }
-  }
-  
-  public var steamChuffMode : SteamChuffMode {
-    get {
-      return (getUInt8(cv: .cv_000_000_057)! == 0) ? .useExternalWheelSensor : .playSteamChuffsAccordingToSpeed
-    }
-    set(value) {
-      if value != steamChuffMode {
-        setUInt8(cv: .cv_000_000_057, value: value == .useExternalWheelSensor ? 0 : 1)
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-  
-  public var distanceOfSteamChuffsAtSpeedStep1 : UInt8 {
-    get {
-      return getUInt8(cv: .cv_000_000_057)!
-    }
-    set(value) {
-      if value != distanceOfSteamChuffsAtSpeedStep1 {
-        setUInt8(cv: .cv_000_000_057, value: value)
-        delegate?.reloadSettings?(self)
-      }
-    }
+  public var detectSpeedStepModeAutomatically : Bool { // KEEP
+    return getValue(property: .detectSpeedStepModeAutomatically) == "true"
   }
   
-  public var distanceOfSteamChuffsAtSpeedStep1InSeconds : Double {
-    return Double(distanceOfSteamChuffsAtSpeedStep1) * 0.032
+  public var isAccelerationEnabled : Bool { // KEEP
+    return getValue(property: .enableAcceleration) == "true"
   }
   
-  public var steamChuffAdjustmentAtHigherSpeedSteps : UInt8 {
-    get {
-      return getUInt8(cv: .cv_000_000_058)!
-    }
-    set(value) {
-      if value != steamChuffAdjustmentAtHigherSpeedSteps {
-        setUInt8(cv: .cv_000_000_058, value: value)
-        delegate?.reloadSettings?(self)
-      }
-    }
+  public var isDecelerationEnabled : Bool { // KEEP
+    return getValue(property: .enableDeceleration) == "true"
   }
-  
-  public var isSecondaryTrimmerEnabled : Bool {
-    get {
-      return getUInt8(cv: .cv_000_000_250)! != 0
-    }
-    set(value) {
-      if value != isSecondaryTrimmerEnabled {
-        setUInt8(cv: .cv_000_000_250, value: value ? 1 : 0)
-        delegate?.reloadSettings!(self)
-      }
-    }
-  }
-  
-  public var secondaryTriggerDistanceReduction : UInt8 {
-    get {
-      return getUInt8(cv: .cv_000_000_250)!
-    }
-    set(value) {
-      if value != secondaryTriggerDistanceReduction {
-        setUInt8(cv: .cv_000_000_250, value: value)
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
 
-  public var secondaryTriggerDistanceReductionAmount : Double {
-    return Double(secondaryTriggerDistanceReduction) * 0.001
+  public var isRailComFeedbackEnabled : Bool { // KEEP
+    return getValue(property: .enableRailComFeedback) == "true"
   }
   
-  public var isMinimumDistanceOfSteamChuffsEnabled : Bool {
-    get {
-      return getUInt8(cv: .cv_000_000_249)! != 0
-    }
-    set(value) {
-      if value != isMinimumDistanceOfSteamChuffsEnabled {
-        setUInt8(cv: .cv_000_000_249, value: value ? 1 : 0)
-        delegate?.reloadSettings?(self)
-      }
-    }
+  public var isForwardTrimEnabled : Bool { // KEEP
+    return getValue(property: .enableForwardTrim) == "true"
   }
   
-  public var minimumDistanceOfSteamChuffs : UInt8 {
-    get {
-      return getUInt8(cv: .cv_000_000_249)!
-    }
-    set(value) {
-      if value != minimumDistanceOfSteamChuffs {
-        setUInt8(cv: .cv_000_000_249, value: value)
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-
-  public var minimumDistanceOfSteamChuffsInSeconds : Double {
-    return Double(minimumDistanceOfSteamChuffs) * 0.001
+  public var isReverseTrimEnabled : Bool { // KEEP
+    return getValue(property: .enableReverseTrim) == "true"
   }
   
-  public var triggerImpulsesPerSteamChuff : UInt8 {
-    get {
-      return getUInt8(cv: .cv_000_000_058)!
-    }
-    set(value) {
-      if value != triggerImpulsesPerSteamChuff {
-        setUInt8(cv: .cv_000_000_058, value: value)
-        delegate?.reloadSettings?(self)
-      }
-    }
+  public var isShuntingModeTrimEnabled : Bool { // KEEP
+    return getValue(property: .enableShuntingModeTrim) == "true"
   }
   
-  public var divideTriggerImpulsesInTwoIfShuntingModeEnabled : Bool {
-    get {
-      return getBool(cv: .cv_000_000_122, mask: ByteMask.d3)!
-    }
-    set(value) {
-      setBool(cv: .cv_000_000_122, mask: ByteMask.d3, value: value)
-    }
+  public var isGearboxBacklashCompensationEnabled : Bool { // KEEP
+    return getValue(property: .enableGearboxBacklashCompensation) == "true"
   }
   
-  public var masterVolume : UInt8 {
-    get {
-      return getUInt8(cv: .cv_000_000_063)!
-    }
-    set(value) {
-      if value != masterVolume {
-        setUInt8(cv: .cv_000_000_063, value: value)
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-
-  public var masterVolumePercentage : Double {
-    return Double(masterVolume) / 128.0 * 100.0
+  public var isDecoderSynchronizedWithMasterDecoder : Bool { // KEEP
+    return getValue(property: .enableRailComPlusSynchronization) == "true"
   }
   
-  public var fadeSoundVolumeReduction : UInt8 {
-    get {
-      return getUInt8(cv: .cv_000_000_133)!
-    }
-    set(value) {
-      if value != fadeSoundVolumeReduction {
-        setUInt8(cv: .cv_000_000_133, value: value)
-        delegate?.reloadSettings!(self)
-      }
-    }
+  public var isAutomaticUncouplingEnabled : Bool { // KEEP
+    return getValue(property: .enableAutomaticUncoupling) == "true"
   }
-
-  public var fadeSoundVolumeReductionPercentage : Double {
-    return Double(fadeSoundVolumeReduction) / 128.0 * 100.0
-  }
   
-  public var soundFadeInFadeOutTime : UInt8 {
-    get {
-      return getUInt8(cv: .cv_000_000_135)!
-    }
-    set(value) {
-      if value != soundFadeInFadeOutTime {
-        setUInt8(cv: .cv_000_000_135, value: value)
-        delegate?.reloadSettings?(self)
-      }
-    }
+  public var isLoadControlBackEMFEnabled : Bool { // KEEP
+    return getValue(property: .enableLoadControlBackEMF) == "true"
   }
   
-  public var soundFadeInFadeOutTimeInSeconds : Double {
-    return Double(soundFadeInFadeOutTime)
-  }
-
-  public var toneBass : UInt8 {
-    get {
-      return getUInt8(cv: .cv_000_000_196)!
-    }
-    set(value) {
-      if value != toneBass {
-        setUInt8(cv: .cv_000_000_196, value: value)
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-
-  public var toneBassdB : Double {
-    return (Double(toneBass) - 16.0) * 10.0 / 16.0
-  }
-
-  public var toneTreble : UInt8 {
-    get {
-      return getUInt8(cv: .cv_000_000_197)!
-    }
-    set(value) {
-      if value != toneTreble {
-        setUInt8(cv: .cv_000_000_197, value: value)
-        delegate?.reloadSettings?(self)
-      }
-    }
+  public var isMotorCurrentLimiterEnabled : Bool { // KEEP
+    return getValue(property: .enableMotorCurrentLimiter) == "true"
   }
-
-  public var toneTrebledB : Double {
-    return (Double(toneTreble) - 16.0) * 10.0 / 16.0
-  }
   
-  public var brakeSoundSwitchingOnThreshold : UInt8 {
-    get {
-      return getUInt8(cv: .cv_000_000_064)!
-    }
-    set(value) {
-      if value != brakeSoundSwitchingOnThreshold {
-        setUInt8(cv: .cv_000_000_064, value: value)
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-
-  public var brakeSoundSwitchingOffThreshold : UInt8 {
-    get {
-      return getUInt8(cv: .cv_000_000_065)!
-    }
-    set(value) {
-      if value != brakeSoundSwitchingOffThreshold {
-        setUInt8(cv: .cv_000_000_065, value: value)
-        delegate?.reloadSettings?(self)
-      }
-    }
+  public var steamChuffMode : SteamChuffMode { // KEEP
+    return SteamChuffMode(title: getValue(property: .steamChuffMode))!
   }
   
-  public var soundControlBasis : SoundControlBasis {
-    get {
-      return getUInt8(cv: .cv_000_000_200)! == 0 ? .accelerationAndBrakeTime : .accelerationAndBrakeTimeAndTrainLoad
-    }
-    set(value) {
-      if value != soundControlBasis {
-        setUInt8(cv: .cv_000_000_200, value: value == .accelerationAndBrakeTime ? 0 : 1)
-        delegate?.reloadSettings?(self)
-      }
-    }
+  public var isSecondaryTrimmerEnabled : Bool { // KEEP
+    return getValue(property: .enableSecondaryTrigger) == "true"
   }
   
-  public var trainLoadAtLowSpeed : UInt8 {
-    get {
-      return getUInt8(cv: .cv_000_000_200)!
-    }
-    set(value) {
-      if value != trainLoadAtLowSpeed {
-        setUInt8(cv: .cv_000_000_200, value: value)
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-
-  public var trainLoadAtLowSpeedPercentage : Double {
-    return Double(trainLoadAtLowSpeed) / 255.0 * 100.0
+  public var isMinimumDistanceOfSteamChuffsEnabled : Bool { // KEEP
+    return getValue(property: .enableMinimumDistanceOfSteamChuffs) == "true"
   }
   
-  public var trainLoadAtHighSpeed : UInt8 {
-    get {
-      return getUInt8(cv: .cv_000_000_201)!
-    }
-    set(value) {
-      if value != trainLoadAtHighSpeed {
-        setUInt8(cv: .cv_000_000_201, value: value)
-        delegate?.reloadSettings?(self)
-      }
-    }
+  public var soundControlBasis : SoundControlBasis { // KEEP
+    return SoundControlBasis(title: getValue(property: .soundControlBasis))!
   }
-
-  public var trainLoadAtHighSpeedPercentage : Double {
-    return Double(trainLoadAtHighSpeed) / 255.0 * 100.0
-  }
   
-  public var isThresholdForLoadOperationEnabled : Bool {
-    get {
-      return getUInt8(cv: .cv_000_000_202)! != 0
-    }
-    set(value) {
-      if value != isThresholdForLoadOperationEnabled {
-        setUInt8(cv: .cv_000_000_202, value: value ? 1 : 0)
-        delegate?.reloadSettings!(self)
-      }
-    }
+  public var isThresholdForLoadOperationEnabled : Bool { // KEEP
+    return getValue(property: .enableLoadOperationThreshold) == "true"
   }
   
-  public var thresholdForLoadOperation : UInt8 {
-    get {
-      return getUInt8(cv: .cv_000_000_202)!
-    }
-    set(value) {
-      if value != thresholdForLoadOperation {
-        setUInt8(cv: .cv_000_000_202, value: value)
-        delegate?.reloadSettings?(self)
-      }
-    }
+  public var isThresholdForIdleOperationEnabled : Bool { // KEEP
+    return getValue(property: .enableIdleOperationThreshold) == "true"
   }
   
-  public var loadOperationTriggeredFunction : TriggeredFunction {
-    get {
-      return TriggeredFunction(rawValue: getUInt8(cv: .cv_000_000_204)!)!
-    }
-    set(value) {
-      if value != loadOperationTriggeredFunction {
-        setUInt8(cv: .cv_000_000_204, value: value.rawValue)
-      }
-    }
+  public var isSUSIMasterEnabled : Bool { // KEEP
+    return getValue(property: .enableSUSIMaster) == "true"
   }
 
-  public var isThresholdForIdleOperationEnabled : Bool {
-    get {
-      return getUInt8(cv: .cv_000_000_203)! != 0
-    }
-    set(value) {
-      if value != isThresholdForIdleOperationEnabled {
-        setUInt8(cv: .cv_000_000_203, value: value ? 1 : 0)
-        delegate?.reloadSettings!(self)
-      }
-    }
-  }
-  
-  public var thresholdForIdleOperation : UInt8 {
-    get {
-      return getUInt8(cv: .cv_000_000_203)!
-    }
-    set(value) {
-      if value != thresholdForIdleOperation {
-        setUInt8(cv: .cv_000_000_203, value: value)
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-  
-  public var idleOperationTriggeredFunction : TriggeredFunction {
-    get {
-      return TriggeredFunction(rawValue: getUInt8(cv: .cv_000_000_205)!)!
-    }
-    set(value) {
-      if value != idleOperationTriggeredFunction {
-        setUInt8(cv: .cv_000_000_205, value: value.rawValue)
-      }
-    }
+  public var isSUSISlaveEnabled : Bool { // KEEP
+    return getValue(property: .enableSUSISlave) == "true"
   }
   
-  public var isSerialFunctionModeF1toF8ForLGBMTSEnabled : Bool {
-    get {
-      return getBool(cv: .cv_000_000_049, mask: ByteMask.d5)!
-    }
-    set(value) {
-      setBool(cv: .cv_000_000_049, mask: ByteMask.d5, value: value)
-    }
-  }
-  
-  public var isSupportForBroadwayLimitedSteamEngineControlEnabled : Bool {
-    get {
-      return getBool(cv: .cv_000_000_122, mask: ByteMask.d7)!
-    }
-    set(value) {
-      setBool(cv: .cv_000_000_122, mask: ByteMask.d7, value: value)
-    }
-  }
-  
-  public var isSUSIMasterEnabled : Bool {
-    get {
-      return getBool(cv: .cv_000_000_124, mask: ByteMask.d3)!
-    }
-    set(value) {
-      if value != isSUSIMasterEnabled {
-        setBool(cv: .cv_000_000_124, mask: ByteMask.d3, value: value)
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-
-  public var isSUSISlaveEnabled : Bool {
-    get {
-      return getBool(cv: .cv_000_000_124, mask: ByteMask.d1)!
-    }
-    set(value) {
-      if value != isSUSISlaveEnabled {
-        setBool(cv: .cv_000_000_124, mask: ByteMask.d1, value: value)
-        delegate?.reloadSettings?(self)
-      }
-    }
+  public var decoderSensorSettings : DecoderSensorSettings { //KEEP
+    return DecoderSensorSettings(title: getValue(property: .decoderSensorSettings))!
   }
   
   private var _speedTablePreset : SpeedTablePreset = .doNothing
@@ -2288,7 +396,7 @@ public class Decoder : NSObject {
     }
   }
   
-  public var speedTableValue : UInt8 {
+  public var speedTableValue : UInt8 { // *** KEEP ***
     get {
       return getUInt8(cv: .cv_000_000_067 + (speedTableIndex - 1))!
     }
@@ -2305,8 +413,9 @@ public class Decoder : NSObject {
             setUInt8(cv: .cv_000_000_067 + (index - 1), value: max(getUInt8(cv: .cv_000_000_067 + (index - 1))!, value))
           }
         }
-        delegate?.reloadSettings!(self)
+        delegate?.reloadSettings?(self)
       }
+      
     }
   }
   
@@ -2325,134 +434,12 @@ public class Decoder : NSObject {
   }
   
   public var esuDecoderPhysicalOutputMode : ESUPhysicalOutputMode {
-    get {
-      return ESUPhysicalOutputMode(rawValue: getPhysicalOutputValue(property: .physicalOutputOutputMode)!)!
-    }
-    set(value) {
-      if value != esuDecoderPhysicalOutputMode {
-        setPhysicalOutputValue(property: .physicalOutputOutputMode, value: value.rawValue)
-        delegate?.reloadSettings!(self)
-      }
-    }
+    return ESUPhysicalOutputMode(title: getValue(property: .physicalOutputOutputMode), decoder: self)!
   }
   
   public func isPropertySupported(property:ProgrammerToolSettingsProperty) -> Bool {
-    if isPhysicalOutputProperty(property: property) {
-      return esuDecoderPhysicalOutputMode.supportedProperties.contains(property)
+    return property.definition.cvIndexingMethod != .esuDecoderPhysicalOutput || esuDecoderPhysicalOutputMode.supportedProperties.contains(property)
     }
-    return true
-  }
-  
-  public var smokeUnitControlMode : SmokeUnitControlMode {
-    get {
-      return SmokeUnitControlMode(rawValue: getPhysicalOutputValue(property: .physicalOutputSmokeUnitControlMode)!)!
-    }
-    set(value) {
-      if value != smokeUnitControlMode {
-        setPhysicalOutputValue(property: .physicalOutputSmokeUnitControlMode, value: value.rawValue)
-      }
-    }
-  }
-  
-  public var externalSmokeUnitType : ExternalSmokeUnitType {
-    get {
-      return ExternalSmokeUnitType(rawValue: getPhysicalOutputValue(property: .physicalOutputExternalSmokeUnitType)!)!
-    }
-    set(value) {
-      if value != externalSmokeUnitType {
-        setPhysicalOutputValue(property: .physicalOutputExternalSmokeUnitType, value: value.rawValue)
-      }
-    }
-  }
-  
-  public func isPhysicalOutputProperty(property:ProgrammerToolSettingsProperty) -> Bool {
-    return physicalOutputCVs.keys.contains(property)
-  }
-  
-  public let physicalOutputCVs : [ProgrammerToolSettingsProperty:(cv:CV, mask:UInt8, shift:UInt8)] = [
-    .physicalOutputPowerOnDelay  : (cv: .cv_016_000_260, mask: 0b00001111, shift:0),
-    .physicalOutputPowerOffDelay : (cv: .cv_016_000_260, mask: 0b11110000 , shift: 4),
-    .physicalOutputEnableFunctionTimeout : (cv: .cv_016_000_261, mask: 0xff, shift:0),
-    .physicalOutputTimeUntilAutomaticPowerOff : (cv: .cv_016_000_261, mask: 0xff , shift:0),
-    .physicalOutputOutputMode : (cv: .cv_016_000_259, mask: 0xff , shift:0),
-    .physicalOutputBrightness : (cv:.cv_016_000_262, mask: 0b00011111, shift:0),
-    .physicalOutputUseClassLightLogic: (cv:.cv_016_000_258, mask: 0b11000000, shift:6),
-    .physicalOutputSequencePosition: (cv:.cv_016_000_262, mask: 0b11000000, shift:6),
-    .physicalOutputPhaseShift : (cv: .cv_016_000_258, mask: 0b00111111, shift:0),
-    .physicalOutputStartupTime : (cv: .cv_016_000_264, mask: 0xff, shift:0),
-    .physicalOutputLevel : (cv: .cv_016_000_264, mask: 0b01111111, shift:0),
-    .physicalOutputSmokeUnitControlMode : (cv: .cv_016_000_262, mask: ByteMask.d0, shift:0),
-    .physicalOutputSpeed : (cv: .cv_016_000_262, mask: 0b00011111, shift:0),
-    .physicalOutputAccelerationRate : (cv:.cv_016_000_263, mask: 0b00011111 , shift:0),
-    .physicalOutputDecelerationRate : (cv:.cv_016_000_264, mask: 0b00011111 , shift:0),
-    .physicalOutputHeatWhileLocomotiveStands : (cv: .cv_016_000_262, mask: 0b00011111 , shift:0),
-    .physicalOutputMinimumHeatWhileLocomotiveDriving : (cv: .cv_016_000_263, mask: 0b00011111, shift:0),
-    .physicalOutputMaximumHeatWhileLocomotiveDriving : (cv: .cv_016_000_264, mask: 0b00011111, shift:0),
-    .physicalOutputChuffPower : (cv: .cv_016_000_262, mask: 0b00011111, shift:0),
-    .physicalOutputFanPower : (cv:.cv_016_000_263, mask: 0b00011111, shift:0),
-    .physicalOutputTimeout : (cv: .cv_016_000_264, mask: 0xff , shift:0),
-    .physicalOutputServoDurationA : (cv:.cv_016_000_258, mask: 0b00111111, shift:0),
-    .physicalOutputServoDurationB : (cv:.cv_016_000_262, mask: 0b00111111 , shift:0),
-    .physicalOutputServoPositionA : (cv: .cv_016_000_263, mask: 0b00111111 , shift:0),
-    .physicalOutputServoDoNotDisableServoPulseAtPositionA : (cv:.cv_016_000_263, mask: 0b10000000, shift:0),
-    .physicalOutputServoPositionB : (cv:.cv_016_000_264, mask: 0b00111111, shift:0),
-    .physicalOutputServoDoNotDisableServoPulseAtPositionB : (cv: .cv_016_000_264, mask: 0b10000000, shift:0),
-    .physicalOutputCouplerForce : (cv: .cv_016_000_262, mask: 0b00011111, shift:0),
-    .physicalOutputRule17Forward : (cv: .cv_016_000_263, mask: ByteMask.d2 , shift:0),
-    .physicalOutputRule17Reverse : (cv: .cv_016_000_263, mask: ByteMask.d3 , shift:0),
-    .physicalOutputDimmer : (cv: .cv_016_000_263, mask: ByteMask.d4, shift:0),
-    .physicalOutputLEDMode : (cv: .cv_016_000_263, mask: ByteMask.d7, shift:0),
-    .physicalOutputGradeCrossing : (cv: .cv_016_000_263, mask: ByteMask.d1, shift:0),
-    .physicalOutputExternalSmokeUnitType : (cv: .cv_016_000_262, mask: 0b00000011, shift:0),
-    .physicalOutputSpecialFunctions : (cv: .cv_000_000_001, mask: 0, shift:0),
-    .physicalOutputStartupTimeInfo : (cv: .cv_000_000_001, mask: 0, shift:0),
-    .physicalOutputStartupDescription : (cv: .cv_000_000_001, mask: 0, shift:0),
-  ]
-  
-  public func physicalOutputCV(property:ProgrammerToolSettingsProperty) -> CV? {
-    
-    if let info = physicalOutputCVs[property] {
-      return info.cv + (Int(esuDecoderPhysicalOutput.rawValue) * 8)
-    }
-    
-    return nil
-    
-  }
-
-  public func esuPhysicalOutputCV(cv:CV) -> CV? {
-    return cv + (Int(esuDecoderPhysicalOutput.rawValue) * 8)
-  }
-
-  public func isPhysicalOutputBoolean(property:ProgrammerToolSettingsProperty) -> Bool? {
-    
-    if let info = physicalOutputCVs[property] {
-      
-      var mask : UInt8 = 0b10000000
-      
-      var firstBit : Int?
-      var lastBit : Int?
-      var index = 7
-      
-      while mask != 0 {
-        if firstBit == nil && (info.mask & mask) == mask {
-          firstBit = index
-        }
-        if (info.mask & mask) == mask {
-          lastBit = firstBit
-        }
-        mask >>= 1
-        index -= 1
-      }
-      
-      if let firstBit, let lastBit {
-        return firstBit == lastBit
-      }
-      
-    }
-    
-    return nil
-    
-  }
   
   public func cvIndexOffset(indexingMethod:CVIndexingMethod) -> Int {
     
@@ -2491,8 +478,6 @@ public class Decoder : NSObject {
     
   }
 
-  private var inSetProperty = false
-  
   public func setProperty(property:ProgrammerToolSettingsProperty, values:[UInt8], propertyDefinition:ProgrammerToolSettingsPropertyDefinition? = nil) {
     
     guard let definition = propertyDefinition == nil ? ProgrammerToolSettingsProperty.definitions[property] : propertyDefinition, let cvs = definition.cv, let masks = definition.mask, let shifts = definition.shift, let cvIndexingMethod = definition.cvIndexingMethod else {
@@ -2517,98 +502,13 @@ public class Decoder : NSObject {
 
   }
 
-
-  public func getPhysicalOutputValue(property:ProgrammerToolSettingsProperty) -> UInt8? {
-    
-    if let cv = physicalOutputCV(property:property) {
-      if let info = physicalOutputCVs[property], var value = getMaskedUInt8(cv: cv, mask: info.mask) {
-        return value >> info.shift
-      }
-      
-    }
-    
-    return nil
-    
-  }
-
-  public func setPhysicalOutputValue(property:ProgrammerToolSettingsProperty, value:UInt8) {
-    
-    if value != getPhysicalOutputValue(property: property), let cv = physicalOutputCV(property:property), let info = physicalOutputCVs[property] {
-      
-      setMaskedUInt8(cv: cv, mask: info.mask, value: value << info.shift)
-      
-      delegate?.reloadSettings?(self)
-      
-    }
-    
-  }
-
-  public func getPhysicalOutputBoolValue(property:ProgrammerToolSettingsProperty) -> Bool? {
-    
-    if let cv = physicalOutputCV(property:property), let info = physicalOutputCVs[property] {
-      
-      return getBool(cv: cv, mask: info.mask)
-      
-    }
-    
-    return nil
-    
-  }
-
-  public func setPhysicalOutputBoolValue(property:ProgrammerToolSettingsProperty, value:Bool) {
-    
-    if value != getPhysicalOutputBoolValue(property: property)!, let cv = physicalOutputCV(property:property), let info = physicalOutputCVs[property] {
-      
-      setBool(cv: cv, mask: info.mask, value: value)
-      
-      delegate?.reloadSettings!(self)
-      
-    }
-    
-  }
-
-  public func physicalOutputCVLabel(property:ProgrammerToolSettingsProperty) -> String {
-    
-    if let info = physicalOutputCVs[property] {
-      
-      var mask : UInt8 = 0b10000000
-      
-      var firstBit : Int?
-      var lastBit : Int?
-      var index = 7
-      
-      while mask != 0 {
-        if firstBit == nil && (info.mask & mask) == mask {
-          firstBit = index
-        }
-        if (info.mask & mask) == mask {
-          lastBit = index
-        }
-        mask >>= 1
-        index -= 1
-      }
-      
-      if let cv = physicalOutputCV(property:property), let firstBit, let lastBit {
-        
-        if firstBit == 7 && lastBit == 0 {
-          return ("\(cv.cvLabel)").replacingOccurrences(of: "%%BITS%%", with: "")
-        }
-        
-        if firstBit == lastBit {
-          return ("\(cv.cvLabel)").replacingOccurrences(of: "%%BITS%%", with: ".\(firstBit)")
-        }
-        
-        return ("\(cv.cvLabel)").replacingOccurrences(of: "%%BITS%%", with: ".\(firstBit):\(lastBit)")
-
-      }
-      
-    }
-    
-    return "error"
-    
+  public var isFunctionTimeOutEnabled : Bool { // KEEP
+    return getValue(property: .physicalOutputEnableFunctionTimeout) == "true"
   }
   
-  // MARK: Private Methods
+  public var isClassLightLogicEnabled : Bool { // KEEP
+    return getValue(property: .physicalOutputUseClassLightLogic) == "true"
+  }
   
   // MARK: Public Methods
   
@@ -2803,14 +703,14 @@ public class Decoder : NSObject {
     
   }
   
-  public func getValue(property:ProgrammerToolSettingsProperty) -> String {
+  public func getValue(property:ProgrammerToolSettingsProperty, propertyDefinition : ProgrammerToolSettingsPropertyDefinition? = nil) -> String {
     
     let excludedEncodings : Set<ProgrammerToolEncodingType> = [
       .custom,
       .none,
     ]
     
-    guard let definition = ProgrammerToolSettingsProperty.definitions[property], !excludedEncodings.contains(definition.encoding) else {
+    guard let definition = propertyDefinition == nil ? ProgrammerToolSettingsProperty.definitions[property] : propertyDefinition, !excludedEncodings.contains(definition.encoding) else {
       return ""
     }
     
@@ -2832,7 +732,7 @@ public class Decoder : NSObject {
     case .esuExternalSmokeUnitType:
       return ExternalSmokeUnitType(rawValue: values[0])!.title
     case .esuMarklinConsecutiveAddresses:
-      return MarklinConsecutiveAddresses(rawValue: values[0])!.title
+      return marklinConsecutiveAddresses.title
     case .esuSpeedStepMode:
       return SpeedStepMode(rawValue: values[0])!.title
     case .manufacturerCode:
@@ -2855,10 +755,14 @@ public class Decoder : NSObject {
       return ClassLightLogicSequenceLength(rawValue: values[0])!.title
     case .speedTableIndex:
       return "\(speedTableIndex)"
+    case .speedTableValue:
+      return "\(speedTableValue)"
     case .esuTriggeredFunction:
       return TriggeredFunction(rawValue: values[0])!.title
     case .dWordHex:
       return UInt32(bigEndianData: values.reversed())!.toHex(numberOfDigits: 8)
+    case .analogModeEnable:
+      return values[1] == definition.mask![1] ? "true" : "false"
     default:
       break
     }
@@ -2869,9 +773,9 @@ public class Decoder : NSObject {
 
   let formatter = NumberFormatter()
   
-  public func getInfo(property:ProgrammerToolSettingsProperty) -> String {
+  public func getInfo(property:ProgrammerToolSettingsProperty, propertyDefinition:ProgrammerToolSettingsPropertyDefinition? = nil) -> String {
 
-    guard let definition = ProgrammerToolSettingsProperty.definitions[property], definition.infoType != .none, let maximumFractionDigits = definition.infoMaxDecimalPlaces, let infoFactor = definition.infoFactor, let appNode else {
+    guard let definition = propertyDefinition == nil ? ProgrammerToolSettingsProperty.definitions[property] : propertyDefinition, definition.infoType != .none, let maximumFractionDigits = definition.infoMaxDecimalPlaces, let infoFactor = definition.infoFactor, let appNode else {
       return ""
     }
 
@@ -2950,7 +854,101 @@ public class Decoder : NSObject {
   }
   
   public func setValue(property: ProgrammerToolSettingsProperty, string: String) {
+ 
+    let excludedEncodings : Set<ProgrammerToolEncodingType> = [
+      .custom,
+      .none,
+    ]
     
+    guard let definition = ProgrammerToolSettingsProperty.definitions[property], !excludedEncodings.contains(definition.encoding) else {
+      return
+    }
+    
+    var newValues : [UInt8] = []
+    
+    switch definition.encoding {
+    case .byte:
+      newValues.append(UInt8(string)!)
+    case .boolBit:
+      newValues.append(string == "true" ? definition.mask![0] : 0)
+    case .boolNZ:
+      newValues.append(string == "true" ? definition.trueDefaultValue! : 0)
+    case .locomotiveAddressType:
+      newValues.append(LocomotiveAddressType(title: string) == .extended ? definition.mask![0] : 0)
+    case .extendedAddress:
+      let extendedAddress = UInt16(string)! + 49152
+      newValues.append(UInt8(extendedAddress >> 8))
+      newValues.append(UInt8(extendedAddress & 0xff))
+    case .specialInt8:
+      let value = Int(string)!
+      newValues.append(UInt8(abs(value)) | (value < 0 ? ByteMask.d7 : 0))
+    case .esuExternalSmokeUnitType:
+      newValues.append(ExternalSmokeUnitType(title: string)!.rawValue)
+    case .esuMarklinConsecutiveAddresses:
+      marklinConsecutiveAddresses = MarklinConsecutiveAddresses(title: string)!
+    case .esuSpeedStepMode:
+      newValues.append(SpeedStepMode(title: string)!.rawValue)
+    case .manufacturerCode:
+      newValues.append(UInt8(ManufacturerCode(title: string)!.rawValue))
+    case .esuDecoderSensorSettings:
+      newValues.append(DecoderSensorSettings(title: string)!.rawValue)
+    case .esuSteamChuffMode:
+      newValues.append(SteamChuffMode(title: string)! == .playSteamChuffsAccordingToSpeed ? definition.trueDefaultValue! : 0)
+    case .esuSoundControlBasis:
+      newValues.append(SoundControlBasis(title: string)! == .accelerationAndBrakeTimeAndTrainLoad ? definition.trueDefaultValue! : 0)
+    case .esuSpeedTablePreset:
+      speedTablePreset = SpeedTablePreset(title: string)!
+    case .esuDecoderPhysicalOutput:
+      esuDecoderPhysicalOutput = ESUDecoderPhysicalOutput(title: string)!
+    case .esuSmokeUnitControlMode:
+      newValues.append(SmokeUnitControlMode(title: string)!.rawValue)
+    case .esuPhysicalOutputMode:
+      newValues.append(ESUPhysicalOutputMode(title: string, decoder: self)!.rawValue)
+    case .esuClassLightLogicLength:
+      newValues.append(ClassLightLogicSequenceLength(title: string)!.rawValue)
+    case .speedTableIndex:
+      speedTableIndex = Int(string)!
+    case .speedTableValue:
+      speedTableValue = UInt8(string)!
+    case .esuTriggeredFunction:
+      newValues.append(TriggeredFunction(title: string)!.rawValue)
+    case .dWordHex:
+      newValues = UInt32(hex: string)!.bigEndianData.reversed()
+    case .analogModeEnable:
+      
+      let otherProperty : ProgrammerToolSettingsProperty = property == .enableACAnalogMode ? .enableDCAnalogMode : .enableACAnalogMode
+      
+      let otherDefinition = otherProperty.definition
+      
+      let otherValues = getProperty(property: otherProperty, propertyDefinition: otherDefinition)
+      
+      let otherEnabled = otherValues[1] == otherDefinition.mask![1]
+      
+      let thisEnabled = string == "true"
+      
+      newValues.append((thisEnabled || otherEnabled) ? definition.mask![0] : 0)
+      
+      newValues.append(thisEnabled ? definition.mask![1] : 0)
+      
+    default:
+      break
+    }
+    
+    if !newValues.isEmpty {
+      
+      let values = getProperty(property: property, propertyDefinition: definition)
+      
+      if values != newValues {
+        setProperty(property: property, values: newValues, propertyDefinition: definition)
+        
+        delegate?.reloadSettings?(self)
+        
+      }
+      
+    }
+    
+    return
+/*
     switch property {
     case .locomotiveAddressType:
       if let temp = LocomotiveAddressType(title: string) {
@@ -3340,6 +1338,7 @@ public class Decoder : NSObject {
     default:
       break
     }
+ */
     
   }
   
@@ -3383,7 +1382,7 @@ public class Decoder : NSObject {
         data.append(item.value)
       }
       if let id = UInt32(bigEndianData: data.reversed()), let decoderType = DecoderType.esuProductIdLookup[id] {
-        debugLog("Found")
+    //    debugLog("Found")
       }
       else {
         

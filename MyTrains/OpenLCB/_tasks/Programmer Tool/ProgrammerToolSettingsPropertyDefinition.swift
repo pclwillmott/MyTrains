@@ -73,6 +73,8 @@ public enum ProgrammerToolEncodingType : Int, CaseIterable {
   case esuDecoderSensorSettings
   case esuClassLightLogicLength
   case speedTableIndex
+  case speedTableValue
+  case analogModeEnable
 
 }
 

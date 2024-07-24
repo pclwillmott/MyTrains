@@ -26,7 +26,7 @@ public enum ProgrammerToolControlType {
 
   // Deprecated
   
-  case textFieldWithInfo
-  case textFieldWithInfoWithSlider
+//  case textFieldWithInfo
+//  case textFieldWithInfoWithSlider
 
 }

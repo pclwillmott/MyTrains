@@ -127,7 +127,7 @@ public enum DecoderType : UInt64, CaseIterable {
       
     }
     catch {
-      debugLog("Error")
+    //  debugLog("Error")
     }
     
     result.sort {
@@ -311,8 +311,9 @@ public enum DecoderType : UInt64, CaseIterable {
   // MARK: Public Methods
   
   public func isSettingsPropertySupported(property:ProgrammerToolSettingsProperty) -> Bool {
-    let requiredCapabilities = property.requiredCapabilities
-    return requiredCapabilities.intersection(self.capabilities) == requiredCapabilities
+//    let requiredCapabilities = property.requiredCapabilities
+//    return requiredCapabilities.intersection(self.capabilities) == requiredCapabilities
+    return true
   }
   
   public func isInspectorPropertySupported(property:ProgrammerToolInspectorProperty) -> Bool {
@@ -372,7 +373,7 @@ public enum DecoderType : UInt64, CaseIterable {
                     result.append((cvConstant, 0))
                   }
                   else {
-                    debugLog("error: \(cv)")
+                //    debugLog("error: \(cv)")
                   }
                 }
                 

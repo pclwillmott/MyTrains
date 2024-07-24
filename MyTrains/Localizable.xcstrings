@@ -4,408 +4,6 @@
     "" : {
       "comment" : "This is used for a tooltip."
     },
-    " [CV1]" : {
-
-    },
-    " [CV2]" : {
-
-    },
-    " [CV3]" : {
-
-    },
-    " [CV4]" : {
-
-    },
-    " [CV5]" : {
-
-    },
-    " [CV9]" : {
-
-    },
-    " [CV13, CV14]" : {
-
-    },
-    " [CV17, CV18]" : {
-
-    },
-    " [CV19.6:0]" : {
-
-    },
-    " [CV19.7]" : {
-
-    },
-    " [CV21, CV22, CV109, CV110]" : {
-
-    },
-    " [CV23]" : {
-
-    },
-    " [CV24]" : {
-
-    },
-    " [CV27.0]" : {
-
-    },
-    " [CV27.1]" : {
-
-    },
-    " [CV27.2]" : {
-
-    },
-    " [CV27.3]" : {
-
-    },
-    " [CV27.4]" : {
-
-    },
-    " [CV27.5]" : {
-
-    },
-    " [CV27.6]" : {
-
-    },
-    " [CV27.7]" : {
-
-    },
-    " [CV28.0]" : {
-
-    },
-    " [CV28.1]" : {
-
-    },
-    " [CV28.7]" : {
-
-    },
-    " [CV29.0]" : {
-
-    },
-    " [CV29.1]" : {
-
-    },
-    " [CV29.2, CV50.0]" : {
-
-    },
-    " [CV29.2, CV50.1]" : {
-
-    },
-    " [CV29.3]" : {
-
-    },
-    " [CV29.5]" : {
-
-    },
-    " [CV47.0]" : {
-
-    },
-    " [CV47.1]" : {
-
-    },
-    " [CV47.2]" : {
-
-    },
-    " [CV47.3]" : {
-
-    },
-    " [CV49.0]" : {
-
-    },
-    " [CV49.4]" : {
-
-    },
-    " [CV49.5]" : {
-
-    },
-    " [CV49.7, CV49.3]" : {
-
-    },
-    " [CV50.2]" : {
-
-    },
-    " [CV51]" : {
-
-    },
-    " [CV53]" : {
-
-    },
-    " [CV54]" : {
-
-    },
-    " [CV55]" : {
-
-    },
-    " [CV56]" : {
-
-    },
-    " [CV57]" : {
-
-    },
-    " [CV58]" : {
-
-    },
-    " [CV63]" : {
-
-    },
-    " [CV64]" : {
-
-    },
-    " [CV65]" : {
-
-    },
-    " [CV66]" : {
-
-    },
-    " [CV67 to CV94]" : {
-
-    },
-    " [CV95]" : {
-
-    },
-    " [CV100]" : {
-
-    },
-    " [CV101]" : {
-
-    },
-    " [CV102]" : {
-
-    },
-    " [CV103]" : {
-
-    },
-    " [CV104]" : {
-
-    },
-    " [CV105]" : {
-
-    },
-    " [CV106]" : {
-
-    },
-    " [CV111]" : {
-
-    },
-    " [CV112]" : {
-
-    },
-    " [CV113]" : {
-
-    },
-    " [CV114]" : {
-
-    },
-    " [CV115]" : {
-
-    },
-    " [CV116]" : {
-
-    },
-    " [CV117]" : {
-
-    },
-    " [CV118]" : {
-
-    },
-    " [CV119]" : {
-
-    },
-    " [CV122.0]" : {
-
-    },
-    " [CV122.1]" : {
-
-    },
-    " [CV122.2]" : {
-
-    },
-    " [CV122.3]" : {
-
-    },
-    " [CV122.5]" : {
-
-    },
-    " [CV122.6]" : {
-
-    },
-    " [CV122.7]" : {
-
-    },
-    " [CV123]" : {
-
-    },
-    " [CV124.0]" : {
-
-    },
-    " [CV124.1]" : {
-
-    },
-    " [CV124.2]" : {
-
-    },
-    " [CV124.3]" : {
-
-    },
-    " [CV124.4]" : {
-
-    },
-    " [CV124.5]" : {
-
-    },
-    " [CV124.6]" : {
-
-    },
-    " [CV125]" : {
-
-    },
-    " [CV126]" : {
-
-    },
-    " [CV127]" : {
-
-    },
-    " [CV128]" : {
-
-    },
-    " [CV129]" : {
-
-    },
-    " [CV130]" : {
-
-    },
-    " [CV131]" : {
-
-    },
-    " [CV132]" : {
-
-    },
-    " [CV133]" : {
-
-    },
-    " [CV134]" : {
-
-    },
-    " [CV135]" : {
-
-    },
-    " [CV138]" : {
-
-    },
-    " [CV139]" : {
-
-    },
-    " [CV140]" : {
-
-    },
-    " [CV141]" : {
-
-    },
-    " [CV142]" : {
-
-    },
-    " [CV143]" : {
-
-    },
-    " [CV144]" : {
-
-    },
-    " [CV149]" : {
-
-    },
-    " [CV150]" : {
-
-    },
-    " [CV151]" : {
-
-    },
-    " [CV152]" : {
-
-    },
-    " [CV153]" : {
-
-    },
-    " [CV154]" : {
-
-    },
-    " [CV179]" : {
-
-    },
-    " [CV180]" : {
-
-    },
-    " [CV181]" : {
-
-    },
-    " [CV182]" : {
-
-    },
-    " [CV183]" : {
-
-    },
-    " [CV184]" : {
-
-    },
-    " [CV191]" : {
-
-    },
-    " [CV195, CV194, CV193, CV192]" : {
-
-    },
-    " [CV196]" : {
-
-    },
-    " [CV197]" : {
-
-    },
-    " [CV199]" : {
-
-    },
-    " [CV200]" : {
-
-    },
-    " [CV201]" : {
-
-    },
-    " [CV202]" : {
-
-    },
-    " [CV203]" : {
-
-    },
-    " [CV204]" : {
-
-    },
-    " [CV205]" : {
-
-    },
-    " [CV245]" : {
-
-    },
-    " [CV246]" : {
-
-    },
-    " [CV247]" : {
-
-    },
-    " [CV248]" : {
-
-    },
-    " [CV249]" : {
-
-    },
-    " [CV250]" : {
-
-    },
-    " [CV253]" : {
-
-    },
-    " [CV254]" : {
-
-    },
-    " [CV255]" : {
-
-    },
-    "." : {
-
-    },
     "(disabled)" : {
 
     },
@@ -888,9 +486,6 @@
     "ABC Reduced Speed" : {
 
     },
-    "ABC Reduced Speed." : {
-
-    },
     "About MyTrains" : {
       "comment" : "Used for a menu title"
     },
@@ -900,9 +495,6 @@
     "Acceleration Adjustment" : {
 
     },
-    "Acceleration Adjustment." : {
-
-    },
     "Acceleration and brake time" : {
 
     },
@@ -910,9 +502,6 @@
 
     },
     "Acceleration Rate" : {
-
-    },
-    "Acceleration Rate." : {
 
     },
     "Acceleration, brake time, and train load" : {
@@ -952,9 +541,6 @@
     "Activate the following functions while driving in analog mode" : {
 
     },
-    "Activate the following functions while driving in analog mode." : {
-
-    },
     "Activated" : {
       "comment" : "This is used for the title of an input field where the user enters a specific event ID.\nUsed to indicate a layout's state",
       "localizations" : {
@@ -990,22 +576,13 @@
     "Additional Addresses" : {
 
     },
-    "Additional addresses." : {
-
-    },
     "Address" : {
 
     },
     "Address for Consist Operation" : {
 
     },
-    "Address for consist operation." : {
-
-    },
     "Adjustment at Higher Speed Steps" : {
-
-    },
-    "Adjustment at higher speed steps." : {
 
     },
     "Agreement" : {
@@ -1091,16 +668,10 @@
     "Allow Data Transmission on Channel 2" : {
 
     },
-    "Allow data transmission on channel 2." : {
-
-    },
     "Allow Shunt" : {
       "comment" : "This is used for the title of a check box where the user can select if shunting is allowed in reverese direction on this switchbaord item."
     },
     "Allow ZIMO (HLU) Brake Sections" : {
-
-    },
-    "Allow ZIMO (HLU) brake sections." : {
 
     },
     "Alternate Clock 1" : {
@@ -1323,25 +894,13 @@
     "Automatic Uncoupling Move Time" : {
 
     },
-    "Automatic uncoupling move time." : {
-
-    },
     "Automatic Uncoupling Push Time" : {
-
-    },
-    "Automatic uncoupling push time." : {
 
     },
     "Automatic Uncoupling Speed" : {
 
     },
-    "Automatic uncoupling speed." : {
-
-    },
     "Automatic Uncoupling Wait Time" : {
-
-    },
-    "Automatic uncoupling wait time." : {
 
     },
     "AUX1 [1]" : {
@@ -1448,9 +1007,6 @@
 
     },
     "Bass" : {
-
-    },
-    "Bass." : {
 
     },
     "Bell" : {
@@ -1588,25 +1144,13 @@
     "Brake Distance Length" : {
 
     },
-    "Brake distance length." : {
-
-    },
     "Brake Function 1 Reduces Brake Time by" : {
-
-    },
-    "Brake function 1 reduces brake time by." : {
 
     },
     "Brake Function 2 Reduces Brake Time by" : {
 
     },
-    "Brake function 2 reduces brake time by." : {
-
-    },
     "Brake Function 3 Reduces Brake Time by" : {
-
-    },
-    "Brake function 3 reduces brake time by." : {
 
     },
     "Brake Functions" : {
@@ -1615,13 +1159,7 @@
     "Brake if left rail signal in driving direction is more positive than the right rail" : {
 
     },
-    "Brake if left rail signal in driving direction is more positive than the right rail." : {
-
-    },
     "Brake if right rail signal in driving direction is more positive than the left rail" : {
-
-    },
-    "Brake if right rail signal in driving direction is more positive than the left rail." : {
 
     },
     "Brake light" : {
@@ -1630,25 +1168,13 @@
     "Brake on Forward DC Polarity" : {
 
     },
-    "Brake on forward DC polarity." : {
-
-    },
     "Brake on Forward Polarity of Brake Diode" : {
-
-    },
-    "Brake on forward polarity of brake diode." : {
 
     },
     "Brake on Reverse DC Polarity" : {
 
     },
-    "Brake on reverse DC polarity." : {
-
-    },
     "Brake on Reverse Polarity of Brake Diode" : {
-
-    },
-    "Brake on reverse polarity of brake diode." : {
 
     },
     "Brake Release" : {
@@ -1698,9 +1224,6 @@
       "comment" : "This is the name of a country."
     },
     "Brightness" : {
-
-    },
-    "Brightness." : {
 
     },
     "Bring All to Front" : {
@@ -1890,13 +1413,7 @@
     "Chuff Power" : {
 
     },
-    "Chuff power." : {
-
-    },
     "Class Light Logic Sequence Length" : {
-
-    },
-    "Class light logic sequence length." : {
 
     },
     "Clear" : {
@@ -2343,9 +1860,6 @@
     "Constant Brake Distance on Speed Step 0" : {
 
     },
-    "Constant brake distance on speed step 0." : {
-
-    },
     "ConstantBrake Distance" : {
 
     },
@@ -2466,9 +1980,6 @@
     "Control Mode" : {
 
     },
-    "Control mode." : {
-
-    },
     "Copy" : {
       "comment" : "Used for a menu title\nUsed for the title of a button copies to the clipboard"
     },
@@ -2510,9 +2021,6 @@
       }
     },
     "Coupler Force" : {
-
-    },
-    "Coupler force." : {
 
     },
     "Create" : {
@@ -2877,13 +2385,7 @@
     "Deceleration Adjustment" : {
 
     },
-    "Deceleration Adjustment." : {
-
-    },
     "Deceleration Rate" : {
-
-    },
-    "Deceleration Rate." : {
 
     },
     "Decimal" : {
@@ -2918,16 +2420,10 @@
     "Decoder Manufacturer" : {
 
     },
-    "Decoder manufacturer." : {
-
-    },
     "Decoder Operating Time" : {
 
     },
     "Decoder Serial Number" : {
-
-    },
-    "Decoder serial number." : {
 
     },
     "Decoder Type" : {
@@ -2985,13 +2481,7 @@
     "Delay Starting if Drive Sound is Enabled" : {
 
     },
-    "Delay starting if drive sound is enabled." : {
-
-    },
     "Delay Time Before Exiting a Brake Section" : {
-
-    },
-    "Delay time before exiting a brake section." : {
 
     },
     "Delegate" : {
@@ -3057,9 +2547,6 @@
     "Detect Speed Step Mode Automatically" : {
 
     },
-    "Detect speed step mode automatically." : {
-
-    },
     "Determines the speed profiler mode of operation." : {
       "comment" : "This is used for a tooltip."
     },
@@ -3090,9 +2577,6 @@
 
     },
     "Different Brake Distance While Driving Backwards" : {
-
-    },
-    "Different brake distance while driving backwards." : {
 
     },
     "Digitrax BXP88" : {
@@ -3188,9 +2672,6 @@
         }
       }
     },
-    "Dimmer." : {
-
-    },
     "Direction Next" : {
       "comment" : "This is used for the title of the Speed Constraints Direction Next section in the Layout Builder."
     },
@@ -3238,9 +2719,6 @@
     "Distance of Steam Chuffs at Speed Step 1" : {
 
     },
-    "Distance of steam chuffs at speed step 1." : {
-
-    },
     "Ditch light type 1" : {
 
     },
@@ -3267,19 +2745,10 @@
     "Divide Trigger Impulses in Two if Shunting Mode Enabled" : {
 
     },
-    "Divide trigger impulses in two if shunting mode enabled." : {
-
-    },
     "Do Not Disable Servo Pulse at Position A" : {
 
     },
-    "Do not disable servo pulse at position A." : {
-
-    },
     "Do Not Disable Servo Pulse at Position B" : {
-
-    },
-    "Do not disable servo pulse at position B." : {
 
     },
     "Do not open" : {
@@ -3334,9 +2803,6 @@
     "Drive Until Locomotive Stops in Specified Period" : {
 
     },
-    "Drive until locomotive stops in specified period." : {
-
-    },
     "Driver's Door" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
       "localizations" : {
@@ -3363,19 +2829,10 @@
     "Duration (speed) A" : {
 
     },
-    "Duration (speed) A." : {
-
-    },
     "Duration (speed) B" : {
 
     },
-    "Duration (speed) B." : {
-
-    },
     "Duration of Steam Chuffs Relative to Trigger Distance" : {
-
-    },
-    "Duration of steam chuffs relative to trigger distance." : {
 
     },
     "Dynamic Brake" : {
@@ -3519,181 +2976,82 @@
     "Enable ABC Shuttle Train" : {
 
     },
-    "Enable ABC shuttle train." : {
-
-    },
     "Enable AC Analog Mode" : {
-
-    },
-    "Enable AC analog mode." : {
 
     },
     "Enable Acceleration Time" : {
 
     },
-    "Enable acceleration time." : {
-
-    },
     "Enable Automatic Parking Brake" : {
-
-    },
-    "Enable automatic parking brake." : {
 
     },
     "Enable Automatic Uncoupling" : {
 
     },
-    "Enable automatic uncoupling." : {
-
-    },
     "Enable Constant Brake Distance" : {
-
-    },
-    "Enable constant brake distance." : {
 
     },
     "Enable DC Analog Mode" : {
 
     },
-    "Enable DC analog mode." : {
-
-    },
     "Enable DCC Consist Address" : {
-
-    },
-    "Enable DCC consist address." : {
-
-    },
-    "Enable DCC protocol." : {
 
     },
     "Enable Deceleration Time" : {
 
     },
-    "Enable deceleration time." : {
-
-    },
     "Enable Forward Trimming" : {
-
-    },
-    "Enable forward trimming." : {
 
     },
     "Enable Function Timeout" : {
 
     },
-    "Enable function timeout." : {
-
-    },
     "Enable Gearbox Backlash Compensation" : {
-
-    },
-    "Enable gearbox backlash compensation." : {
 
     },
     "Enable Load Control / Back EMF" : {
 
     },
-    "Enable load control / back EMF." : {
-
-    },
-    "Enable M4 protocol." : {
-
-    },
-    "Enable Märklin Motorola protocol." : {
-
-    },
     "Enable Minimum Distance of Steam Chuffs" : {
-
-    },
-    "Enable minimum distance of steam chuffs." : {
 
     },
     "Enable Motor Current Limiter" : {
 
     },
-    "Enable motor current limiter." : {
-
-    },
     "Enable Motor Overload Protection" : {
-
-    },
-    "Enable motor overload protection." : {
-
-    },
-    "Enable persistent function." : {
-
-    },
-    "Enable persistent speed." : {
 
     },
     "Enable Quantum Engineer Support" : {
 
     },
-    "Enable quantum engineer support." : {
-
-    },
     "Enable RailCom Feedback" : {
-
-    },
-    "Enable RailCom feedback." : {
 
     },
     "Enable RailComPlus Automatic Announcement" : {
 
     },
-    "Enable RailComPlus automatic announcement." : {
-
-    },
     "Enable Reverse Trimming" : {
-
-    },
-    "Enable Reverse trimming." : {
 
     },
     "Enable Secondary Trigger" : {
 
     },
-    "Enable secondary trigger." : {
-
-    },
-    "Enable Selectrix protocol." : {
-
-    },
     "Enable Serial User Standard Interface (SUSI Master)" : {
-
-    },
-    "Enable serial user standard interface (SUSI Master)." : {
 
     },
     "Enable Serial User Standard Interface (SUSI Slave)" : {
 
     },
-    "Enable serial user standard interface (SUSI Slave)." : {
-
-    },
     "Enable Shunting Mode Trimming" : {
-
-    },
-    "Enable shunting mode trimming." : {
 
     },
     "Enable Support for Broadway Limited Steam Engine Control" : {
 
     },
-    "Enable support for Broadway Limited Steam Engine Control." : {
-
-    },
     "Enable Threshold for Idle Operation" : {
 
     },
-    "Enable threshold for idle operation." : {
-
-    },
     "Enable Threshold for Load Operation" : {
-
-    },
-    "Enable threshold for load operation." : {
 
     },
     "Enabled" : {
@@ -3726,9 +3084,6 @@
 
     },
     "Enforce Slave Communication on AUX3 and AUX4" : {
-
-    },
-    "Enforce slave communication on AUX3 and AUX4." : {
 
     },
     "Engine" : {
@@ -4097,9 +3452,6 @@
     "External Smoke Unit Type" : {
 
     },
-    "External smoke unit type." : {
-
-    },
     "F0" : {
 
     },
@@ -4202,19 +3554,10 @@
     "Fade Sound Volume Reduction" : {
 
     },
-    "Fade sound volume reduction." : {
-
-    },
     "Fade-In Time of Light Effects" : {
 
     },
-    "Fade-in time of light effects." : {
-
-    },
     "Fade-Out Time of Light Effects" : {
-
-    },
-    "Fade-out time of light effects." : {
 
     },
     "Fahrenheit" : {
@@ -4243,13 +3586,7 @@
     "Fan Power" : {
 
     },
-    "Fan power." : {
-
-    },
     "Fan Speed Trim" : {
-
-    },
-    "Fan speed trim." : {
 
     },
     "Far Light" : {
@@ -4400,9 +3737,6 @@
     "Forward Trimming" : {
 
     },
-    "Forward trimming." : {
-
-    },
     "France" : {
       "comment" : "This is the name of a country."
     },
@@ -4429,9 +3763,6 @@
     "Frequency for Blinking Effects" : {
 
     },
-    "Frequency for blinking effects." : {
-
-    },
     "Front Light" : {
 
     },
@@ -4450,13 +3781,7 @@
     "Full Speed Back EMF Sampling Period" : {
 
     },
-    "Full speed back EMF sampling period." : {
-
-    },
     "Full Speed Length of Measurement Gap" : {
-
-    },
-    "Full speed length of measurement gap." : {
 
     },
     "Function Configuration" : {
@@ -4466,9 +3791,6 @@
 
     },
     "Function Difference Voltage" : {
-
-    },
-    "Function difference voltage." : {
 
     },
     "Function Mapping" : {
@@ -4626,12 +3948,6 @@
     "Grade Crossing Holding Time" : {
 
     },
-    "Grade crossing holding time." : {
-
-    },
-    "Grade Crossing." : {
-
-    },
     "Gray" : {
       "comment" : "The name of a color."
     },
@@ -4691,9 +4007,6 @@
       }
     },
     "Heat while Locomotive Stands" : {
-
-    },
-    "Heat while locomotive stands." : {
 
     },
     "Heating control" : {
@@ -4769,31 +4082,16 @@
     "HLU Speed Limit 1" : {
 
     },
-    "HLU speed limit 1." : {
-
-    },
     "HLU Speed Limit 2 (Ultra Low)" : {
-
-    },
-    "HLU speed limit 2." : {
 
     },
     "HLU Speed Limit 3" : {
 
     },
-    "HLU speed limit 3." : {
-
-    },
     "HLU Speed Limit 4 (Low Speed)" : {
 
     },
-    "HLU speed limit 4." : {
-
-    },
     "HLU Speed Limit 5" : {
-
-    },
-    "HLU speed limit 5." : {
 
     },
     "Horn" : {
@@ -4886,9 +4184,6 @@
       "comment" : "This is used for a tooltip."
     },
     "Ignore Acceleration and Deceleration in the Sound Schedule" : {
-
-    },
-    "Ignore acceleration and deceleration in the sound schedule." : {
 
     },
     "In Use" : {
@@ -5127,9 +4422,6 @@
     "Largest Internal Speed Step that uses \"K Slow\"" : {
 
     },
-    "Largest internal speed step that uses \"K Slow\"." : {
-
-    },
     "Last Frame  " : {
 
     },
@@ -5225,9 +4517,6 @@
     "LED Mode" : {
 
     },
-    "LED mode." : {
-
-    },
     "Left Curved Turnout" : {
       "comment" : "This is used to describe a piece of track."
     },
@@ -5298,9 +4587,6 @@
       "comment" : "This is used for a tooltip."
     },
     "Level" : {
-
-    },
-    "Level." : {
 
     },
     "License Agreement" : {
@@ -5390,13 +4676,7 @@
     "Load Adjustment when \"Optional Load\" is Enabled" : {
 
     },
-    "Load adjustment when \"Optional Load\" is enabled." : {
-
-    },
     "Load Adjustment when \"Primary Load\" is Enabled" : {
-
-    },
-    "Load adjustment when \"Primary Load\" is enabled." : {
 
     },
     "Load Control / Back EMF" : {
@@ -5429,20 +4709,11 @@
     "Locomotive Name" : {
       "comment" : "This is used for the title of label which displays the locomotive's name."
     },
-    "Locomotive's address type." : {
-
-    },
-    "Locomotive's extended or long address." : {
-
-    },
     "Locomotive's name." : {
       "comment" : "This is used for a tooltip."
     },
     "Locomotive's node ID." : {
       "comment" : "This is used for a tooltip."
-    },
-    "Locomotive's primary or short address." : {
-
     },
     "LocoNet Dashboard" : {
       "comment" : "Used for a menu title",
@@ -5573,9 +4844,6 @@
 
     },
     "Logical Function Dimmer Brightness Reduction" : {
-
-    },
-    "Logical function dimmer brightness reduction." : {
 
     },
     "LokSound 4 3 Point" : {
@@ -5765,13 +5033,7 @@
     "Master Volume" : {
 
     },
-    "Master volume." : {
-
-    },
     "Maximum Heat while Locomotive is Driving" : {
-
-    },
-    "Maximum heat while locomotive is driving." : {
 
     },
     "Maximum Revs" : {
@@ -5803,25 +5065,13 @@
     "Maximum Speed Voltage" : {
 
     },
-    "Maximum speed voltage." : {
-
-    },
     "Maximum Speed when Brake Function 1 is Active" : {
-
-    },
-    "Maximum speed when brake function 1 is active." : {
 
     },
     "Maximum Speed when Brake Function 2 is Active" : {
 
     },
-    "Maximum speed when brake function 2 is active." : {
-
-    },
     "Maximum Speed when Brake Function 3 is Active" : {
-
-    },
-    "Maximum speed when brake function 3 is active." : {
 
     },
     "Maximum speed when restrictions apply" : {
@@ -5833,13 +5083,7 @@
     "Maximum speed when stop expected" : {
 
     },
-    "Maximum speed." : {
-
-    },
     "Maximum Steam Chuff Duration" : {
-
-    },
-    "Maximum steam chuff duration." : {
 
     },
     "Megahertz" : {
@@ -5968,13 +5212,7 @@
     "Minimum Distance of Steam Chuffs" : {
 
     },
-    "Minimum distance of steam chuffs." : {
-
-    },
     "Minimum Heat while Locomotive is Driving" : {
-
-    },
-    "Minimum heat while locomotive is driving." : {
 
     },
     "Minimum period to profile one speed step." : {
@@ -5986,13 +5224,7 @@
     "Minimum Speed" : {
 
     },
-    "Minimum speed." : {
-
-    },
     "Minimum Steam Chuff Duration" : {
-
-    },
-    "Minimum steam chuff duration." : {
 
     },
     "Mint" : {
@@ -6024,22 +5256,13 @@
     "Motor Current Limiter Limit" : {
 
     },
-    "Motor current limiter limit." : {
-
-    },
     "Motor Hysteresis Voltage" : {
-
-    },
-    "Motor hysteresis Voltage." : {
 
     },
     "Motor Overload Protection" : {
 
     },
     "Motor Pulse Frequency" : {
-
-    },
-    "Motor pulse frequency." : {
 
     },
     "Motor Settings" : {
@@ -6496,9 +5719,6 @@
     "Output Mode (Effect)" : {
 
     },
-    "Output mode (effect)." : {
-
-    },
     "Overhead" : {
       "comment" : "Used to indicate that the track models overhead electrification",
       "localizations" : {
@@ -6709,16 +5929,10 @@
     "Phase Shift" : {
 
     },
-    "Phase shift." : {
-
-    },
     "Physical Output" : {
 
     },
     "Physical Output Configuration" : {
-
-    },
-    "Physical Output." : {
 
     },
     "Pink" : {
@@ -6742,13 +5956,7 @@
     "Position A (Off)" : {
 
     },
-    "Position A (off)." : {
-
-    },
     "Position B (On)" : {
-
-    },
-    "Position B (on)." : {
 
     },
     "Post Office" : {
@@ -6757,13 +5965,7 @@
     "Power Off Delay" : {
 
     },
-    "Power off delay." : {
-
-    },
     "Power On Delay" : {
-
-    },
-    "Power on delay." : {
 
     },
     "Power Pack" : {
@@ -6784,16 +5986,10 @@
     "Preheating Temperature for Secondary Smoke Units" : {
 
     },
-    "Preheating temperature for secondary smoke units." : {
-
-    },
     "Preserve Direction" : {
 
     },
     "Preserve Direction when changing from Analog to Digital" : {
-
-    },
-    "Preserve direction when changing from analog to digital." : {
 
     },
     "Preset" : {
@@ -7131,9 +6327,6 @@
     "Reduce Secondary Trigger Distance by:" : {
 
     },
-    "Reduce secondary trigger distance by." : {
-
-    },
     "Reed Switch" : {
 
     },
@@ -7156,31 +6349,16 @@
     "Regulation Influence During Slow Speed" : {
 
     },
-    "Regulation influence during slow speed." : {
-
-    },
     "Regulation Parameter \"I\"" : {
-
-    },
-    "Regulation parameter \"I\"." : {
 
     },
     "Regulation Parameter \"K Slow\"" : {
 
     },
-    "Regulation parameter \"K Slow\"." : {
-
-    },
     "Regulation Parameter \"K\"" : {
 
     },
-    "Regulation parameter \"K\"." : {
-
-    },
     "Regulation Reference" : {
-
-    },
-    "Regulation reference." : {
 
     },
     "Reinitialize/Factory Reset Command" : {
@@ -7304,9 +6482,6 @@
     "Reverse Direction (Forward becomes Reverse)" : {
 
     },
-    "Reverse direction." : {
-
-    },
     "Reverse Mode" : {
 
     },
@@ -7314,9 +6489,6 @@
 
     },
     "Reverse Trimming" : {
-
-    },
-    "Reverse trimming." : {
 
     },
     "Reverser" : {
@@ -7404,13 +6576,7 @@
     "Rule 17 Forward" : {
 
     },
-    "Rule 17 forward." : {
-
-    },
     "Rule 17 Reverse" : {
-
-    },
-    "Rule 17 Reverse." : {
 
     },
     "Running" : {
@@ -7590,9 +6756,6 @@
     "Select the functions that should respond to the consist address" : {
 
     },
-    "Select the functions that should respond to the consist address." : {
-
-    },
     "Select the required route." : {
       "comment" : "This is used for a tooltip."
     },
@@ -7608,16 +6771,10 @@
     "Send Address via Broadcast on Channel 1" : {
 
     },
-    "Send address via broadcast on channel 1." : {
-
-    },
     "Send following information to the command station:" : {
 
     },
     "Send ZIMO ZACK Signals" : {
-
-    },
-    "Send ZIMO ZACK signals." : {
 
     },
     "Sending unadvertised event" : {
@@ -7638,22 +6795,13 @@
     "Sensor Settings" : {
       "comment" : "This is used for the title of the Sensor Settings section in the Layout Builder."
     },
-    "Sensor settings." : {
-
-    },
     "Sensors" : {
       "comment" : "Used for the title of a switchboard item palette in LayoutBuilder"
     },
     "Sequence Position" : {
 
     },
-    "Sequence position." : {
-
-    },
     "Serial Function Mode for LGB MTS" : {
-
-    },
-    "Serial function mode for LGB MTS." : {
 
     },
     "Serial Number" : {
@@ -7936,9 +7084,6 @@
     "Shunting Mode Trimming" : {
 
     },
-    "Shunting mode trimming." : {
-
-    },
     "Signal" : {
       "comment" : "This is used to describe a switchboard item."
     },
@@ -8021,19 +7166,10 @@
     "Slow motion time until Acceleration Starts" : {
 
     },
-    "Slow motion time until acceleration starts." : {
-
-    },
     "Slow Speed Back EMF Sampling Period" : {
 
     },
-    "Slow speed back EMF sampling period." : {
-
-    },
     "Slow Speed Length of Measurement Gap" : {
-
-    },
-    "Slow speed length of measurement gap." : {
 
     },
     "Slow Speed Settings" : {
@@ -8097,9 +7233,6 @@
     "Sound Control Basis" : {
 
     },
-    "Sound control basis." : {
-
-    },
     "Sound Control Behaviour" : {
 
     },
@@ -8143,9 +7276,6 @@
     "Sound Fade-In and Fade-Out Time" : {
 
     },
-    "Sound fade-in and fade-out time." : {
-
-    },
     "Sound Lock" : {
 
     },
@@ -8185,13 +7315,7 @@
     "Speed Step Mode" : {
 
     },
-    "Speed step mode." : {
-
-    },
     "Speed Table" : {
-
-    },
-    "Speed table index" : {
 
     },
     "Speed Table Index" : {
@@ -8204,9 +7328,6 @@
 
     },
     "Speed that the train actually travelled at in the reverse direction" : {
-
-    },
-    "Speed." : {
 
     },
     "Spirax Valve" : {
@@ -8241,9 +7362,6 @@
     "Start Voltage (minimum speed)" : {
 
     },
-    "Start voltage (minimum speed)." : {
-
-    },
     "Starting Delay" : {
 
     },
@@ -8251,9 +7369,6 @@
 
     },
     "Startup time = 255 means defective Neon lamp." : {
-
-    },
-    "Startup time." : {
 
     },
     "Steam" : {
@@ -8274,9 +7389,6 @@
       }
     },
     "Steam Chuff Mode" : {
-
-    },
-    "Steam chuff mode." : {
 
     },
     "Steam Chuffs" : {
@@ -8360,9 +7472,6 @@
       }
     },
     "Stopping Period" : {
-
-    },
-    "Stopping period." : {
 
     },
     "Straight" : {
@@ -8620,13 +7729,7 @@
     "Switching Off Threshold" : {
 
     },
-    "Switching off threshold." : {
-
-    },
     "Switching On Threshold" : {
-
-    },
-    "Switching on threshold." : {
 
     },
     "t" : {
@@ -8671,9 +7774,6 @@
       "comment" : "The name of a color."
     },
     "Temperature Trim" : {
-
-    },
-    "Temperature trim." : {
 
     },
     "Temporary Error Buffer Unavailable" : {
@@ -8886,9 +7986,6 @@
     "This decoder synchronizes RailComPlus / M4 address with a Master decoder" : {
 
     },
-    "This decoder synchronizes RailComPlus / M4 address with a Master decoder." : {
-
-    },
     "This description will appear in network browsers for this device." : {
       "comment" : "Used for the description of the user description input field in the CDI",
       "localizations" : {
@@ -8983,13 +8080,7 @@
     "Threshold for Idle Operation" : {
 
     },
-    "Threshold for idle operation." : {
-
-    },
     "Threshold for Load Operation" : {
-
-    },
-    "threshold for load operation." : {
 
     },
     "Throttle" : {
@@ -9051,31 +8142,16 @@
     "Time from Maximum Speed to Stop" : {
 
     },
-    "Time from maximum speed to stop." : {
-
-    },
     "Time from Stop to Maximum Speed" : {
-
-    },
-    "Time from stop to maximum speed." : {
 
     },
     "Time to Bridge Power Interruption (PowerPack required)" : {
 
     },
-    "Time to bridge power interruption." : {
-
-    },
     "Time until Automatic Power Off" : {
 
     },
-    "Time until automatic power off." : {
-
-    },
     "Time until Smoke Unit Automatic Power Off" : {
-
-    },
-    "Time until smoke unit automatic power off." : {
 
     },
     "Timeout" : {
@@ -9096,9 +8172,6 @@
           }
         }
       }
-    },
-    "Timeout." : {
-
     },
     "Tone Control" : {
 
@@ -9165,13 +8238,7 @@
     "Train Load at High Speed" : {
 
     },
-    "Train load at high speed." : {
-
-    },
     "Train Load at Low Speed" : {
-
-    },
-    "Train load at low speed." : {
 
     },
     "Train Move Complete" : {
@@ -9212,22 +8279,13 @@
     "Treble" : {
 
     },
-    "Treble." : {
-
-    },
     "Trigger Impulses per Steam Chuff" : {
-
-    },
-    "Trigger impulses per steam chuff." : {
 
     },
     "Trigger smoke chuff" : {
 
     },
     "Triggered Function" : {
-
-    },
-    "Triggered function." : {
 
     },
     "Trimming" : {
@@ -9440,9 +8498,6 @@
     "Use Class Light Logic" : {
 
     },
-    "Use class light logic." : {
-
-    },
     "Use Custom Dimensions" : {
       "comment" : "Used as the title for custom dimensions of a track part."
     },
@@ -9453,9 +8508,6 @@
 
     },
     "Use external wheel sensor" : {
-
-    },
-    "Use high frequency PWM motor control." : {
 
     },
     "Use Index CVs (CV31, CV32)" : {
@@ -9514,13 +8566,7 @@
     "User ID #1" : {
 
     },
-    "User ID #1." : {
-
-    },
     "User ID #2" : {
-
-    },
-    "User ID #2." : {
 
     },
     "User Identification" : {
@@ -9744,9 +8790,6 @@
     "Voltage difference indicating an ABC brake section" : {
 
     },
-    "Voltage difference indicating an ABC brake section." : {
-
-    },
     "Volts" : {
 
     },
@@ -9754,9 +8797,6 @@
 
     },
     "Waiting time before direction change" : {
-
-    },
-    "Waiting time before direction change." : {
 
     },
     "Water Fill" : {

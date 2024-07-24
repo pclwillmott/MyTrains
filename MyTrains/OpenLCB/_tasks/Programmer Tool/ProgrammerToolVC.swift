@@ -169,7 +169,8 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
     
     decoder = Decoder(decoderType: .lokSound5)
     decoder?.delegate = self
-    
+   
+    /*
     // MARK: START TEMPORARY - REMOVE BEFORE FLIGHT
     
     var group : ProgrammerToolSettingsGroup?
@@ -397,7 +398,8 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
     print("  ]")
 
     // MARK: END TEMPORARY - REMOVE BEFORE FLIGHT
-
+*/
+    
     observerId = appNode.addObserver(observer: self)
     
     // Selection Section
@@ -900,6 +902,8 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
       return
     }
     
+    let timeStart = Date.timeIntervalSinceReferenceDate
+    
     NSLayoutConstraint.deactivate(settingsPropertyConstraints)
     settingsPropertyConstraints.removeAll()
     
@@ -918,181 +922,253 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
       }
     }
     
-    if !decoder.showPhysicalOutputPropertiesForThisOutput {
-      for property in commonProperties {
-        if decoder.isPhysicalOutputProperty(property: property) {
-          commonProperties.remove(property)
-        }
+    switch currentSelector {
+    case .address:
+      
+      if decoder.locomotiveAddressType == .primary {
+        commonProperties.remove(.locomotiveAddressLong)
+        commonProperties.remove(.locomotiveAddressWarning)
       }
-    }
+      else {
+        commonProperties.remove(.locomotiveAddressShort)
+        commonProperties.remove(.marklinConsecutiveAddresses)
+      }
+      
+      if !decoder.isConsistAddressEnabled {
+        commonProperties.remove(.consistAddress)
+        commonProperties.remove(.consistReverseDirection)
+      }
+      
+    case .analogSettings:
+      
+      if !decoder.isACAnalogModeEnabled {
+        commonProperties.remove(.acAnalogModeStartVoltage)
+        commonProperties.remove(.acAnalogModeMaximumSpeedVoltage)
+      }
 
-    if decoder.locomotiveAddressType == .extended {
-      commonProperties.remove(.locomotiveAddressShort)
-      commonProperties.remove(.marklinConsecutiveAddresses)
-    }
-    
-    if decoder.locomotiveAddressType == .primary {
-      commonProperties.remove(.locomotiveAddressLong)
-      commonProperties.remove(.locomotiveAddressWarning)
-    }
-    
-    if !decoder.isConsistAddressEnabled {
-      commonProperties.remove(.consistAddress)
-      commonProperties.remove(.consistReverseDirection)
-    }
-    
-    if !decoder.isACAnalogModeEnabled {
-      commonProperties.remove(.acAnalogModeStartVoltage)
-      commonProperties.remove(.acAnalogModeMaximumSpeedVoltage)
-    }
+      if !decoder.isDCAnalogModeEnabled {
+        commonProperties.remove(.dcAnalogModeStartVoltage)
+        commonProperties.remove(.dcAnalogModeMaximumSpeedVoltage)
+      }
+      
+    case .brakeSettings:
+      
+      if !(decoder.abcBrakeIfLeftRailMorePositive || decoder.abcBrakeIfRightRailMorePositive) {
+        commonProperties.remove(.voltageDifferenceIndicatingABCBrakeSection)
+        commonProperties.remove(.abcReducedSpeed)
+      }
+      
+      if !decoder.isABCShuttleTrainEnabled {
+        commonProperties.remove(.waitingPeriodBeforeDirectionChange)
+      }
+      
+      if !decoder.isConstantBrakeDistanceEnabled {
+        commonProperties.remove(.brakeDistanceLength)
+        commonProperties.remove(.differentBrakeDistanceBackwards)
+        commonProperties.remove(.brakeDistanceLengthBackwards)
+        commonProperties.remove(.driveUntilLocomotiveStopsInSpecifiedPeriod)
+        commonProperties.remove(.stoppingPeriod)
+        commonProperties.remove(.constantBrakeDistanceOnSpeedStep0)
+      }
 
-    if !decoder.isDCAnalogModeEnabled {
-      commonProperties.remove(.dcAnalogModeStartVoltage)
-      commonProperties.remove(.dcAnalogModeMaximumSpeedVoltage)
-    }
-    
-    if !(decoder.abcBrakeIfLeftRailMorePositive || decoder.abcBrakeIfRightRailMorePositive) {
-      commonProperties.remove(.voltageDifferenceIndicatingABCBrakeSection)
-      commonProperties.remove(.abcReducedSpeed)
-    }
-    
-    if !decoder.isABCShuttleTrainEnabled {
-      commonProperties.remove(.waitingPeriodBeforeDirectionChange)
-    }
-    
-    if !decoder.isConstantBrakeDistanceEnabled {
-      commonProperties.remove(.brakeDistanceLength)
-      commonProperties.remove(.differentBrakeDistanceBackwards)
-      commonProperties.remove(.brakeDistanceLengthBackwards)
-      commonProperties.remove(.driveUntilLocomotiveStopsInSpecifiedPeriod)
-      commonProperties.remove(.stoppingPeriod)
-      commonProperties.remove(.constantBrakeDistanceOnSpeedStep0)
-    }
+      if !decoder.isDifferentBrakeDistanceBackwards {
+        commonProperties.remove(.brakeDistanceLengthBackwards)
+      }
 
-    if !decoder.isDifferentBrakeDistanceBackwards {
-      commonProperties.remove(.brakeDistanceLengthBackwards)
-    }
+      if !decoder.driveUntilLocomotiveStopsInSpecifiedPeriod {
+        commonProperties.remove(.stoppingPeriod)
+      }
+      
+    case .dccSettings:
+      
+      if !decoder.isRailComFeedbackEnabled {
+        commonProperties.remove(.enableRailComPlusAutomaticAnnouncement)
+        commonProperties.remove(.sendFollowingToCommandStation)
+        commonProperties.remove(.sendAddressViaBroadcastOnChannel1)
+        commonProperties.remove(.allowDataTransmissionOnChannel2)
+      }
+      
+      if decoder.detectSpeedStepModeAutomatically {
+        commonProperties.remove(.speedStepMode)
+      }
+      
+    case .drivingCharacteristics:
+      
+      if !decoder.isAccelerationEnabled {
+        commonProperties.remove(.accelerationRate)
+        commonProperties.remove(.accelerationAdjustment)
+      }
 
-    if !decoder.driveUntilLocomotiveStopsInSpecifiedPeriod {
-      commonProperties.remove(.stoppingPeriod)
-    }
-    
-    if !decoder.isRailComFeedbackEnabled {
-      commonProperties.remove(.enableRailComPlusAutomaticAnnouncement)
-      commonProperties.remove(.sendFollowingToCommandStation)
-      commonProperties.remove(.sendAddressViaBroadcastOnChannel1)
-      commonProperties.remove(.allowDataTransmissionOnChannel2)
-    }
-    
-    if decoder.detectSpeedStepModeAutomatically {
-      commonProperties.remove(.speedStepMode)
-    }
-    
-    if !decoder.isAccelerationEnabled {
-      commonProperties.remove(.accelerationRate)
-      commonProperties.remove(.accelerationAdjustment)
-    }
+      if !decoder.isDecelerationEnabled {
+        commonProperties.remove(.decelerationRate)
+        commonProperties.remove(.decelerationAdjustment)
+      }
+      
+      if !decoder.isForwardTrimEnabled {
+        commonProperties.remove(.forwardTrim)
+      }
 
-    if !decoder.isDecelerationEnabled {
-      commonProperties.remove(.decelerationRate)
-      commonProperties.remove(.decelerationAdjustment)
-    }
-    
-    if !decoder.isForwardTrimEnabled {
-      commonProperties.remove(.forwardTrim)
-    }
+      if !decoder.isReverseTrimEnabled {
+        commonProperties.remove(.reverseTrim)
+      }
 
-    if !decoder.isReverseTrimEnabled {
-      commonProperties.remove(.reverseTrim)
-    }
+      if !decoder.isShuntingModeTrimEnabled {
+        commonProperties.remove(.shuntingModeTrim)
+      }
+    
+      if !decoder.isGearboxBacklashCompensationEnabled {
+        commonProperties.remove(.gearboxBacklashCompensation)
+      }
+      
+    case .functionOutputs:
 
-    if !decoder.isShuntingModeTrimEnabled {
-      commonProperties.remove(.shuntingModeTrim)
-    }
-    
-    if !decoder.isGearboxBacklashCompensationEnabled {
-      commonProperties.remove(.gearboxBacklashCompensation)
-    }
-    
-    if !decoder.isDecoderSynchronizedWithMasterDecoder {
-      commonProperties.remove(.m4MasterDecoderManufacturer)
-      commonProperties.remove(.m4MasterDecoderSerialNumber)
-    }
-    
-    if !decoder.isAutomaticUncouplingEnabled {
-      commonProperties.remove(.automaticUncouplingSpeed)
-      commonProperties.remove(.automaticUncouplingPushTime)
-      commonProperties.remove(.automaticUncouplingWaitTime)
-      commonProperties.remove(.automaticUncouplingMoveTime)
-    }
-    
-    if !decoder.isLoadControlBackEMFEnabled {
-      commonProperties.remove(.regulationReference)
-      commonProperties.remove(.regulationParameterK)
-      commonProperties.remove(.regulationParameterI)
-      commonProperties.remove(.regulationParameterKSlow)
-      commonProperties.remove(.largestInternalSpeedStepThatUsesKSlow)
-      commonProperties.remove(.regulationInfluenceDuringSlowSpeed)
-      commonProperties.remove(.slowSpeedBackEMFSamplingPeriod)
-      commonProperties.remove(.fullSpeedBackEMFSamplingPeriod)
-      commonProperties.remove(.slowSpeedLengthOfMeasurementGap)
-      commonProperties.remove(.fullSpeedLengthOfMeasurementGap)
-    }
-    
-    if !decoder.isMotorCurrentLimiterEnabled {
-      commonProperties.remove(.motorCurrentLimiterLimit)
-    }
-    
-    if decoder.steamChuffMode == .playSteamChuffsAccordingToSpeed {
-      commonProperties.remove(.triggerImpulsesPerSteamChuff)
-      commonProperties.remove(.divideTriggerImpulsesInTwoIfShuntingModeEnabled)
-    }
-    else {
-      commonProperties.remove(.distanceOfSteamChuffsAtSpeedStep1)
-      commonProperties.remove(.steamChuffAdjustmentAtHigherSpeedSteps)
-    }
-    
-    if !decoder.isSecondaryTrimmerEnabled {
-      commonProperties.remove(.secondaryTriggerDistanceReduction)
-    }
-    
-    if !decoder.isMinimumDistanceOfSteamChuffsEnabled {
-      commonProperties.remove(.minimumDistanceofSteamChuffs)
-    }
-    
-    if decoder.soundControlBasis == .accelerationAndBrakeTime {
-      commonProperties.remove(.trainLoadAtLowSpeed)
-      commonProperties.remove(.trainLoadAtHighSpeed)
-      commonProperties.remove(.enableLoadOperationThreshold)
-      commonProperties.remove(.loadOperationThreshold)
-      commonProperties.remove(.loadOperationTriggeredFunction)
-      commonProperties.remove(.enableIdleOperationThreshold)
-      commonProperties.remove(.idleOperationThreshold)
-      commonProperties.remove(.idleOperationTriggeredFunction)
-    }
-    else {
-      if !decoder.isThresholdForLoadOperationEnabled {
+      if !decoder.isFunctionTimeOutEnabled {
+        commonProperties.remove(.physicalOutputTimeUntilAutomaticPowerOff)
+      }
+
+      if !decoder.isClassLightLogicEnabled {
+        commonProperties.remove(.physicalOutputSequencePosition)
+      }
+
+      if !decoder.showPhysicalOutputPropertiesForThisOutput {
+        commonProperties.remove(.physicalOutputLevel)
+        commonProperties.remove(.physicalOutputSpeed)
+        commonProperties.remove(.physicalOutputDimmer)
+        commonProperties.remove(.physicalOutputTimeout)
+        commonProperties.remove(.physicalOutputBrightness)
+        commonProperties.remove(.physicalOutputLEDMode)
+        commonProperties.remove(.physicalOutputFanPower)
+        commonProperties.remove(.physicalOutputChuffPower)
+        commonProperties.remove(.physicalOutputOutputMode)
+        commonProperties.remove(.physicalOutputPhaseShift)
+        commonProperties.remove(.physicalOutputStartupTime)
+        commonProperties.remove(.physicalOutputCouplerForce)
+        commonProperties.remove(.physicalOutputGradeCrossing)
+        commonProperties.remove(.physicalOutputRule17Forward)
+        commonProperties.remove(.physicalOutputRule17Reverse)
+        commonProperties.remove(.physicalOutputAccelerationRate)
+        commonProperties.remove(.physicalOutputDecelerationRate)
+        commonProperties.remove(.physicalOutputSequencePosition)
+        commonProperties.remove(.physicalOutputSpecialFunctions)
+        commonProperties.remove(.physicalOutputStartupDescription)
+        commonProperties.remove(.physicalOutputPowerOnDelay)
+        commonProperties.remove(.physicalOutputPowerOffDelay)
+        commonProperties.remove(.physicalOutputServoDurationA)
+        commonProperties.remove(.physicalOutputServoDurationB)
+        commonProperties.remove(.physicalOutputServoPositionA)
+        commonProperties.remove(.physicalOutputServoPositionB)
+        commonProperties.remove(.physicalOutputStartupTimeInfo)
+        commonProperties.remove(.physicalOutputEnableFunctionTimeout)
+        commonProperties.remove(.physicalOutputUseClassLightLogic)
+        commonProperties.remove(.physicalOutputSmokeUnitControlMode)
+        commonProperties.remove(.physicalOutputExternalSmokeUnitType)
+        commonProperties.remove(.physicalOutputHeatWhileLocomotiveStands)
+        commonProperties.remove(.physicalOutputTimeUntilAutomaticPowerOff)
+        commonProperties.remove(.physicalOutputMaximumHeatWhileLocomotiveDriving)
+        commonProperties.remove(.physicalOutputMinimumHeatWhileLocomotiveDriving)
+        commonProperties.remove(.physicalOutputServoDoNotDisableServoPulseAtPositionA)
+        commonProperties.remove(.physicalOutputServoDoNotDisableServoPulseAtPositionB)
+      }
+      
+    case .functionSettings:
+      
+      if !decoder.isAutomaticUncouplingEnabled {
+        commonProperties.remove(.automaticUncouplingSpeed)
+        commonProperties.remove(.automaticUncouplingPushTime)
+        commonProperties.remove(.automaticUncouplingWaitTime)
+        commonProperties.remove(.automaticUncouplingMoveTime)
+      }
+      
+    case .functionMapping:
+      break
+      
+    case .identification:
+      break
+      
+    case .compatibility:
+      
+      if !decoder.isSUSIMasterEnabled {
+        commonProperties.remove(.susiWarning)
+      }
+      
+    case .motorSettings:
+      
+      if !decoder.isLoadControlBackEMFEnabled {
+        commonProperties.remove(.regulationReference)
+        commonProperties.remove(.regulationParameterK)
+        commonProperties.remove(.regulationParameterI)
+        commonProperties.remove(.regulationParameterKSlow)
+        commonProperties.remove(.largestInternalSpeedStepThatUsesKSlow)
+        commonProperties.remove(.regulationInfluenceDuringSlowSpeed)
+        commonProperties.remove(.slowSpeedBackEMFSamplingPeriod)
+        commonProperties.remove(.fullSpeedBackEMFSamplingPeriod)
+        commonProperties.remove(.slowSpeedLengthOfMeasurementGap)
+        commonProperties.remove(.fullSpeedLengthOfMeasurementGap)
+      }
+      
+      if !decoder.isMotorCurrentLimiterEnabled {
+        commonProperties.remove(.motorCurrentLimiterLimit)
+      }
+      
+    case .smokeUnit:
+      break
+      
+    case .specialOptions:
+      
+      if !decoder.isDecoderSynchronizedWithMasterDecoder {
+        commonProperties.remove(.m4MasterDecoderManufacturer)
+        commonProperties.remove(.m4MasterDecoderSerialNumber)
+      }
+      
+    case .soundSettings:
+      
+      if decoder.steamChuffMode == .playSteamChuffsAccordingToSpeed {
+        commonProperties.remove(.triggerImpulsesPerSteamChuff)
+        commonProperties.remove(.divideTriggerImpulsesInTwoIfShuntingModeEnabled)
+      }
+      else {
+        commonProperties.remove(.distanceOfSteamChuffsAtSpeedStep1)
+        commonProperties.remove(.steamChuffAdjustmentAtHigherSpeedSteps)
+      }
+      
+      if !decoder.isSecondaryTrimmerEnabled {
+        commonProperties.remove(.secondaryTriggerDistanceReduction)
+      }
+      
+      if !decoder.isMinimumDistanceOfSteamChuffsEnabled {
+        commonProperties.remove(.minimumDistanceofSteamChuffs)
+      }
+      
+      if decoder.soundControlBasis == .accelerationAndBrakeTime {
+        commonProperties.remove(.trainLoadAtLowSpeed)
+        commonProperties.remove(.trainLoadAtHighSpeed)
+        commonProperties.remove(.enableLoadOperationThreshold)
         commonProperties.remove(.loadOperationThreshold)
         commonProperties.remove(.loadOperationTriggeredFunction)
-      }
-      if !decoder.isThresholdForIdleOperationEnabled {
+        commonProperties.remove(.enableIdleOperationThreshold)
         commonProperties.remove(.idleOperationThreshold)
         commonProperties.remove(.idleOperationTriggeredFunction)
       }
+      else {
+        if !decoder.isThresholdForLoadOperationEnabled {
+          commonProperties.remove(.loadOperationThreshold)
+          commonProperties.remove(.loadOperationTriggeredFunction)
+        }
+        if !decoder.isThresholdForIdleOperationEnabled {
+          commonProperties.remove(.idleOperationThreshold)
+          commonProperties.remove(.idleOperationTriggeredFunction)
+        }
+      }
+      
+    case .soundSlotSettings:
+      break
+      
+    default:
+      break
     }
     
-    if !decoder.isSUSIMasterEnabled {
-      commonProperties.remove(.susiWarning)
-    }
+    let timeMiddle = Date.timeIntervalSinceReferenceDate
     
-    if decoder.getPhysicalOutputValue(property: .physicalOutputTimeUntilAutomaticPowerOff)! == 0 {
-      commonProperties.remove(.physicalOutputTimeUntilAutomaticPowerOff)
-    }
-
-    if decoder.getPhysicalOutputValue(property: .physicalOutputSequencePosition)! == 0 {
-      commonProperties.remove(.physicalOutputSequencePosition)
-    }
-
     var usedFields : [ProgrammerToolSettingsPropertyField] = []
     
     if let startIndex = settingsGroupStartIndex[currentSelector] {
@@ -1120,7 +1196,7 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
               
               let field = settingsFields[index]
               
-              if commonProperties.contains(field.property), let view = field.view, let cvLabel = field.cvLabel {
+              if commonProperties.contains(field.property), let view = field.view {
                 
                 if showGroupHeader {
                   stackView.addArrangedSubview(settingsGroupFields[group]!.view!)
@@ -1130,12 +1206,10 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
                 
                 stackView.addArrangedSubview(view)
                 
-                if field.property.controlType == .description {
-                  cvLabel.stringValue = ""
+                if let cvLabel = field.cvLabel, let label = field.property.cvLabel(decoder: decoder) {
+                  cvLabel.stringValue = label
                 }
-                else {
-                  cvLabel.stringValue = decoder.isPhysicalOutputProperty(property: field.property) ? decoder.physicalOutputCVLabel(property: field.property) : field.property.cvLabel
-                }
+                
                 /// Note to self: Views within a StackView must not have constraints to the outside world as this will lock the StackView size.
                 /// They must only have internal constraints to the view that is added to the StackView.
                 ///  https://manasaprema04.medium.com/autolayout-fundamental-522f0a6e5790
@@ -1230,9 +1304,11 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
                     }
                   }
                   
-                  settingsPropertyConstraints.append(cvLabel.topAnchor.constraint(equalTo: customView.topAnchor))
-                  settingsPropertyConstraints.append(view.trailingAnchor.constraint(equalToSystemSpacingAfter: cvLabel.trailingAnchor, multiplier: 1.0))
-                  settingsPropertyConstraints.append(cvLabel.leadingAnchor.constraint(greaterThanOrEqualToSystemSpacingAfter: customView.trailingAnchor, multiplier: 1.0))
+                  if let cvLabel = field.cvLabel {
+                    settingsPropertyConstraints.append(cvLabel.topAnchor.constraint(equalTo: customView.topAnchor))
+                    settingsPropertyConstraints.append(view.trailingAnchor.constraint(equalToSystemSpacingAfter: cvLabel.trailingAnchor, multiplier: 1.0))
+                    settingsPropertyConstraints.append(cvLabel.leadingAnchor.constraint(greaterThanOrEqualToSystemSpacingAfter: customView.trailingAnchor, multiplier: 1.0))
+                  }
                   
                 }
                 else if field.property.controlType == .esuSpeedTable, let customView = field.customView {
@@ -1240,9 +1316,11 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
                   settingsPropertyConstraints.append(customView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20))
                   settingsPropertyConstraints.append(view.trailingAnchor.constraint(greaterThanOrEqualTo: customView.trailingAnchor))
                   settingsPropertyConstraints.append(view.bottomAnchor.constraint(greaterThanOrEqualTo: customView.bottomAnchor))
-                  settingsPropertyConstraints.append(cvLabel.topAnchor.constraint(equalTo: customView.topAnchor))
-                  settingsPropertyConstraints.append(view.trailingAnchor.constraint(equalToSystemSpacingAfter: cvLabel.trailingAnchor, multiplier: 1.0))
-                  settingsPropertyConstraints.append(cvLabel.leadingAnchor.constraint(greaterThanOrEqualToSystemSpacingAfter: customView.trailingAnchor, multiplier: 1.0))
+                  if let cvLabel = field.cvLabel {
+                    settingsPropertyConstraints.append(cvLabel.topAnchor.constraint(equalTo: customView.topAnchor))
+                    settingsPropertyConstraints.append(view.trailingAnchor.constraint(equalToSystemSpacingAfter: cvLabel.trailingAnchor, multiplier: 1.0))
+                    settingsPropertyConstraints.append(cvLabel.leadingAnchor.constraint(greaterThanOrEqualToSystemSpacingAfter: customView.trailingAnchor, multiplier: 1.0))
+                  }
                   settingsPropertyConstraints.append(customView.heightAnchor.constraint(equalToConstant: 400))
                   settingsPropertyConstraints.append(customView.widthAnchor.constraint(equalToConstant: 600))
                   (customView as? ESUSpeedTable)?.decoder = decoder
@@ -1250,11 +1328,12 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
                 else if let control = field.control {
                   
                   settingsPropertyConstraints.append(view.bottomAnchor.constraint(greaterThanOrEqualTo: control.bottomAnchor))
-                  settingsPropertyConstraints.append(cvLabel.topAnchor.constraint(equalTo: control.topAnchor))
-                  settingsPropertyConstraints.append(view.bottomAnchor.constraint(greaterThanOrEqualTo: cvLabel.bottomAnchor))
-                  settingsPropertyConstraints.append(cvLabel.leadingAnchor.constraint(greaterThanOrEqualToSystemSpacingAfter: control.trailingAnchor, multiplier: 1.0))
-                  settingsPropertyConstraints.append(view.trailingAnchor.constraint(equalToSystemSpacingAfter: cvLabel.trailingAnchor, multiplier: 1.0))
-                  
+                  if let cvLabel = field.cvLabel {
+                    settingsPropertyConstraints.append(cvLabel.topAnchor.constraint(equalTo: control.topAnchor))
+                    settingsPropertyConstraints.append(view.bottomAnchor.constraint(greaterThanOrEqualTo: cvLabel.bottomAnchor))
+                    settingsPropertyConstraints.append(cvLabel.leadingAnchor.constraint(greaterThanOrEqualToSystemSpacingAfter: control.trailingAnchor, multiplier: 1.0))
+                    settingsPropertyConstraints.append(view.trailingAnchor.constraint(equalToSystemSpacingAfter: cvLabel.trailingAnchor, multiplier: 1.0))
+                  }
                   if let slider = field.slider, let control = field.control {
                     settingsPropertyConstraints.append(slider.centerYAnchor.constraint(equalTo: control.centerYAnchor))
                     settingsPropertyConstraints.append(view.bottomAnchor.constraint(greaterThanOrEqualTo: slider.bottomAnchor))
@@ -1267,7 +1346,9 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
                       settingsPropertyConstraints.append(customView.centerYAnchor.constraint(equalTo: control.centerYAnchor))
                     }
                     settingsPropertyConstraints.append(view.bottomAnchor.constraint(greaterThanOrEqualTo: customView.bottomAnchor))
-                    settingsPropertyConstraints.append(cvLabel.leadingAnchor.constraint(greaterThanOrEqualToSystemSpacingAfter: customView.trailingAnchor, multiplier: 1.0))
+                    if let cvLabel = field.cvLabel {
+                      settingsPropertyConstraints.append(cvLabel.leadingAnchor.constraint(greaterThanOrEqualToSystemSpacingAfter: customView.trailingAnchor, multiplier: 1.0))
+                    }
                   }
                   
                   switch field.property.controlType {
@@ -1284,23 +1365,14 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
                       settingsPropertyConstraints.append(customView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20))
                       settingsPropertyConstraints.append(control.leadingAnchor.constraint(equalToSystemSpacingAfter: customView.trailingAnchor, multiplier: 1.0))
                     }
-                  case .textFieldWithInfo:
-                    if let customView = field.customView {
-                      settingsPropertyConstraints.append(control.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20))
-                      settingsPropertyConstraints.append(control.widthAnchor.constraint(equalToConstant: 100))
-                      settingsPropertyConstraints.append(customView.leadingAnchor.constraint(equalToSystemSpacingAfter: control.trailingAnchor, multiplier: 1.0))
-                    }
-                  case .textFieldWithInfoWithSlider:
-                    if let customView = field.customView, let slider = field.slider {
-                      settingsPropertyConstraints.append(control.leadingAnchor.constraint(equalToSystemSpacingAfter: slider.trailingAnchor, multiplier: 1.0))
-                      settingsPropertyConstraints.append(control.widthAnchor.constraint(equalToConstant: 100))
-                      settingsPropertyConstraints.append(customView.leadingAnchor.constraint(equalToSystemSpacingAfter: control.trailingAnchor, multiplier: 1.0))
-                    }
-                    
                   default:
                     settingsPropertyConstraints.append(control.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20))
                     settingsPropertyConstraints.append(control.widthAnchor.constraint(greaterThanOrEqualToConstant: 100))
                     settingsPropertyConstraints.append(view.trailingAnchor.constraint(greaterThanOrEqualTo: control.trailingAnchor))
+                  }
+                  
+                  if let customView = field.customView, field.property.definition.infoType != .none {
+                    settingsPropertyConstraints.append(customView.leadingAnchor.constraint(equalToSystemSpacingAfter: control.trailingAnchor, multiplier: 1.0))
                   }
                   
                 }
@@ -1344,6 +1416,9 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
     
     NSLayoutConstraint.activate(settingsPropertyConstraints)
     
+    let timeEnd = Date.timeIntervalSinceReferenceDate
+    
+    debugLog("\(timeMiddle - timeStart) \(timeEnd - timeMiddle)")
   }
 
   private func setValue(field:ProgrammerToolSettingsPropertyField) {
@@ -1352,25 +1427,31 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
       return
     }
     
-    let value = decoder.getValue(property: field.property)
+    let definition = field.property.definition
+    
+    if definition.encoding == .none {
+      return
+    }
+    
+    let value = decoder.getValue(property: field.property, propertyDefinition: definition)
     
     if let slider = field.slider {
       slider.intValue = Int32(value)!
     }
     
     switch field.property.controlType {
-    case .textField, .textFieldWithInfo, .textFieldWithSlider, .textFieldWithInfoWithSlider:
+    case .textField, .textFieldWithSlider:
       (field.control as? NSTextField)?.stringValue = value
-      if field.property.controlType == .textFieldWithInfo || field.property.controlType == .textFieldWithInfoWithSlider {
-        (field.customView as? NSTextField)?.stringValue = decoder.getInfo(property: field.property)
+      if definition.infoType != .none {
+        (field.customView as? NSTextField)?.stringValue = decoder.getInfo(property: field.property, propertyDefinition: definition)
       }
     case .functionsConsistMode, .functionsAnalogMode, .esuSpeedTable:
       break
-    case .label, .warning, .description:
+    case .label:
       (field.control as? NSTextField)?.stringValue = value
     case .checkBox:
       (field.control as? NSButton)?.state = value == "true" ? .on : .off
-    case .comboBox:
+    case .comboBox, .comboBoxDynamic:
       
       if let comboBox = field.control as? NSComboBox {
         
