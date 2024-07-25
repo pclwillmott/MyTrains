@@ -122,6 +122,7 @@
 		DA51FB9C29D88320002CAAC1 /* LCCCANFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA51FB9B29D88320002CAAC1 /* LCCCANFrame.swift */; };
 		DA51FB9E29D8921B002CAAC1 /* OpenLCBCANFrameType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA51FB9D29D8921B002CAAC1 /* OpenLCBCANFrameType.swift */; };
 		DA5225F92B307B09005DCBF4 /* MultiTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5225F82B307B09005DCBF4 /* MultiTabView.swift */; };
+		DA52B60E2C5261E200A46549 /* PTSettingsPropertyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA52B60D2C5261E200A46549 /* PTSettingsPropertyView.swift */; };
 		DA5550EA28392A6B00C4FE4E /* DigitraxProductCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5550E928392A6B00C4FE4E /* DigitraxProductCode.swift */; };
 		DA5563D82B499C4600D8BF90 /* CDITextViewVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5563D72B499C4600D8BF90 /* CDITextViewVC.swift */; };
 		DA56260D29E1A13300D465CC /* OpenLCBTransportLayerState.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA56260C29E1A13300D465CC /* OpenLCBTransportLayerState.swift */; };
@@ -604,6 +605,7 @@
 		DA51FB9B29D88320002CAAC1 /* LCCCANFrame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCCCANFrame.swift; sourceTree = "<group>"; };
 		DA51FB9D29D8921B002CAAC1 /* OpenLCBCANFrameType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBCANFrameType.swift; sourceTree = "<group>"; };
 		DA5225F82B307B09005DCBF4 /* MultiTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiTabView.swift; sourceTree = "<group>"; };
+		DA52B60D2C5261E200A46549 /* PTSettingsPropertyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSettingsPropertyView.swift; sourceTree = "<group>"; };
 		DA5550E928392A6B00C4FE4E /* DigitraxProductCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DigitraxProductCode.swift; sourceTree = "<group>"; };
 		DA5563D72B499C4600D8BF90 /* CDITextViewVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CDITextViewVC.swift; sourceTree = "<group>"; };
 		DA56260C29E1A13300D465CC /* OpenLCBTransportLayerState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBTransportLayerState.swift; sourceTree = "<group>"; };
@@ -1146,6 +1148,14 @@
 			path = SoftUIntX;
 			sourceTree = "<group>";
 		};
+		DA52B60C2C5261B800A46549 /* Property Views */ = {
+			isa = PBXGroup;
+			children = (
+				DA52B60D2C5261E200A46549 /* PTSettingsPropertyView.swift */,
+			);
+			path = "Property Views";
+			sourceTree = "<group>";
+		};
 		DA57A6E72A449669005C72B0 /* _types */ = {
 			isa = PBXGroup;
 			children = (
@@ -1325,6 +1335,7 @@
 		DA7B2D002B2F470600327281 /* Programmer Tool */ = {
 			isa = PBXGroup;
 			children = (
+				DA52B60C2C5261B800A46549 /* Property Views */,
 				DA8C2B152C3852C3001755AB /* Decoder */,
 				DA8C2A802C3850C8001755AB /* CV EXPORTS */,
 				DAAC7E942A7966EE001A424E /* ProgrammerTool.storyboard */,
@@ -2261,6 +2272,7 @@
 				DAB07498276EB6C3003278BE /* Sqlite.swift in Sources */,
 				DA9325A8289C04CE00CC317F /* LocoNetSlotState.swift in Sources */,
 				DA9552262B45CE32002477B9 /* CDIDataViewDelegate.swift in Sources */,
+				DA52B60E2C5261E200A46549 /* PTSettingsPropertyView.swift in Sources */,
 				DA8A28662A34F0E8006AE024 /* OpenLCBEnabledDisabledState.swift in Sources */,
 				DA8B5D19282FDE1800D39F07 /* ProgrammerMode.swift in Sources */,
 				DABD4F342A3C9B1B000A25AB /* LocoNetMessageType.swift in Sources */,

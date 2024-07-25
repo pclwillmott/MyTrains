@@ -78,10 +78,23 @@ public class Decoder : NSObject {
   
   private var _cvsModified : [(cv: CV, value:UInt8)]?
   
+  private var physicalOutputProperties : [PTSettingsPropertyView] = []
+  
   // MARK: Public Properties
   
   public var decoderType : DecoderType {
     return _decoderType
+  }
+  
+  public var propertyViews : [PTSettingsPropertyView] = [] {
+    didSet {
+      for view in propertyViews {
+        if view.indexingMethod == .esuDecoderPhysicalOutput {
+          physicalOutputProperties.append(view)
+        }
+        view.decoder = self
+      }
+    }
   }
   
   public var cvList : CVList {
@@ -419,7 +432,13 @@ public class Decoder : NSObject {
     }
   }
   
-  private var _esuDecoderPhysicalOutput : ESUDecoderPhysicalOutput = .frontLight
+  private var _esuDecoderPhysicalOutput : ESUDecoderPhysicalOutput = .frontLight {
+    didSet {
+      for view in physicalOutputProperties {
+        view.reload()
+      }
+    }
+  }
   
   public var esuDecoderPhysicalOutput : ESUDecoderPhysicalOutput { // *** KEEP ***
     get {
@@ -703,14 +722,14 @@ public class Decoder : NSObject {
     
   }
   
-  public func getValue(property:ProgrammerToolSettingsProperty, propertyDefinition : ProgrammerToolSettingsPropertyDefinition? = nil) -> String {
+  public func getValue(property:ProgrammerToolSettingsProperty, definition : ProgrammerToolSettingsPropertyDefinition? = nil) -> String {
     
     let excludedEncodings : Set<ProgrammerToolEncodingType> = [
       .custom,
       .none,
     ]
     
-    guard let definition = propertyDefinition == nil ? ProgrammerToolSettingsProperty.definitions[property] : propertyDefinition, !excludedEncodings.contains(definition.encoding) else {
+    guard let definition = definition ?? ProgrammerToolSettingsProperty.definitions[property], !excludedEncodings.contains(definition.encoding) else {
       return ""
     }
     
@@ -773,9 +792,9 @@ public class Decoder : NSObject {
 
   let formatter = NumberFormatter()
   
-  public func getInfo(property:ProgrammerToolSettingsProperty, propertyDefinition:ProgrammerToolSettingsPropertyDefinition? = nil) -> String {
+  public func getInfo(property:ProgrammerToolSettingsProperty, definition:ProgrammerToolSettingsPropertyDefinition? = nil) -> String {
 
-    guard let definition = propertyDefinition == nil ? ProgrammerToolSettingsProperty.definitions[property] : propertyDefinition, definition.infoType != .none, let maximumFractionDigits = definition.infoMaxDecimalPlaces, let infoFactor = definition.infoFactor, let appNode else {
+    guard let definition = definition ?? ProgrammerToolSettingsProperty.definitions[property], definition.infoType != .none, let maximumFractionDigits = definition.infoMaxDecimalPlaces, let infoFactor = definition.infoFactor, let appNode else {
       return ""
     }
 
@@ -832,9 +851,9 @@ public class Decoder : NSObject {
         
   }
   
-  public func isValid(property:ProgrammerToolSettingsProperty, string:String) -> Bool {
+  public func isValid(property:ProgrammerToolSettingsProperty, string:String, definition:ProgrammerToolSettingsPropertyDefinition? = nil) -> Bool {
     
-    guard let definition = ProgrammerToolSettingsProperty.definitions[property], let maxValue = definition.maxValue, let minValue = definition.minValue else {
+    guard let definition = definition ?? ProgrammerToolSettingsProperty.definitions[property], let maxValue = definition.maxValue, let minValue = definition.minValue else {
       return true
     }
     
@@ -853,14 +872,14 @@ public class Decoder : NSObject {
     
   }
   
-  public func setValue(property: ProgrammerToolSettingsProperty, string: String) {
+  public func setValue(property: ProgrammerToolSettingsProperty, string: String, definition:ProgrammerToolSettingsPropertyDefinition? = nil) {
  
     let excludedEncodings : Set<ProgrammerToolEncodingType> = [
       .custom,
       .none,
     ]
     
-    guard let definition = ProgrammerToolSettingsProperty.definitions[property], !excludedEncodings.contains(definition.encoding) else {
+    guard let definition = definition ?? ProgrammerToolSettingsProperty.definitions[property], !excludedEncodings.contains(definition.encoding) else {
       return
     }
     
@@ -940,8 +959,6 @@ public class Decoder : NSObject {
       
       if values != newValues {
         setProperty(property: property, values: newValues, propertyDefinition: definition)
-        
-        delegate?.reloadSettings?(self)
         
       }
       

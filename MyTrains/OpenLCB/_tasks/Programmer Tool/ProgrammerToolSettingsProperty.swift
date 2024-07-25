@@ -369,6 +369,28 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
   
   // MARK: Public Class Properties
   
+  public static var propertyViews : [PTSettingsPropertyView] {
+    
+    var result : [PTSettingsPropertyView] = []
+    
+    for property in ProgrammerToolSettingsProperty.allCases {
+      
+      if let definition = ProgrammerToolSettingsProperty.definitions[property] {
+        
+        let view = PTSettingsPropertyView()
+        
+        view.initialize(property: property, definition: definition)
+        
+        result.append(view)
+        
+      }
+    }
+    
+    return result
+    
+  }
+  
+  
   public static var inspectorPropertyFields: [ProgrammerToolSettingsPropertyField] {
     
     var result : [ProgrammerToolSettingsPropertyField] = []

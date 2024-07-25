@@ -91,6 +91,8 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
   internal var inspectorFields : [ProgrammerToolInspectorPropertyField] = []
 
   internal var settingsFields : [ProgrammerToolSettingsPropertyField] = []
+  
+  internal var propertyViews : [PTSettingsPropertyView] = []
 
   internal var settingsGroupFields : [ProgrammerToolSettingsSection:ProgrammerToolSettingsSectionField] = [:]
   
@@ -169,237 +171,7 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
     
     decoder = Decoder(decoderType: .lokSound5)
     decoder?.delegate = self
-   
-    /*
-    // MARK: START TEMPORARY - REMOVE BEFORE FLIGHT
-    
-    var group : ProgrammerToolSettingsGroup?
-    
-    var section : ProgrammerToolSettingsSection?
-    
-    print("  private static let definitions : [ProgrammerToolSettingsProperty : ProgrammerToolSettingsPropertyDefinition] = [\n")
 
-    for property in ProgrammerToolSettingsProperty.allCases {
-      
-      if group != property.section.inspector {
-        group = property.section.inspector
-        print("    // MARK: \(group!.title)\n")
-      }
- 
-      if section != property.section {
-        section = property.section
-        print("    // \(section!.title)\n")
-      }
-
-      var item = ""
-      
-      var controlType = property.controlType
-      
-      var infoType : ProgrammerToolInfoType = .none
-
-      var encoding : ProgrammerToolEncodingType = .byte
-
-      switch controlType {
-      case .textFieldWithInfo:
-        infoType = .value
-        controlType = .textField
-      case .textFieldWithInfoWithSlider:
-        infoType = .value
-        controlType = .textFieldWithSlider
-      case .warning, .description:
-        encoding = .none
-      default:
-        break
-      }
-      
-      var minValue = "nil"
-      var maxValue = "nil"
-      
-      if controlType == .textField || controlType == .textFieldWithSlider {
-        minValue = "\(property.minValue)"
-        maxValue = "\(property.maxValue)"
-      }
-      
-      var cv = "nil"
-      var mask = "nil"
-      var shift = "nil"
-      var indexingMethod = "nil"
-      
-      if controlType != .warning && controlType != .description {
-        
-        if let info = decoder?.physicalOutputCVs[property] {
-          
-          cv = "[.\(info.cv)]"
-          
-          mask = "[0b" + info.mask.toBinary(numberOfDigits: 8) + "]"
-          
-          if info.mask == 0 {
-            item += "*** WARNING MASK IS ZERO ***"
-          }
-          
-          shift = "[\(info.shift)]"
-          
-          indexingMethod = ".esuDecoderPhysicalOutput"
-          
-          if controlType == .checkBox {
-            var numberOfBits = 0
-            var temp : UInt8 = ByteMask.d7
-            while temp != 0 {
-              if (info.mask & temp) == temp {
-                numberOfBits += 1
-              }
-              temp >>= 1
-            }
-            encoding = (numberOfBits == 1) ? .boolBit : .boolNZ
-          }
-          
-        }
-        else {
-          
-          var multipleCVs = false
-          
-          var cvLabel = property.cvLabel.trimmingCharacters(in: .whitespaces)
-          
-          if !cvLabel.isEmpty {
-            
-            cvLabel.removeFirst()
-            cvLabel.removeLast()
-            
-            let split = cvLabel.split(separator: ",")
-            
-            cv = ""
-            mask = ""
-            shift = ""
-            
-            multipleCVs = split.count > 1
-            
-            if split[0].contains("to") {
-              let split2 = split[0].split(separator: " ")
-              var cv1 = split2[0].trimmingCharacters(in: .whitespaces)
-              var cv2 = split2[2].trimmingCharacters(in: .whitespaces)
-              cv1.removeFirst(2)
-              cv2.removeFirst(2)
-              for index in (Int(cv1)! - 1) ... (Int(cv2)! - 1) {
-                let nextCV = CV.cv_000_000_001 + index
-                if cv != "" {
-                  cv += ", "
-                  mask += ", "
-                  shift += ", "
-                }
-                cv += ".\(nextCV)"
-                mask += "0xff"
-                shift += "0"
-              }
-              encoding = .custom
-            }
-            else {
-              
-              for item in split {
-                
-                var label = item.trimmingCharacters(in: .whitespaces)
-                
-                if label.contains(".") {
-                  
-                  let split = label.split(separator: ".")
-                  var temp = split[0].trimmingCharacters(in: .whitespaces)
-                  temp.removeFirst(2)
-                  let nextCV = CV.cv_000_000_001 + (Int(temp)! - 1)
-                  if cv != "" {
-                    cv += ", "
-                  }
-                  cv += ".\(nextCV)"
-                  
-                  let split2 = split[1].split(separator: ":")
-                  
-                  let firstBit = UInt8(split2[0].trimmingCharacters(in: .whitespaces))!
-                  var lastBit = firstBit
-                  if split2.count == 2 {
-                    lastBit = UInt8(split2[1].suffix(1))!
-                  }
-                  var newMask : UInt8 = 0
-                  for maskBit in lastBit ... firstBit {
-                    newMask |= 1 << maskBit
-                  }
-                  if mask != "" {
-                    mask += ", "
-                    shift += ", "
-                  }
-                  mask += "0b\(newMask.toBinary(numberOfDigits: 8))"
-                  shift += "0"
-                  if controlType == .checkBox {
-                    encoding = (lastBit == firstBit) ? .boolBit : .boolNZ
-                  }
-                }
-                else {
-                  label.removeFirst(2)
-                  let nextCV = CV.cv_000_000_001 + (Int(label)! - 1)
-                  if cv != "" {
-                    cv += ", "
-                    mask += ", "
-                    shift += ", "
-                  }
-                  cv += ".\(nextCV)"
-                  mask += "0xff"
-                  shift += "0"
-                  if controlType == .checkBox {
-                    encoding = .boolNZ
-                  }
-
-                }
-                
-              }
-            }
-            
-            cv = "[\(cv)]"
-            mask = "[\(mask)]"
-            shift = "[\(shift)]"
-            
-            if multipleCVs {
-              encoding = .custom
-            }
- 
-          }
-          
-        }
-        
-      }
-      
-      if cv != "nil" && indexingMethod == "nil" {
-        indexingMethod = ".standard"
-      }
-      
-      if controlType == .comboBox {
- //       encoding = .esuTRAP
-      }
-      
-      item += "    .\(property) : (\n"
-      item += "      title                : \"\(property.label.replacingOccurrences(of: "\"", with: "\\\""))\",\n"
-      item += "      section              : .\(property.section),\n"
-      item += "      controlType          : .\(controlType),\n"
-      item += "      encoding             : .\(encoding),\n"
-      item += "      cvIndexingMethod     : \(indexingMethod),\n"
-      item += "      cv                   : \(cv),\n"
-      item += "      mask                 : \(mask),\n"
-      item += "      shift                : \(shift),\n"
-      item += "      minValue             : \(minValue),\n"
-      item += "      maxValue             : \(maxValue),\n"
-      item += "      trueDefaultValue     : \(encoding == .boolNZ ? "1" : "nil"),\n"
-      item += "      infoType             : .\(infoType),\n"
-      item += "      infoFactor           : \(infoType != .none ? "1.0" : "nil"),\n"
-      item += "      infoMaxDecimalPlaces : \(infoType != .none ? "2" : "nil"),\n"
-      item += "      infoFormat           : nil,\n"
-      item += "      requiredCapabilities : []\n"
-      item += "    ),\n"
-      
-      print(item)
-      
-    }
-    
-    print("  ]")
-
-    // MARK: END TEMPORARY - REMOVE BEFORE FLIGHT
-*/
-    
     observerId = appNode.addObserver(observer: self)
     
     // Selection Section
@@ -642,6 +414,9 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
       }
     }
     
+    propertyViews = ProgrammerToolSettingsProperty.propertyViews
+
+    /*
     settingsFields = ProgrammerToolSettingsProperty.inspectorPropertyFields
     
     var lastGroup : ProgrammerToolSettingsGroup?
@@ -684,7 +459,8 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
       button.tag = Int(item.rawValue)
       chkAnalogModeFunctions.append(button)
     }
-
+*/
+    
     settingsGroupFields = ProgrammerToolSettingsSection.inspectorSectionFields
     
     settingsGroupSeparators = ProgrammerToolSettingsSection.inspectorSectionSeparators
@@ -703,6 +479,10 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
     
     displayInspector()
     
+  }
+  
+  override func viewDidAppear() {
+    decoder?.propertyViews = propertyViews
   }
   
   // MARK: Private Properties
@@ -898,9 +678,61 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
 
   internal func displaySettingsInspector() {
     
-    guard let decoder, let appNode else {
+    guard let decoder else {
       return
     }
+    
+    var index = 0
+    
+    while index < propertyViews.count {
+
+      let propertyView = propertyViews[index]
+      
+      let group = propertyView.group
+      
+      let hostView = pnlSettingsView[group.rawValue]
+
+      if let stackView = (hostView as? ScrollVerticalStackView)?.stackView {
+        
+        stackView.alignment = .left
+        
+        while index < propertyViews.count && propertyViews[index].group == group {
+          
+          let section = propertyViews[index].section
+          
+          var showGroupHeader = true
+          var showGroupSeparator = false
+          
+          while index < propertyViews.count && propertyViews[index].section == section {
+            
+            let propertyView = propertyViews[index]
+            
+            if showGroupHeader {
+              stackView.addArrangedSubview(settingsGroupFields[section]!.view!)
+              showGroupHeader = false
+              showGroupSeparator = true
+            }
+            
+            stackView.addArrangedSubview(propertyView)
+            
+            propertyView.activateConstraints()
+            
+            index += 1
+            
+          }
+ 
+          if showGroupSeparator {
+            stackView.addArrangedSubview(settingsGroupSeparators[section]!.view!)
+          }
+
+        }
+        
+      }
+      
+    }
+    
+
+    return
     
     let timeStart = Date.timeIntervalSinceReferenceDate
     
@@ -1206,6 +1038,7 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
                 
                 stackView.addArrangedSubview(view)
                 
+                
                 if let cvLabel = field.cvLabel, let label = field.property.cvLabel(decoder: decoder) {
                   cvLabel.stringValue = label
                 }
@@ -1433,7 +1266,7 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
       return
     }
     
-    let value = decoder.getValue(property: field.property, propertyDefinition: definition)
+    let value = decoder.getValue(property: field.property, definition: definition)
     
     if let slider = field.slider {
       slider.intValue = Int32(value)!
@@ -1443,7 +1276,7 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
     case .textField, .textFieldWithSlider:
       (field.control as? NSTextField)?.stringValue = value
       if definition.infoType != .none {
-        (field.customView as? NSTextField)?.stringValue = decoder.getInfo(property: field.property, propertyDefinition: definition)
+        (field.customView as? NSTextField)?.stringValue = decoder.getInfo(property: field.property, definition: definition)
       }
     case .functionsConsistMode, .functionsAnalogMode, .esuSpeedTable:
       break
