@@ -34,6 +34,10 @@ public class PTSettingsPropertyView : NSView, NSTextFieldDelegate {
     
     info = nil
     
+    image = nil
+    
+    speedTable = nil
+    
   }
   
   // MARK: Controls
@@ -52,6 +56,10 @@ public class PTSettingsPropertyView : NSView, NSTextFieldDelegate {
   
   private var info : NSTextField?
   
+  private var image : NSImageView?
+  
+  private var speedTable : ESUSpeedTable?
+  
   // MARK: Private Properties
   
   private var _property : ProgrammerToolSettingsProperty?
@@ -68,9 +76,29 @@ public class PTSettingsPropertyView : NSView, NSTextFieldDelegate {
   
   private var viewConstraints : [NSLayoutConstraint] = []
   
+  private var _isExtant = true
+  
   // MARK: Internal Properties
   
   // MARK: Public Properties
+  
+  public override var isHidden : Bool {
+    get {
+      return super.isHidden
+    }
+    set(value) {
+      super.isHidden = value || !isExtant
+    }
+  }
+  
+  public var isExtant : Bool {
+    get {
+      return _isExtant
+    }
+    set(value) {
+      _isExtant = value
+    }
+  }
   
   public var property : ProgrammerToolSettingsProperty {
     get {
@@ -96,7 +124,7 @@ public class PTSettingsPropertyView : NSView, NSTextFieldDelegate {
     return definition.section.inspector
   }
   
-  public var decoder : Decoder? {
+  public weak var decoder : Decoder? {
     didSet {
       reload()
     }
@@ -158,7 +186,6 @@ public class PTSettingsPropertyView : NSView, NSTextFieldDelegate {
       .comboBox,
       .comboBoxDynamic,
       .description,
-      .esuSpeedTable,
       .functionsAnalogMode,
       .functionsConsistMode,
       .label,
@@ -179,7 +206,38 @@ public class PTSettingsPropertyView : NSView, NSTextFieldDelegate {
         
         viewConstraints.append(label.topAnchor.constraint(equalTo: self.topAnchor))
         
-        viewConstraints.append(label.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: leadingOffset))
+        if definition.controlType == .description {
+          label.lineBreakMode = .byWordWrapping
+          label.maximumNumberOfLines = 0
+          label.preferredMaxLayoutWidth = 400.0
+        }
+        
+        if definition.controlType == .warning {
+          
+          image = NSImageView(image: MyIcon.warning.image!)
+          
+          if let image {
+            
+            image.translatesAutoresizingMaskIntoConstraints = false
+            
+            self.addSubview(image)
+            
+            viewConstraints.append(image.centerYAnchor.constraint(equalTo: label.centerYAnchor))
+            
+            viewConstraints.append(image.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: leadingOffset))
+            
+            viewConstraints.append(self.bottomAnchor.constraint(greaterThanOrEqualTo: image.bottomAnchor))
+            
+            viewConstraints.append(label.leadingAnchor.constraint(equalToSystemSpacingAfter: image.trailingAnchor, multiplier: 1.0))
+            
+          }
+          
+        }
+        else {
+          
+          viewConstraints.append(label.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: leadingOffset))
+          
+        }
         
         viewConstraints.append(self.bottomAnchor.constraint(greaterThanOrEqualTo: label.bottomAnchor))
         
@@ -379,7 +437,37 @@ public class PTSettingsPropertyView : NSView, NSTextFieldDelegate {
       }
       
     case .esuSpeedTable:
-      break
+      
+      speedTable = ESUSpeedTable()
+      
+      if let speedTable {
+        
+        speedTable.translatesAutoresizingMaskIntoConstraints = false
+        
+        self.addSubview(speedTable)
+        
+        viewConstraints.append(speedTable.topAnchor.constraint(equalTo: self.topAnchor))
+        
+        viewConstraints.append(speedTable.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: leadingOffset))
+
+        viewConstraints.append(speedTable.heightAnchor.constraint(equalToConstant: 400))
+        
+        viewConstraints.append(speedTable.widthAnchor.constraint(equalToConstant: 600))
+        
+        viewConstraints.append(self.bottomAnchor.constraint(greaterThanOrEqualTo: speedTable.bottomAnchor))
+        
+        viewConstraints.append(self.trailingAnchor.constraint(greaterThanOrEqualToSystemSpacingAfter: speedTable.trailingAnchor, multiplier: 1.0))
+        
+        if let cvLabel {
+          
+          viewConstraints.append(cvLabel.leadingAnchor.constraint(greaterThanOrEqualToSystemSpacingAfter: speedTable.trailingAnchor, multiplier: 1.0))
+
+          viewConstraints.append(cvLabel.centerYAnchor.constraint(equalTo: speedTable.centerYAnchor))
+
+        }
+        
+      }
+      
     case .functionsAnalogMode:
       break
     case .functionsConsistMode:
@@ -488,12 +576,20 @@ public class PTSettingsPropertyView : NSView, NSTextFieldDelegate {
         initComboBoxDynamic()
         fallthrough
       case .comboBox:
+        let target = comboBox!.target
+        let action = comboBox!.action
+        comboBox!.target = nil
+        comboBox!.action = nil
         comboBox!.selectItem(withObjectValue: value)
+        comboBox!.target = target
+        comboBox!.action = action
       case .textFieldWithSlider:
         slider!.integerValue = Int(value)!
         fallthrough
       case .textField, .label:
         textField!.stringValue = value
+      case .esuSpeedTable:
+        speedTable!.decoder = decoder
       default:
         break
       }

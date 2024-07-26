@@ -213,7 +213,7 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
       constraints.append(pnlInspectorButtons.heightAnchor.constraint(equalTo: button.heightAnchor))
       lastButton = button
       
-      var inspectorPanel = NSView()
+      let inspectorPanel = NSView()
       var subView : NSView?
       
       let inspectorTitle = NSTextField(labelWithString: item.title)
@@ -298,7 +298,7 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
     
     for group in ProgrammerToolSettingsGroup.allCases {
       
-      var view = NSView()
+      let view = NSView()
       
       view.translatesAutoresizingMaskIntoConstraints = false
       view.backgroundColor = nil
@@ -479,6 +479,7 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
     
     displayInspector()
     
+    
   }
   
   override func viewDidAppear() {
@@ -578,7 +579,7 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
   
   internal func displayInspector() {
     
-    guard let decoder, let appNode else {
+    guard let decoder else {
       return
     }
     
@@ -733,7 +734,7 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
     
 
     return
-    
+    /*
     let timeStart = Date.timeIntervalSinceReferenceDate
     
     NSLayoutConstraint.deactivate(settingsPropertyConstraints)
@@ -862,45 +863,6 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
         commonProperties.remove(.physicalOutputSequencePosition)
       }
 
-      if !decoder.showPhysicalOutputPropertiesForThisOutput {
-        commonProperties.remove(.physicalOutputLevel)
-        commonProperties.remove(.physicalOutputSpeed)
-        commonProperties.remove(.physicalOutputDimmer)
-        commonProperties.remove(.physicalOutputTimeout)
-        commonProperties.remove(.physicalOutputBrightness)
-        commonProperties.remove(.physicalOutputLEDMode)
-        commonProperties.remove(.physicalOutputFanPower)
-        commonProperties.remove(.physicalOutputChuffPower)
-        commonProperties.remove(.physicalOutputOutputMode)
-        commonProperties.remove(.physicalOutputPhaseShift)
-        commonProperties.remove(.physicalOutputStartupTime)
-        commonProperties.remove(.physicalOutputCouplerForce)
-        commonProperties.remove(.physicalOutputGradeCrossing)
-        commonProperties.remove(.physicalOutputRule17Forward)
-        commonProperties.remove(.physicalOutputRule17Reverse)
-        commonProperties.remove(.physicalOutputAccelerationRate)
-        commonProperties.remove(.physicalOutputDecelerationRate)
-        commonProperties.remove(.physicalOutputSequencePosition)
-        commonProperties.remove(.physicalOutputSpecialFunctions)
-        commonProperties.remove(.physicalOutputStartupDescription)
-        commonProperties.remove(.physicalOutputPowerOnDelay)
-        commonProperties.remove(.physicalOutputPowerOffDelay)
-        commonProperties.remove(.physicalOutputServoDurationA)
-        commonProperties.remove(.physicalOutputServoDurationB)
-        commonProperties.remove(.physicalOutputServoPositionA)
-        commonProperties.remove(.physicalOutputServoPositionB)
-        commonProperties.remove(.physicalOutputStartupTimeInfo)
-        commonProperties.remove(.physicalOutputEnableFunctionTimeout)
-        commonProperties.remove(.physicalOutputUseClassLightLogic)
-        commonProperties.remove(.physicalOutputSmokeUnitControlMode)
-        commonProperties.remove(.physicalOutputExternalSmokeUnitType)
-        commonProperties.remove(.physicalOutputHeatWhileLocomotiveStands)
-        commonProperties.remove(.physicalOutputTimeUntilAutomaticPowerOff)
-        commonProperties.remove(.physicalOutputMaximumHeatWhileLocomotiveDriving)
-        commonProperties.remove(.physicalOutputMinimumHeatWhileLocomotiveDriving)
-        commonProperties.remove(.physicalOutputServoDoNotDisableServoPulseAtPositionA)
-        commonProperties.remove(.physicalOutputServoDoNotDisableServoPulseAtPositionB)
-      }
       
     case .functionSettings:
       
@@ -1248,10 +1210,8 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
     }
     
     NSLayoutConstraint.activate(settingsPropertyConstraints)
+    */
     
-    let timeEnd = Date.timeIntervalSinceReferenceDate
-    
-    debugLog("\(timeMiddle - timeStart) \(timeEnd - timeMiddle)")
   }
 
   private func setValue(field:ProgrammerToolSettingsPropertyField) {

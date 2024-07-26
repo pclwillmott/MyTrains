@@ -704,6 +704,10 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
     
   }
   
+  @objc public func applicationSupportsSecureRestorableState(_ app: NSApplication) -> Bool {
+    return true
+  }
+  
 }
 
 public enum MyTrainsWindow : String {

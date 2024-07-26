@@ -101,33 +101,6 @@ class ESUSpeedTable: NSView {
       path.stroke()
 
     }
-    /*
-    if isDrag {
-      
-      let dx = boxSize + CGFloat(decoder.speedTableIndex - 1) * scaleWidth
-      let dy = boxSize + CGFloat(dragValue) * scaleHeight
-      
-      let dxLeft = dx - boxSize / 2.0
-      let dxRight = dx + boxSize / 2.0
-      
-      let dyTop = dy + boxSize / 2.0
-      let dyBottom = dy - boxSize / 2.0
-      
-      let path = NSBezierPath()
-      
-      path.move(to: NSMakePoint(dxLeft, dyBottom))
-      path.line(to: NSMakePoint(dxLeft, dyTop))
-      path.line(to: NSMakePoint(dxRight, dyTop))
-      path.line(to: NSMakePoint(dxRight, dyBottom))
-      path.close()
-      
-      NSColor.orange.setFill()
-
-      path.fill()
-      path.stroke()
-
-    }
-*/
 
   }
   
@@ -151,7 +124,7 @@ class ESUSpeedTable: NSView {
 
   // MARK: Public Properties
   
-  public var decoder : Decoder?
+  public weak var decoder : Decoder?
   
   // MARK: Private Methods
   
@@ -173,13 +146,9 @@ class ESUSpeedTable: NSView {
   }
   
   override func mouseDown(with event: NSEvent) {
-
-    speedTableIndex = nil
-    
-    if let pos = position(from: event), let decoder {
+    if let pos = position(from: event) {
       speedTableIndex = pos.x + 1
     }
-
   }
 
   override func mouseDragged(with event: NSEvent) {
@@ -207,35 +176,31 @@ class ESUSpeedTable: NSView {
 
   internal func position(from: NSEvent) -> (x:Int, y:UInt8)? {
     
-    if let decoder {
+    let cc = self.convert(from.locationInWindow, from: nil)
+    
+    let x = cc.x
+    
+    let y = cc.y
+    
+    for index in 0 ... 27 {
       
-      let cc = self.convert(from.locationInWindow, from: nil)
+      let value = values[index]
       
-      let x = cc.x
+      let dx = boxSize + CGFloat(index) * scaleWidth
+      let dy = boxSize + CGFloat(value) * scaleHeight
       
-      let y = cc.y
+      let dxLeft = dx - boxSize / 2.0
+      let dxRight = dx + boxSize / 2.0
       
-      for index in 0 ... 27 {
-        
-        let value = values[index]
-        
-        let dx = boxSize + CGFloat(index) * scaleWidth
-        let dy = boxSize + CGFloat(value) * scaleHeight
-        
-        let dxLeft = dx - boxSize / 2.0
-        let dxRight = dx + boxSize / 2.0
-        
-        let dyTop = dy + boxSize / 2.0
-        let dyBottom = dy - boxSize / 2.0
-        
-        if x >= dxLeft && x <= dxRight && y >= dyBottom && y <= dyTop {
-          return (index, value)
-        }
-        
+      let dyTop = dy + boxSize / 2.0
+      let dyBottom = dy - boxSize / 2.0
+      
+      if x >= dxLeft && x <= dxRight && y >= dyBottom && y <= dyTop {
+        return (index, value)
       }
       
     }
-    
+
     return nil
     
   }

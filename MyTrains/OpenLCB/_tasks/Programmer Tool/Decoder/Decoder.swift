@@ -78,6 +78,8 @@ public class Decoder : NSObject {
   
   private var _cvsModified : [(cv: CV, value:UInt8)]?
   
+  private var propertyViewLookup : [ProgrammerToolSettingsProperty:PTSettingsPropertyView] = [:]
+  
   private var physicalOutputProperties : [PTSettingsPropertyView] = []
   
   // MARK: Public Properties
@@ -89,11 +91,13 @@ public class Decoder : NSObject {
   public var propertyViews : [PTSettingsPropertyView] = [] {
     didSet {
       for view in propertyViews {
+        propertyViewLookup[view.property] = view
         if view.indexingMethod == .esuDecoderPhysicalOutput {
           physicalOutputProperties.append(view)
         }
         view.decoder = self
       }
+      applyLayoutRules()
     }
   }
   
@@ -226,10 +230,6 @@ public class Decoder : NSObject {
     return result
   }
   
-  public var locomotiveAddressType : LocomotiveAddressType { // KEEP
-    return LocomotiveAddressType(title: getValue(property: .locomotiveAddressType))!
-  }
-  
   public var marklinConsecutiveAddresses : MarklinConsecutiveAddresses { // *** KEEP ***
     get {
       return MarklinConsecutiveAddresses(rawValue: getUInt8(cv: .cv_000_000_049)! & MarklinConsecutiveAddresses.mask)!
@@ -237,130 +237,6 @@ public class Decoder : NSObject {
     set(value) {
       setMaskedUInt8(cv: .cv_000_000_049, mask: MarklinConsecutiveAddresses.mask, value: value.rawValue)
     }
-  }
-  
-  public var isConsistAddressEnabled : Bool { // KEEP
-    return getValue(property: .enableDCCConsistAddress) == "true"
-  }
-  
-  public var isACAnalogModeEnabled : Bool { // KEEP
-    return getValue(property: .enableACAnalogMode) == "true"
-  }
-
-  public var isDCAnalogModeEnabled : Bool { // KEEP
-    return getValue(property: .enableDCAnalogMode) == "true"
-  }
-  
-  public var abcBrakeIfRightRailMorePositive : Bool { // KEEP
-    return getValue(property: .brakeIfRightRailSignalPositive) == "true"
-  }
-  
-  public var abcBrakeIfLeftRailMorePositive : Bool { // KEEP
-    return getValue(property: .brakeIfLeftRailSignalPositive) == "true"
-  }
-  
-  public var isABCShuttleTrainEnabled : Bool { // KEEP
-    return getValue(property: .enableABCShuttleTrain) == "true"
-  }
-
-  public var isConstantBrakeDistanceEnabled : Bool { // KEEP
-    return getValue(property: .enableConstantBrakeDistance) == "true"
-  }
-
-  public var isDifferentBrakeDistanceBackwards : Bool { // KEEP
-    return getValue(property: .differentBrakeDistanceBackwards) == "true"
-  }
-
-  public var driveUntilLocomotiveStopsInSpecifiedPeriod : Bool { // KEEP
-    return getValue(property: .driveUntilLocomotiveStopsInSpecifiedPeriod) == "true"
-  }
-
-  public var isRailComPlusAutomaticAnnouncementEnabled : Bool { // KEEP
-    return getValue(property: .enableRailComPlusAutomaticAnnouncement) == "true"
-  }
-
-  public var detectSpeedStepModeAutomatically : Bool { // KEEP
-    return getValue(property: .detectSpeedStepModeAutomatically) == "true"
-  }
-  
-  public var isAccelerationEnabled : Bool { // KEEP
-    return getValue(property: .enableAcceleration) == "true"
-  }
-  
-  public var isDecelerationEnabled : Bool { // KEEP
-    return getValue(property: .enableDeceleration) == "true"
-  }
-
-  public var isRailComFeedbackEnabled : Bool { // KEEP
-    return getValue(property: .enableRailComFeedback) == "true"
-  }
-  
-  public var isForwardTrimEnabled : Bool { // KEEP
-    return getValue(property: .enableForwardTrim) == "true"
-  }
-  
-  public var isReverseTrimEnabled : Bool { // KEEP
-    return getValue(property: .enableReverseTrim) == "true"
-  }
-  
-  public var isShuntingModeTrimEnabled : Bool { // KEEP
-    return getValue(property: .enableShuntingModeTrim) == "true"
-  }
-  
-  public var isGearboxBacklashCompensationEnabled : Bool { // KEEP
-    return getValue(property: .enableGearboxBacklashCompensation) == "true"
-  }
-  
-  public var isDecoderSynchronizedWithMasterDecoder : Bool { // KEEP
-    return getValue(property: .enableRailComPlusSynchronization) == "true"
-  }
-  
-  public var isAutomaticUncouplingEnabled : Bool { // KEEP
-    return getValue(property: .enableAutomaticUncoupling) == "true"
-  }
-  
-  public var isLoadControlBackEMFEnabled : Bool { // KEEP
-    return getValue(property: .enableLoadControlBackEMF) == "true"
-  }
-  
-  public var isMotorCurrentLimiterEnabled : Bool { // KEEP
-    return getValue(property: .enableMotorCurrentLimiter) == "true"
-  }
-  
-  public var steamChuffMode : SteamChuffMode { // KEEP
-    return SteamChuffMode(title: getValue(property: .steamChuffMode))!
-  }
-  
-  public var isSecondaryTrimmerEnabled : Bool { // KEEP
-    return getValue(property: .enableSecondaryTrigger) == "true"
-  }
-  
-  public var isMinimumDistanceOfSteamChuffsEnabled : Bool { // KEEP
-    return getValue(property: .enableMinimumDistanceOfSteamChuffs) == "true"
-  }
-  
-  public var soundControlBasis : SoundControlBasis { // KEEP
-    return SoundControlBasis(title: getValue(property: .soundControlBasis))!
-  }
-  
-  public var isThresholdForLoadOperationEnabled : Bool { // KEEP
-    return getValue(property: .enableLoadOperationThreshold) == "true"
-  }
-  
-  public var isThresholdForIdleOperationEnabled : Bool { // KEEP
-    return getValue(property: .enableIdleOperationThreshold) == "true"
-  }
-  
-  public var isSUSIMasterEnabled : Bool { // KEEP
-    return getValue(property: .enableSUSIMaster) == "true"
-  }
-
-  public var isSUSISlaveEnabled : Bool { // KEEP
-    return getValue(property: .enableSUSISlave) == "true"
-  }
-  
-  public var decoderSensorSettings : DecoderSensorSettings { //KEEP
-    return DecoderSensorSettings(title: getValue(property: .decoderSensorSettings))!
   }
   
   private var _speedTablePreset : SpeedTablePreset = .doNothing
@@ -391,7 +267,6 @@ public class Decoder : NSObject {
         }
       }
       _speedTablePreset = .doNothing
-      delegate?.reloadSettings?(self)
     }
   }
   
@@ -426,7 +301,6 @@ public class Decoder : NSObject {
             setUInt8(cv: .cv_000_000_067 + (index - 1), value: max(getUInt8(cv: .cv_000_000_067 + (index - 1))!, value))
           }
         }
-        delegate?.reloadSettings?(self)
       }
       
     }
@@ -455,10 +329,6 @@ public class Decoder : NSObject {
   public var esuDecoderPhysicalOutputMode : ESUPhysicalOutputMode {
     return ESUPhysicalOutputMode(title: getValue(property: .physicalOutputOutputMode), decoder: self)!
   }
-  
-  public func isPropertySupported(property:ProgrammerToolSettingsProperty) -> Bool {
-    return property.definition.cvIndexingMethod != .esuDecoderPhysicalOutput || esuDecoderPhysicalOutputMode.supportedProperties.contains(property)
-    }
   
   public func cvIndexOffset(indexingMethod:CVIndexingMethod) -> Int {
     
@@ -521,14 +391,6 @@ public class Decoder : NSObject {
 
   }
 
-  public var isFunctionTimeOutEnabled : Bool { // KEEP
-    return getValue(property: .physicalOutputEnableFunctionTimeout) == "true"
-  }
-  
-  public var isClassLightLogicEnabled : Bool { // KEEP
-    return getValue(property: .physicalOutputUseClassLightLogic) == "true"
-  }
-  
   // MARK: Public Methods
   
   public func getConsistFunctionState(function:FunctionConsistMode) -> Bool {
@@ -613,7 +475,7 @@ public class Decoder : NSObject {
   }
   
   public func setMaskedUInt8(cv:CV, mask:UInt8, value:UInt8) {
-    guard var temp = getUInt8(cv: cv) else {
+    guard let temp = getUInt8(cv: cv) else {
       return
     }
     setUInt8(cv: cv, value: (temp & ~mask) | (value & mask))
@@ -628,47 +490,11 @@ public class Decoder : NSObject {
   
   public func setBool(cv:CV, mask:UInt8, value:Bool) {
 
-    guard var byte = getUInt8(cv: cv), var offset = indexLookup[cv.index] else {
+    guard let byte = getUInt8(cv: cv), let offset = indexLookup[cv.index] else {
       return
     }
     
     modifiedBlocks[offset + Int(cv.cv) - 1 - (cv.isIndexed ? 256 : 0)] = (byte & ~mask) | (value ? mask : 0)
-
-  }
-  
-  public func getUInt32(cv:CV) -> UInt32? {
-
-    guard let offset = indexLookup[cv.index] else {
-      return nil
-    }
-
-    let baseOffset = offset - 1 - (cv.isIndexed ? 256 : 0)
-    
-    var data : [UInt8] = []
-    
-    for byte in 0 ... 3 {
-      data.append(modifiedBlocks[baseOffset + Int(cv.cv) + byte])
-    }
-    
-    return UInt32(bigEndianData: data.reversed())
-
-  }
-  
-  public func getUInt16(cv:CV) -> UInt16? {
-
-    guard let offset = indexLookup[cv.index] else {
-      return nil
-    }
-
-    let baseOffset = offset - 1 - (cv.isIndexed ? 256 : 0)
-    
-    var data : [UInt8] = []
-    
-    for byte in 0 ... 1 {
-      data.append(modifiedBlocks[baseOffset + Int(cv.cv) + byte])
-    }
-    
-    return UInt16(bigEndianData: data.reversed())
 
   }
   
@@ -681,20 +507,7 @@ public class Decoder : NSObject {
     return modifiedBlocks[offset + Int(cv.cv) - 1 - (cv.isIndexed ? 256 : 0)]
     
   }
-  
-  public var showPhysicalOutputPropertiesForThisOutput : Bool {
-    
-    switch esuDecoderPhysicalOutput {
-    case .aux10:
-      return decoderSensorSettings != .useDigitalWheelSensor
-    case .aux11, .aux12:
-      return !isSUSIMasterEnabled
-    default:
-      return true
-    }
-    
-  }
-  
+
   public func cvTextList(list:[(cv:CV, value:UInt8)]) -> String {
     
     var result = ""
@@ -958,404 +771,20 @@ public class Decoder : NSObject {
       let values = getProperty(property: property, propertyDefinition: definition)
       
       if values != newValues {
+        
         setProperty(property: property, values: newValues, propertyDefinition: definition)
+        
+        if definition.controlType == .comboBoxDynamic {
+          _layoutRules = nil
+        }
         
       }
       
     }
     
+    applyLayoutRules(property:property)
+    
     return
-/*
-    switch property {
-    case .locomotiveAddressType:
-      if let temp = LocomotiveAddressType(title: string) {
-        locomotiveAddressType = temp
-      }
-    case .locomotiveAddressShort:
-      primaryAddress = UInt8(string)!
-    case .locomotiveAddressLong:
-      extendedAddress = UInt16(string)!
-    case .marklinConsecutiveAddresses:
-      marklinConsecutiveAddresses = MarklinConsecutiveAddresses(title: string)!
-    case .enableDCCConsistAddress:
-      isConsistAddressEnabled = string == "true"
-    case .consistAddress:
-      consistAddress = UInt8(string)!
-    case .consistReverseDirection:
-      isConsistReverseDirection = string == "true"
-    case .enableACAnalogMode:
-      isACAnalogModeEnabled = string == "true"
-    case .acAnalogModeStartVoltage:
-      analogModeACStartVoltage = UInt8(string)!
-    case .acAnalogModeMaximumSpeedVoltage:
-      analogModeACMaximumSpeedVoltage = UInt8(string)!
-    case .enableDCAnalogMode:
-      isDCAnalogModeEnabled = string == "true"
-    case .dcAnalogModeStartVoltage:
-      analogModeDCStartVoltage = UInt8(string)!
-    case .dcAnalogModeMaximumSpeedVoltage:
-      analogModeDCMaximumSpeedVoltage = UInt8(string)!
-    case .enableQuantumEngineer:
-      isQuantumEngineerEnabled = string == "true"
-    case .ignoreAccelerationDecelerationInSoundSchedule:
-      ignoreAccelerationDecelerationInSoundSchedule = string == "true"
-    case .useHighFrequencyPWMMotorControl:
-      useHighFrequencyPWMMotorControl = string == "true"
-    case .analogMotorHysteresisVoltage:
-      analogMotorHysteresisVoltage = UInt8(string)!
-    case .analogFunctionDifferenceVoltage:
-      analogFunctionDifferenceVoltage = UInt8(string)!
-    case .brakeIfRightRailSignalPositive:
-      abcBrakeIfRightRailMorePositive = string == "true"
-    case .brakeIfLeftRailSignalPositive:
-      abcBrakeIfLeftRailMorePositive = string == "true"
-    case .voltageDifferenceIndicatingABCBrakeSection:
-      voltageDifferenceIndicatingABCBrakeSection = UInt8(string)!
-    case .abcReducedSpeed:
-      abcReducedSpeed = UInt8(string)!
-    case .enableABCShuttleTrain:
-      isABCShuttleTrainEnabled = string == "true"
-    case .waitingPeriodBeforeDirectionChange:
-      abcWaitingTime = UInt8(string)!
-    case .hluAllowZIMO:
-      allowZIMOBrakeSections = string == "true"
-    case .hluSendZIMOZACKSignals:
-      sendZIMOZACKSignals = string == "true"
-    case .hluSpeedLimit1:
-      hluSpeedLimit1 = UInt8(string)!
-    case .hluSpeedLimit2:
-      hluSpeedLimit2 = UInt8(string)!
-    case .hluSpeedLimit3:
-      hluSpeedLimit3 = UInt8(string)!
-    case .hluSpeedLimit4:
-      hluSpeedLimit4 = UInt8(string)!
-    case .hluSpeedLimit5:
-      hluSpeedLimit5 = UInt8(string)!
-    case .brakeOnForwardPolarity:
-      brakeOnForwardDCPolarity = string == "true"
-    case .brakeOnReversePolarity:
-      brakeOnReverseDCPolarity = string == "true"
-    case .selectrixBrakeOnForwardPolarity:
-      selectrixBrakeOnForwardPolarity = string == "true"
-    case .selectrixBrakeOnReversePolarity:
-      selectrixBrakeOnReversePolarity = string == "true"
-    case .enableConstantBrakeDistance:
-      isConstantBrakeDistanceEnabled = string == "true"
-    case .brakeDistanceLength:
-      brakeDistanceLength = UInt8(string)!
-    case .differentBrakeDistanceBackwards:
-      isDifferentBrakeDistanceBackwards = string == "true"
-    case .brakeDistanceLengthBackwards:
-      brakeDistanceLengthBackwards = UInt8(string)!
-    case .driveUntilLocomotiveStopsInSpecifiedPeriod:
-      driveUntilLocomotiveStopsInSpecifiedPeriod = string == "true"
-    case .stoppingPeriod:
-      stoppingPeriod = UInt8(string)!
-    case .constantBrakeDistanceOnSpeedStep0:
-      constantBrakeDistanceOnSpeedStep0 = string == "true"
-    case .delayTimeBeforeExitingBrakeSection:
-      delayBeforeExitingBrakeSection = UInt8(string)!
-    case .brakeFunction1BrakeTimeReduction:
-      brakeFunction1BrakeTimeReduction = UInt8(string)!
-    case .maximumSpeedWhenBrakeFunction1Active:
-      maximumSpeedWhenBrakeFunction1Active = UInt8(string)!
-    case .brakeFunction2BrakeTimeReduction:
-      brakeFunction2BrakeTimeReduction = UInt8(string)!
-    case .maximumSpeedWhenBrakeFunction2Active:
-      maximumSpeedWhenBrakeFunction2Active = UInt8(string)!
-    case .brakeFunction3BrakeTimeReduction:
-      brakeFunction3BrakeTimeReduction = UInt8(string)!
-    case .maximumSpeedWhenBrakeFunction3Active:
-      maximumSpeedWhenBrakeFunction3Active = UInt8(string)!
-    case .enableRailComFeedback:
-      isRailComFeedbackEnabled = string == "true"
-    case .enableRailComPlusAutomaticAnnouncement:
-      isRailComPlusAutomaticAnnouncementEnabled = string == "true"
-    case .sendAddressViaBroadcastOnChannel1:
-      sendAddressViaBroadcastOnChannel1 = string == "true"
-    case .allowDataTransmissionOnChannel2:
-      allowDataTransmissionOnChannel2 = string == "true"
-    case .detectSpeedStepModeAutomatically:
-      detectSpeedStepModeAutomatically = string == "true"
-    case .speedStepMode:
-      speedStepMode = SpeedStepMode(title: string)!
-    case .enableAcceleration:
-      isAccelerationEnabled = string == "true"
-    case .accelerationRate:
-      accelerationRate = UInt8(string)!
-    case .accelerationAdjustment:
-      accelerationAdjustment = Int8(string)!
-    case .enableDeceleration:
-      isDecelerationEnabled = string == "true"
-    case .decelerationRate:
-      decelerationRate = UInt8(string)!
-    case .decelerationAdjustment:
-      decelerationAdjustment = Int8(string)!
-    case .reverseMode:
-      isReversed = string == "true"
-    case .enableForwardTrim:
-      isForwardTrimEnabled = string == "true"
-    case .forwardTrim:
-      forwardTrim = UInt8(string)!
-    case .enableReverseTrim:
-      isReverseTrimEnabled = string == "true"
-    case .reverseTrim:
-      reverseTrim = UInt8(string)!
-    case .enableShuntingModeTrim:
-      isShuntingModeTrimEnabled = string == "true"
-    case .shuntingModeTrim:
-      shuntingModeTrim = UInt8(string)!
-    case .loadAdjustmentOptionalLoad:
-      loadAdjustmentOptionalLoad = UInt8(string)!
-    case .loadAdjustmentPrimaryLoad:
-      loadAdjustmentPrimaryLoad = UInt8(string)!
-    case .enableGearboxBacklashCompensation:
-      isGearboxBacklashCompensationEnabled = string == "true"
-    case .gearboxBacklashCompensation:
-      gearboxBacklashCompensation = UInt8(string)!
-    case .timeToBridgePowerInterruption:
-      timeToBridgePowerInterruption = UInt8(string)!
-    case .preserveDirection:
-      isDirectionPreserved = string == "true"
-    case .enableStartingDelay:
-      isStartingDelayEnabled = string == "true"
-    case .userId1:
-      userId1 = UInt8(string)!
-    case .userId2:
-      userId2 = UInt8(string)!
-    case .enableDCCProtocol:
-      isDCCProtocolEnabled = string == "true"
-    case .enableMarklinMotorolaProtocol:
-      isMarklinMotorolaProtocolEnabled = string == "true"
-    case .enableSelectrixProtocol:
-      isSelectrixProtocolEnabled = string == "true"
-    case .enableM4Protocol:
-      isM4ProtocolEnabled = string == "true"
-    case .memoryPersistentFunction:
-      isMemoryPersistentFunctionEnabled = string == "true"
-    case .memoryPersistentSpeed:
-      isMemoryPersistentSpeedEnabled = string == "true"
-    case .enableRailComPlusSynchronization:
-      isDecoderSynchronizedWithMasterDecoder = string == "true"
-    case .m4MasterDecoderManufacturer:
-      m4MasterDecoderManufacturerId = ManufacturerCode(title: string) ?? .noneSelected
-    case .m4MasterDecoderSerialNumber:
-      m4MasterDecoderSerialNumber = UInt32(hex:string)!
-    case .frequencyForBlinkingEffects:
-      frequencyForBlinkingEffects = UInt8(string)!
-    case .gradeCrossingHoldingTime:
-      gradeCrossingHoldingTime = UInt8(string)!
-    case .fadeInTimeOfLightEffects:
-      fadeInTimeOfLightEffects = UInt8(string)!
-    case .fadeOutTimeOfLightEffects:
-      fadeOutTimeOfLightEffects = UInt8(string)!
-    case .logicalFunctionDimmerBrightnessReduction:
-      logicalFunctionDimmerBrightnessReduction = UInt8(string)!
-    case .classLightLogicSequenceLength:
-      classLightLogicSequenceLength = ClassLightLogicSequenceLength(title: string)!
-    case .enforceSlaveCommunicationOnAUX3AndAUX4:
-      isSlaveCommunicationOnAUX3andAUX4Enforced = string == "true"
-    case .decoderSensorSettings:
-      decoderSensorSettings = DecoderSensorSettings(title: string)!
-    case .enableAutomaticUncoupling:
-      isAutomaticUncouplingEnabled = string == "true"
-    case .automaticUncouplingSpeed:
-      automaticUncouplingSpeed = UInt8(string)!
-    case .automaticUncouplingPushTime:
-      automaticUncouplingPushTime = UInt8(string)!
-    case .automaticUncouplingWaitTime:
-      automaticUncouplingWaitTime = UInt8(string)!
-    case .automaticUncouplingMoveTime:
-      automaticUncouplingMoveTime = UInt8(string)!
-    case .smokeUnitTimeUntilPowerOff:
-      smokeUnitTimeUntilAutomaticPowerOff = UInt8(string)!
-    case .smokeUnitFanSpeedTrim:
-      smokeUnitFanSpeedTrim = UInt8(string)!
-    case .smokeUnitTemperatureTrim:
-      smokeUnitTemperatureTrim = UInt8(string)!
-    case .smokeUnitPreheatingTemperatureForSecondarySmokeUnits:
-      smokeUnitPreheatingTemperatureForSecondarySmokeUnits = UInt8(string)!
-    case .smokeChuffsDurationRelativeToTriggerDistance:
-      smokeChuffsDurationRelativeToTriggerDistance = UInt8(string)!
-    case .smokeChuffsMinimumDuration:
-      smokeChuffsMinimumDuration = UInt8(string)!
-    case .smokeChuffsMaximumDuration:
-      smokeChuffsMaximumDuration = UInt8(string)!
-    case .minimumSpeed:
-      minimumSpeed = UInt8(string)!
-    case .maximumSpeed:
-      maximumSpeed = UInt8(string)!
-    case .enableLoadControlBackEMF:
-      isLoadControlBackEMFEnabled = string == "true"
-    case .regulationReference:
-      regulationReference = UInt8(string)!
-    case .regulationParameterK:
-      regulationParameterK = UInt8(string)!
-    case .regulationParameterI:
-      regulationParameterI = UInt8(string)!
-    case .regulationParameterKSlow:
-      regulationParameterKSlow = UInt8(string)!
-    case .largestInternalSpeedStepThatUsesKSlow:
-      largestInternalSpeedStepThatUsesKSlow = UInt8(string)!
-    case .regulationInfluenceDuringSlowSpeed:
-      regulationInfluenceDuringSlowSpeed = UInt8(string)!
-    case .slowSpeedBackEMFSamplingPeriod:
-      slowSpeedBackEMFSamplingPeriod = UInt8(string)!
-    case .fullSpeedBackEMFSamplingPeriod:
-      fullSpeedBackEMFSamplingPeriod = UInt8(string)!
-    case .slowSpeedLengthOfMeasurementGap:
-      slowSpeedLengthOfMeasurementGap = UInt8(string)!
-    case .fullSpeedLengthOfMeasurementGap:
-      fullSpeedLengthOfMeasurementGap = UInt8(string)!
-    case .enableMotorOverloadProtection:
-      isMotorOverloadProtectionEnabled = string == "true"
-    case .enableMotorCurrentLimiter:
-      isMotorCurrentLimiterEnabled = string == "true"
-    case .motorCurrentLimiterLimit:
-      motorCurrentLimiterLimit = UInt8(string)!
-    case .motorPulseFrequency:
-      motorPulseFrequency = UInt8(string)!
-    case .enableAutomaticParkingBrake:
-      isAutomaticParkingBrakeEnabled = string == "true"
-    case .steamChuffMode:
-      steamChuffMode = SteamChuffMode(title: string)!
-    case .distanceOfSteamChuffsAtSpeedStep1:
-      distanceOfSteamChuffsAtSpeedStep1 = UInt8(string)!
-    case .steamChuffAdjustmentAtHigherSpeedSteps:
-      steamChuffAdjustmentAtHigherSpeedSteps = UInt8(string)!
-    case .triggerImpulsesPerSteamChuff:
-      triggerImpulsesPerSteamChuff = UInt8(string)!
-    case .divideTriggerImpulsesInTwoIfShuntingModeEnabled:
-      divideTriggerImpulsesInTwoIfShuntingModeEnabled = string == "true"
-    case .enableSecondaryTrigger:
-      isSecondaryTrimmerEnabled = string == "true"
-    case .secondaryTriggerDistanceReduction:
-      secondaryTriggerDistanceReduction = UInt8(string)!
-    case .enableMinimumDistanceOfSteamChuffs:
-      isMinimumDistanceOfSteamChuffsEnabled = string == "true"
-    case .minimumDistanceofSteamChuffs:
-      minimumDistanceOfSteamChuffs = UInt8(string)!
-    case .masterVolume:
-      masterVolume = UInt8(string)!
-    case .fadeSoundVolumeReduction:
-      fadeSoundVolumeReduction = UInt8(string)!
-    case .soundFadeOutFadeInTime:
-      soundFadeInFadeOutTime = UInt8(string)!
-    case .soundBass:
-      toneBass = UInt8(string)!
-    case .soundTreble:
-      toneTreble = UInt8(string)!
-    case .brakeSoundSwitchingOnThreshold:
-      brakeSoundSwitchingOnThreshold = UInt8(string)!
-    case .brakeSoundSwitchingOffThreshold:
-      brakeSoundSwitchingOffThreshold = UInt8(string)!
-    case .soundControlBasis:
-      soundControlBasis = SoundControlBasis(title: string)!
-    case .trainLoadAtLowSpeed:
-      trainLoadAtLowSpeed = UInt8(string)!
-    case .trainLoadAtHighSpeed:
-      trainLoadAtHighSpeed = UInt8(string)!
-    case .enableLoadOperationThreshold:
-      isThresholdForLoadOperationEnabled = string == "true"
-    case .loadOperationThreshold:
-      thresholdForLoadOperation = UInt8(string)!
-    case .loadOperationTriggeredFunction:
-      loadOperationTriggeredFunction = TriggeredFunction(title: string)!
-    case .enableIdleOperationThreshold:
-      isThresholdForIdleOperationEnabled = string == "true"
-    case .idleOperationThreshold:
-      thresholdForIdleOperation = UInt8(string)!
-    case .idleOperationTriggeredFunction:
-      idleOperationTriggeredFunction = TriggeredFunction(title: string)!
-    case .enableSerialFunctionModeF1toF8ForLGBMTS:
-      isSerialFunctionModeF1toF8ForLGBMTSEnabled = string == "true"
-    case .enableSupportForBroadwayLimitedSteamEngineControl:
-      isSupportForBroadwayLimitedSteamEngineControlEnabled = string == "true"
-    case .enableSUSIMaster:
-      isSUSIMasterEnabled = string == "true"
-    case .enableSUSISlave:
-      isSUSISlaveEnabled = string == "true"
-    case .speedTableIndex:
-      speedTableIndex = Int(string)!
-    case .speedTableEntryValue:
-      speedTableValue = UInt8(string)!
-    case .speedTablePreset:
-      speedTablePreset = SpeedTablePreset(title: string)!
-    case .physicalOutput:
-      esuDecoderPhysicalOutput = ESUDecoderPhysicalOutput(title: string)!
-    case .physicalOutputPowerOnDelay:
-      setPhysicalOutputValue(property: .physicalOutputPowerOnDelay, value: UInt8(string)!)
-    case .physicalOutputPowerOffDelay:
-      setPhysicalOutputValue(property: .physicalOutputPowerOffDelay, value: UInt8(string)!)
-    case .physicalOutputEnableFunctionTimeout:
-      setPhysicalOutputValue(property: .physicalOutputTimeUntilAutomaticPowerOff, value: (string == "true" ? 1 : 0))
-    case .physicalOutputTimeUntilAutomaticPowerOff:
-      setPhysicalOutputValue(property: .physicalOutputTimeUntilAutomaticPowerOff, value: UInt8(string)!)
-    case .physicalOutputOutputMode:
-      esuDecoderPhysicalOutputMode = ESUPhysicalOutputMode(title: string, decoder: self)!
-    case .physicalOutputBrightness:
-      setPhysicalOutputValue(property: .physicalOutputBrightness, value: UInt8(string)!)
-    case .physicalOutputUseClassLightLogic:
-      setPhysicalOutputValue(property: .physicalOutputSequencePosition, value: (string == "true" ? 1 : 0))
-    case .physicalOutputSequencePosition:
-      setPhysicalOutputValue(property: .physicalOutputSequencePosition, value: UInt8(string)!)
-    case .physicalOutputRule17Forward:
-      setPhysicalOutputBoolValue(property: .physicalOutputRule17Forward, value: string == "true")
-    case .physicalOutputRule17Reverse:
-      setPhysicalOutputBoolValue(property: .physicalOutputRule17Reverse, value: string == "true")
-    case .physicalOutputDimmer:
-      setPhysicalOutputBoolValue(property: .physicalOutputDimmer, value: string == "true")
-    case .physicalOutputLEDMode:
-      setPhysicalOutputBoolValue(property: .physicalOutputLEDMode, value: string == "true")
-    case .physicalOutputGradeCrossing:
-      setPhysicalOutputBoolValue(property: .physicalOutputGradeCrossing, value: string == "true")
-    case .physicalOutputPhaseShift:
-      setPhysicalOutputValue(property: .physicalOutputPhaseShift, value: UInt8(string)!)
-    case .physicalOutputStartupTime:
-      setPhysicalOutputValue(property: .physicalOutputStartupTime, value: UInt8(string)!)
-    case .physicalOutputSmokeUnitControlMode:
-      smokeUnitControlMode = SmokeUnitControlMode(title: string)!
-    case .physicalOutputSpeed:
-      setPhysicalOutputValue(property: .physicalOutputSpeed, value: UInt8(string)!)
-    case .physicalOutputAccelerationRate:
-      setPhysicalOutputValue(property: .physicalOutputAccelerationRate, value: UInt8(string)!)
-    case .physicalOutputDecelerationRate:
-      setPhysicalOutputValue(property: .physicalOutputDecelerationRate, value: UInt8(string)!)
-    case .physicalOutputHeatWhileLocomotiveStands:
-      setPhysicalOutputValue(property: .physicalOutputHeatWhileLocomotiveStands, value: UInt8(string)!)
-    case .physicalOutputMinimumHeatWhileLocomotiveDriving:
-      setPhysicalOutputValue(property: .physicalOutputMinimumHeatWhileLocomotiveDriving, value: UInt8(string)!)
-    case .physicalOutputMaximumHeatWhileLocomotiveDriving:
-      setPhysicalOutputValue(property: .physicalOutputMaximumHeatWhileLocomotiveDriving, value: UInt8(string)!)
-    case .physicalOutputChuffPower:
-      setPhysicalOutputValue(property: .physicalOutputChuffPower, value: UInt8(string)!)
-    case .physicalOutputFanPower:
-      setPhysicalOutputValue(property: .physicalOutputFanPower, value: UInt8(string)!)
-    case .physicalOutputTimeout:
-      setPhysicalOutputValue(property: .physicalOutputTimeout, value: UInt8(string)!)
-    case .physicalOutputLevel:
-      setPhysicalOutputValue(property: .physicalOutputLevel, value: UInt8(string)!)
-    case .physicalOutputCouplerForce:
-      setPhysicalOutputValue(property: .physicalOutputCouplerForce, value: UInt8(string)!)
-    case .physicalOutputServoDurationA:
-      setPhysicalOutputValue(property: .physicalOutputServoDurationA, value: UInt8(string)!)
-    case .physicalOutputServoDurationB:
-      setPhysicalOutputValue(property: .physicalOutputServoDurationB, value: UInt8(string)!)
-    case .physicalOutputServoPositionA:
-      setPhysicalOutputValue(property: .physicalOutputServoPositionA, value: UInt8(string)!)
-    case .physicalOutputServoPositionB:
-      setPhysicalOutputValue(property: .physicalOutputServoPositionB, value: UInt8(string)!)
-    case .physicalOutputServoDoNotDisableServoPulseAtPositionA:
-      setPhysicalOutputBoolValue(property: .physicalOutputServoDoNotDisableServoPulseAtPositionA, value: string == "true")
-    case .physicalOutputServoDoNotDisableServoPulseAtPositionB:
-      setPhysicalOutputBoolValue(property: .physicalOutputServoDoNotDisableServoPulseAtPositionB, value: string == "true")
-    case .physicalOutputExternalSmokeUnitType:
-      externalSmokeUnitType = ExternalSmokeUnitType(title: string)!
-
-    default:
-      break
-    }
- */
     
   }
   
@@ -1399,12 +828,126 @@ public class Decoder : NSObject {
         data.append(item.value)
       }
       if let id = UInt32(bigEndianData: data.reversed()), let decoderType = DecoderType.esuProductIdLookup[id] {
-    //    debugLog("Found")
       }
       else {
         
       }
     }
+  }
+  
+  // MARK: Layout Rules
+  
+  internal var _layoutRules : [PTSettingsPropertyLayoutRule]?
+
+  internal var layoutRuleLookupTestProperties : [ProgrammerToolSettingsProperty:[PTSettingsPropertyLayoutRule]] = [:]
+
+  internal var layoutRuleLookupActionProperties : [ProgrammerToolSettingsProperty:[PTSettingsPropertyLayoutRule]] = [:]
+  
+  public func applyLayoutRules(property:ProgrammerToolSettingsProperty? = nil) {
+    
+    func applyProperty(property:ProgrammerToolSettingsProperty) {
+      
+      guard let rules = layoutRuleLookupTestProperties[property] else {
+        return
+      }
+
+      var actionProperties : Set<ProgrammerToolSettingsProperty> = []
+      
+      for rule in rules {
+        actionProperties = actionProperties.union(rule.actionProperty)
+      }
+      
+      for actionProperty in actionProperties {
+        
+        if let rules = layoutRuleLookupActionProperties[actionProperty] {
+          
+          var isHidden : Bool?
+          var isExtant : Bool?
+          
+          for rule in rules {
+            
+            var result : Bool
+            
+            let operand = getValue(property: rule.property1)
+            
+            switch rule.testType1 {
+            case .equal:
+              result = operand == rule.testValue1
+            case .notEqual:
+              result = operand != rule.testValue1
+            }
+            
+            if let property = rule.property2, let testType = rule.testType2, let testValue = rule.testValue2, let ruleOperator = rule.operator {
+
+              var result2 : Bool
+              
+              let operand = getValue(property: property)
+
+              switch testType {
+              case .equal:
+                result2 = operand == testValue
+              case .notEqual:
+                result2 = operand != testValue
+              }
+              
+              switch ruleOperator {
+              case .and:
+                result = result && result2
+              case .or:
+                result = result || result2
+                break
+              }
+
+            }
+            
+            switch rule.actionType {
+            case .setIsExtantToTestResult:
+              if isExtant == nil {
+                isExtant = result
+              }
+              else {
+                isExtant = isExtant! && result
+              }
+            case .setIsHiddenToTestResult:
+              if isHidden == nil {
+                isHidden = result
+              }
+              else {
+                isHidden = isHidden! || result
+              }
+            }
+            
+            if let isHidden, isHidden {
+              break
+            }
+            
+          }
+          
+          if let isExtant, let view = propertyViewLookup[actionProperty] {
+            view.isExtant = isExtant
+          }
+
+          if let isHidden, let view = propertyViewLookup[actionProperty] {
+            view.isHidden = isHidden
+          }
+
+        }
+        
+      }
+
+    }
+    
+    buildLayoutRules()
+    
+    if let property = property {
+      applyProperty(property: property)
+    }
+    else {
+      for property in ProgrammerToolSettingsProperty.allCases {
+        applyProperty(property: property)
+      }
+    }
+    
   }
   
 }

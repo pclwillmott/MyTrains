@@ -131,6 +131,8 @@
 		DA56261329E1B64F00D465CC /* OpenLCBNetworkLayerState.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA56261229E1B64F00D465CC /* OpenLCBNetworkLayerState.swift */; };
 		DA56261529E1BE7800D465CC /* OpenLCBMTI.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA56261429E1BE7800D465CC /* OpenLCBMTI.swift */; };
 		DA568FC82B94DDAD0008086E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DAB5250E2B52E9AA00EEE9A0 /* Main.storyboard */; };
+		DA5714372C53AC2100FA91DA /* PTSettingsPropertyLayoutRule.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5714362C53AC2100FA91DA /* PTSettingsPropertyLayoutRule.swift */; };
+		DA5714392C54023200FA91DA /* Decoder Extension - Layout Rules.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5714382C54023200FA91DA /* Decoder Extension - Layout Rules.swift */; };
 		DA57A6E92A4496A1005C72B0 /* LocoNetLocomotiveState.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA57A6E82A4496A1005C72B0 /* LocoNetLocomotiveState.swift */; };
 		DA58F00D2A45AA3700D36E90 /* LocoNetFunctionConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA58F00C2A45AA3700D36E90 /* LocoNetFunctionConstants.swift */; };
 		DA58F0112A45AE8400D36E90 /* DCCDecoderType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA58F0102A45AE8400D36E90 /* DCCDecoderType.swift */; };
@@ -613,6 +615,8 @@
 		DA56261029E1AE2800D465CC /* OpenLCBMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBMessage.swift; sourceTree = "<group>"; };
 		DA56261229E1B64F00D465CC /* OpenLCBNetworkLayerState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBNetworkLayerState.swift; sourceTree = "<group>"; };
 		DA56261429E1BE7800D465CC /* OpenLCBMTI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBMTI.swift; sourceTree = "<group>"; };
+		DA5714362C53AC2100FA91DA /* PTSettingsPropertyLayoutRule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSettingsPropertyLayoutRule.swift; sourceTree = "<group>"; };
+		DA5714382C54023200FA91DA /* Decoder Extension - Layout Rules.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Decoder Extension - Layout Rules.swift"; sourceTree = "<group>"; };
 		DA57A6E82A4496A1005C72B0 /* LocoNetLocomotiveState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocoNetLocomotiveState.swift; sourceTree = "<group>"; };
 		DA58F00C2A45AA3700D36E90 /* LocoNetFunctionConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocoNetFunctionConstants.swift; sourceTree = "<group>"; };
 		DA58F0102A45AE8400D36E90 /* DCCDecoderType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DCCDecoderType.swift; sourceTree = "<group>"; };
@@ -1152,6 +1156,7 @@
 			isa = PBXGroup;
 			children = (
 				DA52B60D2C5261E200A46549 /* PTSettingsPropertyView.swift */,
+				DA5714362C53AC2100FA91DA /* PTSettingsPropertyLayoutRule.swift */,
 			);
 			path = "Property Views";
 			sourceTree = "<group>";
@@ -1681,6 +1686,7 @@
 			isa = PBXGroup;
 			children = (
 				DA8C2B162C3852DA001755AB /* Decoder.swift */,
+				DA5714382C54023200FA91DA /* Decoder Extension - Layout Rules.swift */,
 				DA47E5402C3AB6DD00A1D803 /* DecoderDelegate.swift */,
 				DA8C2B182C385344001755AB /* DecoderType.swift */,
 				DA73E5022C413360002AB3DF /* DecoderType - Capabilities.swift */,
@@ -2198,6 +2204,7 @@
 				DA408A5A2B5829C3005EBBDE /* AppMode.swift in Sources */,
 				DAFFB65B2B5D49680035AC74 /* CreateVirtualNodeVC.swift in Sources */,
 				DA31688B2BCACBD000059B6C /* SWBNodeLink.swift in Sources */,
+				DA5714392C54023200FA91DA /* Decoder Extension - Layout Rules.swift in Sources */,
 				DA2B5FD22C2863B000A15FAA /* SpeedProfilerEventType.swift in Sources */,
 				DA8AE0F0279B3074001E9311 /* SlotViewVC.swift in Sources */,
 				DAB93F1A2C04AA80006C0580 /* LayoutBuilderPaletteGroupingArea.swift in Sources */,
@@ -2414,6 +2421,7 @@
 				DAA7BEB32B501FCA00508140 /* Scale.swift in Sources */,
 				DA92E0762B6692AA00762058 /* PanelListItem.swift in Sources */,
 				DA3254E82A4755AC006DF357 /* OpenLCBThrottle.swift in Sources */,
+				DA5714372C53AC2100FA91DA /* PTSettingsPropertyLayoutRule.swift in Sources */,
 				DA19A2622BD29BDA00296E15 /* NSViewExtensions.swift in Sources */,
 				DACA33572A18D065009E791F /* OpenLCBNodeAddressSpaceInformation.swift in Sources */,
 				DAA867C627933265008B6EEC /* CSVParser.swift in Sources */,
