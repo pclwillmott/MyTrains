@@ -38,6 +38,8 @@ public class PTSettingsPropertyView : NSView, NSTextFieldDelegate {
     
     speedTable = nil
     
+    functionButtons.removeAll()
+    
   }
   
   // MARK: Controls
@@ -59,6 +61,8 @@ public class PTSettingsPropertyView : NSView, NSTextFieldDelegate {
   private var image : NSImageView?
   
   private var speedTable : ESUSpeedTable?
+  
+  private var functionButtons : [NSButton] = []
   
   // MARK: Private Properties
   
@@ -163,6 +167,11 @@ public class PTSettingsPropertyView : NSView, NSTextFieldDelegate {
       if let cvLabel {
         
         cvLabel.translatesAutoresizingMaskIntoConstraints = false
+        cvLabel.fontSize = 10
+        
+        #if DEBUG
+        cvLabel.toolTip = "\(property)"
+        #endif
         
         self.addSubview(cvLabel)
         
@@ -204,6 +213,10 @@ public class PTSettingsPropertyView : NSView, NSTextFieldDelegate {
         
         self.addSubview(label)
         
+        #if DEBUG
+          label.toolTip = "\(property)"
+        #endif
+
         viewConstraints.append(label.topAnchor.constraint(equalTo: self.topAnchor))
         
         if definition.controlType == .description {
@@ -260,6 +273,10 @@ public class PTSettingsPropertyView : NSView, NSTextFieldDelegate {
         
         self.addSubview(checkBox)
         
+        #if DEBUG
+          checkBox.toolTip = "\(property)"
+        #endif
+
         viewConstraints.append(checkBox.topAnchor.constraint(equalTo: self.topAnchor))
         
         viewConstraints.append(checkBox.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: leadingOffset))
@@ -279,7 +296,11 @@ public class PTSettingsPropertyView : NSView, NSTextFieldDelegate {
         comboBox.translatesAutoresizingMaskIntoConstraints = false
         
         self.addSubview(comboBox)
-        
+ 
+        #if DEBUG
+          comboBox.toolTip = "\(property)"
+        #endif
+
         comboBox.target = self
         comboBox.action = #selector(comboBoxAction(_:))
         comboBox.isEditable = false
@@ -298,7 +319,7 @@ public class PTSettingsPropertyView : NSView, NSTextFieldDelegate {
           
           viewConstraints.append(cvLabel.leadingAnchor.constraint(greaterThanOrEqualToSystemSpacingAfter: comboBox.trailingAnchor, multiplier: 1.0))
           
-          viewConstraints.append(cvLabel.topAnchor.constraint(equalTo: comboBox.topAnchor))
+          viewConstraints.append(cvLabel.centerYAnchor.constraint(equalTo: comboBox.centerYAnchor))
           
         }
         
@@ -330,7 +351,7 @@ public class PTSettingsPropertyView : NSView, NSTextFieldDelegate {
           
           viewConstraints.append(cvLabel.leadingAnchor.constraint(greaterThanOrEqualToSystemSpacingAfter: textField.trailingAnchor, multiplier: 1.0))
 
-          viewConstraints.append(cvLabel.topAnchor.constraint(equalTo: textField.topAnchor))
+          viewConstraints.append(cvLabel.centerYAnchor.constraint(equalTo: textField.centerYAnchor))
 
         }
 
@@ -469,9 +490,155 @@ public class PTSettingsPropertyView : NSView, NSTextFieldDelegate {
       }
       
     case .functionsAnalogMode:
-      break
+    
+      if let label {
+        
+        if let cvLabel {
+          
+          viewConstraints.append(cvLabel.topAnchor.constraint(equalToSystemSpacingBelow: label.bottomAnchor, multiplier: 1.0))
+          
+        }
+        
+        var lastButton : NSButton?
+        
+        var buttonCount = 0
+        
+        var topAnchor : NSLayoutYAxisAnchor = label.bottomAnchor
+        
+        for item in FunctionAnalogMode.allCases {
+          
+          let button = NSButton(checkboxWithTitle: item.title, target: self, action: #selector(buttonAnalogAction(_:)))
+          
+          button.translatesAutoresizingMaskIntoConstraints = false
+          
+          self.addSubview(button)
+          
+          button.tag = Int(item.rawValue)
+          
+          functionButtons.append(button)
+          
+          if let lastButton {
+            
+            viewConstraints.append(button.leadingAnchor.constraint(equalToSystemSpacingAfter: lastButton.trailingAnchor, multiplier: 1.0))
+            
+          }
+          else {
+            
+            viewConstraints.append(button.leadingAnchor.constraint(equalTo: label.leadingAnchor))
+            
+          }
+          
+          viewConstraints.append(button.topAnchor.constraint(equalToSystemSpacingBelow: topAnchor, multiplier: 1.0))
+          
+          viewConstraints.append(self.bottomAnchor.constraint(greaterThanOrEqualTo: button.bottomAnchor))
+          
+          viewConstraints.append(self.trailingAnchor.constraint(greaterThanOrEqualToSystemSpacingAfter: button.trailingAnchor, multiplier: 1.0))
+          
+          lastButton = button
+          
+          buttonCount += 1
+          
+          if buttonCount == 4 {
+            
+            if let cvLabel {
+              
+              viewConstraints.append(cvLabel.leadingAnchor.constraint(greaterThanOrEqualToSystemSpacingAfter: button.trailingAnchor, multiplier: 1.0))
+              
+            }
+            
+            lastButton = nil
+            buttonCount = 0
+            topAnchor = button.bottomAnchor
+            
+          }
+
+        }
+        
+        for button1 in functionButtons {
+          for button2 in functionButtons {
+            if !(button1 === button2) {
+              viewConstraints.append(button1.widthAnchor.constraint(greaterThanOrEqualTo: button2.widthAnchor))
+            }
+          }
+        }
+        
+      }
+      
     case .functionsConsistMode:
-      break
+
+      if let label {
+        
+        if let cvLabel {
+          
+          viewConstraints.append(cvLabel.topAnchor.constraint(equalToSystemSpacingBelow: label.bottomAnchor, multiplier: 1.0))
+          
+        }
+        
+        var lastButton : NSButton?
+        
+        var buttonCount = 0
+        
+        var topAnchor : NSLayoutYAxisAnchor = label.bottomAnchor
+        
+        for item in FunctionConsistMode.allCases {
+          
+          let button = NSButton(checkboxWithTitle: item.title, target: self, action: #selector(buttonConsistAction(_:)))
+          
+          button.translatesAutoresizingMaskIntoConstraints = false
+          
+          self.addSubview(button)
+          
+          button.tag = Int(item.rawValue)
+          
+          functionButtons.append(button)
+          
+          if let lastButton {
+            
+            viewConstraints.append(button.leadingAnchor.constraint(equalToSystemSpacingAfter: lastButton.trailingAnchor, multiplier: 1.0))
+            
+          }
+          else {
+            
+            viewConstraints.append(button.leadingAnchor.constraint(equalTo: label.leadingAnchor))
+            
+          }
+          
+          viewConstraints.append(button.topAnchor.constraint(equalToSystemSpacingBelow: topAnchor, multiplier: 1.0))
+          
+          viewConstraints.append(self.bottomAnchor.constraint(greaterThanOrEqualTo: button.bottomAnchor))
+          
+          viewConstraints.append(self.trailingAnchor.constraint(greaterThanOrEqualToSystemSpacingAfter: button.trailingAnchor, multiplier: 1.0))
+          
+          lastButton = button
+          
+          buttonCount += 1
+          
+          if buttonCount == 4 {
+            
+            if let cvLabel {
+              
+              viewConstraints.append(cvLabel.leadingAnchor.constraint(greaterThanOrEqualToSystemSpacingAfter: button.trailingAnchor, multiplier: 1.0))
+              
+            }
+            
+            lastButton = nil
+            buttonCount = 0
+            topAnchor = button.bottomAnchor
+            
+          }
+
+        }
+        
+        for button1 in functionButtons {
+          for button2 in functionButtons {
+            if !(button1 === button2) {
+              viewConstraints.append(button1.widthAnchor.constraint(greaterThanOrEqualTo: button2.widthAnchor))
+            }
+          }
+        }
+        
+      }
+
     default:
       break
     }
@@ -590,6 +757,47 @@ public class PTSettingsPropertyView : NSView, NSTextFieldDelegate {
         textField!.stringValue = value
       case .esuSpeedTable:
         speedTable!.decoder = decoder
+        speedTable?.needsDisplay = true
+      case .functionsAnalogMode:
+        
+        let supported = decoder.supportedFunctionsAnalogMode
+        
+        for button in functionButtons {
+          
+          if let function = FunctionAnalogMode(rawValue: UInt8(button.tag)) {
+            
+            let isSupported = supported.contains(function)
+            
+            if isSupported {
+              button.state = decoder.getAnalogFunctionState(function: function) ? .on : .off
+            }
+            
+            button.isHidden = !isSupported
+            
+          }
+          
+        }
+        
+      case .functionsConsistMode:
+        
+        let supported = decoder.supportedFunctionsConsistMode
+        
+        for button in functionButtons {
+          
+          if let function = FunctionConsistMode(rawValue: UInt8(button.tag)) {
+            
+            let isSupported = supported.contains(function)
+            
+            if isSupported {
+              button.state = decoder.getConsistFunctionState(function: function) ? .on : .off
+            }
+            
+            button.isHidden = !isSupported
+            
+          }
+          
+        }
+        
       default:
         break
       }
@@ -634,6 +842,18 @@ public class PTSettingsPropertyView : NSView, NSTextFieldDelegate {
       
     }
     
+  }
+  
+  @objc func buttonAnalogAction(_ sender:NSButton) {
+    if let function = FunctionAnalogMode(rawValue:UInt8(exactly: sender.tag)!) {
+      decoder?.setAnalogFunctionState(function: function, state: sender.state == .on)
+    }
+  }
+  
+  @objc func buttonConsistAction(_ sender:NSButton) {
+    if let function = FunctionConsistMode(rawValue:UInt8(exactly: sender.tag)!) {
+      decoder?.setConsistFunctionState(function: function, state: sender.state == .on)
+    }
   }
   
   // MARK: NSTextFieldDelegate Methods

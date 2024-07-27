@@ -12,19 +12,17 @@ public enum ProgrammerToolInspector : Int, CaseIterable {
   
   // MARK: Enumeration
   
-  case identity = 0
-  case quickHelp = 1
-  case settings = 2
+  case settings = 0
+  case changedCVs = 1
+  case sound = 2
   case rwCVs = 3
-  case changedCVs = 4
-  case sound = 5
-  
+  case quickHelp = 4
+
   // MARK: Public Properties
   
   public var title : String {
     
     let titles : [ProgrammerToolInspector:String] = [
-      .identity   : String(localized: "Decoder Information"),
       .quickHelp  : String(localized: "Quick Help"),
       .settings   : String(localized: "Change Decoder Settings"),
       .rwCVs      : String(localized: "Read and Write CVs"),
@@ -39,7 +37,6 @@ public enum ProgrammerToolInspector : Int, CaseIterable {
   public var button : NSButton {
     
     let icons : [ProgrammerToolInspector:MyIcon] = [
-      .identity   : .info,
       .quickHelp  : .help,
       .settings   : .gear,
       .rwCVs      : .wrench,
@@ -48,7 +45,6 @@ public enum ProgrammerToolInspector : Int, CaseIterable {
     ]
     
     let tooltip : [ProgrammerToolInspector:String] = [
-      .identity   : String(localized: "Show Identity Inspector"),
       .quickHelp  : String(localized: "Show Quick Help Inspector"),
       .settings   : String(localized: "Show Settings Inspector"),
       .rwCVs      : String(localized: "Show Read/Write CVs Inspector"),
@@ -69,7 +65,6 @@ public enum ProgrammerToolInspector : Int, CaseIterable {
   public var backgroundColor : CGColor {
     
     let colors : [ProgrammerToolInspector:CGColor] = [
-      .identity   : NSColor.blue.cgColor,
       .quickHelp  : NSColor.red.cgColor,
       .settings   : NSColor.yellow.cgColor,
       .rwCVs      : NSColor.green.cgColor,

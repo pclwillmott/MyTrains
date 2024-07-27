@@ -38,6 +38,7 @@ public enum ProgrammerToolInfoType : CaseIterable {
   case decibel
   case frequency
   case temperature
+  case manufacturerName
   
 }
 
@@ -47,14 +48,18 @@ public enum ProgrammerToolEncodingType : Int, CaseIterable {
 
   // Generic Encodings
   
-  case none            // No encoding - property is a description or warning
-  case byte            // Byte, Min, Max, Mask, Shift
-  case boolBit         // Bit of Byte, Mask
-  case boolNZ          // Byte, Non-Zero means true, 0 means false
-  case extendedAddress // Word DCC long address encoding
-  case specialInt8     // Byte +/- 127 with bit 7 as sign (not 2s complement)
-  case custom          // Decoding/Encoding is handled by separate code
-  case dWordHex        // 4 byte value in hex, little endian
+  case none             // No encoding - property is a description or warning
+  case byte             // Byte, Min, Max, Mask, Shift
+  case word             // Word, Min, Max
+  case dword            // DWord, Min, Max
+  case boolBit          // Bit of Byte, Mask
+  case boolNZ           // Byte, Non-Zero means true, 0 means false
+  case extendedAddress  // Word DCC long address encoding
+  case specialInt8      // Byte +/- 127 with bit 7 as sign (not 2s complement)
+  case custom           // Decoding/Encoding is handled by separate code
+  case dWordHex         // 4 byte value in hex, little endian
+  case manufacturerName // 1 byte decoded as NMRA Manufacturer Name
+  case railComDate      // 4 bytes encoded as number of seconds since 1 Jan 2000
   
   // Selection Encodings (ComboBox)
   
@@ -75,6 +80,7 @@ public enum ProgrammerToolEncodingType : Int, CaseIterable {
   case speedTableIndex
   case speedTableValue
   case analogModeEnable
+  case hluSpeedLimit
 
 }
 

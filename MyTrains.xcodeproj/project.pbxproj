@@ -386,7 +386,6 @@
 		DAB163EF2C3EE20000D7F23E /* ProgrammerToolSettingsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAB163EE2C3EE20000D7F23E /* ProgrammerToolSettingsSection.swift */; };
 		DAB163F12C3EE25500D7F23E /* ProgrammerToolSettingsProperty.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAB163F02C3EE25500D7F23E /* ProgrammerToolSettingsProperty.swift */; };
 		DAB163F32C3EE5ED00D7F23E /* ProgrammerToolControlType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAB163F22C3EE5ED00D7F23E /* ProgrammerToolControlType.swift */; };
-		DAB163F52C3EEEA600D7F23E /* ProgrammerToolSettingsPropertyField.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAB163F42C3EEEA600D7F23E /* ProgrammerToolSettingsPropertyField.swift */; };
 		DAB163F72C3EF31600D7F23E /* ProgrammerToolSettingsSectionField.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAB163F62C3EF31600D7F23E /* ProgrammerToolSettingsSectionField.swift */; };
 		DAB26FF92BD1362300AC1B29 /* SwitchboardEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAB26FF82BD1362300AC1B29 /* SwitchboardEditorView.swift */; };
 		DAB4A7392B3F0E7D00CD5256 /* CDIGroupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAB4A7382B3F0E7D00CD5256 /* CDIGroupView.swift */; };
@@ -877,7 +876,6 @@
 		DAB163EE2C3EE20000D7F23E /* ProgrammerToolSettingsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgrammerToolSettingsSection.swift; sourceTree = "<group>"; };
 		DAB163F02C3EE25500D7F23E /* ProgrammerToolSettingsProperty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgrammerToolSettingsProperty.swift; sourceTree = "<group>"; };
 		DAB163F22C3EE5ED00D7F23E /* ProgrammerToolControlType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgrammerToolControlType.swift; sourceTree = "<group>"; };
-		DAB163F42C3EEEA600D7F23E /* ProgrammerToolSettingsPropertyField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgrammerToolSettingsPropertyField.swift; sourceTree = "<group>"; };
 		DAB163F62C3EF31600D7F23E /* ProgrammerToolSettingsSectionField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgrammerToolSettingsSectionField.swift; sourceTree = "<group>"; };
 		DAB26FF82BD1362300AC1B29 /* SwitchboardEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchboardEditorView.swift; sourceTree = "<group>"; };
 		DAB4A7382B3F0E7D00CD5256 /* CDIGroupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CDIGroupView.swift; sourceTree = "<group>"; };
@@ -1353,7 +1351,6 @@
 				DAB163F02C3EE25500D7F23E /* ProgrammerToolSettingsProperty.swift */,
 				DA7AFCA42C4EC1B40074A45D /* ProgrammerToolSettingsPropertyExtension.swift */,
 				DA7AFCA22C4E71350074A45D /* ProgrammerToolSettingsPropertyDefinition.swift */,
-				DAB163F42C3EEEA600D7F23E /* ProgrammerToolSettingsPropertyField.swift */,
 				DAB163F22C3EE5ED00D7F23E /* ProgrammerToolControlType.swift */,
 				DAB163F62C3EF31600D7F23E /* ProgrammerToolSettingsSectionField.swift */,
 			);
@@ -2256,7 +2253,6 @@
 				DA3168892BCAC84300059B6C /* SwitchboardOperationsView.swift in Sources */,
 				DAF6826F2BA33EB700E6D590 /* GatewayActivityView.swift in Sources */,
 				DA0D3E0E2A487A780042748C /* ComboBoxSimpleDS.swift in Sources */,
-				DAB163F52C3EEEA600D7F23E /* ProgrammerToolSettingsPropertyField.swift in Sources */,
 				DA5A9F90295C89FC00950479 /* NumberBase.swift in Sources */,
 				DA8C2B192C385344001755AB /* DecoderType.swift in Sources */,
 				DAF5B4FF28A93D0E0015E758 /* RandomAccessCollectionExtensions.swift in Sources */,

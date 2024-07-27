@@ -51,6 +51,16 @@ public class Decoder : NSObject {
 
   }
   
+  deinit {
+    
+    propertyViewLookup.removeAll()
+    
+    cvLookup.removeAll()
+    
+    physicalOutputProperties.removeAll()
+    
+  }
+  
   // MARK: Private Properties
   
   private var _decoderType : DecoderType
@@ -80,6 +90,8 @@ public class Decoder : NSObject {
   
   private var propertyViewLookup : [ProgrammerToolSettingsProperty:PTSettingsPropertyView] = [:]
   
+  private var cvLookup : [CV:[PTSettingsPropertyView]] = [:]
+  
   private var physicalOutputProperties : [PTSettingsPropertyView] = []
   
   // MARK: Public Properties
@@ -89,16 +101,41 @@ public class Decoder : NSObject {
   }
   
   public var propertyViews : [PTSettingsPropertyView] = [] {
+    
     didSet {
+      
       for view in propertyViews {
+        
         propertyViewLookup[view.property] = view
+        
         if view.indexingMethod == .esuDecoderPhysicalOutput {
           physicalOutputProperties.append(view)
         }
+        
+        if let cvs = view.definition.cv {
+          
+          for cv in cvs {
+            
+            var views : [PTSettingsPropertyView] = [view]
+            
+            if let temp = cvLookup[cv] {
+              views.append(contentsOf: temp)
+            }
+            
+            cvLookup[cv] = views
+            
+          }
+          
+        }
+        
         view.decoder = self
+        
       }
+      
       applyLayoutRules()
+      
     }
+    
   }
   
   public var cvList : CVList {
@@ -230,15 +267,6 @@ public class Decoder : NSObject {
     return result
   }
   
-  public var marklinConsecutiveAddresses : MarklinConsecutiveAddresses { // *** KEEP ***
-    get {
-      return MarklinConsecutiveAddresses(rawValue: getUInt8(cv: .cv_000_000_049)! & MarklinConsecutiveAddresses.mask)!
-    }
-    set(value) {
-      setMaskedUInt8(cv: .cv_000_000_049, mask: MarklinConsecutiveAddresses.mask, value: value.rawValue)
-    }
-  }
-  
   private var _speedTablePreset : SpeedTablePreset = .doNothing
   
   private var speedTablePreset : SpeedTablePreset { // *** KEEP ***
@@ -279,11 +307,14 @@ public class Decoder : NSObject {
     set(value) {
       if value != _speedTableIndex {
         _speedTableIndex = value
-        delegate?.reloadSettings?(self)
+        propertyViewLookup[.speedTableIndex]?.reload()
+        propertyViewLookup[.speedTableEntryValue]?.reload()
+        propertyViewLookup[.esuSpeedTable]?.reload()
       }
     }
   }
-  
+
+  /*
   public var speedTableValue : UInt8 { // *** KEEP ***
     get {
       return getUInt8(cv: .cv_000_000_067 + (speedTableIndex - 1))!
@@ -305,6 +336,7 @@ public class Decoder : NSObject {
       
     }
   }
+  */
   
   private var _esuDecoderPhysicalOutput : ESUDecoderPhysicalOutput = .frontLight {
     didSet {
@@ -384,6 +416,12 @@ public class Decoder : NSObject {
         let position = offset + Int(cv.cv) - 1 - (cv.isIndexed ? 256 : 0)
         
         modifiedBlocks[position] = (modifiedBlocks[position] & ~masks[index]) | ((values[index] << shifts[index]) & masks[index])
+        
+        if let views = cvLookup[cvs[index]] {
+          for view in views {
+            view.reload()
+          }
+        }
         
       }
       
@@ -535,6 +573,8 @@ public class Decoder : NSObject {
     
   }
   
+  private var dateFormatter = DateFormatter()
+  
   public func getValue(property:ProgrammerToolSettingsProperty, definition : ProgrammerToolSettingsPropertyDefinition? = nil) -> String {
     
     let excludedEncodings : Set<ProgrammerToolEncodingType> = [
@@ -555,6 +595,10 @@ public class Decoder : NSObject {
       return values[0] == definition.mask![0] ? "true" : "false"
     case .boolNZ:
       return values[0] != 0 ? "true" : "false"
+    case .dword:
+      return "\(UInt32(bigEndianData: values.reversed())!)"
+    case .word:
+      return "\(UInt16(bigEndianData: values.reversed())!)"
     case .locomotiveAddressType:
       return (values[0] == definition.mask![0] ? LocomotiveAddressType.extended : LocomotiveAddressType.primary).title
     case .extendedAddress:
@@ -564,7 +608,7 @@ public class Decoder : NSObject {
     case .esuExternalSmokeUnitType:
       return ExternalSmokeUnitType(rawValue: values[0])!.title
     case .esuMarklinConsecutiveAddresses:
-      return marklinConsecutiveAddresses.title
+      return MarklinConsecutiveAddresses(rawValue: values[0])!.title
     case .esuSpeedStepMode:
       return SpeedStepMode(rawValue: values[0])!.title
     case .manufacturerCode:
@@ -588,13 +632,29 @@ public class Decoder : NSObject {
     case .speedTableIndex:
       return "\(speedTableIndex)"
     case .speedTableValue:
-      return "\(speedTableValue)"
+      return "\(values[speedTableIndex - 1])"
     case .esuTriggeredFunction:
       return TriggeredFunction(rawValue: values[0])!.title
+    case .hluSpeedLimit:
+      let index = property.rawValue - ProgrammerToolSettingsProperty.hluSpeedLimit1.rawValue
+      return "\(values[index])"
     case .dWordHex:
       return UInt32(bigEndianData: values.reversed())!.toHex(numberOfDigits: 8)
     case .analogModeEnable:
       return values[1] == definition.mask![1] ? "true" : "false"
+    case .manufacturerName:
+      return ManufacturerCode(rawValue: UInt16(values[0]))?.title ?? ""
+    case .railComDate:
+
+      let date = Date(timeIntervalSince1970: 946684800.0 + Double(UInt32(bigEndianData: values.reversed())!)) // 1-1-2000
+      
+      dateFormatter.calendar = NSLocale.autoupdatingCurrent.calendar
+      dateFormatter.locale = NSLocale.autoupdatingCurrent
+      dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
+      dateFormatter.dateStyle = .long
+      
+      return dateFormatter.string(from: date)
+      
     default:
       break
     }
@@ -675,6 +735,24 @@ public class Decoder : NSObject {
       guard let _ = UInt32(hex:string) else {
         return false
       }
+    case .speedTableValue:
+      
+      guard let value = Int(string) else {
+        return false
+      }
+      
+      if !(value >= Int(minValue) && value <= Int(maxValue)) {
+        return false
+      }
+      
+      if speedTableIndex == 1 && value != 1 {
+        return false
+      }
+
+      if speedTableIndex == 28 && value != 255 {
+        return false
+      }
+
     default:
       guard let value = Int(string), value >= Int(minValue) && value <= Int(maxValue) else {
         return false
@@ -705,6 +783,10 @@ public class Decoder : NSObject {
       newValues.append(string == "true" ? definition.mask![0] : 0)
     case .boolNZ:
       newValues.append(string == "true" ? definition.trueDefaultValue! : 0)
+    case .word:
+      newValues.append(contentsOf: UInt16(string)!.bigEndianData.reversed())
+    case .dword:
+      newValues.append(contentsOf: UInt32(string)!.bigEndianData.reversed())
     case .locomotiveAddressType:
       newValues.append(LocomotiveAddressType(title: string) == .extended ? definition.mask![0] : 0)
     case .extendedAddress:
@@ -717,7 +799,7 @@ public class Decoder : NSObject {
     case .esuExternalSmokeUnitType:
       newValues.append(ExternalSmokeUnitType(title: string)!.rawValue)
     case .esuMarklinConsecutiveAddresses:
-      marklinConsecutiveAddresses = MarklinConsecutiveAddresses(title: string)!
+      newValues.append(MarklinConsecutiveAddresses(title: string)!.rawValue)
     case .esuSpeedStepMode:
       newValues.append(SpeedStepMode(title: string)!.rawValue)
     case .manufacturerCode:
@@ -741,7 +823,41 @@ public class Decoder : NSObject {
     case .speedTableIndex:
       speedTableIndex = Int(string)!
     case .speedTableValue:
-      speedTableValue = UInt8(string)!
+      newValues = getProperty(property: property, propertyDefinition: definition)
+      let value = UInt8(string)!
+      newValues[speedTableIndex - 1] = value
+      if speedTableIndex > 2 {
+        for index in 2 ... speedTableIndex - 1 {
+          newValues[index - 1] = min(newValues[index - 1], value)
+        }
+      }
+      if speedTableIndex < 27 {
+        for index in speedTableIndex + 1 ... 27 {
+          newValues[index - 1] = max(newValues[index - 1], value)
+        }
+      }
+    case .hluSpeedLimit:
+      
+      newValues = getProperty(property: property, propertyDefinition: definition)
+      
+      let value = UInt8(string)!
+      
+      let hluIndex = property.rawValue - ProgrammerToolSettingsProperty.hluSpeedLimit1.rawValue
+      
+      newValues[hluIndex] = value
+      
+      if hluIndex > 0 {
+        for index in 0 ... hluIndex - 1 {
+          newValues[index] = min(newValues[index], value)
+        }
+      }
+      
+      if hluIndex < 4 {
+        for index in hluIndex + 1 ... 4 {
+          newValues[index] = max(newValues[index], value)
+        }
+      }
+      
     case .esuTriggeredFunction:
       newValues.append(TriggeredFunction(title: string)!.rawValue)
     case .dWordHex:
@@ -838,7 +954,7 @@ public class Decoder : NSObject {
   // MARK: Layout Rules
   
   internal var _layoutRules : [PTSettingsPropertyLayoutRule]?
-
+  
   internal var layoutRuleLookupTestProperties : [ProgrammerToolSettingsProperty:[PTSettingsPropertyLayoutRule]] = [:]
 
   internal var layoutRuleLookupActionProperties : [ProgrammerToolSettingsProperty:[PTSettingsPropertyLayoutRule]] = [:]

@@ -12,28 +12,30 @@ public enum ProgrammerToolSettingsGroup : Int, CaseIterable {
   
   // MARK: Enumeration
   
-  case address = 0
-  case analogSettings = 1
-  case brakeSettings = 2
-  case dccSettings = 3
-  case drivingCharacteristics = 4
-  case functionOutputs = 5
-  case functionSettings = 6
-  case functionMapping = 7
-  case identification = 8
-  case compatibility = 9
-  case motorSettings = 10
-  case smokeUnit = 11
-  case specialOptions = 12
-  case soundSettings = 13
-  case soundSlotSettings = 14
-  case manualCVInput = 15
+  case info = 0
+  case address = 1
+  case analogSettings = 2
+  case brakeSettings = 3
+  case dccSettings = 4
+  case drivingCharacteristics = 5
+  case functionOutputs = 6
+  case functionSettings = 7
+  case functionMapping = 8
+  case identification = 9
+  case compatibility = 10
+  case motorSettings = 11
+  case smokeUnit = 12
+  case specialOptions = 13
+  case soundSettings = 14
+  case soundSlotSettings = 15
+  case manualCVInput = 16
   
   // MARK: Public Properties
   
   public var title : String {
   
     let titles : [ProgrammerToolSettingsGroup:String] = [
+      .info                   : String(localized: "Decoder Information"),
       .address                : String(localized: "Address"),
       .analogSettings         : String(localized: "Analog Settings"),
       .brakeSettings          : String(localized: "Brake Settings"),
@@ -59,6 +61,7 @@ public enum ProgrammerToolSettingsGroup : Int, CaseIterable {
   public var button : NSButton {
     
     let icons : [ProgrammerToolSettingsGroup:MyIcon] = [
+      .info : .info,
       .address : .envelope,
       .analogSettings : .speedometer,
       .brakeSettings : .brake,

@@ -35,9 +35,7 @@ class ESUSpeedTable: NSView {
     
     if speedTableIndex == nil {
       values.removeAll()
-      for index in 0 ... 27 {
-        values.append(decoder.getUInt8(cv: .cv_000_000_067 + index)!)
-      }
+      values = decoder.getProperty(property: .esuSpeedTable)
     }
 
     var lastX  : CGFloat = 0
@@ -165,11 +163,9 @@ class ESUSpeedTable: NSView {
       let cc = self.convert(event.locationInWindow, from: nil)
       setValue(speedTableIndex: speedTableIndex, value: UInt8(max(1,min(255,round((cc.y - boxSize) / scaleHeight)))))
       needsDisplay = true
-      for index in 0 ... values.count - 1 {
-        decoder.setUInt8(cv: .cv_000_000_067 + index, value: values[index])
-      }
+      decoder.setProperty(property: .esuSpeedTable, values: values)
+      decoder.setValue(property: .speedTableIndex, string: "\(speedTableIndex)")
       self.speedTableIndex = nil
-      decoder.speedTableIndex = speedTableIndex
     }
     
   }

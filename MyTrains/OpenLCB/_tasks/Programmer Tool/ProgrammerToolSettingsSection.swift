@@ -12,6 +12,10 @@ public enum ProgrammerToolSettingsSection : Int, CaseIterable {
   
   // MARK: Enumeration
   
+  // Decoder Information
+  
+  case decoderInformation
+  
   // Address
   
   case locomotiveAddress = 1
@@ -126,6 +130,10 @@ public enum ProgrammerToolSettingsSection : Int, CaseIterable {
   // MARK: Private Class Properties
   
   private static let groups : [ProgrammerToolSettingsSection:(title:String, inspector:ProgrammerToolSettingsGroup)] = [
+    .decoderInformation : (
+      String(localized: "Decoder Information"),
+      .info
+    ),
     .locomotiveAddress : (
       String(localized: "Locomotive Address"),
       .address

@@ -12,7 +12,26 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
 
   // MARK: Enumeration
   
-  // address
+  // Decoder Information
+  
+  case manufacturer = 207
+  case model = 208
+  case flash = 209
+  case manufacturerId = 210
+  case productId = 211
+  case serialNumber = 212
+  case soundLock = 213
+  case firmwareVersion = 214
+  case firmwareType = 215
+  case bootcodeVersion = 216
+  case productionInfo = 217
+  case productionDate = 218
+  case cv7 = 219
+  case cv8 = 220
+  case decoderOperatingTime = 221
+  case smokeUnitOperatingTime = 222
+  
+  // Address
   
   case locomotiveAddressType = 1
   case locomotiveAddressShort = 2
@@ -276,7 +295,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
   
   public func cvLabel(decoder:Decoder) -> String? {
     
-    guard let definition = ProgrammerToolSettingsProperty.definitions[self], let cvs = definition.cv, let masks = definition.mask, let cvIndexingMethod = definition.cvIndexingMethod else {
+    guard let definition = ProgrammerToolSettingsProperty.definitions[self], let _cvs = definition.cv, let masks = definition.mask, let cvIndexingMethod = definition.cvIndexingMethod else {
       return nil
     }
     
@@ -317,6 +336,18 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
       
     }
     
+    var cvs = _cvs
+    
+    switch definition.encoding {
+    case .hluSpeedLimit:
+      let hluIndex = self.rawValue - ProgrammerToolSettingsProperty.hluSpeedLimit1.rawValue
+      cvs = [_cvs[0] + hluIndex]
+    case .speedTableValue:
+      cvs = [_cvs[0] + (decoder.speedTableIndex - 1)]
+    default:
+      break
+    }
+    
     let offset = decoder.cvIndexOffset(indexingMethod: cvIndexingMethod)
     
     let isMultiple = cvs.count > 2
@@ -327,7 +358,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
       
       for index in 1 ... cvs.count - 1 {
         let previous = cvs[index - 1] + offset
-        if let test = CV(cv31: previous.cv31, cv32: previous.cv32, cv: previous.cv + 1, indexMethod: previous.indexMethod) {
+        if let test = CV(cv31: previous.cv31, cv32: previous.cv32, cv: previous.cv + 1, indexMethod: previous.indexMethod, isHidden: previous.isHidden, isReadOnly: previous.isReadOnly) {
           if !(cvs[index] + offset == test && masks[index] == masks[index - 1]) {
             isContiguous = false
             break
@@ -387,166 +418,6 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     }
     
     return result
-    
-  }
-  
-  
-  public static var inspectorPropertyFields: [ProgrammerToolSettingsPropertyField] {
-    
-    var result : [ProgrammerToolSettingsPropertyField] = []
-    
-//    let labelFontSize : CGFloat = 10.0
-    let textFontSize  : CGFloat = 11.0
-    
-    for item in ProgrammerToolSettingsProperty.allCases {
-      
-      if let definition = ProgrammerToolSettingsProperty.definitions[item] {
-        
-        var field : ProgrammerToolSettingsPropertyField = (view:nil, label:nil, control:nil, item, customView:nil, cvLabel:nil, slider:nil)
-        
-        if definition.controlType != .checkBox && definition.controlType != .description && definition.controlType != .warning {
-          field.label = NSTextField(labelWithString: definition.title)
-        }
-        
-        switch definition.controlType {
-        case .checkBox:
-          let checkBox = NSButton()
-          checkBox.setButtonType(.switch)
-          checkBox.title = definition.title
-          field.control = checkBox
-        case .comboBox:
-          let comboBox = MyComboBox()
-          comboBox.isEditable = false
-          field.control = comboBox
-          initComboBox(property: field.property, comboBox: comboBox)
-        case .comboBoxDynamic:
-          let comboBox = MyComboBox()
-          comboBox.isEditable = false
-          field.control = comboBox
-        case .warning:
-          field.customView = NSImageView(image: MyIcon.warning.image!)
-          field.control = NSTextField(labelWithString: definition.title)
-        case .label:
-          field.control = NSTextField(labelWithString: "")
-        case .description:
-          let textField = NSTextField(labelWithString: definition.title)
-          textField.lineBreakMode = .byWordWrapping
-          textField.maximumNumberOfLines = 0
-          textField.preferredMaxLayoutWidth = 400.0
-          field.control = textField
-        case .textField:
-          field.control = NSTextField()
-        case .textFieldWithSlider:
-          field.control = NSTextField()
-          field.slider = NSSlider()
-        case .functionsConsistMode, .functionsAnalogMode:
-          field.customView = NSView()
-        case .esuSpeedTable:
-          field.customView = ESUSpeedTable()
-        default:
-          break
-        }
-        
-        if definition.infoType != .none {
-          let info = NSTextField(labelWithString: "")
-          info.fontSize = textFontSize
-          field.customView = info
-        }
-        
-        /// https://manasaprema04.medium.com/autolayout-fundamental-522f0a6e5790
-        
-        let view = NSView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.setContentHuggingPriority(NSLayoutConstraint.Priority(rawValue: 500), for: .horizontal)
-        field.view = view
-        
-        if let label = field.label {
-          label.stringValue = definition.title
-          label.translatesAutoresizingMaskIntoConstraints = false
-          label.setContentHuggingPriority(NSLayoutConstraint.Priority(rawValue: 250), for: .horizontal)
-          view.addSubview(label)
-        }
-        
-        if let slider = field.slider {
-          slider.translatesAutoresizingMaskIntoConstraints = false
-          slider.altIncrementValue = 1
-          slider.minValue = definition.minValue!
-          slider.maxValue = definition.maxValue!
-          slider.tag = item.rawValue
-          view.addSubview(slider)
-        }
-        
-        if let control = field.control {
-          control.translatesAutoresizingMaskIntoConstraints = false
-          control.setContentHuggingPriority(NSLayoutConstraint.Priority(rawValue: 1), for: .horizontal)
-          control.tag = item.rawValue
-          view.addSubview(control)
-        }
-        
-        if let customView = field.customView {
-          customView.translatesAutoresizingMaskIntoConstraints = false
-          view.addSubview(customView)
-        }
-        
-        if definition.cv != nil {
-          
-          field.cvLabel = NSTextField(labelWithString: "")
-          
-          if let cvLabel = field.cvLabel {
-            cvLabel.translatesAutoresizingMaskIntoConstraints = false
-            cvLabel.alignment = .right
-            view.addSubview(cvLabel)
-          }
-          
-        }
-        
-        result.append(field)
-        
-      }
-      
-    }
-    
-    return result
-    
-  }
-
-  // MARK: Private Class Methods
-  
-  private static func initComboBox(property:ProgrammerToolSettingsProperty, comboBox:MyComboBox) {
-    
-    switch property {
-    case .locomotiveAddressType:
-      LocomotiveAddressType.populate(comboBox: comboBox)
-    case .marklinConsecutiveAddresses:
-      MarklinConsecutiveAddresses.populate(comboBox: comboBox)
-    case .m4MasterDecoderManufacturer:
-      ManufacturerCode.populate(comboBox: comboBox)
-    case .speedStepMode:
-      SpeedStepMode.populate(comboBox: comboBox)
-    case .classLightLogicSequenceLength:
-      ClassLightLogicSequenceLength.populate(comboBox: comboBox)
-    case .decoderSensorSettings:
-      DecoderSensorSettings.populate(comboBox: comboBox)
-    case .steamChuffMode:
-      SteamChuffMode.populate(comboBox: comboBox)
-    case .soundControlBasis:
-      SoundControlBasis.populate(comboBox: comboBox)
-    case .idleOperationTriggeredFunction, .loadOperationTriggeredFunction:
-      TriggeredFunction.populate(comboBox: comboBox)
-    case .physicalOutputSmokeUnitControlMode:
-      SmokeUnitControlMode.populate(comboBox: comboBox)
-    case .physicalOutputExternalSmokeUnitType:
-      ExternalSmokeUnitType.populate(comboBox: comboBox)
-    case .speedTableIndex:
-      comboBox.removeAllItems()
-      for index in 1 ... 28 {
-        comboBox.addItem(withObjectValue: "\(index)")
-      }
-    case .speedTablePreset:
-      SpeedTablePreset.populate(comboBox: comboBox)
-    default:
-      break
-    }
     
   }
   
