@@ -939,13 +939,22 @@
     "AUX10" : {
 
     },
+    "AUX10 is not available while digital wheel sensor is enabled." : {
+
+    },
     "AUX11" : {
 
     },
     "AUX11 and AUX12 will not work while SUSI is enabled." : {
 
     },
+    "AUX11 is not available while SUSI is enabled." : {
+
+    },
     "AUX12" : {
+
+    },
+    "AUX12 is not available while SUSI is enabled." : {
 
     },
     "AUX13" : {
@@ -2976,6 +2985,12 @@
     "Enable Acceleration Time" : {
 
     },
+    "Enable Analog Sensor Input for Sensor 1" : {
+
+    },
+    "Enable Analog Sensor Input for Sensor 2" : {
+
+    },
     "Enable Automatic Parking Brake" : {
 
     },
@@ -2992,6 +3007,12 @@
 
     },
     "Enable Deceleration Time" : {
+
+    },
+    "Enable Digital Sensor Input for Sensor 1" : {
+
+    },
+    "Enable Digital Sensor Input for Sensor 2" : {
 
     },
     "Enable Forward Trimming" : {
@@ -5798,6 +5819,9 @@
     "Pantograph 2" : {
 
     },
+    "Pantograph Height" : {
+
+    },
     "Passenger Door Slams" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
       "localizations" : {
@@ -7356,7 +7380,7 @@
     "Startup Time" : {
 
     },
-    "Startup time = 255 means defective Neon lamp." : {
+    "Startup time = 255 means defective lamp." : {
 
     },
     "Steam" : {
@@ -8028,6 +8052,9 @@
           }
         }
       }
+    },
+    "Threshold" : {
+
     },
     "Threshold for Idle Operation" : {
 

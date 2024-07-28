@@ -93,7 +93,9 @@ public class Decoder : NSObject {
   private var cvLookup : [CV:[PTSettingsPropertyView]] = [:]
   
   private var physicalOutputProperties : [PTSettingsPropertyView] = []
-  
+
+  private var randomFunctionProperties : [PTSettingsPropertyView] = []
+
   // MARK: Public Properties
   
   public var decoderType : DecoderType {
@@ -108,8 +110,13 @@ public class Decoder : NSObject {
         
         propertyViewLookup[view.property] = view
         
-        if view.indexingMethod == .esuDecoderPhysicalOutput {
+        switch view.indexingMethod {
+        case .esuDecoderPhysicalOutput:
           physicalOutputProperties.append(view)
+        case .esuRandomFunction:
+          randomFunctionProperties.append(view)
+        default:
+          break
         }
         
         if let cvs = view.definition.cv {
@@ -346,6 +353,14 @@ public class Decoder : NSObject {
     }
   }
   
+  private var _esuRandomFunction : ESURandomFunction = .random1 {
+    didSet {
+      for view in randomFunctionProperties {
+        view.reload()
+      }
+    }
+  }
+  
   public var esuDecoderPhysicalOutput : ESUDecoderPhysicalOutput { // *** KEEP ***
     get {
       return _esuDecoderPhysicalOutput
@@ -357,7 +372,18 @@ public class Decoder : NSObject {
       }
     }
   }
-  
+
+  public var esuRandomFunction : ESURandomFunction { // *** KEEP ***
+    get {
+      return _esuRandomFunction
+    }
+    set(value) {
+      if value != _esuRandomFunction {
+        _esuRandomFunction = value
+      }
+    }
+  }
+
   public var esuDecoderPhysicalOutputMode : ESUPhysicalOutputMode {
     return ESUPhysicalOutputMode(title: getValue(property: .physicalOutputOutputMode), decoder: self)!
   }
@@ -369,6 +395,8 @@ public class Decoder : NSObject {
       return 0
     case .esuDecoderPhysicalOutput:
       return Int(esuDecoderPhysicalOutput.rawValue) * 8
+    case .esuRandomFunction:
+      return Int(esuRandomFunction.rawValue) * 8
     }
     
   }
@@ -526,6 +554,12 @@ public class Decoder : NSObject {
     return value == mask
   }
   
+  public func reloadAll() {
+    for view in propertyViews {
+      view.reload()
+    }
+  }
+  
   public func setBool(cv:CV, mask:UInt8, value:Bool) {
 
     guard let byte = getUInt8(cv: cv), let offset = indexLookup[cv.index] else {
@@ -595,6 +629,8 @@ public class Decoder : NSObject {
       return values[0] == definition.mask![0] ? "true" : "false"
     case .boolNZ:
       return values[0] != 0 ? "true" : "false"
+    case .boolNZReversed:
+      return values[0] != 0 ? "false" : "true"
     case .dword:
       return "\(UInt32(bigEndianData: values.reversed())!)"
     case .word:
@@ -620,7 +656,7 @@ public class Decoder : NSObject {
     case .esuSoundControlBasis:
       return (values[0] == 0 ? SoundControlBasis.accelerationAndBrakeTime : SoundControlBasis.accelerationAndBrakeTimeAndTrainLoad).title
     case .esuSpeedTablePreset:
-      return speedTablePreset.title
+      return SpeedTablePreset.doNothing.title
     case .esuDecoderPhysicalOutput:
       return esuDecoderPhysicalOutput.title
     case .esuSmokeUnitControlMode:
@@ -640,6 +676,9 @@ public class Decoder : NSObject {
       return "\(values[index])"
     case .dWordHex:
       return UInt32(bigEndianData: values.reversed())!.toHex(numberOfDigits: 8)
+    case .steamChuffDuration:
+      let index = property.rawValue - ProgrammerToolSettingsProperty.smokeChuffsMinimumDuration.rawValue
+      return "\(values[index])"
     case .analogModeEnable:
       return values[1] == definition.mask![1] ? "true" : "false"
     case .manufacturerName:
@@ -681,10 +720,13 @@ public class Decoder : NSObject {
 
     var doubleValue : Double
 
-    if definition.encoding == .specialInt8 {
+    switch definition.encoding {
+    case .specialInt8:
       doubleValue = Double((Int8(values[0] & 0x7f) * (((values[0] & ByteMask.d7) == ByteMask.d7) ? -1 : 1)))
-    }
-    else {
+    case .steamChuffDuration:
+      let index = property.rawValue - ProgrammerToolSettingsProperty.smokeChuffsMinimumDuration.rawValue
+      doubleValue = Double(values[index])
+    default:
       doubleValue = Double(values[0])
     }
 
@@ -783,6 +825,8 @@ public class Decoder : NSObject {
       newValues.append(string == "true" ? definition.mask![0] : 0)
     case .boolNZ:
       newValues.append(string == "true" ? definition.trueDefaultValue! : 0)
+    case .boolNZReversed:
+      newValues.append(string == "false" ? definition.trueDefaultValue! : 0)
     case .word:
       newValues.append(contentsOf: UInt16(string)!.bigEndianData.reversed())
     case .dword:
@@ -810,8 +854,28 @@ public class Decoder : NSObject {
       newValues.append(SteamChuffMode(title: string)! == .playSteamChuffsAccordingToSpeed ? definition.trueDefaultValue! : 0)
     case .esuSoundControlBasis:
       newValues.append(SoundControlBasis(title: string)! == .accelerationAndBrakeTimeAndTrainLoad ? definition.trueDefaultValue! : 0)
+      
     case .esuSpeedTablePreset:
-      speedTablePreset = SpeedTablePreset(title: string)!
+      
+      let speedTablePreset = SpeedTablePreset(title: string)!
+      
+      if !speedTablePreset.speedTableValues.isEmpty {
+        newValues = speedTablePreset.speedTableValues
+      }
+      else if speedTablePreset == .linearUntilFirstMaximumValue {
+        newValues = getProperty(property: .speedTablePreset)
+        var firstMax : Int = 0
+        for index in 0 ... 27 {
+          if newValues[index] == 255 {
+            firstMax = index
+            break
+          }
+        }
+        for index in 1 ... firstMax - 1 {
+          newValues[index] = UInt8(1 + (255 - 1) * Double(index) / Double(firstMax))
+        }
+      }
+      
     case .esuDecoderPhysicalOutput:
       esuDecoderPhysicalOutput = ESUDecoderPhysicalOutput(title: string)!
     case .esuSmokeUnitControlMode:
@@ -823,19 +887,25 @@ public class Decoder : NSObject {
     case .speedTableIndex:
       speedTableIndex = Int(string)!
     case .speedTableValue:
+      
       newValues = getProperty(property: property, propertyDefinition: definition)
+      
       let value = UInt8(string)!
+      
       newValues[speedTableIndex - 1] = value
+      
       if speedTableIndex > 2 {
         for index in 2 ... speedTableIndex - 1 {
           newValues[index - 1] = min(newValues[index - 1], value)
         }
       }
+      
       if speedTableIndex < 27 {
         for index in speedTableIndex + 1 ... 27 {
           newValues[index - 1] = max(newValues[index - 1], value)
         }
       }
+      
     case .hluSpeedLimit:
       
       newValues = getProperty(property: property, propertyDefinition: definition)
@@ -856,6 +926,24 @@ public class Decoder : NSObject {
         for index in hluIndex + 1 ... 4 {
           newValues[index] = max(newValues[index], value)
         }
+      }
+      
+    case .steamChuffDuration:
+      
+      let index = property.rawValue - ProgrammerToolSettingsProperty.smokeChuffsMinimumDuration.rawValue
+
+      newValues = getProperty(property: property, propertyDefinition: definition)
+      
+      let value = UInt8(string)!
+      
+      newValues[index] = value
+      
+      if index == 0 && newValues[1] < value {
+        newValues[1] = value
+      }
+      
+      if index == 1 && newValues[0] > value {
+        newValues[0] = value
       }
       
     case .esuTriggeredFunction:

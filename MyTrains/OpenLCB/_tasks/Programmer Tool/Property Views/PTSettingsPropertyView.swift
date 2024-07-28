@@ -72,7 +72,7 @@ public class PTSettingsPropertyView : NSView, NSTextFieldDelegate {
   
   private let leadingOffset : CGFloat = 20.0
   
-  private let comboWidth : CGFloat = 300.0
+  private let comboWidth : CGFloat = 350.0
   
   private let textWidth : CGFloat = 50.0
   
@@ -373,7 +373,7 @@ public class PTSettingsPropertyView : NSView, NSTextFieldDelegate {
         
         viewConstraints.append(textField.leadingAnchor.constraint(equalTo: label.leadingAnchor))
         
-        viewConstraints.append(textField.widthAnchor.constraint(equalToConstant: textWidth))
+        viewConstraints.append(textField.widthAnchor.constraint(equalToConstant: definition.encoding == .dWordHex ? 100 : textWidth))
         
         viewConstraints.append(self.bottomAnchor.constraint(greaterThanOrEqualTo: textField.bottomAnchor))
         
@@ -431,8 +431,8 @@ public class PTSettingsPropertyView : NSView, NSTextFieldDelegate {
         
         viewConstraints.append(textField.leadingAnchor.constraint(equalToSystemSpacingAfter: slider.trailingAnchor, multiplier: 1.0))
         
-        viewConstraints.append(textField.widthAnchor.constraint(equalToConstant: textWidth))
-        
+        viewConstraints.append(textField.widthAnchor.constraint(equalToConstant: definition.encoding == .dWordHex ? 100 : textWidth))
+
         viewConstraints.append(self.bottomAnchor.constraint(greaterThanOrEqualTo: textField.bottomAnchor))
         
         viewConstraints.append(self.trailingAnchor.constraint(greaterThanOrEqualToSystemSpacingAfter: textField.trailingAnchor, multiplier: 1.0))

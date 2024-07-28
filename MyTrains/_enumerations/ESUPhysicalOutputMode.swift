@@ -498,6 +498,7 @@ public enum ESUPhysicalOutputMode : UInt8, CaseIterable {
         .aux7:  String(localized: "ESU coupler 1"),
         .aux15: String(localized: "ESU coupler 1"),
         .aux8:  String(localized: "ESU coupler 2"),
+        .aux16: String(localized: "ESU coupler 2"),
       ],
     ]
     

@@ -335,6 +335,7 @@
 		DA98AC1E2B41870500CC423B /* CDIGroupTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA98AC1D2B41870500CC423B /* CDIGroupTabView.swift */; };
 		DA9B87262A2B686C00E9969E /* OpenLCBNodeConfigurationOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA9B87252A2B686C00E9969E /* OpenLCBNodeConfigurationOptions.swift */; };
 		DA9C6A1E2A408F060069FED8 /* OpenLCBTractionControlInstructionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA9C6A1D2A408F060069FED8 /* OpenLCBTractionControlInstructionType.swift */; };
+		DA9CBFB82C5696CE00CC54B7 /* ESURandomFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA9CBFB72C5696CE00CC54B7 /* ESURandomFunction.swift */; };
 		DA9CF8F9286089B000825FA9 /* NSButtonExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA9CF8F8286089B000825FA9 /* NSButtonExtensions.swift */; };
 		DA9CF8FB2860952300825FA9 /* BlockType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA9CF8FA2860952300825FA9 /* BlockType.swift */; };
 		DA9CF8FD2860978A00825FA9 /* TurnoutMotorType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA9CF8FC2860978A00825FA9 /* TurnoutMotorType.swift */; };
@@ -819,6 +820,7 @@
 		DA98AC1D2B41870500CC423B /* CDIGroupTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CDIGroupTabView.swift; sourceTree = "<group>"; };
 		DA9B87252A2B686C00E9969E /* OpenLCBNodeConfigurationOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBNodeConfigurationOptions.swift; sourceTree = "<group>"; };
 		DA9C6A1D2A408F060069FED8 /* OpenLCBTractionControlInstructionType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBTractionControlInstructionType.swift; sourceTree = "<group>"; };
+		DA9CBFB72C5696CE00CC54B7 /* ESURandomFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ESURandomFunction.swift; sourceTree = "<group>"; };
 		DA9CF8F8286089B000825FA9 /* NSButtonExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSButtonExtensions.swift; sourceTree = "<group>"; };
 		DA9CF8FA2860952300825FA9 /* BlockType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockType.swift; sourceTree = "<group>"; };
 		DA9CF8FC2860978A00825FA9 /* TurnoutMotorType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TurnoutMotorType.swift; sourceTree = "<group>"; };
@@ -1092,6 +1094,7 @@
 				DAE524FD2C454D60000FC319 /* DecoderSensorSettings.swift */,
 				DAE524FF2C459854000FC319 /* ESUDecoderPhysicalOutput.swift */,
 				DAEC69492C4BEEFD008F1CFF /* ESUPhysicalOutputMode.swift */,
+				DA9CBFB72C5696CE00CC54B7 /* ESURandomFunction.swift */,
 				DA0F378D2C47D471002C66D8 /* SteamChuffMode.swift */,
 				DAAE3E3C2C4D261400F129B7 /* SmokeUnitControlMode.swift */,
 				DAAE3E3E2C4D2B8A00F129B7 /* ExternalSmokeUnitType.swift */,
@@ -2385,6 +2388,7 @@
 				DA20941E2BC3012B00737A12 /* OpenLCBLocoNetCommandStation.swift in Sources */,
 				DA063399293CEB8700CEAFD1 /* SetFastClockVC.swift in Sources */,
 				DA774BC42C19E6E800D21F88 /* LocoNetGatewayDelegate.swift in Sources */,
+				DA9CBFB82C5696CE00CC54B7 /* ESURandomFunction.swift in Sources */,
 				DAB163F32C3EE5ED00D7F23E /* ProgrammerToolControlType.swift in Sources */,
 				DA3904092A349B3A00864157 /* OpenLCBClockInitialDateTime.swift in Sources */,
 				DAB93F202C04B361006C0580 /* ArrangeButton.swift in Sources */,

@@ -813,6 +813,9 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
         default:
           break
         }
+        if isValid {
+          decoder.reloadAll()
+        }
       }
       else {
         

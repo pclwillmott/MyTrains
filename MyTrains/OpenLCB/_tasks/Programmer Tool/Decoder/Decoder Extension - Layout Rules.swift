@@ -244,8 +244,41 @@ extension Decoder {
         operator       : .and,
         property2      : .decoderSensorSettings,
         testType2      : .equal,
-        testValue2     : "Use digital wheel sensor",
-        actionProperty : [.physicalOutputRule17Forward, .physicalOutputLevel, .physicalOutputAccelerationRate, .physicalOutputPowerOffDelay, .physicalOutputSequencePosition, .physicalOutputPhaseShift, .physicalOutputHeatWhileLocomotiveStands, .physicalOutputStartupTimeInfo, .physicalOutputUseClassLightLogic, .physicalOutputExternalSmokeUnitType, .physicalOutputRule17Reverse, .physicalOutputFanPower, .physicalOutputStartupTime, .physicalOutputCouplerForce, .physicalOutputServoDurationA, .physicalOutputServoDoNotDisableServoPulseAtPositionB, .physicalOutputDimmer, .physicalOutputGradeCrossing, .physicalOutputServoPositionB, .physicalOutputPowerOnDelay, .physicalOutputTimeout, .physicalOutputBrightness, .physicalOutputServoDoNotDisableServoPulseAtPositionA, .physicalOutputSpecialFunctions, .physicalOutputDecelerationRate, .physicalOutputServoPositionA, .physicalOutputStartupDescription, .physicalOutputSmokeUnitControlMode, .physicalOutputChuffPower, .physicalOutputEnableFunctionTimeout, .physicalOutputTimeUntilAutomaticPowerOff, .physicalOutputMinimumHeatWhileLocomotiveDriving, .physicalOutputOutputMode, .physicalOutputLEDMode, .physicalOutputSpeed, .physicalOutputMaximumHeatWhileLocomotiveDriving, .physicalOutputServoDurationB],
+        testValue2     : DecoderSensorSettings.useDigitalWheelSensor.title,
+        actionProperty : [.physicalOutputRule17Forward, .physicalOutputLevel, .physicalOutputAccelerationRate, .physicalOutputPowerOffDelay, .physicalOutputSequencePosition, .physicalOutputPhaseShift, .physicalOutputHeatWhileLocomotiveStands, .physicalOutputStartupTimeInfo, .physicalOutputUseClassLightLogic, .physicalOutputExternalSmokeUnitType, .physicalOutputRule17Reverse, .physicalOutputFanPower, .physicalOutputStartupTime, .physicalOutputCouplerForce, .physicalOutputServoDurationA, .physicalOutputServoDoNotDisableServoPulseAtPositionB, .physicalOutputDimmer, .physicalOutputGradeCrossing, .physicalOutputServoPositionB, .physicalOutputPowerOnDelay, .physicalOutputTimeout, .physicalOutputBrightness, .physicalOutputServoDoNotDisableServoPulseAtPositionA, .physicalOutputSpecialFunctions, .physicalOutputDecelerationRate, .physicalOutputServoPositionA, .physicalOutputStartupDescription, .physicalOutputSmokeUnitControlMode, .physicalOutputChuffPower, .physicalOutputEnableFunctionTimeout, .physicalOutputTimeUntilAutomaticPowerOff, .physicalOutputMinimumHeatWhileLocomotiveDriving, .physicalOutputOutputMode, .physicalOutputLEDMode, .physicalOutputSpeed, .physicalOutputMaximumHeatWhileLocomotiveDriving, .physicalOutputServoDurationB, .physicalOutputPantographHeight],
+        actionType     : .setIsHiddenToTestResult
+      ),
+      (
+        property1      : .physicalOutput,
+        testType1      : .equal,
+        testValue1     : ESUDecoderPhysicalOutput.aux10.title,
+        operator       : .and,
+        property2      : .decoderSensorSettings,
+        testType2      : .equal,
+        testValue2     : DecoderSensorSettings.useOutputAUX10.title,
+        actionProperty : [.physicalOutputAUX10Warning],
+        actionType     : .setIsHiddenToTestResult
+      ),
+      (
+        property1      : .physicalOutput,
+        testType1      : .equal,
+        testValue1     : ESUDecoderPhysicalOutput.aux11.title,
+        operator       : .and,
+        property2      : .enableSUSIMaster,
+        testType2      : .equal,
+        testValue2     : "false",
+        actionProperty : [.physicalOutputAUX11Warning],
+        actionType     : .setIsHiddenToTestResult
+      ),
+      (
+        property1      : .physicalOutput,
+        testType1      : .equal,
+        testValue1     : ESUDecoderPhysicalOutput.aux12.title,
+        operator       : .and,
+        property2      : .enableSUSIMaster,
+        testType2      : .equal,
+        testValue2     : "false",
+        actionProperty : [.physicalOutputAUX12Warning],
         actionType     : .setIsHiddenToTestResult
       ),
       (
@@ -256,7 +289,7 @@ extension Decoder {
         property2      : .enableSUSIMaster,
         testType2      : .equal,
         testValue2     : "true",
-        actionProperty : [.physicalOutputChuffPower, .physicalOutputTimeUntilAutomaticPowerOff, .physicalOutputPowerOnDelay, .physicalOutputBrightness, .physicalOutputMaximumHeatWhileLocomotiveDriving, .physicalOutputSmokeUnitControlMode, .physicalOutputAccelerationRate, .physicalOutputServoPositionA, .physicalOutputServoDurationB, .physicalOutputPhaseShift, .physicalOutputSpeed, .physicalOutputLEDMode, .physicalOutputEnableFunctionTimeout, .physicalOutputExternalSmokeUnitType, .physicalOutputGradeCrossing, .physicalOutputTimeout, .physicalOutputMinimumHeatWhileLocomotiveDriving, .physicalOutputSpecialFunctions, .physicalOutputStartupTimeInfo, .physicalOutputRule17Forward, .physicalOutputLevel, .physicalOutputServoDurationA, .physicalOutputStartupDescription, .physicalOutputCouplerForce, .physicalOutputServoDoNotDisableServoPulseAtPositionA, .physicalOutputDecelerationRate, .physicalOutputOutputMode, .physicalOutputSequencePosition, .physicalOutputServoDoNotDisableServoPulseAtPositionB, .physicalOutputUseClassLightLogic, .physicalOutputRule17Reverse, .physicalOutputPowerOffDelay, .physicalOutputStartupTime, .physicalOutputFanPower, .physicalOutputHeatWhileLocomotiveStands, .physicalOutputDimmer, .physicalOutputServoPositionB],
+        actionProperty : [.physicalOutputChuffPower, .physicalOutputTimeUntilAutomaticPowerOff, .physicalOutputPowerOnDelay, .physicalOutputBrightness, .physicalOutputMaximumHeatWhileLocomotiveDriving, .physicalOutputSmokeUnitControlMode, .physicalOutputAccelerationRate, .physicalOutputServoPositionA, .physicalOutputServoDurationB, .physicalOutputPhaseShift, .physicalOutputSpeed, .physicalOutputLEDMode, .physicalOutputEnableFunctionTimeout, .physicalOutputExternalSmokeUnitType, .physicalOutputGradeCrossing, .physicalOutputTimeout, .physicalOutputMinimumHeatWhileLocomotiveDriving, .physicalOutputSpecialFunctions, .physicalOutputStartupTimeInfo, .physicalOutputRule17Forward, .physicalOutputLevel, .physicalOutputServoDurationA, .physicalOutputStartupDescription, .physicalOutputCouplerForce, .physicalOutputServoDoNotDisableServoPulseAtPositionA, .physicalOutputDecelerationRate, .physicalOutputOutputMode, .physicalOutputSequencePosition, .physicalOutputServoDoNotDisableServoPulseAtPositionB, .physicalOutputUseClassLightLogic, .physicalOutputRule17Reverse, .physicalOutputPowerOffDelay, .physicalOutputStartupTime, .physicalOutputFanPower, .physicalOutputHeatWhileLocomotiveStands, .physicalOutputDimmer, .physicalOutputServoPositionB, .physicalOutputPantographHeight],
         actionType     : .setIsHiddenToTestResult
       ),
       (
@@ -267,7 +300,7 @@ extension Decoder {
         property2      : .enableSUSIMaster,
         testType2      : .equal,
         testValue2     : "true",
-        actionProperty : [.physicalOutputUseClassLightLogic, .physicalOutputOutputMode, .physicalOutputSequencePosition, .physicalOutputHeatWhileLocomotiveStands, .physicalOutputTimeout, .physicalOutputStartupDescription, .physicalOutputDimmer, .physicalOutputServoPositionA, .physicalOutputBrightness, .physicalOutputSmokeUnitControlMode, .physicalOutputExternalSmokeUnitType, .physicalOutputLevel, .physicalOutputRule17Reverse, .physicalOutputAccelerationRate, .physicalOutputLEDMode, .physicalOutputTimeUntilAutomaticPowerOff, .physicalOutputStartupTimeInfo, .physicalOutputServoDurationB, .physicalOutputSpeed, .physicalOutputEnableFunctionTimeout, .physicalOutputChuffPower, .physicalOutputStartupTime, .physicalOutputDecelerationRate, .physicalOutputSpecialFunctions, .physicalOutputServoPositionB, .physicalOutputPhaseShift, .physicalOutputPowerOffDelay, .physicalOutputServoDoNotDisableServoPulseAtPositionB, .physicalOutputMaximumHeatWhileLocomotiveDriving, .physicalOutputMinimumHeatWhileLocomotiveDriving, .physicalOutputServoDoNotDisableServoPulseAtPositionA, .physicalOutputGradeCrossing, .physicalOutputRule17Forward, .physicalOutputCouplerForce, .physicalOutputPowerOnDelay, .physicalOutputServoDurationA, .physicalOutputFanPower],
+        actionProperty : [.physicalOutputUseClassLightLogic, .physicalOutputOutputMode, .physicalOutputSequencePosition, .physicalOutputHeatWhileLocomotiveStands, .physicalOutputTimeout, .physicalOutputStartupDescription, .physicalOutputDimmer, .physicalOutputServoPositionA, .physicalOutputBrightness, .physicalOutputSmokeUnitControlMode, .physicalOutputExternalSmokeUnitType, .physicalOutputLevel, .physicalOutputRule17Reverse, .physicalOutputAccelerationRate, .physicalOutputLEDMode, .physicalOutputTimeUntilAutomaticPowerOff, .physicalOutputStartupTimeInfo, .physicalOutputServoDurationB, .physicalOutputSpeed, .physicalOutputEnableFunctionTimeout, .physicalOutputChuffPower, .physicalOutputStartupTime, .physicalOutputDecelerationRate, .physicalOutputSpecialFunctions, .physicalOutputServoPositionB, .physicalOutputPhaseShift, .physicalOutputPowerOffDelay, .physicalOutputServoDoNotDisableServoPulseAtPositionB, .physicalOutputMaximumHeatWhileLocomotiveDriving, .physicalOutputMinimumHeatWhileLocomotiveDriving, .physicalOutputServoDoNotDisableServoPulseAtPositionA, .physicalOutputGradeCrossing, .physicalOutputRule17Forward, .physicalOutputCouplerForce, .physicalOutputPowerOnDelay, .physicalOutputServoDurationA, .physicalOutputFanPower, .physicalOutputPantographHeight],
         actionType     : .setIsHiddenToTestResult
       ),
       (
@@ -289,7 +322,84 @@ extension Decoder {
         property2      : nil,
         testType2      : nil,
         testValue2     : nil,
-        actionProperty : [.susiWarning],
+        actionProperty : [.susiWarning, .physicalOutputAUX11Warning, .physicalOutputAUX12Warning],
+        actionType     : .setIsHiddenToTestResult
+      ),
+      (
+        property1      : .sensor1EnableAnalogSensorInput,
+        testType1      : .equal,
+        testValue1     : "false",
+        operator       : nil,
+        property2      : nil,
+        testType2      : nil,
+        testValue2     : nil,
+        actionProperty : [.sensor1Threshold],
+        actionType     : .setIsHiddenToTestResult
+      ),
+      (
+        property1      : .sensor1DigitalSensorInputEnabled,
+        testType1      : .equal,
+        testValue1     : "true",
+        operator       : nil,
+        property2      : nil,
+        testType2      : nil,
+        testValue2     : nil,
+        actionProperty : [.sensor1Threshold],
+        actionType     : .setIsHiddenToTestResult
+      ),
+      (
+        property1      : .sensor2EnableAnalogSensorInput,
+        testType1      : .equal,
+        testValue1     : "false",
+        operator       : nil,
+        property2      : nil,
+        testType2      : nil,
+        testValue2     : nil,
+        actionProperty : [.sensor2Threshold],
+        actionType     : .setIsHiddenToTestResult
+      ),
+      (
+        property1      : .sensor2DigitalSensorInputEnabled,
+        testType1      : .equal,
+        testValue1     : "true",
+        operator       : nil,
+        property2      : nil,
+        testType2      : nil,
+        testValue2     : nil,
+        actionProperty : [.sensor2Threshold],
+        actionType     : .setIsHiddenToTestResult
+      ),
+      (
+        property1      : .physicalOutput,
+        testType1      : .notEqual,
+        testValue1     : ESUDecoderPhysicalOutput.aux10.title,
+        operator       : nil,
+        property2      : nil,
+        testType2      : nil,
+        testValue2     : nil,
+        actionProperty : [.physicalOutputAUX10Warning],
+        actionType     : .setIsHiddenToTestResult
+      ),
+      (
+        property1      : .physicalOutput,
+        testType1      : .notEqual,
+        testValue1     : ESUDecoderPhysicalOutput.aux11.title,
+        operator       : nil,
+        property2      : nil,
+        testType2      : nil,
+        testValue2     : nil,
+        actionProperty : [.physicalOutputAUX11Warning],
+        actionType     : .setIsHiddenToTestResult
+      ),
+      (
+        property1      : .physicalOutput,
+        testType1      : .notEqual,
+        testValue1     : ESUDecoderPhysicalOutput.aux12.title,
+        operator       : nil,
+        property2      : nil,
+        testType2      : nil,
+        testValue2     : nil,
+        actionProperty : [.physicalOutputAUX12Warning],
         actionType     : .setIsHiddenToTestResult
       ),
       (
@@ -414,7 +524,7 @@ extension Decoder {
         property2      : nil,
         testType2      : nil,
         testValue2     : nil,
-        actionProperty : [.physicalOutputBrightness, .physicalOutputUseClassLightLogic, .physicalOutputSequencePosition, .physicalOutputPhaseShift, .physicalOutputStartupTime, .physicalOutputLevel, .physicalOutputSmokeUnitControlMode, .physicalOutputSpeed, .physicalOutputAccelerationRate, .physicalOutputDecelerationRate, .physicalOutputHeatWhileLocomotiveStands, .physicalOutputMinimumHeatWhileLocomotiveDriving, .physicalOutputMaximumHeatWhileLocomotiveDriving, .physicalOutputChuffPower, .physicalOutputFanPower, .physicalOutputTimeout, .physicalOutputServoDurationA, .physicalOutputServoDurationB, .physicalOutputServoPositionA, .physicalOutputServoDoNotDisableServoPulseAtPositionA, .physicalOutputServoPositionB, .physicalOutputServoDoNotDisableServoPulseAtPositionB, .physicalOutputCouplerForce, .physicalOutputExternalSmokeUnitType, .physicalOutputGradeCrossing, .physicalOutputRule17Forward, .physicalOutputRule17Reverse, .physicalOutputDimmer, .physicalOutputLEDMode],
+        actionProperty : [.physicalOutputBrightness, .physicalOutputUseClassLightLogic, .physicalOutputSequencePosition, .physicalOutputPhaseShift, .physicalOutputStartupTime, .physicalOutputLevel, .physicalOutputSmokeUnitControlMode, .physicalOutputSpeed, .physicalOutputAccelerationRate, .physicalOutputDecelerationRate, .physicalOutputHeatWhileLocomotiveStands, .physicalOutputMinimumHeatWhileLocomotiveDriving, .physicalOutputMaximumHeatWhileLocomotiveDriving, .physicalOutputChuffPower, .physicalOutputFanPower, .physicalOutputTimeout, .physicalOutputServoDurationA, .physicalOutputServoDurationB, .physicalOutputServoPositionA, .physicalOutputServoDoNotDisableServoPulseAtPositionA, .physicalOutputServoPositionB, .physicalOutputServoDoNotDisableServoPulseAtPositionB, .physicalOutputCouplerForce, .physicalOutputExternalSmokeUnitType, .physicalOutputGradeCrossing, .physicalOutputRule17Forward, .physicalOutputRule17Reverse, .physicalOutputDimmer, .physicalOutputStartupTimeInfo, .physicalOutputStartupDescription, .physicalOutputLEDMode, .physicalOutputSpecialFunctions, .physicalOutputPantographHeight],
         actionType     : .setIsHiddenToTestResult
       ),
       (
@@ -425,7 +535,7 @@ extension Decoder {
         property2      : nil,
         testType2      : nil,
         testValue2     : nil,
-        actionProperty : [.physicalOutputPhaseShift, .physicalOutputStartupTime, .physicalOutputLevel, .physicalOutputSmokeUnitControlMode, .physicalOutputSpeed, .physicalOutputAccelerationRate, .physicalOutputDecelerationRate, .physicalOutputHeatWhileLocomotiveStands, .physicalOutputMinimumHeatWhileLocomotiveDriving, .physicalOutputMaximumHeatWhileLocomotiveDriving, .physicalOutputChuffPower, .physicalOutputFanPower, .physicalOutputTimeout, .physicalOutputServoDurationA, .physicalOutputServoDurationB, .physicalOutputServoPositionA, .physicalOutputServoDoNotDisableServoPulseAtPositionA, .physicalOutputServoPositionB, .physicalOutputServoDoNotDisableServoPulseAtPositionB, .physicalOutputCouplerForce, .physicalOutputExternalSmokeUnitType, .physicalOutputGradeCrossing],
+        actionProperty : [.physicalOutputPhaseShift, .physicalOutputStartupTime, .physicalOutputLevel, .physicalOutputSmokeUnitControlMode, .physicalOutputSpeed, .physicalOutputAccelerationRate, .physicalOutputDecelerationRate, .physicalOutputHeatWhileLocomotiveStands, .physicalOutputMinimumHeatWhileLocomotiveDriving, .physicalOutputMaximumHeatWhileLocomotiveDriving, .physicalOutputChuffPower, .physicalOutputFanPower, .physicalOutputTimeout, .physicalOutputServoDurationA, .physicalOutputServoDurationB, .physicalOutputServoPositionA, .physicalOutputServoDoNotDisableServoPulseAtPositionA, .physicalOutputServoPositionB, .physicalOutputServoDoNotDisableServoPulseAtPositionB, .physicalOutputCouplerForce, .physicalOutputExternalSmokeUnitType, .physicalOutputGradeCrossing, .physicalOutputStartupTimeInfo, .physicalOutputStartupDescription, .physicalOutputPantographHeight],
         actionType     : .setIsHiddenToTestResult
       ),
       (
@@ -436,7 +546,7 @@ extension Decoder {
         property2      : nil,
         testType2      : nil,
         testValue2     : nil,
-        actionProperty : [.physicalOutputPhaseShift, .physicalOutputStartupTime, .physicalOutputLevel, .physicalOutputSmokeUnitControlMode, .physicalOutputSpeed, .physicalOutputAccelerationRate, .physicalOutputDecelerationRate, .physicalOutputHeatWhileLocomotiveStands, .physicalOutputMinimumHeatWhileLocomotiveDriving, .physicalOutputMaximumHeatWhileLocomotiveDriving, .physicalOutputChuffPower, .physicalOutputFanPower, .physicalOutputTimeout, .physicalOutputServoDurationA, .physicalOutputServoDurationB, .physicalOutputServoPositionA, .physicalOutputServoDoNotDisableServoPulseAtPositionA, .physicalOutputServoPositionB, .physicalOutputServoDoNotDisableServoPulseAtPositionB, .physicalOutputCouplerForce, .physicalOutputExternalSmokeUnitType, .physicalOutputGradeCrossing],
+        actionProperty : [.physicalOutputPhaseShift, .physicalOutputStartupTime, .physicalOutputLevel, .physicalOutputSmokeUnitControlMode, .physicalOutputSpeed, .physicalOutputAccelerationRate, .physicalOutputDecelerationRate, .physicalOutputHeatWhileLocomotiveStands, .physicalOutputMinimumHeatWhileLocomotiveDriving, .physicalOutputMaximumHeatWhileLocomotiveDriving, .physicalOutputChuffPower, .physicalOutputFanPower, .physicalOutputTimeout, .physicalOutputServoDurationA, .physicalOutputServoDurationB, .physicalOutputServoPositionA, .physicalOutputServoDoNotDisableServoPulseAtPositionA, .physicalOutputServoPositionB, .physicalOutputServoDoNotDisableServoPulseAtPositionB, .physicalOutputCouplerForce, .physicalOutputExternalSmokeUnitType, .physicalOutputGradeCrossing, .physicalOutputStartupTimeInfo, .physicalOutputStartupDescription, .physicalOutputPantographHeight],
         actionType     : .setIsHiddenToTestResult
       ),
       (
@@ -447,7 +557,7 @@ extension Decoder {
         property2      : nil,
         testType2      : nil,
         testValue2     : nil,
-        actionProperty : [.physicalOutputUseClassLightLogic, .physicalOutputSequencePosition, .physicalOutputPhaseShift, .physicalOutputStartupTime, .physicalOutputLevel, .physicalOutputSmokeUnitControlMode, .physicalOutputSpeed, .physicalOutputAccelerationRate, .physicalOutputDecelerationRate, .physicalOutputHeatWhileLocomotiveStands, .physicalOutputMinimumHeatWhileLocomotiveDriving, .physicalOutputMaximumHeatWhileLocomotiveDriving, .physicalOutputChuffPower, .physicalOutputFanPower, .physicalOutputTimeout, .physicalOutputServoDurationA, .physicalOutputServoDurationB, .physicalOutputServoPositionA, .physicalOutputServoDoNotDisableServoPulseAtPositionA, .physicalOutputServoPositionB, .physicalOutputServoDoNotDisableServoPulseAtPositionB, .physicalOutputCouplerForce, .physicalOutputExternalSmokeUnitType, .physicalOutputGradeCrossing, .physicalOutputRule17Forward, .physicalOutputRule17Reverse, .physicalOutputDimmer],
+        actionProperty : [.physicalOutputUseClassLightLogic, .physicalOutputSequencePosition, .physicalOutputPhaseShift, .physicalOutputStartupTime, .physicalOutputLevel, .physicalOutputSmokeUnitControlMode, .physicalOutputSpeed, .physicalOutputAccelerationRate, .physicalOutputDecelerationRate, .physicalOutputHeatWhileLocomotiveStands, .physicalOutputMinimumHeatWhileLocomotiveDriving, .physicalOutputMaximumHeatWhileLocomotiveDriving, .physicalOutputChuffPower, .physicalOutputFanPower, .physicalOutputTimeout, .physicalOutputServoDurationA, .physicalOutputServoDurationB, .physicalOutputServoPositionA, .physicalOutputServoDoNotDisableServoPulseAtPositionA, .physicalOutputServoPositionB, .physicalOutputServoDoNotDisableServoPulseAtPositionB, .physicalOutputCouplerForce, .physicalOutputExternalSmokeUnitType, .physicalOutputGradeCrossing, .physicalOutputRule17Forward, .physicalOutputRule17Reverse, .physicalOutputDimmer, .physicalOutputStartupTimeInfo, .physicalOutputStartupDescription, .physicalOutputPantographHeight],
         actionType     : .setIsHiddenToTestResult
       ),
       (
@@ -458,7 +568,7 @@ extension Decoder {
         property2      : nil,
         testType2      : nil,
         testValue2     : nil,
-        actionProperty : [.physicalOutputUseClassLightLogic, .physicalOutputSequencePosition, .physicalOutputPhaseShift, .physicalOutputStartupTime, .physicalOutputLevel, .physicalOutputSmokeUnitControlMode, .physicalOutputSpeed, .physicalOutputAccelerationRate, .physicalOutputDecelerationRate, .physicalOutputHeatWhileLocomotiveStands, .physicalOutputMinimumHeatWhileLocomotiveDriving, .physicalOutputMaximumHeatWhileLocomotiveDriving, .physicalOutputChuffPower, .physicalOutputFanPower, .physicalOutputTimeout, .physicalOutputServoDurationA, .physicalOutputServoDurationB, .physicalOutputServoPositionA, .physicalOutputServoDoNotDisableServoPulseAtPositionA, .physicalOutputServoPositionB, .physicalOutputServoDoNotDisableServoPulseAtPositionB, .physicalOutputCouplerForce, .physicalOutputExternalSmokeUnitType, .physicalOutputGradeCrossing, .physicalOutputRule17Forward, .physicalOutputRule17Reverse, .physicalOutputDimmer],
+        actionProperty : [.physicalOutputUseClassLightLogic, .physicalOutputSequencePosition, .physicalOutputPhaseShift, .physicalOutputStartupTime, .physicalOutputLevel, .physicalOutputSmokeUnitControlMode, .physicalOutputSpeed, .physicalOutputAccelerationRate, .physicalOutputDecelerationRate, .physicalOutputHeatWhileLocomotiveStands, .physicalOutputMinimumHeatWhileLocomotiveDriving, .physicalOutputMaximumHeatWhileLocomotiveDriving, .physicalOutputChuffPower, .physicalOutputFanPower, .physicalOutputTimeout, .physicalOutputServoDurationA, .physicalOutputServoDurationB, .physicalOutputServoPositionA, .physicalOutputServoDoNotDisableServoPulseAtPositionA, .physicalOutputServoPositionB, .physicalOutputServoDoNotDisableServoPulseAtPositionB, .physicalOutputCouplerForce, .physicalOutputExternalSmokeUnitType, .physicalOutputGradeCrossing, .physicalOutputRule17Forward, .physicalOutputRule17Reverse, .physicalOutputDimmer, .physicalOutputStartupTimeInfo, .physicalOutputStartupDescription, .physicalOutputPantographHeight],
         actionType     : .setIsHiddenToTestResult
       ),
       (
@@ -469,7 +579,7 @@ extension Decoder {
         property2      : nil,
         testType2      : nil,
         testValue2     : nil,
-        actionProperty : [.physicalOutputUseClassLightLogic, .physicalOutputSequencePosition, .physicalOutputStartupTime, .physicalOutputLevel, .physicalOutputSmokeUnitControlMode, .physicalOutputSpeed, .physicalOutputAccelerationRate, .physicalOutputDecelerationRate, .physicalOutputHeatWhileLocomotiveStands, .physicalOutputMinimumHeatWhileLocomotiveDriving, .physicalOutputMaximumHeatWhileLocomotiveDriving, .physicalOutputChuffPower, .physicalOutputFanPower, .physicalOutputTimeout, .physicalOutputServoDurationA, .physicalOutputServoDurationB, .physicalOutputServoPositionA, .physicalOutputServoDoNotDisableServoPulseAtPositionA, .physicalOutputServoPositionB, .physicalOutputServoDoNotDisableServoPulseAtPositionB, .physicalOutputCouplerForce, .physicalOutputExternalSmokeUnitType, .physicalOutputRule17Forward, .physicalOutputRule17Reverse, .physicalOutputDimmer, .physicalOutputLEDMode],
+        actionProperty : [.physicalOutputUseClassLightLogic, .physicalOutputSequencePosition, .physicalOutputStartupTime, .physicalOutputLevel, .physicalOutputSmokeUnitControlMode, .physicalOutputSpeed, .physicalOutputAccelerationRate, .physicalOutputDecelerationRate, .physicalOutputHeatWhileLocomotiveStands, .physicalOutputMinimumHeatWhileLocomotiveDriving, .physicalOutputMaximumHeatWhileLocomotiveDriving, .physicalOutputChuffPower, .physicalOutputFanPower, .physicalOutputTimeout, .physicalOutputServoDurationA, .physicalOutputServoDurationB, .physicalOutputServoPositionA, .physicalOutputServoDoNotDisableServoPulseAtPositionA, .physicalOutputServoPositionB, .physicalOutputServoDoNotDisableServoPulseAtPositionB, .physicalOutputCouplerForce, .physicalOutputExternalSmokeUnitType, .physicalOutputRule17Forward, .physicalOutputRule17Reverse, .physicalOutputDimmer, .physicalOutputLEDMode, .physicalOutputStartupTimeInfo, .physicalOutputStartupDescription, .physicalOutputPantographHeight],
         actionType     : .setIsHiddenToTestResult
       ),
       (
@@ -480,7 +590,7 @@ extension Decoder {
         property2      : nil,
         testType2      : nil,
         testValue2     : nil,
-        actionProperty : [.physicalOutputUseClassLightLogic, .physicalOutputSequencePosition, .physicalOutputStartupTime, .physicalOutputLevel, .physicalOutputSmokeUnitControlMode, .physicalOutputSpeed, .physicalOutputAccelerationRate, .physicalOutputDecelerationRate, .physicalOutputHeatWhileLocomotiveStands, .physicalOutputMinimumHeatWhileLocomotiveDriving, .physicalOutputMaximumHeatWhileLocomotiveDriving, .physicalOutputChuffPower, .physicalOutputFanPower, .physicalOutputTimeout, .physicalOutputServoDurationA, .physicalOutputServoDurationB, .physicalOutputServoPositionA, .physicalOutputServoDoNotDisableServoPulseAtPositionA, .physicalOutputServoPositionB, .physicalOutputServoDoNotDisableServoPulseAtPositionB, .physicalOutputCouplerForce, .physicalOutputExternalSmokeUnitType, .physicalOutputRule17Forward, .physicalOutputRule17Reverse, .physicalOutputDimmer, .physicalOutputLEDMode],
+        actionProperty : [.physicalOutputUseClassLightLogic, .physicalOutputSequencePosition, .physicalOutputStartupTime, .physicalOutputLevel, .physicalOutputSmokeUnitControlMode, .physicalOutputSpeed, .physicalOutputAccelerationRate, .physicalOutputDecelerationRate, .physicalOutputHeatWhileLocomotiveStands, .physicalOutputMinimumHeatWhileLocomotiveDriving, .physicalOutputMaximumHeatWhileLocomotiveDriving, .physicalOutputChuffPower, .physicalOutputFanPower, .physicalOutputTimeout, .physicalOutputServoDurationA, .physicalOutputServoDurationB, .physicalOutputServoPositionA, .physicalOutputServoDoNotDisableServoPulseAtPositionA, .physicalOutputServoPositionB, .physicalOutputServoDoNotDisableServoPulseAtPositionB, .physicalOutputCouplerForce, .physicalOutputExternalSmokeUnitType, .physicalOutputRule17Forward, .physicalOutputRule17Reverse, .physicalOutputDimmer, .physicalOutputLEDMode, .physicalOutputStartupTimeInfo, .physicalOutputStartupDescription, .physicalOutputPantographHeight],
         actionType     : .setIsHiddenToTestResult
       ),
       (
@@ -491,7 +601,7 @@ extension Decoder {
         property2      : nil,
         testType2      : nil,
         testValue2     : nil,
-        actionProperty : [.physicalOutputUseClassLightLogic, .physicalOutputSequencePosition, .physicalOutputStartupTime, .physicalOutputLevel, .physicalOutputSmokeUnitControlMode, .physicalOutputSpeed, .physicalOutputAccelerationRate, .physicalOutputDecelerationRate, .physicalOutputHeatWhileLocomotiveStands, .physicalOutputMinimumHeatWhileLocomotiveDriving, .physicalOutputMaximumHeatWhileLocomotiveDriving, .physicalOutputChuffPower, .physicalOutputFanPower, .physicalOutputTimeout, .physicalOutputServoDurationA, .physicalOutputServoDurationB, .physicalOutputServoPositionA, .physicalOutputServoDoNotDisableServoPulseAtPositionA, .physicalOutputServoPositionB, .physicalOutputServoDoNotDisableServoPulseAtPositionB, .physicalOutputCouplerForce, .physicalOutputExternalSmokeUnitType, .physicalOutputRule17Forward, .physicalOutputRule17Reverse, .physicalOutputDimmer],
+        actionProperty : [.physicalOutputUseClassLightLogic, .physicalOutputSequencePosition, .physicalOutputStartupTime, .physicalOutputLevel, .physicalOutputSmokeUnitControlMode, .physicalOutputSpeed, .physicalOutputAccelerationRate, .physicalOutputDecelerationRate, .physicalOutputHeatWhileLocomotiveStands, .physicalOutputMinimumHeatWhileLocomotiveDriving, .physicalOutputMaximumHeatWhileLocomotiveDriving, .physicalOutputChuffPower, .physicalOutputFanPower, .physicalOutputTimeout, .physicalOutputServoDurationA, .physicalOutputServoDurationB, .physicalOutputServoPositionA, .physicalOutputServoDoNotDisableServoPulseAtPositionA, .physicalOutputServoPositionB, .physicalOutputServoDoNotDisableServoPulseAtPositionB, .physicalOutputCouplerForce, .physicalOutputExternalSmokeUnitType, .physicalOutputRule17Forward, .physicalOutputRule17Reverse, .physicalOutputDimmer, .physicalOutputStartupTimeInfo, .physicalOutputStartupDescription, .physicalOutputPantographHeight],
         actionType     : .setIsHiddenToTestResult
       ),
       (
@@ -502,7 +612,7 @@ extension Decoder {
         property2      : nil,
         testType2      : nil,
         testValue2     : nil,
-        actionProperty : [.physicalOutputUseClassLightLogic, .physicalOutputSequencePosition, .physicalOutputStartupTime, .physicalOutputLevel, .physicalOutputSmokeUnitControlMode, .physicalOutputSpeed, .physicalOutputAccelerationRate, .physicalOutputDecelerationRate, .physicalOutputHeatWhileLocomotiveStands, .physicalOutputMinimumHeatWhileLocomotiveDriving, .physicalOutputMaximumHeatWhileLocomotiveDriving, .physicalOutputChuffPower, .physicalOutputFanPower, .physicalOutputTimeout, .physicalOutputServoDurationA, .physicalOutputServoDurationB, .physicalOutputServoPositionA, .physicalOutputServoDoNotDisableServoPulseAtPositionA, .physicalOutputServoPositionB, .physicalOutputServoDoNotDisableServoPulseAtPositionB, .physicalOutputCouplerForce, .physicalOutputExternalSmokeUnitType, .physicalOutputRule17Forward, .physicalOutputRule17Reverse, .physicalOutputDimmer],
+        actionProperty : [.physicalOutputUseClassLightLogic, .physicalOutputSequencePosition, .physicalOutputStartupTime, .physicalOutputLevel, .physicalOutputSmokeUnitControlMode, .physicalOutputSpeed, .physicalOutputAccelerationRate, .physicalOutputDecelerationRate, .physicalOutputHeatWhileLocomotiveStands, .physicalOutputMinimumHeatWhileLocomotiveDriving, .physicalOutputMaximumHeatWhileLocomotiveDriving, .physicalOutputChuffPower, .physicalOutputFanPower, .physicalOutputTimeout, .physicalOutputServoDurationA, .physicalOutputServoDurationB, .physicalOutputServoPositionA, .physicalOutputServoDoNotDisableServoPulseAtPositionA, .physicalOutputServoPositionB, .physicalOutputServoDoNotDisableServoPulseAtPositionB, .physicalOutputCouplerForce, .physicalOutputExternalSmokeUnitType, .physicalOutputRule17Forward, .physicalOutputRule17Reverse, .physicalOutputDimmer, .physicalOutputStartupTimeInfo, .physicalOutputStartupDescription, .physicalOutputPantographHeight],
         actionType     : .setIsHiddenToTestResult
       ),
       (
@@ -513,7 +623,7 @@ extension Decoder {
         property2      : nil,
         testType2      : nil,
         testValue2     : nil,
-        actionProperty : [.physicalOutputUseClassLightLogic, .physicalOutputSequencePosition, .physicalOutputStartupTime, .physicalOutputLevel, .physicalOutputSmokeUnitControlMode, .physicalOutputSpeed, .physicalOutputAccelerationRate, .physicalOutputDecelerationRate, .physicalOutputHeatWhileLocomotiveStands, .physicalOutputMinimumHeatWhileLocomotiveDriving, .physicalOutputMaximumHeatWhileLocomotiveDriving, .physicalOutputChuffPower, .physicalOutputFanPower, .physicalOutputTimeout, .physicalOutputServoDurationA, .physicalOutputServoDurationB, .physicalOutputServoPositionA, .physicalOutputServoDoNotDisableServoPulseAtPositionA, .physicalOutputServoPositionB, .physicalOutputServoDoNotDisableServoPulseAtPositionB, .physicalOutputCouplerForce, .physicalOutputExternalSmokeUnitType, .physicalOutputRule17Forward, .physicalOutputRule17Reverse, .physicalOutputDimmer],
+        actionProperty : [.physicalOutputUseClassLightLogic, .physicalOutputSequencePosition, .physicalOutputStartupTime, .physicalOutputLevel, .physicalOutputSmokeUnitControlMode, .physicalOutputSpeed, .physicalOutputAccelerationRate, .physicalOutputDecelerationRate, .physicalOutputHeatWhileLocomotiveStands, .physicalOutputMinimumHeatWhileLocomotiveDriving, .physicalOutputMaximumHeatWhileLocomotiveDriving, .physicalOutputChuffPower, .physicalOutputFanPower, .physicalOutputTimeout, .physicalOutputServoDurationA, .physicalOutputServoDurationB, .physicalOutputServoPositionA, .physicalOutputServoDoNotDisableServoPulseAtPositionA, .physicalOutputServoPositionB, .physicalOutputServoDoNotDisableServoPulseAtPositionB, .physicalOutputCouplerForce, .physicalOutputExternalSmokeUnitType, .physicalOutputRule17Forward, .physicalOutputRule17Reverse, .physicalOutputDimmer, .physicalOutputStartupTimeInfo, .physicalOutputStartupDescription, .physicalOutputPantographHeight],
         actionType     : .setIsHiddenToTestResult
       ),
       (
@@ -524,7 +634,7 @@ extension Decoder {
         property2      : nil,
         testType2      : nil,
         testValue2     : nil,
-        actionProperty : [.physicalOutputUseClassLightLogic, .physicalOutputSequencePosition, .physicalOutputStartupTime, .physicalOutputLevel, .physicalOutputSmokeUnitControlMode, .physicalOutputSpeed, .physicalOutputAccelerationRate, .physicalOutputDecelerationRate, .physicalOutputHeatWhileLocomotiveStands, .physicalOutputMinimumHeatWhileLocomotiveDriving, .physicalOutputMaximumHeatWhileLocomotiveDriving, .physicalOutputChuffPower, .physicalOutputFanPower, .physicalOutputTimeout, .physicalOutputServoDurationA, .physicalOutputServoDurationB, .physicalOutputServoPositionA, .physicalOutputServoDoNotDisableServoPulseAtPositionA, .physicalOutputServoPositionB, .physicalOutputServoDoNotDisableServoPulseAtPositionB, .physicalOutputCouplerForce, .physicalOutputExternalSmokeUnitType, .physicalOutputRule17Forward, .physicalOutputRule17Reverse, .physicalOutputDimmer],
+        actionProperty : [.physicalOutputUseClassLightLogic, .physicalOutputSequencePosition, .physicalOutputStartupTime, .physicalOutputLevel, .physicalOutputSmokeUnitControlMode, .physicalOutputSpeed, .physicalOutputAccelerationRate, .physicalOutputDecelerationRate, .physicalOutputHeatWhileLocomotiveStands, .physicalOutputMinimumHeatWhileLocomotiveDriving, .physicalOutputMaximumHeatWhileLocomotiveDriving, .physicalOutputChuffPower, .physicalOutputFanPower, .physicalOutputTimeout, .physicalOutputServoDurationA, .physicalOutputServoDurationB, .physicalOutputServoPositionA, .physicalOutputServoDoNotDisableServoPulseAtPositionA, .physicalOutputServoPositionB, .physicalOutputServoDoNotDisableServoPulseAtPositionB, .physicalOutputCouplerForce, .physicalOutputExternalSmokeUnitType, .physicalOutputRule17Forward, .physicalOutputRule17Reverse, .physicalOutputDimmer, .physicalOutputStartupTimeInfo, .physicalOutputStartupDescription, .physicalOutputPantographHeight],
         actionType     : .setIsHiddenToTestResult
       ),
       (
@@ -535,7 +645,7 @@ extension Decoder {
         property2      : nil,
         testType2      : nil,
         testValue2     : nil,
-        actionProperty : [.physicalOutputUseClassLightLogic, .physicalOutputSequencePosition, .physicalOutputStartupTime, .physicalOutputLevel, .physicalOutputSmokeUnitControlMode, .physicalOutputSpeed, .physicalOutputAccelerationRate, .physicalOutputDecelerationRate, .physicalOutputHeatWhileLocomotiveStands, .physicalOutputMinimumHeatWhileLocomotiveDriving, .physicalOutputMaximumHeatWhileLocomotiveDriving, .physicalOutputChuffPower, .physicalOutputFanPower, .physicalOutputTimeout, .physicalOutputServoDurationA, .physicalOutputServoDurationB, .physicalOutputServoPositionA, .physicalOutputServoDoNotDisableServoPulseAtPositionA, .physicalOutputServoPositionB, .physicalOutputServoDoNotDisableServoPulseAtPositionB, .physicalOutputCouplerForce, .physicalOutputExternalSmokeUnitType, .physicalOutputRule17Forward, .physicalOutputRule17Reverse, .physicalOutputDimmer],
+        actionProperty : [.physicalOutputUseClassLightLogic, .physicalOutputSequencePosition, .physicalOutputStartupTime, .physicalOutputLevel, .physicalOutputSmokeUnitControlMode, .physicalOutputSpeed, .physicalOutputAccelerationRate, .physicalOutputDecelerationRate, .physicalOutputHeatWhileLocomotiveStands, .physicalOutputMinimumHeatWhileLocomotiveDriving, .physicalOutputMaximumHeatWhileLocomotiveDriving, .physicalOutputChuffPower, .physicalOutputFanPower, .physicalOutputTimeout, .physicalOutputServoDurationA, .physicalOutputServoDurationB, .physicalOutputServoPositionA, .physicalOutputServoDoNotDisableServoPulseAtPositionA, .physicalOutputServoPositionB, .physicalOutputServoDoNotDisableServoPulseAtPositionB, .physicalOutputCouplerForce, .physicalOutputExternalSmokeUnitType, .physicalOutputRule17Forward, .physicalOutputRule17Reverse, .physicalOutputDimmer, .physicalOutputStartupTimeInfo, .physicalOutputStartupDescription, .physicalOutputPantographHeight],
         actionType     : .setIsHiddenToTestResult
       ),
       (
@@ -546,7 +656,7 @@ extension Decoder {
         property2      : nil,
         testType2      : nil,
         testValue2     : nil,
-        actionProperty : [.physicalOutputUseClassLightLogic, .physicalOutputSequencePosition, .physicalOutputStartupTime, .physicalOutputLevel, .physicalOutputSmokeUnitControlMode, .physicalOutputSpeed, .physicalOutputAccelerationRate, .physicalOutputDecelerationRate, .physicalOutputHeatWhileLocomotiveStands, .physicalOutputMinimumHeatWhileLocomotiveDriving, .physicalOutputMaximumHeatWhileLocomotiveDriving, .physicalOutputChuffPower, .physicalOutputFanPower, .physicalOutputTimeout, .physicalOutputServoDurationA, .physicalOutputServoDurationB, .physicalOutputServoPositionA, .physicalOutputServoDoNotDisableServoPulseAtPositionA, .physicalOutputServoPositionB, .physicalOutputServoDoNotDisableServoPulseAtPositionB, .physicalOutputCouplerForce, .physicalOutputExternalSmokeUnitType, .physicalOutputRule17Forward, .physicalOutputRule17Reverse, .physicalOutputDimmer, .physicalOutputLEDMode],
+        actionProperty : [.physicalOutputUseClassLightLogic, .physicalOutputSequencePosition, .physicalOutputStartupTime, .physicalOutputLevel, .physicalOutputSmokeUnitControlMode, .physicalOutputSpeed, .physicalOutputAccelerationRate, .physicalOutputDecelerationRate, .physicalOutputHeatWhileLocomotiveStands, .physicalOutputMinimumHeatWhileLocomotiveDriving, .physicalOutputMaximumHeatWhileLocomotiveDriving, .physicalOutputChuffPower, .physicalOutputFanPower, .physicalOutputTimeout, .physicalOutputServoDurationA, .physicalOutputServoDurationB, .physicalOutputServoPositionA, .physicalOutputServoDoNotDisableServoPulseAtPositionA, .physicalOutputServoPositionB, .physicalOutputServoDoNotDisableServoPulseAtPositionB, .physicalOutputCouplerForce, .physicalOutputExternalSmokeUnitType, .physicalOutputRule17Forward, .physicalOutputRule17Reverse, .physicalOutputDimmer, .physicalOutputLEDMode, .physicalOutputStartupTimeInfo, .physicalOutputStartupDescription, .physicalOutputPantographHeight],
         actionType     : .setIsHiddenToTestResult
       ),
       (
@@ -557,7 +667,7 @@ extension Decoder {
         property2      : nil,
         testType2      : nil,
         testValue2     : nil,
-        actionProperty : [.physicalOutputUseClassLightLogic, .physicalOutputSequencePosition, .physicalOutputStartupTime, .physicalOutputLevel, .physicalOutputSmokeUnitControlMode, .physicalOutputSpeed, .physicalOutputAccelerationRate, .physicalOutputDecelerationRate, .physicalOutputHeatWhileLocomotiveStands, .physicalOutputMinimumHeatWhileLocomotiveDriving, .physicalOutputMaximumHeatWhileLocomotiveDriving, .physicalOutputChuffPower, .physicalOutputFanPower, .physicalOutputTimeout, .physicalOutputServoDurationA, .physicalOutputServoDurationB, .physicalOutputServoPositionA, .physicalOutputServoDoNotDisableServoPulseAtPositionA, .physicalOutputServoPositionB, .physicalOutputServoDoNotDisableServoPulseAtPositionB, .physicalOutputCouplerForce, .physicalOutputExternalSmokeUnitType, .physicalOutputRule17Forward, .physicalOutputRule17Reverse, .physicalOutputDimmer],
+        actionProperty : [.physicalOutputUseClassLightLogic, .physicalOutputSequencePosition, .physicalOutputStartupTime, .physicalOutputLevel, .physicalOutputSmokeUnitControlMode, .physicalOutputSpeed, .physicalOutputAccelerationRate, .physicalOutputDecelerationRate, .physicalOutputHeatWhileLocomotiveStands, .physicalOutputMinimumHeatWhileLocomotiveDriving, .physicalOutputMaximumHeatWhileLocomotiveDriving, .physicalOutputChuffPower, .physicalOutputFanPower, .physicalOutputTimeout, .physicalOutputServoDurationA, .physicalOutputServoDurationB, .physicalOutputServoPositionA, .physicalOutputServoDoNotDisableServoPulseAtPositionA, .physicalOutputServoPositionB, .physicalOutputServoDoNotDisableServoPulseAtPositionB, .physicalOutputCouplerForce, .physicalOutputExternalSmokeUnitType, .physicalOutputRule17Forward, .physicalOutputRule17Reverse, .physicalOutputDimmer, .physicalOutputStartupTimeInfo, .physicalOutputStartupDescription, .physicalOutputPantographHeight],
         actionType     : .setIsHiddenToTestResult
       ),
       (
@@ -568,7 +678,7 @@ extension Decoder {
         property2      : nil,
         testType2      : nil,
         testValue2     : nil,
-        actionProperty : [.physicalOutputUseClassLightLogic, .physicalOutputSequencePosition, .physicalOutputStartupTime, .physicalOutputLevel, .physicalOutputSmokeUnitControlMode, .physicalOutputSpeed, .physicalOutputAccelerationRate, .physicalOutputDecelerationRate, .physicalOutputHeatWhileLocomotiveStands, .physicalOutputMinimumHeatWhileLocomotiveDriving, .physicalOutputMaximumHeatWhileLocomotiveDriving, .physicalOutputChuffPower, .physicalOutputFanPower, .physicalOutputTimeout, .physicalOutputServoDurationA, .physicalOutputServoDurationB, .physicalOutputServoPositionA, .physicalOutputServoDoNotDisableServoPulseAtPositionA, .physicalOutputServoPositionB, .physicalOutputServoDoNotDisableServoPulseAtPositionB, .physicalOutputCouplerForce, .physicalOutputExternalSmokeUnitType, .physicalOutputRule17Forward, .physicalOutputRule17Reverse, .physicalOutputDimmer],
+        actionProperty : [.physicalOutputUseClassLightLogic, .physicalOutputSequencePosition, .physicalOutputStartupTime, .physicalOutputLevel, .physicalOutputSmokeUnitControlMode, .physicalOutputSpeed, .physicalOutputAccelerationRate, .physicalOutputDecelerationRate, .physicalOutputHeatWhileLocomotiveStands, .physicalOutputMinimumHeatWhileLocomotiveDriving, .physicalOutputMaximumHeatWhileLocomotiveDriving, .physicalOutputChuffPower, .physicalOutputFanPower, .physicalOutputTimeout, .physicalOutputServoDurationA, .physicalOutputServoDurationB, .physicalOutputServoPositionA, .physicalOutputServoDoNotDisableServoPulseAtPositionA, .physicalOutputServoPositionB, .physicalOutputServoDoNotDisableServoPulseAtPositionB, .physicalOutputCouplerForce, .physicalOutputExternalSmokeUnitType, .physicalOutputRule17Forward, .physicalOutputRule17Reverse, .physicalOutputDimmer, .physicalOutputStartupTimeInfo, .physicalOutputStartupDescription, .physicalOutputPantographHeight],
         actionType     : .setIsHiddenToTestResult
       ),
       (
@@ -579,7 +689,7 @@ extension Decoder {
         property2      : nil,
         testType2      : nil,
         testValue2     : nil,
-        actionProperty : [.physicalOutputUseClassLightLogic, .physicalOutputSequencePosition, .physicalOutputStartupTime, .physicalOutputLevel, .physicalOutputSmokeUnitControlMode, .physicalOutputSpeed, .physicalOutputAccelerationRate, .physicalOutputDecelerationRate, .physicalOutputHeatWhileLocomotiveStands, .physicalOutputMinimumHeatWhileLocomotiveDriving, .physicalOutputMaximumHeatWhileLocomotiveDriving, .physicalOutputChuffPower, .physicalOutputFanPower, .physicalOutputTimeout, .physicalOutputServoDurationA, .physicalOutputServoDurationB, .physicalOutputServoPositionA, .physicalOutputServoDoNotDisableServoPulseAtPositionA, .physicalOutputServoPositionB, .physicalOutputServoDoNotDisableServoPulseAtPositionB, .physicalOutputCouplerForce, .physicalOutputExternalSmokeUnitType, .physicalOutputRule17Forward, .physicalOutputRule17Reverse, .physicalOutputDimmer],
+        actionProperty : [.physicalOutputUseClassLightLogic, .physicalOutputSequencePosition, .physicalOutputStartupTime, .physicalOutputLevel, .physicalOutputSmokeUnitControlMode, .physicalOutputSpeed, .physicalOutputAccelerationRate, .physicalOutputDecelerationRate, .physicalOutputHeatWhileLocomotiveStands, .physicalOutputMinimumHeatWhileLocomotiveDriving, .physicalOutputMaximumHeatWhileLocomotiveDriving, .physicalOutputChuffPower, .physicalOutputFanPower, .physicalOutputTimeout, .physicalOutputServoDurationA, .physicalOutputServoDurationB, .physicalOutputServoPositionA, .physicalOutputServoDoNotDisableServoPulseAtPositionA, .physicalOutputServoPositionB, .physicalOutputServoDoNotDisableServoPulseAtPositionB, .physicalOutputCouplerForce, .physicalOutputExternalSmokeUnitType, .physicalOutputRule17Forward, .physicalOutputRule17Reverse, .physicalOutputDimmer, .physicalOutputStartupTimeInfo, .physicalOutputStartupDescription, .physicalOutputPantographHeight],
         actionType     : .setIsHiddenToTestResult
       ),
       (
@@ -590,7 +700,7 @@ extension Decoder {
         property2      : nil,
         testType2      : nil,
         testValue2     : nil,
-        actionProperty : [.physicalOutputUseClassLightLogic, .physicalOutputSequencePosition, .physicalOutputPhaseShift, .physicalOutputLevel, .physicalOutputSmokeUnitControlMode, .physicalOutputSpeed, .physicalOutputAccelerationRate, .physicalOutputDecelerationRate, .physicalOutputHeatWhileLocomotiveStands, .physicalOutputMinimumHeatWhileLocomotiveDriving, .physicalOutputMaximumHeatWhileLocomotiveDriving, .physicalOutputChuffPower, .physicalOutputFanPower, .physicalOutputTimeout, .physicalOutputServoDurationA, .physicalOutputServoDurationB, .physicalOutputServoPositionA, .physicalOutputServoDoNotDisableServoPulseAtPositionA, .physicalOutputServoPositionB, .physicalOutputServoDoNotDisableServoPulseAtPositionB, .physicalOutputCouplerForce, .physicalOutputExternalSmokeUnitType, .physicalOutputGradeCrossing, .physicalOutputRule17Forward, .physicalOutputRule17Reverse, .physicalOutputDimmer, .physicalOutputLEDMode],
+        actionProperty : [.physicalOutputUseClassLightLogic, .physicalOutputSequencePosition, .physicalOutputPhaseShift, .physicalOutputLevel, .physicalOutputSmokeUnitControlMode, .physicalOutputSpeed, .physicalOutputAccelerationRate, .physicalOutputDecelerationRate, .physicalOutputHeatWhileLocomotiveStands, .physicalOutputMinimumHeatWhileLocomotiveDriving, .physicalOutputMaximumHeatWhileLocomotiveDriving, .physicalOutputChuffPower, .physicalOutputFanPower, .physicalOutputTimeout, .physicalOutputServoDurationA, .physicalOutputServoDurationB, .physicalOutputServoPositionA, .physicalOutputServoDoNotDisableServoPulseAtPositionA, .physicalOutputServoPositionB, .physicalOutputServoDoNotDisableServoPulseAtPositionB, .physicalOutputCouplerForce, .physicalOutputExternalSmokeUnitType, .physicalOutputGradeCrossing, .physicalOutputRule17Forward, .physicalOutputRule17Reverse, .physicalOutputDimmer, .physicalOutputStartupTimeInfo, .physicalOutputLEDMode, .physicalOutputSpecialFunctions, .physicalOutputPantographHeight],
         actionType     : .setIsHiddenToTestResult
       ),
       (
@@ -601,7 +711,7 @@ extension Decoder {
         property2      : nil,
         testType2      : nil,
         testValue2     : nil,
-        actionProperty : [.physicalOutputUseClassLightLogic, .physicalOutputSequencePosition, .physicalOutputPhaseShift, .physicalOutputLevel, .physicalOutputSmokeUnitControlMode, .physicalOutputSpeed, .physicalOutputAccelerationRate, .physicalOutputDecelerationRate, .physicalOutputHeatWhileLocomotiveStands, .physicalOutputMinimumHeatWhileLocomotiveDriving, .physicalOutputMaximumHeatWhileLocomotiveDriving, .physicalOutputChuffPower, .physicalOutputFanPower, .physicalOutputTimeout, .physicalOutputServoDurationA, .physicalOutputServoDurationB, .physicalOutputServoPositionA, .physicalOutputServoDoNotDisableServoPulseAtPositionA, .physicalOutputServoPositionB, .physicalOutputServoDoNotDisableServoPulseAtPositionB, .physicalOutputCouplerForce, .physicalOutputExternalSmokeUnitType, .physicalOutputGradeCrossing, .physicalOutputRule17Forward, .physicalOutputRule17Reverse, .physicalOutputDimmer, .physicalOutputLEDMode],
+        actionProperty : [.physicalOutputUseClassLightLogic, .physicalOutputSequencePosition, .physicalOutputPhaseShift, .physicalOutputLevel, .physicalOutputSmokeUnitControlMode, .physicalOutputSpeed, .physicalOutputAccelerationRate, .physicalOutputDecelerationRate, .physicalOutputHeatWhileLocomotiveStands, .physicalOutputMinimumHeatWhileLocomotiveDriving, .physicalOutputMaximumHeatWhileLocomotiveDriving, .physicalOutputChuffPower, .physicalOutputFanPower, .physicalOutputTimeout, .physicalOutputServoDurationA, .physicalOutputServoDurationB, .physicalOutputServoPositionA, .physicalOutputServoDoNotDisableServoPulseAtPositionA, .physicalOutputServoPositionB, .physicalOutputServoDoNotDisableServoPulseAtPositionB, .physicalOutputCouplerForce, .physicalOutputExternalSmokeUnitType, .physicalOutputGradeCrossing, .physicalOutputRule17Forward, .physicalOutputRule17Reverse, .physicalOutputDimmer, .physicalOutputLEDMode, .physicalOutputStartupTimeInfo, .physicalOutputSpecialFunctions, .physicalOutputPantographHeight],
         actionType     : .setIsHiddenToTestResult
       ),
       (
@@ -612,7 +722,7 @@ extension Decoder {
         property2      : nil,
         testType2      : nil,
         testValue2     : nil,
-        actionProperty : [.physicalOutputUseClassLightLogic, .physicalOutputSequencePosition, .physicalOutputPhaseShift, .physicalOutputStartupTime, .physicalOutputLevel, .physicalOutputSmokeUnitControlMode, .physicalOutputSpeed, .physicalOutputAccelerationRate, .physicalOutputDecelerationRate, .physicalOutputHeatWhileLocomotiveStands, .physicalOutputMinimumHeatWhileLocomotiveDriving, .physicalOutputMaximumHeatWhileLocomotiveDriving, .physicalOutputChuffPower, .physicalOutputFanPower, .physicalOutputTimeout, .physicalOutputServoDurationA, .physicalOutputServoDurationB, .physicalOutputServoPositionA, .physicalOutputServoDoNotDisableServoPulseAtPositionA, .physicalOutputServoPositionB, .physicalOutputServoDoNotDisableServoPulseAtPositionB, .physicalOutputCouplerForce, .physicalOutputExternalSmokeUnitType, .physicalOutputGradeCrossing, .physicalOutputRule17Forward, .physicalOutputRule17Reverse, .physicalOutputDimmer, .physicalOutputLEDMode],
+        actionProperty : [.physicalOutputUseClassLightLogic, .physicalOutputSequencePosition, .physicalOutputPhaseShift, .physicalOutputStartupTime, .physicalOutputLevel, .physicalOutputSmokeUnitControlMode, .physicalOutputSpeed, .physicalOutputAccelerationRate, .physicalOutputDecelerationRate, .physicalOutputHeatWhileLocomotiveStands, .physicalOutputMinimumHeatWhileLocomotiveDriving, .physicalOutputMaximumHeatWhileLocomotiveDriving, .physicalOutputChuffPower, .physicalOutputFanPower, .physicalOutputTimeout, .physicalOutputServoDurationA, .physicalOutputServoDurationB, .physicalOutputServoPositionA, .physicalOutputServoDoNotDisableServoPulseAtPositionA, .physicalOutputServoPositionB, .physicalOutputServoDoNotDisableServoPulseAtPositionB, .physicalOutputCouplerForce, .physicalOutputExternalSmokeUnitType, .physicalOutputGradeCrossing, .physicalOutputRule17Forward, .physicalOutputRule17Reverse, .physicalOutputDimmer, .physicalOutputLEDMode, .physicalOutputStartupTimeInfo, .physicalOutputStartupDescription, .physicalOutputSpecialFunctions, .physicalOutputPantographHeight],
         actionType     : .setIsHiddenToTestResult
       ),
       (
@@ -623,7 +733,7 @@ extension Decoder {
         property2      : nil,
         testType2      : nil,
         testValue2     : nil,
-        actionProperty : [.physicalOutputUseClassLightLogic, .physicalOutputSequencePosition, .physicalOutputPhaseShift, .physicalOutputStartupTime, .physicalOutputSmokeUnitControlMode, .physicalOutputSpeed, .physicalOutputAccelerationRate, .physicalOutputDecelerationRate, .physicalOutputHeatWhileLocomotiveStands, .physicalOutputMinimumHeatWhileLocomotiveDriving, .physicalOutputMaximumHeatWhileLocomotiveDriving, .physicalOutputChuffPower, .physicalOutputFanPower, .physicalOutputTimeout, .physicalOutputServoDurationA, .physicalOutputServoDurationB, .physicalOutputServoPositionA, .physicalOutputServoDoNotDisableServoPulseAtPositionA, .physicalOutputServoPositionB, .physicalOutputServoDoNotDisableServoPulseAtPositionB, .physicalOutputCouplerForce, .physicalOutputExternalSmokeUnitType, .physicalOutputGradeCrossing, .physicalOutputRule17Forward, .physicalOutputRule17Reverse, .physicalOutputDimmer, .physicalOutputLEDMode],
+        actionProperty : [.physicalOutputUseClassLightLogic, .physicalOutputSequencePosition, .physicalOutputPhaseShift, .physicalOutputStartupTime, .physicalOutputSmokeUnitControlMode, .physicalOutputSpeed, .physicalOutputAccelerationRate, .physicalOutputDecelerationRate, .physicalOutputHeatWhileLocomotiveStands, .physicalOutputMinimumHeatWhileLocomotiveDriving, .physicalOutputMaximumHeatWhileLocomotiveDriving, .physicalOutputChuffPower, .physicalOutputFanPower, .physicalOutputTimeout, .physicalOutputServoDurationA, .physicalOutputServoDurationB, .physicalOutputServoPositionA, .physicalOutputServoDoNotDisableServoPulseAtPositionA, .physicalOutputServoPositionB, .physicalOutputServoDoNotDisableServoPulseAtPositionB, .physicalOutputCouplerForce, .physicalOutputExternalSmokeUnitType, .physicalOutputGradeCrossing, .physicalOutputRule17Forward, .physicalOutputRule17Reverse, .physicalOutputDimmer, .physicalOutputLEDMode, .physicalOutputStartupTimeInfo, .physicalOutputStartupDescription, .physicalOutputSpecialFunctions, .physicalOutputPantographHeight],
         actionType     : .setIsHiddenToTestResult
       ),
       (
@@ -634,18 +744,18 @@ extension Decoder {
         property2      : nil,
         testType2      : nil,
         testValue2     : nil,
-        actionProperty : [.physicalOutputUseClassLightLogic, .physicalOutputSequencePosition, .physicalOutputPhaseShift, .physicalOutputStartupTime, .physicalOutputLevel, .physicalOutputSmokeUnitControlMode, .physicalOutputSpeed, .physicalOutputAccelerationRate, .physicalOutputDecelerationRate, .physicalOutputHeatWhileLocomotiveStands, .physicalOutputMinimumHeatWhileLocomotiveDriving, .physicalOutputMaximumHeatWhileLocomotiveDriving, .physicalOutputChuffPower, .physicalOutputFanPower, .physicalOutputTimeout, .physicalOutputServoDurationA, .physicalOutputServoDurationB, .physicalOutputServoPositionA, .physicalOutputServoDoNotDisableServoPulseAtPositionA, .physicalOutputServoPositionB, .physicalOutputServoDoNotDisableServoPulseAtPositionB, .physicalOutputCouplerForce, .physicalOutputExternalSmokeUnitType, .physicalOutputGradeCrossing, .physicalOutputRule17Forward, .physicalOutputRule17Reverse, .physicalOutputDimmer, .physicalOutputLEDMode],
+        actionProperty : [.physicalOutputUseClassLightLogic, .physicalOutputSequencePosition, .physicalOutputPhaseShift, .physicalOutputStartupTime, .physicalOutputLevel, .physicalOutputSmokeUnitControlMode, .physicalOutputSpeed, .physicalOutputAccelerationRate, .physicalOutputDecelerationRate, .physicalOutputHeatWhileLocomotiveStands, .physicalOutputMinimumHeatWhileLocomotiveDriving, .physicalOutputMaximumHeatWhileLocomotiveDriving, .physicalOutputChuffPower, .physicalOutputFanPower, .physicalOutputTimeout, .physicalOutputServoDurationA, .physicalOutputServoDurationB, .physicalOutputServoPositionA, .physicalOutputServoDoNotDisableServoPulseAtPositionA, .physicalOutputServoPositionB, .physicalOutputServoDoNotDisableServoPulseAtPositionB, .physicalOutputCouplerForce, .physicalOutputExternalSmokeUnitType, .physicalOutputGradeCrossing, .physicalOutputRule17Forward, .physicalOutputRule17Reverse, .physicalOutputDimmer, .physicalOutputLEDMode, .physicalOutputStartupTimeInfo, .physicalOutputStartupDescription, .physicalOutputSpecialFunctions, .physicalOutputPantographHeight],
         actionType     : .setIsHiddenToTestResult
       ),
       (
         property1      : .physicalOutputOutputMode,
         testType1      : .equal,
-        testValue1     : ESUPhysicalOutputMode.esuCoupler.title,
+        testValue1     : ESUPhysicalOutputMode.esuCoupler.title(decoder: self),
         operator       : nil,
         property2      : nil,
         testType2      : nil,
         testValue2     : nil,
-        actionProperty : [.physicalOutputBrightness, .physicalOutputUseClassLightLogic, .physicalOutputSequencePosition, .physicalOutputPhaseShift, .physicalOutputStartupTime, .physicalOutputLevel, .physicalOutputSmokeUnitControlMode, .physicalOutputSpeed, .physicalOutputAccelerationRate, .physicalOutputDecelerationRate, .physicalOutputHeatWhileLocomotiveStands, .physicalOutputMinimumHeatWhileLocomotiveDriving, .physicalOutputMaximumHeatWhileLocomotiveDriving, .physicalOutputChuffPower, .physicalOutputFanPower, .physicalOutputTimeout, .physicalOutputServoDurationA, .physicalOutputServoDurationB, .physicalOutputServoPositionA, .physicalOutputServoDoNotDisableServoPulseAtPositionA, .physicalOutputServoPositionB, .physicalOutputServoDoNotDisableServoPulseAtPositionB, .physicalOutputCouplerForce, .physicalOutputExternalSmokeUnitType, .physicalOutputGradeCrossing, .physicalOutputRule17Forward, .physicalOutputRule17Reverse, .physicalOutputDimmer, .physicalOutputLEDMode],
+        actionProperty : [.physicalOutputBrightness, .physicalOutputUseClassLightLogic, .physicalOutputSequencePosition, .physicalOutputPhaseShift, .physicalOutputStartupTime, .physicalOutputLevel, .physicalOutputSmokeUnitControlMode, .physicalOutputSpeed, .physicalOutputAccelerationRate, .physicalOutputDecelerationRate, .physicalOutputHeatWhileLocomotiveStands, .physicalOutputMinimumHeatWhileLocomotiveDriving, .physicalOutputMaximumHeatWhileLocomotiveDriving, .physicalOutputChuffPower, .physicalOutputFanPower, .physicalOutputTimeout, .physicalOutputServoDurationA, .physicalOutputServoDurationB, .physicalOutputServoPositionA, .physicalOutputServoDoNotDisableServoPulseAtPositionA, .physicalOutputServoPositionB, .physicalOutputServoDoNotDisableServoPulseAtPositionB, .physicalOutputCouplerForce, .physicalOutputExternalSmokeUnitType, .physicalOutputGradeCrossing, .physicalOutputRule17Forward, .physicalOutputRule17Reverse, .physicalOutputDimmer, .physicalOutputLEDMode, .physicalOutputStartupTimeInfo, .physicalOutputStartupDescription, .physicalOutputSpecialFunctions, .physicalOutputPantographHeight],
         actionType     : .setIsHiddenToTestResult
       ),
       (
@@ -656,7 +766,7 @@ extension Decoder {
         property2      : nil,
         testType2      : nil,
         testValue2     : nil,
-        actionProperty : [.physicalOutputBrightness, .physicalOutputUseClassLightLogic, .physicalOutputSequencePosition, .physicalOutputPhaseShift, .physicalOutputStartupTime, .physicalOutputLevel, .physicalOutputSpeed, .physicalOutputAccelerationRate, .physicalOutputDecelerationRate, .physicalOutputHeatWhileLocomotiveStands, .physicalOutputMinimumHeatWhileLocomotiveDriving, .physicalOutputMaximumHeatWhileLocomotiveDriving, .physicalOutputChuffPower, .physicalOutputFanPower, .physicalOutputTimeout, .physicalOutputServoDurationA, .physicalOutputServoDurationB, .physicalOutputServoPositionA, .physicalOutputServoDoNotDisableServoPulseAtPositionA, .physicalOutputServoPositionB, .physicalOutputServoDoNotDisableServoPulseAtPositionB, .physicalOutputCouplerForce, .physicalOutputExternalSmokeUnitType, .physicalOutputGradeCrossing, .physicalOutputRule17Forward, .physicalOutputRule17Reverse, .physicalOutputDimmer, .physicalOutputLEDMode],
+        actionProperty : [.physicalOutputBrightness, .physicalOutputUseClassLightLogic, .physicalOutputSequencePosition, .physicalOutputPhaseShift, .physicalOutputStartupTime, .physicalOutputLevel, .physicalOutputSpeed, .physicalOutputAccelerationRate, .physicalOutputDecelerationRate, .physicalOutputHeatWhileLocomotiveStands, .physicalOutputMinimumHeatWhileLocomotiveDriving, .physicalOutputMaximumHeatWhileLocomotiveDriving, .physicalOutputChuffPower, .physicalOutputFanPower, .physicalOutputTimeout, .physicalOutputServoDurationA, .physicalOutputServoDurationB, .physicalOutputServoPositionA, .physicalOutputServoDoNotDisableServoPulseAtPositionA, .physicalOutputServoPositionB, .physicalOutputServoDoNotDisableServoPulseAtPositionB, .physicalOutputCouplerForce, .physicalOutputExternalSmokeUnitType, .physicalOutputGradeCrossing, .physicalOutputRule17Forward, .physicalOutputRule17Reverse, .physicalOutputDimmer, .physicalOutputLEDMode, .physicalOutputStartupTimeInfo, .physicalOutputStartupDescription, .physicalOutputSpecialFunctions, .physicalOutputPantographHeight],
         actionType     : .setIsHiddenToTestResult
       ),
       (
@@ -667,7 +777,7 @@ extension Decoder {
         property2      : nil,
         testType2      : nil,
         testValue2     : nil,
-        actionProperty : [.physicalOutputBrightness, .physicalOutputUseClassLightLogic, .physicalOutputSequencePosition, .physicalOutputPhaseShift, .physicalOutputStartupTime, .physicalOutputLevel, .physicalOutputSmokeUnitControlMode, .physicalOutputHeatWhileLocomotiveStands, .physicalOutputMinimumHeatWhileLocomotiveDriving, .physicalOutputMaximumHeatWhileLocomotiveDriving, .physicalOutputChuffPower, .physicalOutputFanPower, .physicalOutputTimeout, .physicalOutputServoDurationA, .physicalOutputServoDurationB, .physicalOutputServoPositionA, .physicalOutputServoDoNotDisableServoPulseAtPositionA, .physicalOutputServoPositionB, .physicalOutputServoDoNotDisableServoPulseAtPositionB, .physicalOutputCouplerForce, .physicalOutputExternalSmokeUnitType, .physicalOutputGradeCrossing, .physicalOutputRule17Forward, .physicalOutputRule17Reverse, .physicalOutputDimmer, .physicalOutputLEDMode],
+        actionProperty : [.physicalOutputBrightness, .physicalOutputUseClassLightLogic, .physicalOutputSequencePosition, .physicalOutputPhaseShift, .physicalOutputStartupTime, .physicalOutputLevel, .physicalOutputSmokeUnitControlMode, .physicalOutputHeatWhileLocomotiveStands, .physicalOutputMinimumHeatWhileLocomotiveDriving, .physicalOutputMaximumHeatWhileLocomotiveDriving, .physicalOutputChuffPower, .physicalOutputFanPower, .physicalOutputTimeout, .physicalOutputServoDurationA, .physicalOutputServoDurationB, .physicalOutputServoPositionA, .physicalOutputServoDoNotDisableServoPulseAtPositionA, .physicalOutputServoPositionB, .physicalOutputServoDoNotDisableServoPulseAtPositionB, .physicalOutputCouplerForce, .physicalOutputExternalSmokeUnitType, .physicalOutputGradeCrossing, .physicalOutputRule17Forward, .physicalOutputRule17Reverse, .physicalOutputDimmer, .physicalOutputLEDMode, .physicalOutputStartupTimeInfo, .physicalOutputStartupDescription, .physicalOutputSpecialFunctions, .physicalOutputPantographHeight],
         actionType     : .setIsHiddenToTestResult
       ),
       (
@@ -678,7 +788,7 @@ extension Decoder {
         property2      : nil,
         testType2      : nil,
         testValue2     : nil,
-        actionProperty : [.physicalOutputBrightness, .physicalOutputUseClassLightLogic, .physicalOutputSequencePosition, .physicalOutputPhaseShift, .physicalOutputStartupTime, .physicalOutputLevel, .physicalOutputSmokeUnitControlMode, .physicalOutputSpeed, .physicalOutputAccelerationRate, .physicalOutputDecelerationRate, .physicalOutputChuffPower, .physicalOutputFanPower, .physicalOutputTimeout, .physicalOutputServoDurationA, .physicalOutputServoDurationB, .physicalOutputServoPositionA, .physicalOutputServoDoNotDisableServoPulseAtPositionA, .physicalOutputServoPositionB, .physicalOutputServoDoNotDisableServoPulseAtPositionB, .physicalOutputCouplerForce, .physicalOutputExternalSmokeUnitType, .physicalOutputGradeCrossing, .physicalOutputRule17Forward, .physicalOutputRule17Reverse, .physicalOutputDimmer, .physicalOutputLEDMode],
+        actionProperty : [.physicalOutputBrightness, .physicalOutputUseClassLightLogic, .physicalOutputSequencePosition, .physicalOutputPhaseShift, .physicalOutputStartupTime, .physicalOutputLevel, .physicalOutputSmokeUnitControlMode, .physicalOutputSpeed, .physicalOutputAccelerationRate, .physicalOutputDecelerationRate, .physicalOutputChuffPower, .physicalOutputFanPower, .physicalOutputTimeout, .physicalOutputServoDurationA, .physicalOutputServoDurationB, .physicalOutputServoPositionA, .physicalOutputServoDoNotDisableServoPulseAtPositionA, .physicalOutputServoPositionB, .physicalOutputServoDoNotDisableServoPulseAtPositionB, .physicalOutputCouplerForce, .physicalOutputExternalSmokeUnitType, .physicalOutputGradeCrossing, .physicalOutputRule17Forward, .physicalOutputRule17Reverse, .physicalOutputDimmer, .physicalOutputLEDMode, .physicalOutputStartupTimeInfo, .physicalOutputStartupDescription, .physicalOutputSpecialFunctions, .physicalOutputPantographHeight],
         actionType     : .setIsHiddenToTestResult
       ),
       (
@@ -689,7 +799,7 @@ extension Decoder {
         property2      : nil,
         testType2      : nil,
         testValue2     : nil,
-        actionProperty : [.physicalOutputBrightness, .physicalOutputUseClassLightLogic, .physicalOutputSequencePosition, .physicalOutputPhaseShift, .physicalOutputStartupTime, .physicalOutputLevel, .physicalOutputSmokeUnitControlMode, .physicalOutputSpeed, .physicalOutputAccelerationRate, .physicalOutputDecelerationRate, .physicalOutputHeatWhileLocomotiveStands, .physicalOutputMinimumHeatWhileLocomotiveDriving, .physicalOutputMaximumHeatWhileLocomotiveDriving, .physicalOutputServoDurationA, .physicalOutputServoDurationB, .physicalOutputServoPositionA, .physicalOutputServoDoNotDisableServoPulseAtPositionA, .physicalOutputServoPositionB, .physicalOutputServoDoNotDisableServoPulseAtPositionB, .physicalOutputCouplerForce, .physicalOutputExternalSmokeUnitType, .physicalOutputGradeCrossing, .physicalOutputRule17Forward, .physicalOutputRule17Reverse, .physicalOutputDimmer, .physicalOutputLEDMode],
+        actionProperty : [.physicalOutputBrightness, .physicalOutputUseClassLightLogic, .physicalOutputSequencePosition, .physicalOutputPhaseShift, .physicalOutputStartupTime, .physicalOutputLevel, .physicalOutputSmokeUnitControlMode, .physicalOutputSpeed, .physicalOutputAccelerationRate, .physicalOutputDecelerationRate, .physicalOutputHeatWhileLocomotiveStands, .physicalOutputMinimumHeatWhileLocomotiveDriving, .physicalOutputMaximumHeatWhileLocomotiveDriving, .physicalOutputServoDurationA, .physicalOutputServoDurationB, .physicalOutputServoPositionA, .physicalOutputServoDoNotDisableServoPulseAtPositionA, .physicalOutputServoPositionB, .physicalOutputServoDoNotDisableServoPulseAtPositionB, .physicalOutputCouplerForce, .physicalOutputExternalSmokeUnitType, .physicalOutputGradeCrossing, .physicalOutputRule17Forward, .physicalOutputRule17Reverse, .physicalOutputDimmer, .physicalOutputLEDMode, .physicalOutputStartupTimeInfo, .physicalOutputStartupDescription, .physicalOutputSpecialFunctions, .physicalOutputPantographHeight],
         actionType     : .setIsHiddenToTestResult
       ),
       (
@@ -700,18 +810,18 @@ extension Decoder {
         property2      : nil,
         testType2      : nil,
         testValue2     : nil,
-        actionProperty : [.physicalOutputBrightness, .physicalOutputUseClassLightLogic, .physicalOutputSequencePosition, .physicalOutputPhaseShift, .physicalOutputStartupTime, .physicalOutputLevel, .physicalOutputSmokeUnitControlMode, .physicalOutputSpeed, .physicalOutputAccelerationRate, .physicalOutputDecelerationRate, .physicalOutputHeatWhileLocomotiveStands, .physicalOutputMinimumHeatWhileLocomotiveDriving, .physicalOutputMaximumHeatWhileLocomotiveDriving, .physicalOutputChuffPower, .physicalOutputFanPower, .physicalOutputTimeout, .physicalOutputServoDurationA, .physicalOutputServoDurationB, .physicalOutputServoPositionA, .physicalOutputServoDoNotDisableServoPulseAtPositionA, .physicalOutputServoPositionB, .physicalOutputServoDoNotDisableServoPulseAtPositionB, .physicalOutputCouplerForce, .physicalOutputGradeCrossing, .physicalOutputRule17Forward, .physicalOutputRule17Reverse, .physicalOutputDimmer, .physicalOutputLEDMode],
+        actionProperty : [.physicalOutputBrightness, .physicalOutputUseClassLightLogic, .physicalOutputSequencePosition, .physicalOutputPhaseShift, .physicalOutputStartupTime, .physicalOutputLevel, .physicalOutputSmokeUnitControlMode, .physicalOutputSpeed, .physicalOutputAccelerationRate, .physicalOutputDecelerationRate, .physicalOutputHeatWhileLocomotiveStands, .physicalOutputMinimumHeatWhileLocomotiveDriving, .physicalOutputMaximumHeatWhileLocomotiveDriving, .physicalOutputChuffPower, .physicalOutputFanPower, .physicalOutputTimeout, .physicalOutputServoDurationA, .physicalOutputServoDurationB, .physicalOutputServoPositionA, .physicalOutputServoDoNotDisableServoPulseAtPositionA, .physicalOutputServoPositionB, .physicalOutputServoDoNotDisableServoPulseAtPositionB, .physicalOutputCouplerForce, .physicalOutputGradeCrossing, .physicalOutputRule17Forward, .physicalOutputRule17Reverse, .physicalOutputDimmer, .physicalOutputLEDMode, .physicalOutputStartupTimeInfo, .physicalOutputStartupDescription, .physicalOutputSpecialFunctions, .physicalOutputPantographHeight],
         actionType     : .setIsHiddenToTestResult
       ),
       (
         property1      : .physicalOutputOutputMode,
         testType1      : .equal,
-        testValue1     : ESUPhysicalOutputMode.servoOutput.title,
+        testValue1     : ESUPhysicalOutputMode.servoOutput.title(decoder: self),
         operator       : nil,
         property2      : nil,
         testType2      : nil,
         testValue2     : nil,
-        actionProperty : [.physicalOutputBrightness, .physicalOutputUseClassLightLogic, .physicalOutputSequencePosition, .physicalOutputPhaseShift, .physicalOutputStartupTime, .physicalOutputLevel, .physicalOutputSmokeUnitControlMode, .physicalOutputSpeed, .physicalOutputAccelerationRate, .physicalOutputDecelerationRate, .physicalOutputHeatWhileLocomotiveStands, .physicalOutputMinimumHeatWhileLocomotiveDriving, .physicalOutputMaximumHeatWhileLocomotiveDriving, .physicalOutputChuffPower, .physicalOutputFanPower, .physicalOutputTimeout, .physicalOutputCouplerForce, .physicalOutputExternalSmokeUnitType, .physicalOutputGradeCrossing, .physicalOutputRule17Forward, .physicalOutputRule17Reverse, .physicalOutputDimmer, .physicalOutputLEDMode],
+        actionProperty : [.physicalOutputBrightness, .physicalOutputUseClassLightLogic, .physicalOutputSequencePosition, .physicalOutputPhaseShift, .physicalOutputStartupTime, .physicalOutputLevel, .physicalOutputSmokeUnitControlMode, .physicalOutputSpeed, .physicalOutputAccelerationRate, .physicalOutputDecelerationRate, .physicalOutputHeatWhileLocomotiveStands, .physicalOutputMinimumHeatWhileLocomotiveDriving, .physicalOutputMaximumHeatWhileLocomotiveDriving, .physicalOutputChuffPower, .physicalOutputFanPower, .physicalOutputTimeout, .physicalOutputCouplerForce, .physicalOutputExternalSmokeUnitType, .physicalOutputGradeCrossing, .physicalOutputRule17Forward, .physicalOutputRule17Reverse, .physicalOutputDimmer, .physicalOutputLEDMode, .physicalOutputStartupTimeInfo, .physicalOutputStartupDescription, .physicalOutputSpecialFunctions, .physicalOutputPantographHeight],
         actionType     : .setIsHiddenToTestResult
       ),
       (
@@ -722,7 +832,7 @@ extension Decoder {
         property2      : nil,
         testType2      : nil,
         testValue2     : nil,
-        actionProperty : [.physicalOutputBrightness, .physicalOutputUseClassLightLogic, .physicalOutputSequencePosition, .physicalOutputPhaseShift, .physicalOutputStartupTime, .physicalOutputLevel, .physicalOutputSmokeUnitControlMode, .physicalOutputSpeed, .physicalOutputAccelerationRate, .physicalOutputDecelerationRate, .physicalOutputHeatWhileLocomotiveStands, .physicalOutputMinimumHeatWhileLocomotiveDriving, .physicalOutputMaximumHeatWhileLocomotiveDriving, .physicalOutputChuffPower, .physicalOutputFanPower, .physicalOutputTimeout, .physicalOutputServoDurationA, .physicalOutputServoDurationB, .physicalOutputServoPositionA, .physicalOutputServoDoNotDisableServoPulseAtPositionA, .physicalOutputServoPositionB, .physicalOutputServoDoNotDisableServoPulseAtPositionB, .physicalOutputExternalSmokeUnitType, .physicalOutputGradeCrossing, .physicalOutputRule17Forward, .physicalOutputRule17Reverse, .physicalOutputDimmer, .physicalOutputLEDMode],
+        actionProperty : [.physicalOutputBrightness, .physicalOutputUseClassLightLogic, .physicalOutputSequencePosition, .physicalOutputPhaseShift, .physicalOutputStartupTime, .physicalOutputLevel, .physicalOutputSmokeUnitControlMode, .physicalOutputSpeed, .physicalOutputAccelerationRate, .physicalOutputDecelerationRate, .physicalOutputHeatWhileLocomotiveStands, .physicalOutputMinimumHeatWhileLocomotiveDriving, .physicalOutputMaximumHeatWhileLocomotiveDriving, .physicalOutputChuffPower, .physicalOutputFanPower, .physicalOutputTimeout, .physicalOutputServoDurationA, .physicalOutputServoDurationB, .physicalOutputServoPositionA, .physicalOutputServoDoNotDisableServoPulseAtPositionA, .physicalOutputServoPositionB, .physicalOutputServoDoNotDisableServoPulseAtPositionB, .physicalOutputExternalSmokeUnitType, .physicalOutputGradeCrossing, .physicalOutputRule17Forward, .physicalOutputRule17Reverse, .physicalOutputDimmer, .physicalOutputLEDMode, .physicalOutputStartupTimeInfo, .physicalOutputStartupDescription, .physicalOutputSpecialFunctions, .physicalOutputPantographHeight],
         actionType     : .setIsHiddenToTestResult
       ),
       (
@@ -733,18 +843,18 @@ extension Decoder {
         property2      : nil,
         testType2      : nil,
         testValue2     : nil,
-        actionProperty : [.physicalOutputBrightness, .physicalOutputUseClassLightLogic, .physicalOutputSequencePosition, .physicalOutputPhaseShift, .physicalOutputStartupTime, .physicalOutputLevel, .physicalOutputSmokeUnitControlMode, .physicalOutputSpeed, .physicalOutputAccelerationRate, .physicalOutputDecelerationRate, .physicalOutputHeatWhileLocomotiveStands, .physicalOutputMinimumHeatWhileLocomotiveDriving, .physicalOutputMaximumHeatWhileLocomotiveDriving, .physicalOutputChuffPower, .physicalOutputFanPower, .physicalOutputTimeout, .physicalOutputServoDurationA, .physicalOutputServoDurationB, .physicalOutputServoPositionA, .physicalOutputServoDoNotDisableServoPulseAtPositionA, .physicalOutputServoPositionB, .physicalOutputServoDoNotDisableServoPulseAtPositionB, .physicalOutputCouplerForce, .physicalOutputExternalSmokeUnitType, .physicalOutputGradeCrossing, .physicalOutputRule17Forward, .physicalOutputRule17Reverse, .physicalOutputDimmer, .physicalOutputLEDMode],
+        actionProperty : [.physicalOutputBrightness, .physicalOutputUseClassLightLogic, .physicalOutputSequencePosition, .physicalOutputPhaseShift, .physicalOutputStartupTime, .physicalOutputLevel, .physicalOutputSmokeUnitControlMode, .physicalOutputSpeed, .physicalOutputAccelerationRate, .physicalOutputDecelerationRate, .physicalOutputHeatWhileLocomotiveStands, .physicalOutputMinimumHeatWhileLocomotiveDriving, .physicalOutputMaximumHeatWhileLocomotiveDriving, .physicalOutputChuffPower, .physicalOutputFanPower, .physicalOutputTimeout, .physicalOutputServoDurationA, .physicalOutputServoDurationB, .physicalOutputServoPositionA, .physicalOutputServoDoNotDisableServoPulseAtPositionA, .physicalOutputServoPositionB, .physicalOutputServoDoNotDisableServoPulseAtPositionB, .physicalOutputCouplerForce, .physicalOutputExternalSmokeUnitType, .physicalOutputGradeCrossing, .physicalOutputRule17Forward, .physicalOutputRule17Reverse, .physicalOutputDimmer, .physicalOutputLEDMode, .physicalOutputStartupTimeInfo, .physicalOutputStartupDescription, .physicalOutputSpecialFunctions, .physicalOutputPantographHeight],
         actionType     : .setIsHiddenToTestResult
       ),
       (
         property1      : .physicalOutputOutputMode,
         testType1      : .equal,
-        testValue1     : ESUPhysicalOutputMode.pantograph.title,
+        testValue1     : ESUPhysicalOutputMode.pantograph.title(decoder: self),
         operator       : nil,
         property2      : nil,
         testType2      : nil,
         testValue2     : nil,
-        actionProperty : [.physicalOutputBrightness, .physicalOutputUseClassLightLogic, .physicalOutputSequencePosition, .physicalOutputPhaseShift, .physicalOutputStartupTime, .physicalOutputLevel, .physicalOutputSmokeUnitControlMode, .physicalOutputSpeed, .physicalOutputAccelerationRate, .physicalOutputDecelerationRate, .physicalOutputHeatWhileLocomotiveStands, .physicalOutputMinimumHeatWhileLocomotiveDriving, .physicalOutputMaximumHeatWhileLocomotiveDriving, .physicalOutputChuffPower, .physicalOutputFanPower, .physicalOutputTimeout, .physicalOutputServoDurationA, .physicalOutputServoDurationB, .physicalOutputServoPositionA, .physicalOutputServoDoNotDisableServoPulseAtPositionA, .physicalOutputServoPositionB, .physicalOutputServoDoNotDisableServoPulseAtPositionB, .physicalOutputCouplerForce, .physicalOutputExternalSmokeUnitType, .physicalOutputGradeCrossing, .physicalOutputRule17Forward, .physicalOutputRule17Reverse, .physicalOutputDimmer, .physicalOutputLEDMode],
+        actionProperty : [.physicalOutputBrightness, .physicalOutputUseClassLightLogic, .physicalOutputSequencePosition, .physicalOutputPhaseShift, .physicalOutputStartupTime, .physicalOutputLevel, .physicalOutputSmokeUnitControlMode, .physicalOutputSpeed, .physicalOutputAccelerationRate, .physicalOutputDecelerationRate, .physicalOutputHeatWhileLocomotiveStands, .physicalOutputMinimumHeatWhileLocomotiveDriving, .physicalOutputMaximumHeatWhileLocomotiveDriving, .physicalOutputChuffPower, .physicalOutputFanPower, .physicalOutputTimeout, .physicalOutputServoDurationA, .physicalOutputServoDurationB, .physicalOutputServoPositionA, .physicalOutputServoDoNotDisableServoPulseAtPositionA, .physicalOutputServoPositionB, .physicalOutputServoDoNotDisableServoPulseAtPositionB, .physicalOutputCouplerForce, .physicalOutputExternalSmokeUnitType, .physicalOutputGradeCrossing, .physicalOutputRule17Forward, .physicalOutputRule17Reverse, .physicalOutputDimmer, .physicalOutputLEDMode, .physicalOutputStartupTimeInfo, .physicalOutputStartupDescription, .physicalOutputSpecialFunctions],
         actionType     : .setIsHiddenToTestResult
       ),
       (
@@ -755,7 +865,7 @@ extension Decoder {
         property2      : nil,
         testType2      : nil,
         testValue2     : nil,
-        actionProperty : [.physicalOutputBrightness, .physicalOutputUseClassLightLogic, .physicalOutputSequencePosition, .physicalOutputPhaseShift, .physicalOutputStartupTime, .physicalOutputLevel, .physicalOutputSmokeUnitControlMode, .physicalOutputSpeed, .physicalOutputAccelerationRate, .physicalOutputDecelerationRate, .physicalOutputHeatWhileLocomotiveStands, .physicalOutputMinimumHeatWhileLocomotiveDriving, .physicalOutputMaximumHeatWhileLocomotiveDriving, .physicalOutputChuffPower, .physicalOutputFanPower, .physicalOutputTimeout, .physicalOutputServoDurationA, .physicalOutputServoDurationB, .physicalOutputServoPositionA, .physicalOutputServoDoNotDisableServoPulseAtPositionA, .physicalOutputServoPositionB, .physicalOutputServoDoNotDisableServoPulseAtPositionB, .physicalOutputCouplerForce, .physicalOutputExternalSmokeUnitType, .physicalOutputGradeCrossing, .physicalOutputRule17Forward, .physicalOutputRule17Reverse, .physicalOutputDimmer, .physicalOutputLEDMode],
+        actionProperty : [.physicalOutputBrightness, .physicalOutputUseClassLightLogic, .physicalOutputSequencePosition, .physicalOutputPhaseShift, .physicalOutputStartupTime, .physicalOutputLevel, .physicalOutputSmokeUnitControlMode, .physicalOutputSpeed, .physicalOutputAccelerationRate, .physicalOutputDecelerationRate, .physicalOutputHeatWhileLocomotiveStands, .physicalOutputMinimumHeatWhileLocomotiveDriving, .physicalOutputMaximumHeatWhileLocomotiveDriving, .physicalOutputChuffPower, .physicalOutputFanPower, .physicalOutputTimeout, .physicalOutputServoDurationA, .physicalOutputServoDurationB, .physicalOutputServoPositionA, .physicalOutputServoDoNotDisableServoPulseAtPositionA, .physicalOutputServoPositionB, .physicalOutputServoDoNotDisableServoPulseAtPositionB, .physicalOutputCouplerForce, .physicalOutputExternalSmokeUnitType, .physicalOutputGradeCrossing, .physicalOutputRule17Forward, .physicalOutputRule17Reverse, .physicalOutputDimmer, .physicalOutputLEDMode, .physicalOutputStartupTimeInfo, .physicalOutputStartupDescription, .physicalOutputSpecialFunctions, .physicalOutputPantographHeight],
         actionType     : .setIsHiddenToTestResult
       ),
       (
@@ -766,7 +876,7 @@ extension Decoder {
         property2      : nil,
         testType2      : nil,
         testValue2     : nil,
-        actionProperty : [.physicalOutputBrightness, .physicalOutputUseClassLightLogic, .physicalOutputSequencePosition, .physicalOutputPhaseShift, .physicalOutputStartupTime, .physicalOutputLevel, .physicalOutputSmokeUnitControlMode, .physicalOutputSpeed, .physicalOutputAccelerationRate, .physicalOutputDecelerationRate, .physicalOutputHeatWhileLocomotiveStands, .physicalOutputMinimumHeatWhileLocomotiveDriving, .physicalOutputMaximumHeatWhileLocomotiveDriving, .physicalOutputChuffPower, .physicalOutputFanPower, .physicalOutputTimeout, .physicalOutputServoDurationA, .physicalOutputServoDurationB, .physicalOutputServoPositionA, .physicalOutputServoDoNotDisableServoPulseAtPositionA, .physicalOutputServoPositionB, .physicalOutputServoDoNotDisableServoPulseAtPositionB, .physicalOutputCouplerForce, .physicalOutputExternalSmokeUnitType, .physicalOutputGradeCrossing, .physicalOutputRule17Forward, .physicalOutputRule17Reverse, .physicalOutputDimmer, .physicalOutputLEDMode],
+        actionProperty : [.physicalOutputBrightness, .physicalOutputUseClassLightLogic, .physicalOutputSequencePosition, .physicalOutputPhaseShift, .physicalOutputStartupTime, .physicalOutputLevel, .physicalOutputSmokeUnitControlMode, .physicalOutputSpeed, .physicalOutputAccelerationRate, .physicalOutputDecelerationRate, .physicalOutputHeatWhileLocomotiveStands, .physicalOutputMinimumHeatWhileLocomotiveDriving, .physicalOutputMaximumHeatWhileLocomotiveDriving, .physicalOutputChuffPower, .physicalOutputFanPower, .physicalOutputTimeout, .physicalOutputServoDurationA, .physicalOutputServoDurationB, .physicalOutputServoPositionA, .physicalOutputServoDoNotDisableServoPulseAtPositionA, .physicalOutputServoPositionB, .physicalOutputServoDoNotDisableServoPulseAtPositionB, .physicalOutputCouplerForce, .physicalOutputExternalSmokeUnitType, .physicalOutputGradeCrossing, .physicalOutputRule17Forward, .physicalOutputRule17Reverse, .physicalOutputDimmer, .physicalOutputLEDMode, .physicalOutputStartupTimeInfo, .physicalOutputStartupDescription, .physicalOutputSpecialFunctions, .physicalOutputPantographHeight],
         actionType     : .setIsHiddenToTestResult
       ),
       (
@@ -777,18 +887,18 @@ extension Decoder {
         property2      : nil,
         testType2      : nil,
         testValue2     : nil,
-        actionProperty : [.physicalOutputBrightness, .physicalOutputUseClassLightLogic, .physicalOutputSequencePosition, .physicalOutputPhaseShift, .physicalOutputStartupTime, .physicalOutputLevel, .physicalOutputSmokeUnitControlMode, .physicalOutputSpeed, .physicalOutputAccelerationRate, .physicalOutputDecelerationRate, .physicalOutputHeatWhileLocomotiveStands, .physicalOutputMinimumHeatWhileLocomotiveDriving, .physicalOutputMaximumHeatWhileLocomotiveDriving, .physicalOutputChuffPower, .physicalOutputFanPower, .physicalOutputTimeout, .physicalOutputServoDurationA, .physicalOutputServoDurationB, .physicalOutputServoPositionA, .physicalOutputServoDoNotDisableServoPulseAtPositionA, .physicalOutputServoPositionB, .physicalOutputServoDoNotDisableServoPulseAtPositionB, .physicalOutputExternalSmokeUnitType, .physicalOutputGradeCrossing, .physicalOutputRule17Forward, .physicalOutputRule17Reverse, .physicalOutputDimmer, .physicalOutputLEDMode],
+        actionProperty : [.physicalOutputBrightness, .physicalOutputUseClassLightLogic, .physicalOutputSequencePosition, .physicalOutputPhaseShift, .physicalOutputStartupTime, .physicalOutputLevel, .physicalOutputSmokeUnitControlMode, .physicalOutputSpeed, .physicalOutputAccelerationRate, .physicalOutputDecelerationRate, .physicalOutputHeatWhileLocomotiveStands, .physicalOutputMinimumHeatWhileLocomotiveDriving, .physicalOutputMaximumHeatWhileLocomotiveDriving, .physicalOutputChuffPower, .physicalOutputFanPower, .physicalOutputTimeout, .physicalOutputServoDurationA, .physicalOutputServoDurationB, .physicalOutputServoPositionA, .physicalOutputServoDoNotDisableServoPulseAtPositionA, .physicalOutputServoPositionB, .physicalOutputServoDoNotDisableServoPulseAtPositionB, .physicalOutputExternalSmokeUnitType, .physicalOutputGradeCrossing, .physicalOutputRule17Forward, .physicalOutputRule17Reverse, .physicalOutputDimmer, .physicalOutputLEDMode, .physicalOutputStartupTimeInfo, .physicalOutputStartupDescription, .physicalOutputSpecialFunctions, .physicalOutputPantographHeight],
         actionType     : .setIsHiddenToTestResult
       ),
       (
         property1      : .physicalOutputOutputMode,
         testType1      : .equal,
-        testValue1     : ESUPhysicalOutputMode.servoOutputSteamEngineJohnsonBarControl.title,
+        testValue1     : ESUPhysicalOutputMode.servoOutputSteamEngineJohnsonBarControl.title(decoder: self),
         operator       : nil,
         property2      : nil,
         testType2      : nil,
         testValue2     : nil,
-        actionProperty : [.physicalOutputBrightness, .physicalOutputUseClassLightLogic, .physicalOutputSequencePosition, .physicalOutputPhaseShift, .physicalOutputStartupTime, .physicalOutputLevel, .physicalOutputSmokeUnitControlMode, .physicalOutputSpeed, .physicalOutputAccelerationRate, .physicalOutputDecelerationRate, .physicalOutputHeatWhileLocomotiveStands, .physicalOutputMinimumHeatWhileLocomotiveDriving, .physicalOutputMaximumHeatWhileLocomotiveDriving, .physicalOutputChuffPower, .physicalOutputFanPower, .physicalOutputTimeout, .physicalOutputServoDoNotDisableServoPulseAtPositionA, .physicalOutputServoDoNotDisableServoPulseAtPositionB, .physicalOutputCouplerForce, .physicalOutputExternalSmokeUnitType, .physicalOutputGradeCrossing, .physicalOutputRule17Forward, .physicalOutputRule17Reverse, .physicalOutputDimmer, .physicalOutputLEDMode],
+        actionProperty : [.physicalOutputBrightness, .physicalOutputUseClassLightLogic, .physicalOutputSequencePosition, .physicalOutputPhaseShift, .physicalOutputStartupTime, .physicalOutputLevel, .physicalOutputSmokeUnitControlMode, .physicalOutputSpeed, .physicalOutputAccelerationRate, .physicalOutputDecelerationRate, .physicalOutputHeatWhileLocomotiveStands, .physicalOutputMinimumHeatWhileLocomotiveDriving, .physicalOutputMaximumHeatWhileLocomotiveDriving, .physicalOutputChuffPower, .physicalOutputFanPower, .physicalOutputTimeout, .physicalOutputServoDoNotDisableServoPulseAtPositionA, .physicalOutputServoDoNotDisableServoPulseAtPositionB, .physicalOutputCouplerForce, .physicalOutputExternalSmokeUnitType, .physicalOutputGradeCrossing, .physicalOutputRule17Forward, .physicalOutputRule17Reverse, .physicalOutputDimmer, .physicalOutputLEDMode, .physicalOutputStartupTimeInfo, .physicalOutputStartupDescription, .physicalOutputSpecialFunctions, .physicalOutputPantographHeight],
         actionType     : .setIsHiddenToTestResult
       ),
 

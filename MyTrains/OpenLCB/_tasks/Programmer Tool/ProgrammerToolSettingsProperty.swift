@@ -133,6 +133,9 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
   // Function Outputs
   
   case physicalOutput = 165
+  case physicalOutputAUX10Warning = 224
+  case physicalOutputAUX11Warning = 225
+  case physicalOutputAUX12Warning = 226
   case physicalOutputPowerOnDelay = 166
   case physicalOutputPowerOffDelay = 167
   case physicalOutputEnableFunctionTimeout = 168
@@ -164,6 +167,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
   case physicalOutputServoDoNotDisableServoPulseAtPositionB = 190
   case physicalOutputCouplerForce = 191
   case physicalOutputExternalSmokeUnitType = 204
+  case physicalOutputPantographHeight = 223
   case physicalOutputSpecialFunctions = 205
   case physicalOutputGradeCrossing = 196
   case physicalOutputRule17Forward = 192
@@ -182,6 +186,12 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
   case classLightLogicSequenceLength = 97
   case enforceSlaveCommunicationOnAUX3AndAUX4 = 98
   case decoderSensorSettings = 99
+  case sensor1DigitalSensorInputEnabled = 227
+  case sensor1EnableAnalogSensorInput = 228
+  case sensor1Threshold = 229
+  case sensor2DigitalSensorInputEnabled = 230
+  case sensor2EnableAnalogSensorInput = 231
+  case sensor2Threshold = 232
   case enableAutomaticUncoupling = 100
   case automaticUncouplingSpeed = 101
   case automaticUncouplingPushTime = 102
@@ -344,6 +354,9 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
       cvs = [_cvs[0] + hluIndex]
     case .speedTableValue:
       cvs = [_cvs[0] + (decoder.speedTableIndex - 1)]
+    case .steamChuffDuration:
+      let index = self.rawValue - ProgrammerToolSettingsProperty.smokeChuffsMinimumDuration.rawValue
+      cvs = [_cvs[index]]
     default:
       break
     }

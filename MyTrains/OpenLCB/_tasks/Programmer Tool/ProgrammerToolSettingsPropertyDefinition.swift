@@ -54,6 +54,7 @@ public enum ProgrammerToolEncodingType : Int, CaseIterable {
   case dword            // DWord, Min, Max
   case boolBit          // Bit of Byte, Mask
   case boolNZ           // Byte, Non-Zero means true, 0 means false
+  case boolNZReversed   // Byte, Non-Zero means false, 0 means true
   case extendedAddress  // Word DCC long address encoding
   case specialInt8      // Byte +/- 127 with bit 7 as sign (not 2s complement)
   case custom           // Decoding/Encoding is handled by separate code
@@ -81,6 +82,7 @@ public enum ProgrammerToolEncodingType : Int, CaseIterable {
   case speedTableValue
   case analogModeEnable
   case hluSpeedLimit
+  case steamChuffDuration
 
 }
 
@@ -90,5 +92,6 @@ public enum CVIndexingMethod {
   
   case standard
   case esuDecoderPhysicalOutput
+  case esuRandomFunction
   
 }
