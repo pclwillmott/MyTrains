@@ -60,46 +60,46 @@ public enum TriggeredFunction : UInt8, CaseIterable {
   // MARK: Public Properties
   
   public var title : String {
-    
-    let titles : [TriggeredFunction:String] = [
-      .f0 : String(localized:"F0"),
-      .f1 : String(localized:"F1"),
-      .f2 : String(localized:"F2"),
-      .f3 : String(localized:"F3"),
-      .f4 : String(localized:"F4"),
-      .f5 : String(localized:"F5"),
-      .f6 : String(localized:"F6"),
-      .f7 : String(localized:"F7"),
-      .f8 : String(localized:"F8"),
-      .f9 : String(localized:"F9"),
-      .f10 : String(localized:"F10"),
-      .f11 : String(localized:"F11"),
-      .f12 : String(localized:"F12"),
-      .f13 : String(localized:"F13"),
-      .f14 : String(localized:"F14"),
-      .f15 : String(localized:"F15"),
-      .f16 : String(localized:"F16"),
-      .f17 : String(localized:"F17"),
-      .f18 : String(localized:"F18"),
-      .f19 : String(localized:"F19"),
-      .f20 : String(localized:"F20"),
-      .f21 : String(localized:"F21"),
-      .f22 : String(localized:"F22"),
-      .f23 : String(localized:"F23"),
-      .f24 : String(localized:"F24"),
-      .f25 : String(localized:"F25"),
-      .f26 : String(localized:"F26"),
-      .f27 : String(localized:"F27"),
-      .f28 : String(localized:"F28"),
-      .f29 : String(localized:"F29"),
-      .f30 : String(localized:"F30"),
-      .f31 : String(localized:"F31"),
-    ]
-    
-    return titles[self]!
-    
+    return TriggeredFunction.titles[self]!
   }
+
+  // MARK: Public Class Properties
   
+  public static let titles : [TriggeredFunction:String] = [
+    .f0 : String(localized:"F0"),
+    .f1 : String(localized:"F1"),
+    .f2 : String(localized:"F2"),
+    .f3 : String(localized:"F3"),
+    .f4 : String(localized:"F4"),
+    .f5 : String(localized:"F5"),
+    .f6 : String(localized:"F6"),
+    .f7 : String(localized:"F7"),
+    .f8 : String(localized:"F8"),
+    .f9 : String(localized:"F9"),
+    .f10 : String(localized:"F10"),
+    .f11 : String(localized:"F11"),
+    .f12 : String(localized:"F12"),
+    .f13 : String(localized:"F13"),
+    .f14 : String(localized:"F14"),
+    .f15 : String(localized:"F15"),
+    .f16 : String(localized:"F16"),
+    .f17 : String(localized:"F17"),
+    .f18 : String(localized:"F18"),
+    .f19 : String(localized:"F19"),
+    .f20 : String(localized:"F20"),
+    .f21 : String(localized:"F21"),
+    .f22 : String(localized:"F22"),
+    .f23 : String(localized:"F23"),
+    .f24 : String(localized:"F24"),
+    .f25 : String(localized:"F25"),
+    .f26 : String(localized:"F26"),
+    .f27 : String(localized:"F27"),
+    .f28 : String(localized:"F28"),
+    .f29 : String(localized:"F29"),
+    .f30 : String(localized:"F30"),
+    .f31 : String(localized:"F31"),
+  ]
+
   // MARK: Public Class Methods
   
   public static func populate(comboBox:NSComboBox) {

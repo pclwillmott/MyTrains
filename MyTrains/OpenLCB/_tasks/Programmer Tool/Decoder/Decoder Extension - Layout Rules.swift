@@ -315,6 +315,17 @@ extension Decoder {
         actionType     : .setIsHiddenToTestResult
       ),
       (
+        property1      : .randomStop,
+        testType1      : .equal,
+        testValue1     : "false",
+        operator       : .and,
+        property2      : .randomDrive,
+        testType2      : .equal,
+        testValue2     : "false",
+        actionProperty : [.randomActiveMaximum, .randomActiveMinimum, .randomPassiveMaximum, .randomPassiveMinimum, .randomTriggeredFunction, .randomOnlyPlayWhenDrivingSoundEnabled],
+        actionType     : .setIsHiddenToTestResult
+      ),
+      (
         property1      : .enableSUSIMaster,
         testType1      : .equal,
         testValue1     : "false",

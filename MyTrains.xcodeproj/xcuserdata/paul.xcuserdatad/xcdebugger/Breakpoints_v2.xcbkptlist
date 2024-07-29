@@ -615,22 +615,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "82DDEF78-CCE5-4381-A897-AA7D1FA42283"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "MyTrains/_enumerations/ESUDecoderPhysicalOutput.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "65"
-            endingLineNumber = "65"
-            landmarkName = "title"
-            landmarkType = "24">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "3BB6C64A-9955-45FC-AECC-857D20C04802"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -638,8 +622,8 @@
             filePath = "MyTrains/OpenLCB/_tasks/Programmer Tool/Property Views/PTSettingsPropertyView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "745"
-            endingLineNumber = "745"
+            startingLineNumber = "855"
+            endingLineNumber = "855"
             landmarkName = "reload()"
             landmarkType = "7">
          </BreakpointContent>

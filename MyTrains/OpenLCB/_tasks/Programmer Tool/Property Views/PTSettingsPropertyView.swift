@@ -40,6 +40,10 @@ public class PTSettingsPropertyView : NSView, NSTextFieldDelegate {
     
     functionButtons.removeAll()
     
+    functionLabels.removeAll()
+    
+    sfLabels.removeAll()
+    
   }
   
   // MARK: Controls
@@ -63,6 +67,10 @@ public class PTSettingsPropertyView : NSView, NSTextFieldDelegate {
   private var speedTable : ESUSpeedTable?
   
   private var functionButtons : [NSButton] = []
+  
+  private var functionLabels : [NSTextField] = []
+  
+  private var sfLabels : [NSTextField] = []
   
   // MARK: Private Properties
   
@@ -201,6 +209,7 @@ public class PTSettingsPropertyView : NSView, NSTextFieldDelegate {
       .textField,
       .textFieldWithSlider,
       .warning,
+      .esuSUSIMapping,
     ]
     
     if controlsWithLabels.contains(definition.controlType) {
@@ -489,6 +498,102 @@ public class PTSettingsPropertyView : NSView, NSTextFieldDelegate {
         
       }
       
+    case .esuSUSIMapping:
+      
+      if let label {
+        
+        let columnOffset : CGFloat = 30
+        
+        for index in 0 ... 15 {
+
+          let title = String(localized: "SF\(index)")
+
+          let sfLabel = NSTextField(labelWithString: title)
+          
+          sfLabel.translatesAutoresizingMaskIntoConstraints = false
+          
+          sfLabels.append(sfLabel)
+          
+          self.addSubview(sfLabel)
+          
+          if index > 0 {
+            
+            viewConstraints.append(sfLabel.leadingAnchor.constraint(equalToSystemSpacingAfter: sfLabels[index - 1].trailingAnchor, multiplier: 1.0))
+            
+          }
+          
+          viewConstraints.append(sfLabel.topAnchor.constraint(equalToSystemSpacingBelow: label.bottomAnchor, multiplier: 1.0))
+          
+        }
+        
+        for label1 in sfLabels {
+          for label2 in sfLabels {
+            if !(label1 === label2) {
+              viewConstraints.append(label1.widthAnchor.constraint(greaterThanOrEqualTo: label2.widthAnchor))
+            }
+          }
+        }
+        
+        var buttonIndex = 0
+        
+        for index in 0 ... 15 {
+          
+          let title = String(localized: "F\(index)")
+
+          let functionLabel = NSTextField(labelWithString: title)
+          
+          functionLabel.translatesAutoresizingMaskIntoConstraints = false
+          
+          functionLabels.append(functionLabel)
+          
+          self.addSubview(functionLabel)
+          
+          let topAnchor = (index == 0) ? sfLabels[0].bottomAnchor : functionLabels[index - 1].bottomAnchor
+
+          viewConstraints.append(functionLabel.topAnchor.constraint(equalToSystemSpacingBelow: topAnchor, multiplier: 1.0))
+          
+          viewConstraints.append(functionLabel.leadingAnchor.constraint(equalTo: label.leadingAnchor))
+          
+          for sfIndex in 0 ... 15 {
+            
+            let checkBox = NSButton(checkboxWithTitle: "", target: self, action: #selector(sfbuttonAction(_:)))
+            
+            checkBox.translatesAutoresizingMaskIntoConstraints = false
+            
+            functionButtons.append(checkBox)
+            
+            self.addSubview(checkBox)
+            
+            checkBox.tag = buttonIndex
+            buttonIndex += 1
+            
+            viewConstraints.append(checkBox.centerYAnchor.constraint(equalTo: functionLabel.centerYAnchor))
+            
+            viewConstraints.append(checkBox.centerXAnchor.constraint(equalTo: sfLabels[sfIndex].centerXAnchor))
+            
+            if (sfIndex + 1) % 16 == 0 {
+              viewConstraints.append(self.trailingAnchor.constraint(greaterThanOrEqualToSystemSpacingAfter: checkBox.trailingAnchor, multiplier: 1.0))
+              
+            }
+            
+          }
+          
+        }
+        
+        for label1 in functionLabels {
+          for label2 in functionLabels {
+            if !(label1 === label2) {
+              viewConstraints.append(label1.widthAnchor.constraint(greaterThanOrEqualTo: label2.widthAnchor))
+            }
+          }
+        }
+        
+        viewConstraints.append(sfLabels[0].leadingAnchor.constraint(equalToSystemSpacingAfter: functionLabels[0].trailingAnchor, multiplier: 1.0))
+        
+        viewConstraints.append(self.bottomAnchor.constraint(greaterThanOrEqualTo: functionLabels.last!.bottomAnchor))
+        
+      }
+      
     case .functionsAnalogMode:
     
       if let label {
@@ -651,39 +756,44 @@ public class PTSettingsPropertyView : NSView, NSTextFieldDelegate {
       return
     }
     
-    switch property {
+    switch definition.encoding {
     case .locomotiveAddressType:
       LocomotiveAddressType.populate(comboBox: comboBox)
-    case .marklinConsecutiveAddresses:
+    case .esuMarklinConsecutiveAddresses:
       MarklinConsecutiveAddresses.populate(comboBox: comboBox)
-    case .m4MasterDecoderManufacturer:
+    case .manufacturerCode:
       ManufacturerCode.populate(comboBox: comboBox)
-    case .speedStepMode:
+    case .esuSpeedStepMode:
       SpeedStepMode.populate(comboBox: comboBox)
-    case .classLightLogicSequenceLength:
+    case .esuClassLightLogicLength:
       ClassLightLogicSequenceLength.populate(comboBox: comboBox)
-    case .decoderSensorSettings:
+    case .esuDecoderSensorSettings:
       DecoderSensorSettings.populate(comboBox: comboBox)
-    case .steamChuffMode:
+    case .esuSteamChuffMode:
       SteamChuffMode.populate(comboBox: comboBox)
-    case .soundControlBasis:
+    case .esuSoundControlBasis:
       SoundControlBasis.populate(comboBox: comboBox)
-    case .idleOperationTriggeredFunction, .loadOperationTriggeredFunction:
+    case .esuTriggeredFunction:
       TriggeredFunction.populate(comboBox: comboBox)
-    case .physicalOutputSmokeUnitControlMode:
+    case .esuSmokeUnitControlMode:
       SmokeUnitControlMode.populate(comboBox: comboBox)
-    case .physicalOutputExternalSmokeUnitType:
+    case .esuExternalSmokeUnitType:
       ExternalSmokeUnitType.populate(comboBox: comboBox)
+    case .esuRandomFunction:
+      ESURandomFunction.populate(comboBox: comboBox)
     case .speedTableIndex:
       comboBox.removeAllItems()
       for index in 1 ... 28 {
         comboBox.addItem(withObjectValue: "\(index)")
       }
-    case .speedTablePreset:
+    case .esuSpeedTablePreset:
       SpeedTablePreset.populate(comboBox: comboBox)
+    case .soundCV:
+      SoundCV.populate(comboBox: comboBox)
     default:
       break
     }
+    
   }
   
   private func initComboBoxDynamic() {
@@ -797,6 +907,11 @@ public class PTSettingsPropertyView : NSView, NSTextFieldDelegate {
           }
           
         }
+      case .esuSUSIMapping:
+        
+        for button in functionButtons {
+          button.state = decoder.getSFMappingState(mapIndex: button.tag) ? .on : .off
+        }
         
       default:
         break
@@ -855,7 +970,11 @@ public class PTSettingsPropertyView : NSView, NSTextFieldDelegate {
       decoder?.setConsistFunctionState(function: function, state: sender.state == .on)
     }
   }
-  
+
+  @objc func sfbuttonAction(_ sender:NSButton) {
+    decoder?.setSFMappingState(mapIndex: sender.tag, value: sender.state == .on)
+  }
+
   // MARK: NSTextFieldDelegate Methods
   
   @objc public func control(_ control: NSControl, textShouldEndEditing fieldEditor: NSText) -> Bool {

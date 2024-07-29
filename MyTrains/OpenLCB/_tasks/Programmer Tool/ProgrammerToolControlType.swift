@@ -23,5 +23,6 @@ public enum ProgrammerToolControlType {
   case functionsConsistMode
   case functionsAnalogMode
   case esuSpeedTable
+  case esuSUSIMapping
 
 }

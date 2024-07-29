@@ -274,37 +274,6 @@ public class Decoder : NSObject {
     return result
   }
   
-  private var _speedTablePreset : SpeedTablePreset = .doNothing
-  
-  private var speedTablePreset : SpeedTablePreset { // *** KEEP ***
-    get {
-      return _speedTablePreset
-    }
-    set(value) {
-      _speedTablePreset = value
-      if !_speedTablePreset.speedTableValues.isEmpty {
-        let table = _speedTablePreset.speedTableValues
-        for index in 0 ... table.count - 1 {
-          setUInt8(cv: .cv_000_000_067 + index, value: table[index])
-        }
-      }
-      else if _speedTablePreset == .linearUntilFirstMaximumValue {
-        var firstMax : Int = 0
-        for index in 0 ... 27 {
-          if getUInt8(cv: .cv_000_000_067 + index)! == 255 {
-            firstMax = index
-            break
-          }
-        }
-        for index in 1 ... firstMax - 1 {
-          let value = UInt8(1 + (255 - 1) * Double(index) / Double(firstMax))
-          setUInt8(cv: .cv_000_000_067 + index, value: value)
-        }
-      }
-      _speedTablePreset = .doNothing
-    }
-  }
-  
   private var _speedTableIndex : Int = 1
   
   public var speedTableIndex : Int { // *** KEEP ***
@@ -321,31 +290,16 @@ public class Decoder : NSObject {
     }
   }
 
-  /*
-  public var speedTableValue : UInt8 { // *** KEEP ***
-    get {
-      return getUInt8(cv: .cv_000_000_067 + (speedTableIndex - 1))!
-    }
-    set(value) {
-      if value != speedTableValue {
-        setUInt8(cv: .cv_000_000_067 + (speedTableIndex - 1), value: value)
-        if speedTableIndex > 2 {
-          for index in 2 ... speedTableIndex - 1 {
-            setUInt8(cv: .cv_000_000_067 + (index - 1), value: min(getUInt8(cv: .cv_000_000_067 + (index - 1))!, value))
-          }
-        }
-        if speedTableIndex < 27 {
-          for index in speedTableIndex + 1 ... 27 {
-            setUInt8(cv: .cv_000_000_067 + (index - 1), value: max(getUInt8(cv: .cv_000_000_067 + (index - 1))!, value))
-          }
-        }
+  private var esuRandomFunction : ESURandomFunction = .random1 {
+    didSet {
+      for view in randomFunctionProperties {
+        view.reload()
       }
-      
+      applyLayoutRules()
     }
   }
-  */
   
-  private var _esuDecoderPhysicalOutput : ESUDecoderPhysicalOutput = .frontLight {
+  public var esuDecoderPhysicalOutput : ESUDecoderPhysicalOutput = .frontLight {
     didSet {
       for view in physicalOutputProperties {
         view.reload()
@@ -353,37 +307,12 @@ public class Decoder : NSObject {
     }
   }
   
-  private var _esuRandomFunction : ESURandomFunction = .random1 {
+  public var soundCV : SoundCV = .soundCV1 {
     didSet {
-      for view in randomFunctionProperties {
-        view.reload()
-      }
+      propertyViewLookup[.soundCVValue]?.reload()
     }
   }
   
-  public var esuDecoderPhysicalOutput : ESUDecoderPhysicalOutput { // *** KEEP ***
-    get {
-      return _esuDecoderPhysicalOutput
-    }
-    set(value) {
-      if value != esuDecoderPhysicalOutput {
-        _esuDecoderPhysicalOutput = value
-        delegate?.reloadSettings?(self)
-      }
-    }
-  }
-
-  public var esuRandomFunction : ESURandomFunction { // *** KEEP ***
-    get {
-      return _esuRandomFunction
-    }
-    set(value) {
-      if value != _esuRandomFunction {
-        _esuRandomFunction = value
-      }
-    }
-  }
-
   public var esuDecoderPhysicalOutputMode : ESUPhysicalOutputMode {
     return ESUPhysicalOutputMode(title: getValue(property: .physicalOutputOutputMode), decoder: self)!
   }
@@ -394,9 +323,11 @@ public class Decoder : NSObject {
     case .standard:
       return 0
     case .esuDecoderPhysicalOutput:
-      return Int(esuDecoderPhysicalOutput.rawValue) * 8
+      return esuDecoderPhysicalOutput.cvIndexOffset(decoder: self)
     case .esuRandomFunction:
-      return Int(esuRandomFunction.rawValue) * 8
+      return esuRandomFunction.cvIndexOffset(decoder: self)
+    case .soundCV:
+      return soundCV.cvIndexOffset(decoder: self)
     }
     
   }
@@ -458,6 +389,42 @@ public class Decoder : NSObject {
   }
 
   // MARK: Public Methods
+  
+  public func getSFMappingState(mapIndex:Int) -> Bool {
+    
+    let row = mapIndex / 16
+    
+    let column = mapIndex % 16
+    
+    var cv : CV = .cv_000_252_257 + (row * 4)
+    
+    if column > 7 {
+      cv = cv + 1
+    }
+    
+    let mask : UInt8 = 1 << (column & 0x07)
+    
+    return getBool(cv: cv, mask: mask)!
+    
+  }
+  
+  public func setSFMappingState(mapIndex:Int, value:Bool) {
+    
+    let row = mapIndex / 16
+    
+    let column = mapIndex % 16
+    
+    var cv : CV = .cv_000_252_257 + (row * 4)
+    
+    if column > 7 {
+      cv = cv + 1
+    }
+    
+    let mask : UInt8 = 1 << (column & 0x07)
+    
+    setBool(cv: cv, mask: mask, value: value)
+    
+  }
   
   public func getConsistFunctionState(function:FunctionConsistMode) -> Bool {
     let cvMask = function.cvMask
@@ -659,10 +626,14 @@ public class Decoder : NSObject {
       return SpeedTablePreset.doNothing.title
     case .esuDecoderPhysicalOutput:
       return esuDecoderPhysicalOutput.title
+    case .esuRandomFunction:
+      return esuRandomFunction.title
     case .esuSmokeUnitControlMode:
       return SmokeUnitControlMode(rawValue: values[0])!.title
     case .esuPhysicalOutputMode:
       return ESUPhysicalOutputMode(rawValue: values[0])!.title(decoder: self)
+    case .soundCV:
+      return soundCV.title
     case .esuClassLightLogicLength:
       return ClassLightLogicSequenceLength(rawValue: values[0])!.title
     case .speedTableIndex:
@@ -673,6 +644,12 @@ public class Decoder : NSObject {
       return TriggeredFunction(rawValue: values[0])!.title
     case .hluSpeedLimit:
       let index = property.rawValue - ProgrammerToolSettingsProperty.hluSpeedLimit1.rawValue
+      return "\(values[index])"
+    case .randomActiveMinMax:
+      let index = property.rawValue - ProgrammerToolSettingsProperty.randomActiveMinimum.rawValue
+      return "\(values[index])"
+    case .randomPassiveMinMax:
+      let index = property.rawValue - ProgrammerToolSettingsProperty.randomPassiveMinimum.rawValue
       return "\(values[index])"
     case .dWordHex:
       return UInt32(bigEndianData: values.reversed())!.toHex(numberOfDigits: 8)
@@ -725,6 +702,12 @@ public class Decoder : NSObject {
       doubleValue = Double((Int8(values[0] & 0x7f) * (((values[0] & ByteMask.d7) == ByteMask.d7) ? -1 : 1)))
     case .steamChuffDuration:
       let index = property.rawValue - ProgrammerToolSettingsProperty.smokeChuffsMinimumDuration.rawValue
+      doubleValue = Double(values[index])
+    case .randomActiveMinMax:
+      let index = property.rawValue - ProgrammerToolSettingsProperty.randomActiveMinimum.rawValue
+      doubleValue = Double(values[index])
+    case .randomPassiveMinMax:
+      let index = property.rawValue - ProgrammerToolSettingsProperty.randomPassiveMinimum.rawValue
       doubleValue = Double(values[index])
     default:
       doubleValue = Double(values[0])
@@ -878,6 +861,10 @@ public class Decoder : NSObject {
       
     case .esuDecoderPhysicalOutput:
       esuDecoderPhysicalOutput = ESUDecoderPhysicalOutput(title: string)!
+    case .soundCV:
+      soundCV = SoundCV(title: string)!
+    case .esuRandomFunction:
+      esuRandomFunction = ESURandomFunction(title: string)!
     case .esuSmokeUnitControlMode:
       newValues.append(SmokeUnitControlMode(title: string)!.rawValue)
     case .esuPhysicalOutputMode:
@@ -931,6 +918,42 @@ public class Decoder : NSObject {
     case .steamChuffDuration:
       
       let index = property.rawValue - ProgrammerToolSettingsProperty.smokeChuffsMinimumDuration.rawValue
+
+      newValues = getProperty(property: property, propertyDefinition: definition)
+      
+      let value = UInt8(string)!
+      
+      newValues[index] = value
+      
+      if index == 0 && newValues[1] < value {
+        newValues[1] = value
+      }
+      
+      if index == 1 && newValues[0] > value {
+        newValues[0] = value
+      }
+      
+    case .randomActiveMinMax:
+      
+      let index = property.rawValue - ProgrammerToolSettingsProperty.randomActiveMinimum.rawValue
+
+      newValues = getProperty(property: property, propertyDefinition: definition)
+      
+      let value = UInt8(string)!
+      
+      newValues[index] = value
+      
+      if index == 0 && newValues[1] < value {
+        newValues[1] = value
+      }
+      
+      if index == 1 && newValues[0] > value {
+        newValues[0] = value
+      }
+      
+    case .randomPassiveMinMax:
+      
+      let index = property.rawValue - ProgrammerToolSettingsProperty.randomPassiveMinimum.rawValue
 
       newValues = getProperty(property: property, propertyDefinition: definition)
       

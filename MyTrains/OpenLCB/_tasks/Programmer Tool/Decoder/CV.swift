@@ -2799,48 +2799,144 @@ public enum CV : UInt64, CaseIterable {
   
   public static func + (lhs:CV, rhs:Int) -> CV {
     
-    var index = lhs.index
-    var cv = Int(lhs.cv) + Int(rhs)
+    var newIndex : UInt16 = 0
+    var newCV : UInt16
     
-    if lhs.isIndexed {
-      if cv > 512 {
-        index += 1
-        cv = 257
+    /// Paged CV
+    if lhs.cv >= 257 && lhs.cv <= 512 {
+      let newValue = (Int(lhs.index) << 8) + Int(lhs.cv) - 257 + rhs
+      if newValue < 1 {
+        fatalError("Out of range.")
       }
+      newIndex = UInt16(newValue >> 8)
+      newCV = UInt16(newValue & 0xff) + 257
     }
+    // High Range CV
+    else if lhs.cv > 512 {
+      let value = Int(lhs.cv) + rhs
+      if value < 513 || value > 1024 {
+        fatalError("Out of range.")
+      }
+      newCV = UInt16(value)
+    }
+    // Regular CV
     else {
-      if cv > 1024 {
-        index += 1
-        cv = 257
+      let value = Int(lhs.cv) + rhs
+      if value < 1 || value > 256 {
+        fatalError("Out of range.")
       }
+      newCV = UInt16(value)
     }
-  
-    return CV(index: index, cv: UInt16(cv), indexMethod: lhs.indexMethod, isHidden: lhs.isHidden, isReadOnly: lhs.isReadOnly)!
+    
+    return CV(index: newIndex, cv: newCV, indexMethod: lhs.indexMethod, isHidden: lhs.isHidden, isReadOnly: lhs.isReadOnly)!
     
   }
 
   public static func + (lhs:Int, rhs:CV) -> CV {
     
-    var index = rhs.index
-    var cv = Int(rhs.cv) + Int(lhs)
+    var newIndex : UInt16 = 0
+    var newCV : UInt16
     
-    if rhs.isIndexed {
-      if cv > 512 {
-        index += 1
-        cv = 257
+    /// Paged CV
+    if rhs.cv >= 257 && rhs.cv <= 512 {
+      let newValue = (Int(rhs.index) << 8) + Int(rhs.cv) - 257 + lhs
+      if newValue < 1 {
+        fatalError("Out of range.")
       }
+      newIndex = UInt16(newValue >> 8)
+      newCV = UInt16(newValue & 0xff) + 257
     }
+    // High Range CV
+    else if rhs.cv > 512 {
+      let value = Int(rhs.cv) + lhs
+      if value < 513 || value > 1024 {
+        fatalError("Out of range.")
+      }
+      newCV = UInt16(value)
+    }
+    // Regular CV
     else {
-      if cv > 1024 {
-        index += 1
-        cv = 257
+      let value = Int(rhs.cv) + lhs
+      if value < 1 || value > 256 {
+        fatalError("Out of range.")
       }
+      newCV = UInt16(value)
     }
-  
-    return CV(index: index, cv: UInt16(cv), indexMethod: rhs.indexMethod, isHidden: rhs.isHidden, isReadOnly: rhs.isReadOnly)!
+    
+    return CV(index: newIndex, cv: newCV, indexMethod: rhs.indexMethod, isHidden: rhs.isHidden, isReadOnly: rhs.isReadOnly)!
+
+  }
+
+  public static func - (lhs:CV, rhs:Int) -> CV {
+    
+    var newIndex : UInt16 = 0
+    var newCV : UInt16
+    
+    /// Paged CV
+    if lhs.cv >= 257 && lhs.cv <= 512 {
+      let newValue = (Int(lhs.index) << 8) + Int(lhs.cv) - 257 - rhs
+      if newValue < 1 {
+        fatalError("Out of range.")
+      }
+      newIndex = UInt16(newValue >> 8)
+      newCV = UInt16(newValue & 0xff) + 257
+    }
+    // High Range CV
+    else if lhs.cv > 512 {
+      let value = Int(lhs.cv) - rhs
+      if value < 513 || value > 1024 {
+        fatalError("Out of range.")
+      }
+      newCV = UInt16(value)
+    }
+    // Regular CV
+    else {
+      let value = Int(lhs.cv) - rhs
+      if value < 1 || value > 256 {
+        fatalError("Out of range.")
+      }
+      newCV = UInt16(value)
+    }
+    
+    return CV(index: newIndex, cv: newCV, indexMethod: lhs.indexMethod, isHidden: lhs.isHidden, isReadOnly: lhs.isReadOnly)!
     
   }
-  
+
+  public static func - (lhs:Int, rhs:CV) -> CV {
+    
+    var newIndex : UInt16 = 0
+    var newCV : UInt16
+    
+    /// Paged CV
+    if rhs.cv >= 257 && rhs.cv <= 512 {
+      let newValue = (Int(rhs.index) << 8) + Int(rhs.cv) - 257 - lhs
+      if newValue < 1 {
+        fatalError("Out of range.")
+      }
+      newIndex = UInt16(newValue >> 8)
+      newCV = UInt16(newValue & 0xff) + 257
+    }
+    // High Range CV
+    else if rhs.cv > 512 {
+      let value = Int(rhs.cv) - lhs
+      if value < 513 || value > 1024 {
+        fatalError("Out of range.")
+      }
+      newCV = UInt16(value)
+    }
+    // Regular CV
+    else {
+      let value = Int(rhs.cv) - lhs
+      if value < 1 || value > 256 {
+        fatalError("Out of range.")
+      }
+      newCV = UInt16(value)
+    }
+    
+    return CV(index: newIndex, cv: newCV, indexMethod: rhs.indexMethod, isHidden: rhs.isHidden, isReadOnly: rhs.isReadOnly)!
+
+  }
+
   public static func consecutiveCVs(startCV:CV, numberOfCVs:Int) -> [CV] {
     
     var result : [CV] = []

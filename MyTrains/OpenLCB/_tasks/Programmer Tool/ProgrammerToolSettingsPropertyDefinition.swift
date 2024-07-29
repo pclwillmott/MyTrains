@@ -83,6 +83,10 @@ public enum ProgrammerToolEncodingType : Int, CaseIterable {
   case analogModeEnable
   case hluSpeedLimit
   case steamChuffDuration
+  case esuRandomFunction
+  case randomActiveMinMax
+  case randomPassiveMinMax
+  case soundCV
 
 }
 
@@ -93,5 +97,6 @@ public enum CVIndexingMethod {
   case standard
   case esuDecoderPhysicalOutput
   case esuRandomFunction
+  case soundCV
   
 }

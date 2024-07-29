@@ -37,24 +37,32 @@ public enum ESURandomFunction : UInt8, CaseIterable {
   
   public var title : String {
     
-    let titles : [ESURandomFunction:String] = [
-      .random1 : String(localized:"Random 1"),
-      .random2 : String(localized:"Random 2"),
-      .random3 : String(localized:"Random 3"),
-      .random4 : String(localized:"Random 4"),
-      .random5 : String(localized:"Random 5"),
-      .random6 : String(localized:"Random 6"),
-      .random7 : String(localized:"Random 7"),
-      .random8 : String(localized:"Random 8"),
-    ]
-    
-    return titles[self]!
+    return ESURandomFunction.titles[self]!
     
   }
   
+  // MARK: Public Methods
+  
+  public func cvIndexOffset(decoder:Decoder) -> Int {
+    return Int(self.rawValue) * 8
+  }
+  
+  // MARK: Public Class Properties
+  
+  public static let titles : [ESURandomFunction:String] = [
+    .random1 : String(localized:"Random 1"),
+    .random2 : String(localized:"Random 2"),
+    .random3 : String(localized:"Random 3"),
+    .random4 : String(localized:"Random 4"),
+    .random5 : String(localized:"Random 5"),
+    .random6 : String(localized:"Random 6"),
+    .random7 : String(localized:"Random 7"),
+    .random8 : String(localized:"Random 8"),
+  ]
+
   // MARK: Public Class Methods
   
-  public static func populate(comboBox:NSComboBox, decoder:Decoder) {
+  public static func populate(comboBox:NSComboBox) {
     let target = comboBox.target
     let action = comboBox.action
     comboBox.target = nil

@@ -52,38 +52,44 @@ public enum ESUDecoderPhysicalOutput : UInt8, CaseIterable {
   // MARK: Public Properties
   
   public var title : String {
-    
-    let titles : [ESUDecoderPhysicalOutput:String] = [
-      .frontLight   : String(localized:"Front Light [1]"),
-      .frontLight_2 : String(localized:"Front Light [2]"),
-      .rearLight    : String(localized:"Rear Light [1]"),
-      .rearLight_2  : String(localized:"Rear Light [2]"),
-      .aux1         : String(localized:"AUX1 [1]"),
-      .aux1_2       : String(localized:"AUX1 [2]"),
-      .aux2         : String(localized:"AUX2 [1]"),
-      .aux2_2       : String(localized:"AUX2 [2]"),
-      .aux3         : String(localized:"AUX3"),
-      .aux4         : String(localized:"AUX4"),
-      .aux5         : String(localized:"AUX5"),
-      .aux6         : String(localized:"AUX6"),
-      .aux7         : String(localized:"AUX7"),
-      .aux8         : String(localized:"AUX8"),
-      .aux9         : String(localized:"AUX9"),
-      .aux10        : String(localized:"AUX10"),
-      .aux11        : String(localized:"AUX11"),
-      .aux12        : String(localized:"AUX12"),
-      .aux13        : String(localized:"AUX13"),
-      .aux14        : String(localized:"AUX14"),
-      .aux15        : String(localized:"AUX15"),
-      .aux16        : String(localized:"AUX16"),
-      .aux17        : String(localized:"AUX17"),
-      .aux18        : String(localized:"AUX18"),
-    ]
-    
-    return titles[self]!
-    
+    return ESUDecoderPhysicalOutput.titles[self]!
   }
   
+  // MARK: Public Methods
+  
+  public func cvIndexOffset(decoder:Decoder) -> Int {
+    return Int(self.rawValue) * 8
+  }
+  
+  // MARK: Public Class Properties
+  
+  public static let titles : [ESUDecoderPhysicalOutput:String] = [
+    .frontLight   : String(localized:"Front Light [1]"),
+    .frontLight_2 : String(localized:"Front Light [2]"),
+    .rearLight    : String(localized:"Rear Light [1]"),
+    .rearLight_2  : String(localized:"Rear Light [2]"),
+    .aux1         : String(localized:"AUX1 [1]"),
+    .aux1_2       : String(localized:"AUX1 [2]"),
+    .aux2         : String(localized:"AUX2 [1]"),
+    .aux2_2       : String(localized:"AUX2 [2]"),
+    .aux3         : String(localized:"AUX3"),
+    .aux4         : String(localized:"AUX4"),
+    .aux5         : String(localized:"AUX5"),
+    .aux6         : String(localized:"AUX6"),
+    .aux7         : String(localized:"AUX7"),
+    .aux8         : String(localized:"AUX8"),
+    .aux9         : String(localized:"AUX9"),
+    .aux10        : String(localized:"AUX10"),
+    .aux11        : String(localized:"AUX11"),
+    .aux12        : String(localized:"AUX12"),
+    .aux13        : String(localized:"AUX13"),
+    .aux14        : String(localized:"AUX14"),
+    .aux15        : String(localized:"AUX15"),
+    .aux16        : String(localized:"AUX16"),
+    .aux17        : String(localized:"AUX17"),
+    .aux18        : String(localized:"AUX18"),
+  ]
+
   // MARK: Public Class Methods
   
   public static func populate(comboBox:NSComboBox, decoder:Decoder) {

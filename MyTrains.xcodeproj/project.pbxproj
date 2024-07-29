@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DA00D9502C57EFDA00B26A83 /* SoundCV.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA00D94F2C57EFDA00B26A83 /* SoundCV.swift */; };
 		DA04B8DA28F1AED70062D944 /* ConsistState.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA04B8D928F1AEB60062D944 /* ConsistState.swift */; };
 		DA063397293CE8F400CEAFD1 /* SetFastClock.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA063396293CE8F400CEAFD1 /* SetFastClock.storyboard */; };
 		DA063399293CEB8700CEAFD1 /* SetFastClockVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA063398293CEB8700CEAFD1 /* SetFastClockVC.swift */; };
@@ -489,6 +490,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		DA00D94F2C57EFDA00B26A83 /* SoundCV.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundCV.swift; sourceTree = "<group>"; };
 		DA04B8D928F1AEB60062D944 /* ConsistState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsistState.swift; sourceTree = "<group>"; };
 		DA063396293CE8F400CEAFD1 /* SetFastClock.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = SetFastClock.storyboard; sourceTree = "<group>"; };
 		DA063398293CEB8700CEAFD1 /* SetFastClockVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetFastClockVC.swift; sourceTree = "<group>"; };
@@ -1100,6 +1102,7 @@
 				DAAE3E3E2C4D2B8A00F129B7 /* ExternalSmokeUnitType.swift */,
 				DA0F378F2C47E9D8002C66D8 /* SoundControlBasis.swift */,
 				DA0F37912C47EFA4002C66D8 /* TriggeredFunction.swift */,
+				DA00D94F2C57EFDA00B26A83 /* SoundCV.swift */,
 				DA6BA50D2C4930A30028EDA0 /* FunctionConsistMode.swift */,
 				DA6BA50F2C4931850028EDA0 /* FunctionAnalogMode.swift */,
 				DA6BA5132C4ADC270028EDA0 /* SpeedTablePreset.swift */,
@@ -2216,6 +2219,7 @@
 				DA56260F29E1AC2B00D465CC /* OpenLCBNetworkLayer.swift in Sources */,
 				DA7C509A2BD688EB0079E876 /* LayoutInspectorProperty.swift in Sources */,
 				DA6E28E5285F925C00772641 /* BlockDirection.swift in Sources */,
+				DA00D9502C57EFDA00B26A83 /* SoundCV.swift in Sources */,
 				DA09493A2B7F726200545650 /* OpenLCBCANGateway - Messages.swift in Sources */,
 				DAD7352B2BFF74C200BDC0A4 /* PanelProperty.swift in Sources */,
 				DA467B9D281CAFDA00AB9650 /* NSColorExtensions.swift in Sources */,

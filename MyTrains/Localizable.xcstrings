@@ -561,6 +561,12 @@
     "Active Functions in Analog Mode" : {
 
     },
+    "Active Maximum" : {
+
+    },
+    "Active Minimum" : {
+
+    },
     "Actual Samples" : {
 
     },
@@ -2786,6 +2792,9 @@
     "Double strobe" : {
 
     },
+    "Drive" : {
+
+    },
     "Drive Hold" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
       "localizations" : {
@@ -3465,6 +3474,9 @@
 
     },
     "External Smoke Unit Type" : {
+
+    },
+    "F%lld" : {
 
     },
     "F0" : {
@@ -4996,6 +5008,9 @@
     "Manufacturer ID" : {
 
     },
+    "Map decoder functions (F0 to F15) to SUSI functions (SF0 to SF15)." : {
+
+    },
     "Märklin Motorola Protocol" : {
 
     },
@@ -5657,6 +5672,9 @@
     "Only Frame  " : {
 
     },
+    "Only play when the driving sound is enabled" : {
+
+    },
     "OO/HO" : {
       "comment" : "Used to indicate the track gauge",
       "extractionState" : "stale",
@@ -5838,6 +5856,12 @@
           }
         }
       }
+    },
+    "Passive Maximum" : {
+
+    },
+    "Passive Minimum" : {
+
     },
     "Paste" : {
       "comment" : "Used for a menu title\nUsed for the title of a button that pastes from the clipboard"
@@ -6137,6 +6161,33 @@
 
     },
     "RailComPlus and M4 Master Decoder Synchronization" : {
+
+    },
+    "Random 1" : {
+
+    },
+    "Random 2" : {
+
+    },
+    "Random 3" : {
+
+    },
+    "Random 4" : {
+
+    },
+    "Random 5" : {
+
+    },
+    "Random 6" : {
+
+    },
+    "Random 7" : {
+
+    },
+    "Random 8" : {
+
+    },
+    "Random Function" : {
 
     },
     "Random Functions" : {
@@ -6969,6 +7020,9 @@
     "Seuthe smoke unit" : {
 
     },
+    "SF%lld" : {
+
+    },
     "Short Whistle" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
       "localizations" : {
@@ -7246,6 +7300,57 @@
 
     },
     "Sound Control Behaviour" : {
+
+    },
+    "Sound CV" : {
+
+    },
+    "Sound CV 1" : {
+
+    },
+    "Sound CV 2" : {
+
+    },
+    "Sound CV 3" : {
+
+    },
+    "Sound CV 4" : {
+
+    },
+    "Sound CV 5" : {
+
+    },
+    "Sound CV 6" : {
+
+    },
+    "Sound CV 7" : {
+
+    },
+    "Sound CV 8" : {
+
+    },
+    "Sound CV 9" : {
+
+    },
+    "Sound CV 10" : {
+
+    },
+    "Sound CV 11" : {
+
+    },
+    "Sound CV 12" : {
+
+    },
+    "Sound CV 13" : {
+
+    },
+    "Sound CV 14" : {
+
+    },
+    "Sound CV 15" : {
+
+    },
+    "Sound CV 16" : {
 
     },
     "Sound CV Configuration" : {

@@ -197,6 +197,15 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
   case automaticUncouplingPushTime = 102
   case automaticUncouplingWaitTime = 103
   case automaticUncouplingMoveTime = 104
+  case randomFunction = 241
+  case randomStop = 233
+  case randomDrive = 234
+  case randomOnlyPlayWhenDrivingSoundEnabled = 235
+  case randomTriggeredFunction = 236
+  case randomActiveMinimum = 237
+  case randomActiveMaximum = 238
+  case randomPassiveMinimum = 239
+  case randomPassiveMaximum = 240
   
   // Identification
   
@@ -210,6 +219,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
   case enableSUSIMaster = 160
   case susiWarning = 161
   case enableSUSISlave = 162
+  case susiMapping = 242
   
   // Motor Settings
   
@@ -289,6 +299,11 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
   case idleOperationThreshold = 156
   case idleOperationTriggeredFunction = 157
 
+  // Sound Slot Settings
+  
+  case soundCV = 243
+  case soundCVValue = 244
+  
   // MARK: Public Properties
   
   public var definition : ProgrammerToolSettingsPropertyDefinition {
@@ -356,6 +371,12 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
       cvs = [_cvs[0] + (decoder.speedTableIndex - 1)]
     case .steamChuffDuration:
       let index = self.rawValue - ProgrammerToolSettingsProperty.smokeChuffsMinimumDuration.rawValue
+      cvs = [_cvs[index]]
+    case .randomActiveMinMax:
+      let index = self.rawValue - ProgrammerToolSettingsProperty.randomActiveMinimum.rawValue
+      cvs = [_cvs[index]]
+    case .randomPassiveMinMax:
+      let index = self.rawValue - ProgrammerToolSettingsProperty.randomPassiveMinimum.rawValue
       cvs = [_cvs[index]]
     default:
       break
