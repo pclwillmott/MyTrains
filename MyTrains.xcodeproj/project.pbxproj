@@ -352,6 +352,8 @@
 		DAA56B4F2BD9381600BAB6EF /* LayoutInspectorPropertyField.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA56B4E2BD9381600BAB6EF /* LayoutInspectorPropertyField.swift */; };
 		DAA56B512BD938AE00BAB6EF /* LayoutInspectorGroupField.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA56B502BD938AE00BAB6EF /* LayoutInspectorGroupField.swift */; };
 		DAA56B532BD93A7900BAB6EF /* InspectorControlType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA56B522BD93A7900BAB6EF /* InspectorControlType.swift */; };
+		DAA5E76A2C59036900EC43F0 /* ESUSoundSlot.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA5E7692C59036900EC43F0 /* ESUSoundSlot.swift */; };
+		DAA5E76C2C5925DF00EC43F0 /* ESUFunctionIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA5E76B2C5925DF00EC43F0 /* ESUFunctionIcon.swift */; };
 		DAA66BD22A092DC2001804AC /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA66BD12A092DC2001804AC /* StringExtensions.swift */; };
 		DAA777CA2A20C84C008EAF02 /* OpenLCBClock.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA777C92A20C84C008EAF02 /* OpenLCBClock.swift */; };
 		DAA777CC2A20C861008EAF02 /* OpenLCBClockType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA777CB2A20C861008EAF02 /* OpenLCBClockType.swift */; };
@@ -838,6 +840,8 @@
 		DAA56B4E2BD9381600BAB6EF /* LayoutInspectorPropertyField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoutInspectorPropertyField.swift; sourceTree = "<group>"; };
 		DAA56B502BD938AE00BAB6EF /* LayoutInspectorGroupField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoutInspectorGroupField.swift; sourceTree = "<group>"; };
 		DAA56B522BD93A7900BAB6EF /* InspectorControlType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InspectorControlType.swift; sourceTree = "<group>"; };
+		DAA5E7692C59036900EC43F0 /* ESUSoundSlot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ESUSoundSlot.swift; sourceTree = "<group>"; };
+		DAA5E76B2C5925DF00EC43F0 /* ESUFunctionIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ESUFunctionIcon.swift; sourceTree = "<group>"; };
 		DAA66BD12A092DC2001804AC /* StringExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
 		DAA777C92A20C84C008EAF02 /* OpenLCBClock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = OpenLCBClock.swift; path = ../OpenLCBClock.swift; sourceTree = "<group>"; };
 		DAA777CB2A20C861008EAF02 /* OpenLCBClockType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBClockType.swift; sourceTree = "<group>"; };
@@ -1103,6 +1107,8 @@
 				DA0F378F2C47E9D8002C66D8 /* SoundControlBasis.swift */,
 				DA0F37912C47EFA4002C66D8 /* TriggeredFunction.swift */,
 				DA00D94F2C57EFDA00B26A83 /* SoundCV.swift */,
+				DAA5E7692C59036900EC43F0 /* ESUSoundSlot.swift */,
+				DAA5E76B2C5925DF00EC43F0 /* ESUFunctionIcon.swift */,
 				DA6BA50D2C4930A30028EDA0 /* FunctionConsistMode.swift */,
 				DA6BA50F2C4931850028EDA0 /* FunctionAnalogMode.swift */,
 				DA6BA5132C4ADC270028EDA0 /* SpeedTablePreset.swift */,
@@ -2217,6 +2223,7 @@
 				DA1003232A7E81F7004CC86C /* OpenLCBProgrammingMode.swift in Sources */,
 				DABD30B629E4610A002A2C4B /* OpenLCBNetworkLayerDelegate.swift in Sources */,
 				DA56260F29E1AC2B00D465CC /* OpenLCBNetworkLayer.swift in Sources */,
+				DAA5E76C2C5925DF00EC43F0 /* ESUFunctionIcon.swift in Sources */,
 				DA7C509A2BD688EB0079E876 /* LayoutInspectorProperty.swift in Sources */,
 				DA6E28E5285F925C00772641 /* BlockDirection.swift in Sources */,
 				DA00D9502C57EFDA00B26A83 /* SoundCV.swift in Sources */,
@@ -2294,6 +2301,7 @@
 				DA8C29E82C3811D8001755AB /* ProgrammerToolInspector.swift in Sources */,
 				DA31688D2BCACC2B00059B6C /* SWBRoutePart.swift in Sources */,
 				DA3866232A7A653900A0FAEB /* OpenLCBNodeManager.swift in Sources */,
+				DAA5E76A2C59036900EC43F0 /* ESUSoundSlot.swift in Sources */,
 				DAB163F72C3EF31600D7F23E /* ProgrammerToolSettingsSectionField.swift in Sources */,
 				DA5B6AAC29EAEDB20095F7D5 /* OpenLCBCANFrameFlag.swift in Sources */,
 				DA6403EF2A24EF62001CE29B /* OpenLCBMemorySpace.swift in Sources */,

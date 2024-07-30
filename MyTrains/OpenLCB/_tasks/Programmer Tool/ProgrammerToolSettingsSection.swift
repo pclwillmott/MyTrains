@@ -69,6 +69,7 @@ public enum ProgrammerToolSettingsSection : Int, CaseIterable {
   case sensorConfiguration = 32
   case automaticUncoupling = 33
   case randomFunctions = 34
+  case additionalFunctionSettings = 57
   
   // Function Mapping
   
@@ -141,6 +142,10 @@ public enum ProgrammerToolSettingsSection : Int, CaseIterable {
     .dccConsistAddress : (
       String(localized: "DCC Consist Address"),
       .address
+    ),
+    .additionalFunctionSettings : (
+      String(localized: "Additional Function Settings"),
+      .functionSettings
     ),
     .activateFunctionsInConsistMode : (
       String(localized: "Activate Functions in Consist Mode"),

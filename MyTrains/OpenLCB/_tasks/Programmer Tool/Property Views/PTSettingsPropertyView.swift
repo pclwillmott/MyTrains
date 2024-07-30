@@ -773,7 +773,7 @@ public class PTSettingsPropertyView : NSView, NSTextFieldDelegate {
       SteamChuffMode.populate(comboBox: comboBox)
     case .esuSoundControlBasis:
       SoundControlBasis.populate(comboBox: comboBox)
-    case .esuTriggeredFunction:
+    case .esuTriggeredFunction, .esuFunction:
       TriggeredFunction.populate(comboBox: comboBox)
     case .esuSmokeUnitControlMode:
       SmokeUnitControlMode.populate(comboBox: comboBox)
@@ -790,6 +790,10 @@ public class PTSettingsPropertyView : NSView, NSTextFieldDelegate {
       SpeedTablePreset.populate(comboBox: comboBox)
     case .soundCV:
       SoundCV.populate(comboBox: comboBox)
+    case .esuSoundSlot:
+      ESUSoundSlot.populate(comboBox: comboBox)
+    case .esuFunctionIcon:
+      ESUFunctionIcon.populate(comboBox: comboBox)
     default:
       break
     }

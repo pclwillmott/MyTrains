@@ -87,6 +87,11 @@ public enum ProgrammerToolEncodingType : Int, CaseIterable {
   case randomActiveMinMax
   case randomPassiveMinMax
   case soundCV
+  case esuSoundSlot
+  case soundSlotMinMaxSoundSpeed
+  case esuFunction
+  case esuFunctionIcon
+  case esuFunctionCategory
 
 }
 
@@ -98,5 +103,7 @@ public enum CVIndexingMethod {
   case esuDecoderPhysicalOutput
   case esuRandomFunction
   case soundCV
+  case esuSoundSlot
+  case esuFunction
   
 }

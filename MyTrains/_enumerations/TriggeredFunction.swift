@@ -12,16 +12,16 @@ public enum TriggeredFunction : UInt8, CaseIterable {
   
   // MARK: Enumeration
   
-  case f0 = 0
-  case f1 = 1
-  case f2 = 2
-  case f3 = 3
-  case f4 = 4
-  case f5 = 5
-  case f6 = 6
-  case f7 = 7
-  case f8 = 8
-  case f9 = 9
+  case f0  = 0
+  case f1  = 1
+  case f2  = 2
+  case f3  = 3
+  case f4  = 4
+  case f5  = 5
+  case f6  = 6
+  case f7  = 7
+  case f8  = 8
+  case f9  = 9
   case f10 = 10
   case f11 = 11
   case f12 = 12
@@ -62,20 +62,26 @@ public enum TriggeredFunction : UInt8, CaseIterable {
   public var title : String {
     return TriggeredFunction.titles[self]!
   }
+  
+  // MARK: Public Methods
+  
+  public func cvIndexOffset(decoder:Decoder) -> Int {
+    return Int(self.rawValue) * 2
+  }
 
   // MARK: Public Class Properties
   
   public static let titles : [TriggeredFunction:String] = [
-    .f0 : String(localized:"F0"),
-    .f1 : String(localized:"F1"),
-    .f2 : String(localized:"F2"),
-    .f3 : String(localized:"F3"),
-    .f4 : String(localized:"F4"),
-    .f5 : String(localized:"F5"),
-    .f6 : String(localized:"F6"),
-    .f7 : String(localized:"F7"),
-    .f8 : String(localized:"F8"),
-    .f9 : String(localized:"F9"),
+    .f0  : String(localized:"F0"),
+    .f1  : String(localized:"F1"),
+    .f2  : String(localized:"F2"),
+    .f3  : String(localized:"F3"),
+    .f4  : String(localized:"F4"),
+    .f5  : String(localized:"F5"),
+    .f6  : String(localized:"F6"),
+    .f7  : String(localized:"F7"),
+    .f8  : String(localized:"F8"),
+    .f9  : String(localized:"F9"),
     .f10 : String(localized:"F10"),
     .f11 : String(localized:"F11"),
     .f12 : String(localized:"F12"),

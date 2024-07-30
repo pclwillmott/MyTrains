@@ -582,6 +582,9 @@
     "Additional Addresses" : {
 
     },
+    "Additional Function Settings" : {
+
+    },
     "Address" : {
 
     },
@@ -592,6 +595,9 @@
 
     },
     "Agreement" : {
+
+    },
+    "Air Blow" : {
 
     },
     "Air Build Up" : {
@@ -891,6 +897,15 @@
     "Autocoupler coil #2" : {
 
     },
+    "Autocoupler Front" : {
+
+    },
+    "Autocoupler Rear" : {
+
+    },
+    "Automatic Coupler" : {
+
+    },
     "Automatic Parking Brake" : {
 
     },
@@ -979,6 +994,9 @@
 
     },
     "AUX18" : {
+
+    },
+    "Auxilary Diesel" : {
 
     },
     "AWS Bell" : {
@@ -1136,6 +1154,9 @@
     "Blue" : {
       "comment" : "The name of a color."
     },
+    "Board Light" : {
+
+    },
     "Bootcode Version" : {
 
     },
@@ -1250,6 +1271,9 @@
     "Brown" : {
       "comment" : "The name of a color."
     },
+    "Buffer Sound" : {
+
+    },
     "Buffer Stop" : {
       "comment" : "This is used to describe a piece of track."
     },
@@ -1305,6 +1329,15 @@
         }
       }
     },
+    "Cab Light 2" : {
+
+    },
+    "Cab Light Front" : {
+
+    },
+    "Cab Light Rear" : {
+
+    },
     "CAN Gateway" : {
       "comment" : "Used for a menu title\nUsed to create a default OpenLCB virtual name",
       "localizations" : {
@@ -1341,6 +1374,9 @@
     },
     "Canada" : {
       "comment" : "This is the name of a country."
+    },
+    "Category" : {
+
     },
     "CDI: %@ (%@)" : {
       "localizations" : {
@@ -1526,6 +1562,9 @@
     },
     "cm/s" : {
       "comment" : "Used for the abbreviation of centimeters per second"
+    },
+    "Coast Operation" : {
+
     },
     "Coasting" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
@@ -1770,6 +1809,9 @@
       }
     },
     "Compatibility" : {
+
+    },
+    "Compressor" : {
 
     },
     "Computer Date & Time" : {
@@ -2038,6 +2080,36 @@
     "Coupler Force" : {
 
     },
+    "Coupler Sound" : {
+
+    },
+    "Crane Down" : {
+
+    },
+    "Crane Hook Raise/Lower" : {
+
+    },
+    "Crane Left" : {
+
+    },
+    "Crane Left/Right" : {
+
+    },
+    "Crane Magnet" : {
+
+    },
+    "Crane Raise/Lower" : {
+
+    },
+    "Crane Right" : {
+
+    },
+    "Crane Turn" : {
+
+    },
+    "Crane Up" : {
+
+    },
     "Create" : {
       "comment" : "Used for the Create Application Node button title",
       "localizations" : {
@@ -2099,6 +2171,9 @@
     },
     "Curve fit methodology." : {
       "comment" : "This is used for a tooltip."
+    },
+    "Curve Sound" : {
+
     },
     "Curve Squeal" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
@@ -2728,6 +2803,9 @@
     "Distance of Steam Chuffs at Speed Step 1" : {
 
     },
+    "Ditch Light" : {
+
+    },
     "Ditch light type 1" : {
 
     },
@@ -2769,6 +2847,12 @@
     "Do not use enter zone event for speed profiling" : {
       "comment" : "This is used for the title of a check box."
     },
+    "Doors" : {
+
+    },
+    "Doppler" : {
+
+    },
     "Doppler Horn" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
       "localizations" : {
@@ -2786,10 +2870,16 @@
         }
       }
     },
+    "Double Horn" : {
+
+    },
     "Double Slip" : {
       "comment" : "This is used to describe a piece of track."
     },
     "Double strobe" : {
+
+    },
+    "Drain Valve" : {
 
     },
     "Drive" : {
@@ -2811,6 +2901,9 @@
           }
         }
       }
+    },
+    "Drive Sound" : {
+
     },
     "Drive Until Locomotive Stops in Specified Period" : {
 
@@ -3590,6 +3683,9 @@
     "Fahrenheit" : {
 
     },
+    "Fan" : {
+
+    },
     "Fan control" : {
 
     },
@@ -3808,6 +3904,9 @@
     "Full Speed Length of Measurement Gap" : {
 
     },
+    "Function" : {
+
+    },
     "Function Configuration" : {
 
     },
@@ -3829,6 +3928,9 @@
     "Function Settings" : {
 
     },
+    "Gear Shift Sound" : {
+
+    },
     "Gearbox Backlash" : {
 
     },
@@ -3837,6 +3939,15 @@
     },
     "General Settings" : {
       "comment" : "This is used for the title of the General Settings section in the Layout Builder."
+    },
+    "Generator (Steam Loco)" : {
+
+    },
+    "Generic Function" : {
+
+    },
+    "Generic Sound" : {
+
     },
     "Generic Virtual" : {
       "comment" : "Used to create a default OpenLCB virtual name",
@@ -4010,6 +4121,9 @@
     "h" : {
       "comment" : "Used for the abbreviation of hours"
     },
+    "Handbrake" : {
+
+    },
     "Hardware Version" : {
 
     },
@@ -4031,6 +4145,9 @@
       }
     },
     "Heat while Locomotive Stands" : {
+
+    },
+    "Heating" : {
 
     },
     "Heating control" : {
@@ -4100,6 +4217,15 @@
     "High Frequency PWM Motor Control" : {
 
     },
+    "Highbeam" : {
+
+    },
+    "Highbeam Front" : {
+
+    },
+    "Highbeam Rear" : {
+
+    },
     "HLU Sections" : {
 
     },
@@ -4140,6 +4266,9 @@
     },
     "Hz" : {
       "comment" : "Used for the abbreviation of Hertz"
+    },
+    "Icon" : {
+
     },
     "ID of the parent panel for this switchboard item." : {
       "comment" : "This is used for a tooltip."
@@ -4328,6 +4457,9 @@
         }
       }
     },
+    "Interior Light" : {
+
+    },
     "Interior Lights" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
       "localizations" : {
@@ -4344,6 +4476,9 @@
           }
         }
       }
+    },
+    "Inverted" : {
+
     },
     "ips" : {
       "comment" : "Used for the abbreviation of inches per second"
@@ -4867,6 +5002,9 @@
     "Logarithmic 2" : {
 
     },
+    "Logical" : {
+
+    },
     "Logical Function Dimmer Brightness Reduction" : {
 
     },
@@ -5023,6 +5161,9 @@
     "Mars light" : {
 
     },
+    "Mars Light" : {
+
+    },
     "Master" : {
       "comment" : "Used to indicate that the workstation is the master mode",
       "localizations" : {
@@ -5079,6 +5220,9 @@
           }
         }
       }
+    },
+    "Maximum Sound Speed" : {
+
     },
     "Maximum Speed" : {
 
@@ -5248,6 +5392,9 @@
     "Minimum Sample Period" : {
       "comment" : "This is used for the title of combobox."
     },
+    "Minimum Sound Speed" : {
+
+    },
     "Minimum Speed" : {
 
     },
@@ -5261,6 +5408,9 @@
       "comment" : "Used for the abbreviation of millimeters"
     },
     "Model" : {
+
+    },
+    "Momentary" : {
 
     },
     "Momentum" : {
@@ -5558,6 +5708,12 @@
         }
       }
     },
+    "Notch Down" : {
+
+    },
+    "Notch Up" : {
+
+    },
     "Number of Columns" : {
 
     },
@@ -5648,6 +5804,9 @@
           }
         }
       }
+    },
+    "Oil Burner" : {
+
     },
     "OK" : {
       "comment" : "Used for the OK button title to say that all is complete",
@@ -5837,7 +5996,16 @@
     "Pantograph 2" : {
 
     },
+    "Pantograph Front" : {
+
+    },
     "Pantograph Height" : {
+
+    },
+    "Pantograph Rear" : {
+
+    },
+    "Party" : {
 
     },
     "Passenger Door Slams" : {
@@ -5968,6 +6136,9 @@
     "Phase Shift" : {
 
     },
+    "Physical" : {
+
+    },
     "Physical Output" : {
 
     },
@@ -5980,8 +6151,14 @@
     "PLACEHOLDER" : {
 
     },
+    "Plate Light" : {
+
+    },
     "Platform" : {
       "comment" : "This is used to describe a switchboard item."
+    },
+    "Play only if drive sound is enabled" : {
+
     },
     "Play steam chuffs according to speed" : {
 
@@ -6139,6 +6316,9 @@
           }
         }
       }
+    },
+    "Radio Sound" : {
+
     },
     "Rail Joints" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
@@ -6393,6 +6573,9 @@
     "Reed Switch" : {
 
     },
+    "Refill Diesel" : {
+
+    },
     "Refresh All" : {
       "localizations" : {
         "en" : {
@@ -6425,6 +6608,9 @@
 
     },
     "Reinitialize/Factory Reset Command" : {
+
+    },
+    "Relief Valve" : {
 
     },
     "Remote Button Protocol" : {
@@ -6589,6 +6775,9 @@
     "Rotary beacon" : {
 
     },
+    "Rotary Beacon" : {
+
+    },
     "Rotate Clockwise" : {
 
     },
@@ -6618,6 +6807,9 @@
     },
     "Route Type." : {
       "comment" : "This is used for a tooltip."
+    },
+    "Routing Speed" : {
+
     },
     "RTS/CTS" : {
       "comment" : "Used to indicate that serial port uses the RTS/CTS lines for hardware flow control",
@@ -7014,6 +7206,9 @@
     "Set Aspect #32" : {
       "comment" : "This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."
     },
+    "Set Brake (Automatic Release)" : {
+
+    },
     "Settings for certain Command Stations" : {
 
     },
@@ -7021,6 +7216,9 @@
 
     },
     "SF%lld" : {
+
+    },
+    "Shift" : {
 
     },
     "Short Whistle" : {
@@ -7039,6 +7237,9 @@
           }
         }
       }
+    },
+    "Shovel Work" : {
+
     },
     "Shoveling" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
@@ -7130,6 +7331,9 @@
     "Show trendline on chart." : {
       "comment" : "This is used for a tooltip."
     },
+    "Shunting Light" : {
+
+    },
     "Shunting Mode" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
       "localizations" : {
@@ -7148,6 +7352,9 @@
       }
     },
     "Shunting Mode Trimming" : {
+
+    },
+    "SIFA Message" : {
 
     },
     "Signal" : {
@@ -7296,6 +7503,12 @@
         }
       }
     },
+    "Sound" : {
+
+    },
+    "Sound Configuration" : {
+
+    },
     "Sound Control Basis" : {
 
     },
@@ -7402,10 +7615,112 @@
     "Sound Settings" : {
 
     },
+    "Sound Slot" : {
+
+    },
+    "Sound Slot 1" : {
+
+    },
+    "Sound Slot 2" : {
+
+    },
+    "Sound Slot 3" : {
+
+    },
+    "Sound Slot 4" : {
+
+    },
+    "Sound Slot 5" : {
+
+    },
+    "Sound Slot 6" : {
+
+    },
+    "Sound Slot 7" : {
+
+    },
+    "Sound Slot 8" : {
+
+    },
+    "Sound Slot 9" : {
+
+    },
+    "Sound Slot 10" : {
+
+    },
+    "Sound Slot 11" : {
+
+    },
+    "Sound Slot 12" : {
+
+    },
+    "Sound Slot 13" : {
+
+    },
+    "Sound Slot 14" : {
+
+    },
+    "Sound Slot 15" : {
+
+    },
+    "Sound Slot 16" : {
+
+    },
+    "Sound Slot 17" : {
+
+    },
+    "Sound Slot 18" : {
+
+    },
+    "Sound Slot 19" : {
+
+    },
+    "Sound Slot 20" : {
+
+    },
+    "Sound Slot 21" : {
+
+    },
+    "Sound Slot 22" : {
+
+    },
+    "Sound Slot 23" : {
+
+    },
+    "Sound Slot 24" : {
+
+    },
+    "Sound Slot 25" : {
+
+    },
+    "Sound Slot 26" : {
+
+    },
+    "Sound Slot 27" : {
+
+    },
+    "Sound Slot 28" : {
+
+    },
+    "Sound Slot 29" : {
+
+    },
+    "Sound Slot 30" : {
+
+    },
+    "Sound Slot 31" : {
+
+    },
+    "Sound Slot 32" : {
+
+    },
     "Sound Slot Configuration" : {
 
     },
     "Sound Slot Settings" : {
+
+    },
+    "Soundfader Mute" : {
 
     },
     "South Africa" : {
@@ -7479,6 +7794,9 @@
     "Start Voltage (minimum speed)" : {
 
     },
+    "Start/Stop Delay" : {
+
+    },
     "Starting Delay" : {
 
     },
@@ -7486,6 +7804,9 @@
 
     },
     "Startup time = 255 means defective lamp." : {
+
+    },
+    "Station Announcement" : {
 
     },
     "Steam" : {
@@ -7504,6 +7825,9 @@
           }
         }
       }
+    },
+    "Steam Blow" : {
+
     },
     "Steam Chuff Mode" : {
 
@@ -7544,6 +7868,9 @@
           }
         }
       }
+    },
+    "Stoker" : {
+
     },
     "Stop" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
@@ -7866,6 +8193,9 @@
           }
         }
       }
+    },
+    "Table Light 1" : {
+
     },
     "Tail Lights" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
@@ -8217,6 +8547,9 @@
         }
       }
     },
+    "Thunderer Whistle" : {
+
+    },
     "Time between the sensor no longer being triggered and the sensor reporting such non-triggering." : {
       "comment" : "This is used for a tooltip."
     },
@@ -8300,6 +8633,9 @@
     },
     "Track Protocol." : {
       "comment" : "This is used for a tooltip."
+    },
+    "Track Sound" : {
+
     },
     "Tracks" : {
       "comment" : "Used for the title of a switchboard item palette in LayoutBuilder"
@@ -8422,6 +8758,9 @@
     },
     "Turnout Right" : {
       "comment" : "This is used to describe a piece of track."
+    },
+    "Turnout Sound" : {
+
     },
     "Turnouts & Crossovers" : {
       "comment" : "Used for the title of a switchboard item palette in LayoutBuilder"
@@ -8900,6 +9239,12 @@
         }
       }
     },
+    "Water Pump" : {
+
+    },
+    "Wheel Light" : {
+
+    },
     "Whistle" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
       "localizations" : {
@@ -8916,6 +9261,9 @@
           }
         }
       }
+    },
+    "Whistle (Short)" : {
+
     },
     "White" : {
       "comment" : "The name of a color."

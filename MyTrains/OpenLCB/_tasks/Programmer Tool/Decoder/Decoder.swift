@@ -96,6 +96,10 @@ public class Decoder : NSObject {
 
   private var randomFunctionProperties : [PTSettingsPropertyView] = []
 
+  private var soundSlotProperties : [PTSettingsPropertyView] = []
+
+  private var functionProperties : [PTSettingsPropertyView] = []
+
   // MARK: Public Properties
   
   public var decoderType : DecoderType {
@@ -115,6 +119,10 @@ public class Decoder : NSObject {
           physicalOutputProperties.append(view)
         case .esuRandomFunction:
           randomFunctionProperties.append(view)
+        case .esuSoundSlot:
+          soundSlotProperties.append(view)
+        case .esuFunction:
+          functionProperties.append(view)
         default:
           break
         }
@@ -313,6 +321,22 @@ public class Decoder : NSObject {
     }
   }
   
+  public var esuSoundSlot : ESUSoundSlot = .soundSlot1 {
+    didSet {
+      for view in soundSlotProperties {
+        view.reload()
+      }
+    }
+  }
+  
+  public var esuFunction : TriggeredFunction = .f0 {
+    didSet {
+      for view in functionProperties {
+        view.reload()
+      }
+    }
+  }
+  
   public var esuDecoderPhysicalOutputMode : ESUPhysicalOutputMode {
     return ESUPhysicalOutputMode(title: getValue(property: .physicalOutputOutputMode), decoder: self)!
   }
@@ -328,6 +352,10 @@ public class Decoder : NSObject {
       return esuRandomFunction.cvIndexOffset(decoder: self)
     case .soundCV:
       return soundCV.cvIndexOffset(decoder: self)
+    case .esuSoundSlot:
+      return esuSoundSlot.cvIndexOffset(decoder: self)
+    case .esuFunction:
+      return esuFunction.cvIndexOffset(decoder:self)
     }
     
   }
@@ -628,12 +656,20 @@ public class Decoder : NSObject {
       return esuDecoderPhysicalOutput.title
     case .esuRandomFunction:
       return esuRandomFunction.title
+    case .esuFunction:
+      return esuFunction.title
+    case .esuFunctionIcon:
+      return ESUFunctionIcon(rawValue: values[0])!.title
+    case .esuFunctionCategory:
+      return ESUFunctionIconCategory(rawValue: values[0])!.title
     case .esuSmokeUnitControlMode:
       return SmokeUnitControlMode(rawValue: values[0])!.title
     case .esuPhysicalOutputMode:
       return ESUPhysicalOutputMode(rawValue: values[0])!.title(decoder: self)
     case .soundCV:
       return soundCV.title
+    case .esuSoundSlot:
+      return esuSoundSlot.title
     case .esuClassLightLogicLength:
       return ClassLightLogicSequenceLength(rawValue: values[0])!.title
     case .speedTableIndex:
@@ -650,6 +686,9 @@ public class Decoder : NSObject {
       return "\(values[index])"
     case .randomPassiveMinMax:
       let index = property.rawValue - ProgrammerToolSettingsProperty.randomPassiveMinimum.rawValue
+      return "\(values[index])"
+    case .soundSlotMinMaxSoundSpeed:
+      let index = property.rawValue - ProgrammerToolSettingsProperty.soundSlotMinimumSoundSpeed.rawValue
       return "\(values[index])"
     case .dWordHex:
       return UInt32(bigEndianData: values.reversed())!.toHex(numberOfDigits: 8)
@@ -709,6 +748,9 @@ public class Decoder : NSObject {
     case .randomPassiveMinMax:
       let index = property.rawValue - ProgrammerToolSettingsProperty.randomPassiveMinimum.rawValue
       doubleValue = Double(values[index])
+    case .soundSlotMinMaxSoundSpeed:
+      let index = property.rawValue - ProgrammerToolSettingsProperty.soundSlotMinimumSoundSpeed.rawValue
+      doubleValue = Double(values[index])
     default:
       doubleValue = Double(values[0])
     }
@@ -766,7 +808,7 @@ public class Decoder : NSObject {
         return false
       }
       
-      if !(value >= Int(minValue) && value <= Int(maxValue)) {
+      if !(Int(minValue) ... Int(maxValue) ~= value) {
         return false
       }
       
@@ -829,6 +871,10 @@ public class Decoder : NSObject {
       newValues.append(MarklinConsecutiveAddresses(title: string)!.rawValue)
     case .esuSpeedStepMode:
       newValues.append(SpeedStepMode(title: string)!.rawValue)
+    case .esuFunctionIcon:
+      let icon = ESUFunctionIcon(title: string)!
+      newValues.append(icon.rawValue)
+      setProperty(property: .esuFunctionCategory, values: [icon.rawValue])
     case .manufacturerCode:
       newValues.append(UInt8(ManufacturerCode(title: string)!.rawValue))
     case .esuDecoderSensorSettings:
@@ -863,8 +909,12 @@ public class Decoder : NSObject {
       esuDecoderPhysicalOutput = ESUDecoderPhysicalOutput(title: string)!
     case .soundCV:
       soundCV = SoundCV(title: string)!
+    case .esuSoundSlot:
+      esuSoundSlot = ESUSoundSlot(title: string)!
     case .esuRandomFunction:
       esuRandomFunction = ESURandomFunction(title: string)!
+    case .esuFunction:
+      esuFunction = TriggeredFunction(title: string)!
     case .esuSmokeUnitControlMode:
       newValues.append(SmokeUnitControlMode(title: string)!.rawValue)
     case .esuPhysicalOutputMode:
@@ -936,6 +986,24 @@ public class Decoder : NSObject {
     case .randomActiveMinMax:
       
       let index = property.rawValue - ProgrammerToolSettingsProperty.randomActiveMinimum.rawValue
+
+      newValues = getProperty(property: property, propertyDefinition: definition)
+      
+      let value = UInt8(string)!
+      
+      newValues[index] = value
+      
+      if index == 0 && newValues[1] < value {
+        newValues[1] = value
+      }
+      
+      if index == 1 && newValues[0] > value {
+        newValues[0] = value
+      }
+      
+    case .soundSlotMinMaxSoundSpeed:
+      
+      let index = property.rawValue - ProgrammerToolSettingsProperty.soundSlotMinimumSoundSpeed.rawValue
 
       newValues = getProperty(property: property, propertyDefinition: definition)
       

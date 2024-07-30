@@ -206,6 +206,11 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
   case randomActiveMaximum = 238
   case randomPassiveMinimum = 239
   case randomPassiveMaximum = 240
+  case esuFunction = 251
+  case esuFunctionIcon = 252
+  case esuFunctionCategory = 255
+  case esuFunctionMomentary = 253
+  case esuFunctionInverted = 254
   
   // Identification
   
@@ -303,6 +308,12 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
   
   case soundCV = 243
   case soundCVValue = 244
+  case esuSoundSlot = 245
+  case soundSlotVolume = 246
+  case soundSlotMinimumSoundSpeed = 247
+  case soundSlotMaximumSoundSpeed = 248
+  case soundSlotPlayOnlyIfDriveSoundEnabled = 249
+  case soundSlotSoundConfiguration = 250
   
   // MARK: Public Properties
   
@@ -377,6 +388,9 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
       cvs = [_cvs[index]]
     case .randomPassiveMinMax:
       let index = self.rawValue - ProgrammerToolSettingsProperty.randomPassiveMinimum.rawValue
+      cvs = [_cvs[index]]
+    case .soundSlotMinMaxSoundSpeed:
+      let index = self.rawValue - ProgrammerToolSettingsProperty.soundSlotMinimumSoundSpeed.rawValue
       cvs = [_cvs[index]]
     default:
       break
