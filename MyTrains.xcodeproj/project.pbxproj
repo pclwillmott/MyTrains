@@ -49,6 +49,10 @@
 		DA17297F2B25E7330013301B /* OpenLCBLocationServicesContentBlock.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA17297E2B25E7330013301B /* OpenLCBLocationServicesContentBlock.swift */; };
 		DA17E0862A77C83A000154E0 /* OpenLCBLocoNetMonitorNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA17E0852A77C83A000154E0 /* OpenLCBLocoNetMonitorNode.swift */; };
 		DA17E0882A77D7CC000154E0 /* OpenLCBLocoNetMonitorDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA17E0872A77D7CC000154E0 /* OpenLCBLocoNetMonitorDelegate.swift */; };
+		DA188A992C5A6D1800A50EFB /* ESUFunctionMapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA188A982C5A6D1800A50EFB /* ESUFunctionMapping.swift */; };
+		DA188A9B2C5A93F100A50EFB /* ESUCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA188A9A2C5A93F100A50EFB /* ESUCondition.swift */; };
+		DA188A9D2C5A951200A50EFB /* ESUConditionDriving.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA188A9C2C5A951200A50EFB /* ESUConditionDriving.swift */; };
+		DA188A9F2C5A957F00A50EFB /* ESUConditionDirection.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA188A9E2C5A957F00A50EFB /* ESUConditionDirection.swift */; };
 		DA19A10E2A4469B00048C55E /* LocoNetGateway Extensions - Unused.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA19A10D2A4469B00048C55E /* LocoNetGateway Extensions - Unused.swift */; };
 		DA19A2622BD29BDA00296E15 /* NSViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA19A2612BD29BDA00296E15 /* NSViewExtensions.swift */; };
 		DA19A2642BD2D74F00296E15 /* NSTextFieldExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA19A2632BD2D74F00296E15 /* NSTextFieldExtensions.swift */; };
@@ -535,6 +539,10 @@
 		DA17297E2B25E7330013301B /* OpenLCBLocationServicesContentBlock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBLocationServicesContentBlock.swift; sourceTree = "<group>"; };
 		DA17E0852A77C83A000154E0 /* OpenLCBLocoNetMonitorNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBLocoNetMonitorNode.swift; sourceTree = "<group>"; };
 		DA17E0872A77D7CC000154E0 /* OpenLCBLocoNetMonitorDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBLocoNetMonitorDelegate.swift; sourceTree = "<group>"; };
+		DA188A982C5A6D1800A50EFB /* ESUFunctionMapping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ESUFunctionMapping.swift; sourceTree = "<group>"; };
+		DA188A9A2C5A93F100A50EFB /* ESUCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ESUCondition.swift; sourceTree = "<group>"; };
+		DA188A9C2C5A951200A50EFB /* ESUConditionDriving.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ESUConditionDriving.swift; sourceTree = "<group>"; };
+		DA188A9E2C5A957F00A50EFB /* ESUConditionDirection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ESUConditionDirection.swift; sourceTree = "<group>"; };
 		DA19A10D2A4469B00048C55E /* LocoNetGateway Extensions - Unused.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LocoNetGateway Extensions - Unused.swift"; sourceTree = "<group>"; };
 		DA19A2612BD29BDA00296E15 /* NSViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSViewExtensions.swift; sourceTree = "<group>"; };
 		DA19A2632BD2D74F00296E15 /* NSTextFieldExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSTextFieldExtensions.swift; sourceTree = "<group>"; };
@@ -1101,6 +1109,9 @@
 				DAE524FF2C459854000FC319 /* ESUDecoderPhysicalOutput.swift */,
 				DAEC69492C4BEEFD008F1CFF /* ESUPhysicalOutputMode.swift */,
 				DA9CBFB72C5696CE00CC54B7 /* ESURandomFunction.swift */,
+				DA188A9A2C5A93F100A50EFB /* ESUCondition.swift */,
+				DA188A9C2C5A951200A50EFB /* ESUConditionDriving.swift */,
+				DA188A9E2C5A957F00A50EFB /* ESUConditionDirection.swift */,
 				DA0F378D2C47D471002C66D8 /* SteamChuffMode.swift */,
 				DAAE3E3C2C4D261400F129B7 /* SmokeUnitControlMode.swift */,
 				DAAE3E3E2C4D2B8A00F129B7 /* ExternalSmokeUnitType.swift */,
@@ -1109,6 +1120,7 @@
 				DA00D94F2C57EFDA00B26A83 /* SoundCV.swift */,
 				DAA5E7692C59036900EC43F0 /* ESUSoundSlot.swift */,
 				DAA5E76B2C5925DF00EC43F0 /* ESUFunctionIcon.swift */,
+				DA188A982C5A6D1800A50EFB /* ESUFunctionMapping.swift */,
 				DA6BA50D2C4930A30028EDA0 /* FunctionConsistMode.swift */,
 				DA6BA50F2C4931850028EDA0 /* FunctionAnalogMode.swift */,
 				DA6BA5132C4ADC270028EDA0 /* SpeedTablePreset.swift */,
@@ -2248,7 +2260,9 @@
 				DAF5B4FD28A91A830015E758 /* SpeedSteps.swift in Sources */,
 				DAF3746F2A1A2A9B009E91F0 /* OpenLCBNodeVirtual.swift in Sources */,
 				DA1272C72A75773D00AB42F6 /* OpenLCBFDIFunctionKind.swift in Sources */,
+				DA188A9B2C5A93F100A50EFB /* ESUCondition.swift in Sources */,
 				DA60408A2C23139C006E6325 /* TrackProtocol.swift in Sources */,
+				DA188A9D2C5A951200A50EFB /* ESUConditionDriving.swift in Sources */,
 				DA5225F92B307B09005DCBF4 /* MultiTabView.swift in Sources */,
 				DAD22F7B2BD56F5A00F396AD /* NSScrollViewExtensions.swift in Sources */,
 				DAF374732A1A2D94009E91F0 /* BundleExtensions.swift in Sources */,
@@ -2286,9 +2300,11 @@
 				DA6239322BCD511D000E9018 /* UserSettings.swift in Sources */,
 				DA48DA722BA201BD0009FEBF /* LEDView.swift in Sources */,
 				DADC21CE2944ABE2008A2F33 /* ClockView.swift in Sources */,
+				DA188A9F2C5A957F00A50EFB /* ESUConditionDirection.swift in Sources */,
 				DAB07498276EB6C3003278BE /* Sqlite.swift in Sources */,
 				DA9325A8289C04CE00CC317F /* LocoNetSlotState.swift in Sources */,
 				DA9552262B45CE32002477B9 /* CDIDataViewDelegate.swift in Sources */,
+				DA188A992C5A6D1800A50EFB /* ESUFunctionMapping.swift in Sources */,
 				DA52B60E2C5261E200A46549 /* PTSettingsPropertyView.swift in Sources */,
 				DA8A28662A34F0E8006AE024 /* OpenLCBEnabledDisabledState.swift in Sources */,
 				DA8B5D19282FDE1800D39F07 /* ProgrammerMode.swift in Sources */,

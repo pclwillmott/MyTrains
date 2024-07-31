@@ -73,8 +73,12 @@ public enum ProgrammerToolSettingsSection : Int, CaseIterable {
   
   // Function Mapping
   
-  case functionMapping = 35
-  
+  case functionMappings = 35
+  case functionMappingConditions = 58
+  case functionMappingPhysicalOutputs = 59
+  case functionMappingLogicalFunctions = 60
+  case functionMappingSounds = 61
+
   // Identification
   
   case userIdentification = 20
@@ -88,6 +92,7 @@ public enum ProgrammerToolSettingsSection : Int, CaseIterable {
   
   // Motor Settings
   
+  case locomotiveInformation = 62
   case speedTable = 40
   case loadControlBackEMF = 41
   case motorOverloadProtection = 42
@@ -275,8 +280,24 @@ public enum ProgrammerToolSettingsSection : Int, CaseIterable {
       String(localized: "Random Functions"),
       .functionSettings
     ),
-    .functionMapping : (
-      String(localized: "Function Mapping"),
+    .functionMappings : (
+      String(localized: "Function Mappings"),
+      .functionMapping
+    ),
+    .functionMappingConditions : (
+      String(localized: "Conditions"),
+      .functionMapping
+    ),
+    .functionMappingPhysicalOutputs : (
+      String(localized: "Physical Outputs"),
+      .functionMapping
+    ),
+    .functionMappingLogicalFunctions : (
+      String(localized: "Logical Functions"),
+      .functionMapping
+    ),
+    .functionMappingSounds : (
+      String(localized: "Sounds"),
       .functionMapping
     ),
     .settingsForCertainCommandStations : (
@@ -294,6 +315,10 @@ public enum ProgrammerToolSettingsSection : Int, CaseIterable {
     .susiMapping : (
       String(localized: "SUSI Mapping"),
       .compatibility
+    ),
+    .locomotiveInformation : (
+      String(localized: "Locomotive Information"),
+      .motorSettings
     ),
     .speedTable : (
       String(localized: "Speed Table"),

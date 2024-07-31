@@ -39,6 +39,7 @@ public enum ProgrammerToolInfoType : CaseIterable {
   case frequency
   case temperature
   case manufacturerName
+  case esuFunctionCategory
   
 }
 
@@ -61,6 +62,8 @@ public enum ProgrammerToolEncodingType : Int, CaseIterable {
   case dWordHex         // 4 byte value in hex, little endian
   case manufacturerName // 1 byte decoded as NMRA Manufacturer Name
   case railComDate      // 4 bytes encoded as number of seconds since 1 Jan 2000
+  case zString          // Null terminated string upto the Max length of the field.
+                        // If all characters are used there is no null termination
   
   // Selection Encodings (ComboBox)
   
@@ -91,7 +94,10 @@ public enum ProgrammerToolEncodingType : Int, CaseIterable {
   case soundSlotMinMaxSoundSpeed
   case esuFunction
   case esuFunctionIcon
-  case esuFunctionCategory
+  case esuFunctionMapping
+  case esuCondition
+  case esuConditionDriving
+  case esuConditionDirection
 
 }
 
@@ -105,5 +111,6 @@ public enum CVIndexingMethod {
   case soundCV
   case esuSoundSlot
   case esuFunction
+  case esuFunctionMapping
   
 }

@@ -492,6 +492,9 @@
     "AC Analog Mode" : {
 
     },
+    "Acceleration" : {
+
+    },
     "Acceleration Adjustment" : {
 
     },
@@ -1177,6 +1180,15 @@
         }
       }
     },
+    "Brake 1" : {
+
+    },
+    "Brake 2" : {
+
+    },
+    "Brake 3" : {
+
+    },
     "Brake Distance Length" : {
 
     },
@@ -1374,9 +1386,6 @@
     },
     "Canada" : {
       "comment" : "This is the name of a country."
-    },
-    "Category" : {
-
     },
     "CDI: %@ (%@)" : {
       "localizations" : {
@@ -1834,6 +1843,9 @@
     },
     "Computer Date and Time" : {
       "comment" : "Used to indicate what is the initial date and time setting for a clock"
+    },
+    "Conditions" : {
+
     },
     "Configuration" : {
       "comment" : "Used for a menu title",
@@ -2756,6 +2768,9 @@
         }
       }
     },
+    "Direction" : {
+
+    },
     "Direction Next" : {
       "comment" : "This is used for the title of the Speed Constraints Direction Next section in the Layout Builder."
     },
@@ -2773,6 +2788,9 @@
     },
     "Directionality applicable to this signal." : {
       "comment" : "This is used for a tooltip."
+    },
+    "Disable Brake Sound" : {
+
     },
     "Disabled" : {
       "comment" : "Used to indicate that something is disabled",
@@ -2924,6 +2942,9 @@
           }
         }
       }
+    },
+    "Driving" : {
+
     },
     "Driving Characteristics" : {
 
@@ -3671,6 +3692,9 @@
     "Facing Direction" : {
       "comment" : "This is used for the title of combobox."
     },
+    "Fade Out Sound" : {
+
+    },
     "Fade Sound Volume Reduction" : {
 
     },
@@ -3917,6 +3941,222 @@
 
     },
     "Function Mapping" : {
+
+    },
+    "Function Mapping 1" : {
+
+    },
+    "Function Mapping 2" : {
+
+    },
+    "Function Mapping 3" : {
+
+    },
+    "Function Mapping 4" : {
+
+    },
+    "Function Mapping 5" : {
+
+    },
+    "Function Mapping 6" : {
+
+    },
+    "Function Mapping 7" : {
+
+    },
+    "Function Mapping 8" : {
+
+    },
+    "Function Mapping 9" : {
+
+    },
+    "Function Mapping 10" : {
+
+    },
+    "Function Mapping 11" : {
+
+    },
+    "Function Mapping 12" : {
+
+    },
+    "Function Mapping 13" : {
+
+    },
+    "Function Mapping 14" : {
+
+    },
+    "Function Mapping 15" : {
+
+    },
+    "Function Mapping 16" : {
+
+    },
+    "Function Mapping 17" : {
+
+    },
+    "Function Mapping 18" : {
+
+    },
+    "Function Mapping 19" : {
+
+    },
+    "Function Mapping 20" : {
+
+    },
+    "Function Mapping 21" : {
+
+    },
+    "Function Mapping 22" : {
+
+    },
+    "Function Mapping 23" : {
+
+    },
+    "Function Mapping 24" : {
+
+    },
+    "Function Mapping 25" : {
+
+    },
+    "Function Mapping 26" : {
+
+    },
+    "Function Mapping 27" : {
+
+    },
+    "Function Mapping 28" : {
+
+    },
+    "Function Mapping 29" : {
+
+    },
+    "Function Mapping 30" : {
+
+    },
+    "Function Mapping 31" : {
+
+    },
+    "Function Mapping 32" : {
+
+    },
+    "Function Mapping 33" : {
+
+    },
+    "Function Mapping 34" : {
+
+    },
+    "Function Mapping 35" : {
+
+    },
+    "Function Mapping 36" : {
+
+    },
+    "Function Mapping 37" : {
+
+    },
+    "Function Mapping 38" : {
+
+    },
+    "Function Mapping 39" : {
+
+    },
+    "Function Mapping 40" : {
+
+    },
+    "Function Mapping 41" : {
+
+    },
+    "Function Mapping 42" : {
+
+    },
+    "Function Mapping 43" : {
+
+    },
+    "Function Mapping 44" : {
+
+    },
+    "Function Mapping 45" : {
+
+    },
+    "Function Mapping 46" : {
+
+    },
+    "Function Mapping 47" : {
+
+    },
+    "Function Mapping 48" : {
+
+    },
+    "Function Mapping 49" : {
+
+    },
+    "Function Mapping 50" : {
+
+    },
+    "Function Mapping 51" : {
+
+    },
+    "Function Mapping 52" : {
+
+    },
+    "Function Mapping 53" : {
+
+    },
+    "Function Mapping 54" : {
+
+    },
+    "Function Mapping 55" : {
+
+    },
+    "Function Mapping 56" : {
+
+    },
+    "Function Mapping 57" : {
+
+    },
+    "Function Mapping 58" : {
+
+    },
+    "Function Mapping 59" : {
+
+    },
+    "Function Mapping 60" : {
+
+    },
+    "Function Mapping 61" : {
+
+    },
+    "Function Mapping 62" : {
+
+    },
+    "Function Mapping 63" : {
+
+    },
+    "Function Mapping 64" : {
+
+    },
+    "Function Mapping 65" : {
+
+    },
+    "Function Mapping 66" : {
+
+    },
+    "Function Mapping 67" : {
+
+    },
+    "Function Mapping 68" : {
+
+    },
+    "Function Mapping 69" : {
+
+    },
+    "Function Mapping 70" : {
+
+    },
+    "Function Mapping 71" : {
+
+    },
+    "Function Mapping 72" : {
 
     },
     "Function Mappings" : {
@@ -4335,6 +4575,9 @@
     },
     "If this box is checked then the enter zone event will not be used by the speed profiler." : {
       "comment" : "This is used for a tooltip."
+    },
+    "Ignore" : {
+
     },
     "Ignore Acceleration and Deceleration in the Sound Schedule" : {
 
@@ -4865,6 +5108,12 @@
     "Locomotive ID" : {
       "comment" : "This is used for the title of label which displays the locomotive's node Id."
     },
+    "Locomotive Information" : {
+
+    },
+    "Locomotive Maximum Speed" : {
+
+    },
     "Locomotive Name" : {
       "comment" : "This is used for the title of label which displays the locomotive's name."
     },
@@ -5006,6 +5255,9 @@
 
     },
     "Logical Function Dimmer Brightness Reduction" : {
+
+    },
+    "Logical Functions" : {
 
     },
     "LokSound 4 3 Point" : {
@@ -5805,6 +6057,9 @@
         }
       }
     },
+    "Off" : {
+
+    },
     "Oil Burner" : {
 
     },
@@ -5824,6 +6079,9 @@
           }
         }
       }
+    },
+    "On" : {
+
     },
     "One or more turnouts failed to set correctly." : {
 
@@ -5891,6 +6149,9 @@
       }
     },
     "Optional Interaction Rejected" : {
+
+    },
+    "Optional Load" : {
 
     },
     "Orange" : {
@@ -6145,6 +6406,9 @@
     "Physical Output Configuration" : {
 
     },
+    "Physical Outputs" : {
+
+    },
     "Pink" : {
       "comment" : "The name of a color."
     },
@@ -6227,6 +6491,9 @@
           }
         }
       }
+    },
+    "Primary Load" : {
+
     },
     "Producer Consumer Event Report" : {
 
@@ -7038,6 +7305,18 @@
     "Sensor" : {
       "comment" : "This is used to describe a switchboard item."
     },
+    "Sensor 1" : {
+
+    },
+    "Sensor 2" : {
+
+    },
+    "Sensor 3" : {
+
+    },
+    "Sensor 4" : {
+
+    },
     "Sensor Configuration" : {
 
     },
@@ -7219,6 +7498,24 @@
 
     },
     "Shift" : {
+
+    },
+    "Shift Mode 1" : {
+
+    },
+    "Shift Mode 2" : {
+
+    },
+    "Shift Mode 3" : {
+
+    },
+    "Shift Mode 4" : {
+
+    },
+    "Shift Mode 5" : {
+
+    },
+    "Shift Mode 6" : {
 
     },
     "Short Whistle" : {
@@ -7723,6 +8020,9 @@
     "Soundfader Mute" : {
 
     },
+    "Sounds" : {
+
+    },
     "South Africa" : {
       "comment" : "This is the name of a country."
     },
@@ -8169,6 +8469,9 @@
           }
         }
       }
+    },
+    "Switching Mode" : {
+
     },
     "Switching Off Threshold" : {
 
@@ -8837,6 +9140,9 @@
         }
       }
     },
+    "Uncoupling Cycle" : {
+
+    },
     "Unfreeze Command" : {
 
     },
@@ -9219,6 +9525,9 @@
     "Volume" : {
 
     },
+    "Volume Control" : {
+
+    },
     "Waiting time before direction change" : {
 
     },
@@ -9243,6 +9552,9 @@
 
     },
     "Wheel Light" : {
+
+    },
+    "Wheel Sensor" : {
 
     },
     "Whistle" : {

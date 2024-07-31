@@ -57,7 +57,7 @@ public class Decoder : NSObject {
     
     cvLookup.removeAll()
     
-    physicalOutputProperties.removeAll()
+    indexedProperties.removeAll()
     
   }
   
@@ -92,13 +92,7 @@ public class Decoder : NSObject {
   
   private var cvLookup : [CV:[PTSettingsPropertyView]] = [:]
   
-  private var physicalOutputProperties : [PTSettingsPropertyView] = []
-
-  private var randomFunctionProperties : [PTSettingsPropertyView] = []
-
-  private var soundSlotProperties : [PTSettingsPropertyView] = []
-
-  private var functionProperties : [PTSettingsPropertyView] = []
+  private var indexedProperties : [CVIndexingMethod:[PTSettingsPropertyView]] = [:]
 
   // MARK: Public Properties
   
@@ -114,17 +108,16 @@ public class Decoder : NSObject {
         
         propertyViewLookup[view.property] = view
         
-        switch view.indexingMethod {
-        case .esuDecoderPhysicalOutput:
-          physicalOutputProperties.append(view)
-        case .esuRandomFunction:
-          randomFunctionProperties.append(view)
-        case .esuSoundSlot:
-          soundSlotProperties.append(view)
-        case .esuFunction:
-          functionProperties.append(view)
-        default:
-          break
+        if let indexingMethod = view.indexingMethod, indexingMethod != .standard {
+          
+          var views = [view]
+          
+          if let temp = indexedProperties[indexingMethod] {
+            views.append(contentsOf: temp)
+          }
+          
+          indexedProperties[indexingMethod] = views
+          
         }
         
         if let cvs = view.definition.cv {
@@ -298,42 +291,48 @@ public class Decoder : NSObject {
     }
   }
 
-  private var esuRandomFunction : ESURandomFunction = .random1 {
-    didSet {
-      for view in randomFunctionProperties {
+  private func reloadIndexedViews(indexingMethod:CVIndexingMethod?) {
+    if let indexingMethod, let views = indexedProperties[indexingMethod] {
+      for view in views {
         view.reload()
       }
+    }
+  }
+  
+  private var esuRandomFunction : ESURandomFunction = .random1 {
+    didSet {
+      reloadIndexedViews(indexingMethod: .esuRandomFunction)
       applyLayoutRules()
     }
   }
   
   public var esuDecoderPhysicalOutput : ESUDecoderPhysicalOutput = .frontLight {
     didSet {
-      for view in physicalOutputProperties {
-        view.reload()
-      }
+      reloadIndexedViews(indexingMethod: .esuDecoderPhysicalOutput)
     }
   }
   
   public var soundCV : SoundCV = .soundCV1 {
     didSet {
-      propertyViewLookup[.soundCVValue]?.reload()
+      reloadIndexedViews(indexingMethod: .soundCV)
     }
   }
   
   public var esuSoundSlot : ESUSoundSlot = .soundSlot1 {
     didSet {
-      for view in soundSlotProperties {
-        view.reload()
-      }
+      reloadIndexedViews(indexingMethod: .esuSoundSlot)
     }
   }
   
   public var esuFunction : TriggeredFunction = .f0 {
     didSet {
-      for view in functionProperties {
-        view.reload()
-      }
+      reloadIndexedViews(indexingMethod: .esuFunction)
+    }
+  }
+  
+  public var esuFunctionMapping : ESUFunctionMapping = .mapping1 {
+    didSet {
+      reloadIndexedViews(indexingMethod: .esuFunctionMapping)
     }
   }
   
@@ -356,6 +355,8 @@ public class Decoder : NSObject {
       return esuSoundSlot.cvIndexOffset(decoder: self)
     case .esuFunction:
       return esuFunction.cvIndexOffset(decoder:self)
+    case .esuFunctionMapping:
+      return esuFunctionMapping.cvIndexOffset(decoder: self)
     }
     
   }
@@ -630,6 +631,10 @@ public class Decoder : NSObject {
       return "\(UInt32(bigEndianData: values.reversed())!)"
     case .word:
       return "\(UInt16(bigEndianData: values.reversed())!)"
+    case .zString:
+      var data = values
+      data.append(0)
+      return String(cString: data)
     case .locomotiveAddressType:
       return (values[0] == definition.mask![0] ? LocomotiveAddressType.extended : LocomotiveAddressType.primary).title
     case .extendedAddress:
@@ -644,6 +649,12 @@ public class Decoder : NSObject {
       return SpeedStepMode(rawValue: values[0])!.title
     case .manufacturerCode:
       return ManufacturerCode(rawValue:UInt16(values[0]))!.title
+    case .esuCondition:
+      return ESUCondition(rawValue: values[0])!.title
+    case .esuConditionDriving:
+      return ESUConditionDriving(rawValue: values[0])!.title
+    case .esuConditionDirection:
+      return ESUConditionDirection(rawValue: values[0])!.title
     case .esuDecoderSensorSettings:
       return DecoderSensorSettings(rawValue: values[0])!.title
     case .esuSteamChuffMode:
@@ -656,12 +667,12 @@ public class Decoder : NSObject {
       return esuDecoderPhysicalOutput.title
     case .esuRandomFunction:
       return esuRandomFunction.title
+    case .esuFunctionMapping:
+      return esuFunctionMapping.title
     case .esuFunction:
       return esuFunction.title
     case .esuFunctionIcon:
-      return ESUFunctionIcon(rawValue: values[0])!.title
-    case .esuFunctionCategory:
-      return ESUFunctionIconCategory(rawValue: values[0])!.title
+      return ESUFunctionIcon(rawValue: values[1])!.title
     case .esuSmokeUnitControlMode:
       return SmokeUnitControlMode(rawValue: values[0])!.title
     case .esuPhysicalOutputMode:
@@ -777,6 +788,9 @@ public class Decoder : NSObject {
     case .voltage:
       doubleValue = UnitVoltage.convert(fromValue: doubleValue, fromUnits: .volts, toUnits: appNode.unitsVoltage)
       symbol = appNode.unitsVoltage.symbol
+    case .esuFunctionCategory:
+      return ESUFunctionIconCategory(rawValue: values[0])!.title
+
     default:
       break
     }
@@ -798,6 +812,10 @@ public class Decoder : NSObject {
     }
     
     switch definition.encoding {
+    case .zString:
+      guard Int(minValue) ... Int(maxValue) ~= string.utf8.count else {
+        return false
+      }
     case .dWordHex:
       guard let _ = UInt32(hex:string) else {
         return false
@@ -856,6 +874,8 @@ public class Decoder : NSObject {
       newValues.append(contentsOf: UInt16(string)!.bigEndianData.reversed())
     case .dword:
       newValues.append(contentsOf: UInt32(string)!.bigEndianData.reversed())
+    case .zString:
+      newValues = [UInt8](string.padWithNull(length: 29).prefix(28))
     case .locomotiveAddressType:
       newValues.append(LocomotiveAddressType(title: string) == .extended ? definition.mask![0] : 0)
     case .extendedAddress:
@@ -873,8 +893,8 @@ public class Decoder : NSObject {
       newValues.append(SpeedStepMode(title: string)!.rawValue)
     case .esuFunctionIcon:
       let icon = ESUFunctionIcon(title: string)!
+      newValues.append(icon.category.rawValue)
       newValues.append(icon.rawValue)
-      setProperty(property: .esuFunctionCategory, values: [icon.rawValue])
     case .manufacturerCode:
       newValues.append(UInt8(ManufacturerCode(title: string)!.rawValue))
     case .esuDecoderSensorSettings:
@@ -883,7 +903,12 @@ public class Decoder : NSObject {
       newValues.append(SteamChuffMode(title: string)! == .playSteamChuffsAccordingToSpeed ? definition.trueDefaultValue! : 0)
     case .esuSoundControlBasis:
       newValues.append(SoundControlBasis(title: string)! == .accelerationAndBrakeTimeAndTrainLoad ? definition.trueDefaultValue! : 0)
-      
+    case .esuCondition:
+      newValues.append(ESUCondition(title: string)!.rawValue)
+    case .esuConditionDriving:
+      newValues.append(ESUConditionDriving(title: string)!.rawValue)
+    case .esuConditionDirection:
+      newValues.append(ESUConditionDirection(title: string)!.rawValue)
     case .esuSpeedTablePreset:
       
       let speedTablePreset = SpeedTablePreset(title: string)!
@@ -915,6 +940,8 @@ public class Decoder : NSObject {
       esuRandomFunction = ESURandomFunction(title: string)!
     case .esuFunction:
       esuFunction = TriggeredFunction(title: string)!
+    case .esuFunctionMapping:
+      esuFunctionMapping = ESUFunctionMapping(title: string)!
     case .esuSmokeUnitControlMode:
       newValues.append(SmokeUnitControlMode(title: string)!.rawValue)
     case .esuPhysicalOutputMode:

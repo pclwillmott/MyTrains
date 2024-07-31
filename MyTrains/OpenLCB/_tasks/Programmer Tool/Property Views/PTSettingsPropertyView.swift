@@ -80,9 +80,25 @@ public class PTSettingsPropertyView : NSView, NSTextFieldDelegate {
   
   private let leadingOffset : CGFloat = 20.0
   
-  private let comboWidth : CGFloat = 350.0
+  private var comboWidth : CGFloat {
+    switch definition.encoding {
+    case .esuCondition, .esuConditionDriving, .esuConditionDirection:
+      return 100.0
+    default:
+      return 350.0
+    }
+  }
   
-  private let textWidth : CGFloat = 50.0
+  private var textWidth : CGFloat {
+    switch definition.encoding {
+    case .dWordHex:
+      return 100.0
+    case .zString:
+      return 300.0
+    default:
+      return 50.0
+    }
+  }
   
   private let sliderWidth : CGFloat = 150.0
   
@@ -330,6 +346,16 @@ public class PTSettingsPropertyView : NSView, NSTextFieldDelegate {
           
           viewConstraints.append(cvLabel.centerYAnchor.constraint(equalTo: comboBox.centerYAnchor))
           
+          if let info {
+            
+            viewConstraints.append(info.leadingAnchor.constraint(equalToSystemSpacingAfter: comboBox.trailingAnchor, multiplier: 1.0))
+            
+            viewConstraints.append(info.centerYAnchor.constraint(equalTo: comboBox.centerYAnchor))
+            
+            viewConstraints.append(cvLabel.leadingAnchor.constraint(greaterThanOrEqualToSystemSpacingAfter: info.trailingAnchor, multiplier: 1.0))
+            
+          }
+          
         }
         
         if definition.controlType == .comboBox {
@@ -382,7 +408,7 @@ public class PTSettingsPropertyView : NSView, NSTextFieldDelegate {
         
         viewConstraints.append(textField.leadingAnchor.constraint(equalTo: label.leadingAnchor))
         
-        viewConstraints.append(textField.widthAnchor.constraint(equalToConstant: definition.encoding == .dWordHex ? 100 : textWidth))
+        viewConstraints.append(textField.widthAnchor.constraint(equalToConstant: textWidth))
         
         viewConstraints.append(self.bottomAnchor.constraint(greaterThanOrEqualTo: textField.bottomAnchor))
         
@@ -440,7 +466,7 @@ public class PTSettingsPropertyView : NSView, NSTextFieldDelegate {
         
         viewConstraints.append(textField.leadingAnchor.constraint(equalToSystemSpacingAfter: slider.trailingAnchor, multiplier: 1.0))
         
-        viewConstraints.append(textField.widthAnchor.constraint(equalToConstant: definition.encoding == .dWordHex ? 100 : textWidth))
+        viewConstraints.append(textField.widthAnchor.constraint(equalToConstant: textWidth))
 
         viewConstraints.append(self.bottomAnchor.constraint(greaterThanOrEqualTo: textField.bottomAnchor))
         
@@ -501,8 +527,6 @@ public class PTSettingsPropertyView : NSView, NSTextFieldDelegate {
     case .esuSUSIMapping:
       
       if let label {
-        
-        let columnOffset : CGFloat = 30
         
         for index in 0 ... 15 {
 
@@ -794,6 +818,14 @@ public class PTSettingsPropertyView : NSView, NSTextFieldDelegate {
       ESUSoundSlot.populate(comboBox: comboBox)
     case .esuFunctionIcon:
       ESUFunctionIcon.populate(comboBox: comboBox)
+    case .esuFunctionMapping:
+      ESUFunctionMapping.populate(comboBox: comboBox)
+    case .esuCondition:
+      ESUCondition.populate(comboBox: comboBox)
+    case .esuConditionDriving:
+      ESUConditionDriving.populate(comboBox: comboBox)
+    case .esuConditionDirection:
+      ESUConditionDirection.populate(comboBox: comboBox)
     default:
       break
     }

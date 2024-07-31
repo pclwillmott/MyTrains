@@ -208,10 +208,146 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
   case randomPassiveMaximum = 240
   case esuFunction = 251
   case esuFunctionIcon = 252
-  case esuFunctionCategory = 255
   case esuFunctionMomentary = 253
   case esuFunctionInverted = 254
   
+  // Function Mappings
+  
+  case esuFunctionMapping = 257
+  
+  // Conditions
+  
+  case condDriving = 336
+  case condDirection = 337
+  case condF0 = 338
+  case condF1 = 339
+  case condF2 = 340
+  case condF3 = 341
+  case condF4 = 342
+  case condF5 = 343
+  case condF6 = 344
+  case condF7 = 345
+  case condF8 = 346
+  case condF9 = 347
+  case condF10 = 348
+  case condF11 = 349
+  case condF12 = 350
+  case condF13 = 351
+  case condF14 = 352
+  case condF15 = 353
+  case condF16 = 354
+  case condF17 = 355
+  case condF18 = 356
+  case condF19 = 357
+  case condF20 = 358
+  case condF21 = 359
+  case condF22 = 360
+  case condF23 = 361
+  case condF24 = 362
+  case condF25 = 363
+  case condF26 = 364
+  case condF27 = 365
+  case condF28 = 366
+  case condF29 = 367
+  case condF30 = 368
+  case condF31 = 369
+  case condwheelSensor = 370
+  case condSensor1 = 371
+  case condSensor2 = 372
+  case condSensor3 = 373
+  case condSensor4 = 374
+
+  // Physical Outputs
+  
+  case fmFrontLight_1 = 290
+  case fmFrontLight_2 = 291
+  case fmRearLight_1 = 292
+  case fmRearLight_2 = 293
+  case fmAux1_1 = 294
+  case fmAux1_2 = 295
+  case fmAux2_1 = 312
+  case fmAux2_2 = 313
+  case fmAux3 = 296
+  case fmAux4 = 297
+  case fmAux5 = 298
+  case fmAux6 = 299
+  case fmAux7 = 300
+  case fmAux8 = 301
+  case fmAux9 = 302
+  case fmAux10 = 303
+  case fmAux11 = 304
+  case fmAux12 = 305
+  case fmAux13 = 306
+  case fmAux14 = 307
+  case fmAux15 = 308
+  case fmAux16 = 309
+  case fmAux17 = 310
+  case fmAux18 = 311
+
+  // Logical Functions
+
+  case fmOptionalLoad = 334
+  case fmSwitchingMode = 316
+  case fmBrake1 = 331
+  case fmBrake2 = 332
+  case fmBrake3 = 333
+  case fmPrimaryLoad = 335
+  case fmUncouplingCycle = 323
+  case fmDriveHold = 324
+
+  case fmDimmer = 317
+  case fmGradeCrossing = 318
+  case fmAcceleration = 315
+  case fmESUSmokeUnit = 320
+  case fmFadeOutSound = 319
+  case fmDisableBrakeSound = 322
+  case fmVolumeControl = 321
+
+  case fmShiftMode1 = 325
+  case fmShiftMode2 = 326
+  case fmShiftMode3 = 327
+  case fmShiftMode4 = 328
+  case fmShiftMode5 = 329
+  case fmShiftMode6 = 330
+
+  
+
+  
+  // Sounds
+  
+  case fmSoundSlot1 = 258
+  case fmSoundSlot2 = 259
+  case fmSoundSlot3 = 260
+  case fmSoundSlot4 = 261
+  case fmSoundSlot5 = 262
+  case fmSoundSlot6 = 263
+  case fmSoundSlot7 = 264
+  case fmSoundSlot8 = 265
+  case fmSoundSlot9 = 266
+  case fmSoundSlot10 = 267
+  case fmSoundSlot11 = 268
+  case fmSoundSlot12 = 269
+  case fmSoundSlot13 = 270
+  case fmSoundSlot14 = 271
+  case fmSoundSlot15 = 272
+  case fmSoundSlot16 = 273
+  case fmSoundSlot17 = 274
+  case fmSoundSlot18 = 275
+  case fmSoundSlot19 = 276
+  case fmSoundSlot20 = 277
+  case fmSoundSlot21 = 278
+  case fmSoundSlot22 = 279
+  case fmSoundSlot23 = 280
+  case fmSoundSlot24 = 281
+  case fmSoundSlot25 = 282
+  case fmSoundSlot26 = 283
+  case fmSoundSlot27 = 284
+  case fmSoundSlot28 = 285
+  case fmSoundSlot29 = 286
+  case fmSoundSlot30 = 287
+  case fmSoundSlot31 = 288
+  case fmSoundSlot32 = 289
+
   // Identification
   
   case userId1 = 61
@@ -228,6 +364,8 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
   
   // Motor Settings
   
+  case locomotiveName = 255
+  case locoMaximumSpeed = 256
   case esuSpeedTable = 200
   case speedTableIndex = 201
   case speedTableEntryValue = 202
