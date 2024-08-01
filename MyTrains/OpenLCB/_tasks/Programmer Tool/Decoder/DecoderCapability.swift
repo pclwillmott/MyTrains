@@ -6,14 +6,18 @@
 //
 
 import Foundation
-public enum DecoderCapability : Int, CaseIterable {
+public enum DecoderCapability : CaseIterable {
   
   // MARK: Enumeration
   
-  case nmraMandatory = 0
-  case nmraSpeedTable = 1
-  case esuProprietary = 2
-  case esuSpeedTable = 3
-  case esuSound = 4
+  case dccProtocol
+  case marklinMotorolaProtocol
+  case m4Protocol
+  case selectrixProtocol
+  case respondsToNonDCCCommands
+  case acAnalogMode
+  case threeValueSpeedTable
+  case highFrequencyPWMMotorControl
+  case sendZIMOZACKSignals
   
 }

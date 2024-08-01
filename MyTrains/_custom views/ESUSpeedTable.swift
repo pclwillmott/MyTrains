@@ -117,7 +117,7 @@ class ESUSpeedTable: NSView {
   }
   
   private var scaleWidth : CGFloat {
-    return (bounds.width - boxSize / 3) / 28
+    return (bounds.width - boxSize * 2) / 27
   }
 
   // MARK: Public Properties

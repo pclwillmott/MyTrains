@@ -44,6 +44,8 @@ public class PTSettingsPropertyView : NSView, NSTextFieldDelegate {
     
     sfLabels.removeAll()
     
+    threeValueSpeedTable = nil
+    
   }
   
   // MARK: Controls
@@ -71,6 +73,8 @@ public class PTSettingsPropertyView : NSView, NSTextFieldDelegate {
   private var functionLabels : [NSTextField] = []
   
   private var sfLabels : [NSTextField] = []
+  
+  private var threeValueSpeedTable : ThreeValueSpeedTable?
   
   // MARK: Private Properties
   
@@ -104,7 +108,11 @@ public class PTSettingsPropertyView : NSView, NSTextFieldDelegate {
   
   private var viewConstraints : [NSLayoutConstraint] = []
   
-  private var _isExtant = true
+  private var _isExtant = true {
+    didSet {
+      isHidden = true
+    }
+  }
   
   // MARK: Internal Properties
   
@@ -524,6 +532,38 @@ public class PTSettingsPropertyView : NSView, NSTextFieldDelegate {
         
       }
       
+    case .threeValueSpeedTable:
+      
+      threeValueSpeedTable = ThreeValueSpeedTable()
+      
+      if let speedTable = threeValueSpeedTable {
+        
+        speedTable.translatesAutoresizingMaskIntoConstraints = false
+        
+        self.addSubview(speedTable)
+        
+        viewConstraints.append(speedTable.topAnchor.constraint(equalTo: self.topAnchor))
+        
+        viewConstraints.append(speedTable.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: leadingOffset))
+
+        viewConstraints.append(speedTable.heightAnchor.constraint(equalToConstant: 400))
+        
+        viewConstraints.append(speedTable.widthAnchor.constraint(equalToConstant: 600))
+        
+        viewConstraints.append(self.bottomAnchor.constraint(greaterThanOrEqualTo: speedTable.bottomAnchor))
+        
+        viewConstraints.append(self.trailingAnchor.constraint(greaterThanOrEqualToSystemSpacingAfter: speedTable.trailingAnchor, multiplier: 1.0))
+        
+        if let cvLabel {
+          
+          viewConstraints.append(cvLabel.leadingAnchor.constraint(greaterThanOrEqualToSystemSpacingAfter: speedTable.trailingAnchor, multiplier: 1.0))
+
+          viewConstraints.append(cvLabel.centerYAnchor.constraint(equalTo: speedTable.centerYAnchor))
+
+        }
+        
+      }
+      
     case .esuSUSIMapping:
       
       if let label {
@@ -826,6 +866,10 @@ public class PTSettingsPropertyView : NSView, NSTextFieldDelegate {
       ESUConditionDriving.populate(comboBox: comboBox)
     case .esuConditionDirection:
       ESUConditionDirection.populate(comboBox: comboBox)
+    case .speedTableType:
+      SpeedTableType.populate(comboBox: comboBox)
+    case .threeValueSpeedTablePreset:
+      ThreeValueSpeedTablePreset.populate(comboBox: comboBox)
     default:
       break
     }
@@ -904,6 +948,9 @@ public class PTSettingsPropertyView : NSView, NSTextFieldDelegate {
       case .esuSpeedTable:
         speedTable!.decoder = decoder
         speedTable?.needsDisplay = true
+      case .threeValueSpeedTable:
+        threeValueSpeedTable?.decoder = decoder
+        threeValueSpeedTable?.needsDisplay = true
       case .functionsAnalogMode:
         
         let supported = decoder.supportedFunctionsAnalogMode

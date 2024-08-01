@@ -106,39 +106,48 @@ public class Decoder : NSObject {
       
       for view in propertyViews {
         
-        propertyViewLookup[view.property] = view
-        
-        if let indexingMethod = view.indexingMethod, indexingMethod != .standard {
+        if decoderType.isSettingsPropertySupported(property: view.property) {
           
-          var views = [view]
+          propertyViewLookup[view.property] = view
           
-          if let temp = indexedProperties[indexingMethod] {
-            views.append(contentsOf: temp)
-          }
-          
-          indexedProperties[indexingMethod] = views
-          
-        }
-        
-        if let cvs = view.definition.cv {
-          
-          for cv in cvs {
+          if let indexingMethod = view.indexingMethod, indexingMethod != .standard {
             
-            var views : [PTSettingsPropertyView] = [view]
+            var views = [view]
             
-            if let temp = cvLookup[cv] {
+            if let temp = indexedProperties[indexingMethod] {
               views.append(contentsOf: temp)
             }
             
-            cvLookup[cv] = views
+            indexedProperties[indexingMethod] = views
             
           }
           
+          if let cvs = view.definition.cv {
+            
+            for cv in cvs {
+              
+              var views : [PTSettingsPropertyView] = [view]
+              
+              if let temp = cvLookup[cv] {
+                views.append(contentsOf: temp)
+              }
+              
+              cvLookup[cv] = views
+              
+            }
+            
+          }
+          
+          view.decoder = self
+          
+        }
+        else {
+          view.isExtant = false
         }
         
-        view.decoder = self
-        
       }
+      
+      delegate?.displaySettingsInspector?(self)
       
       applyLayoutRules()
       
@@ -616,7 +625,12 @@ public class Decoder : NSObject {
       return ""
     }
     
-    let values = getProperty(property: property, propertyDefinition: definition)
+    var values = getProperty(property: property, propertyDefinition: definition)
+    
+    if let baseProperty = property.minMaxBaseProperty {
+      let index = property.rawValue - baseProperty.rawValue
+      values = [values[index]]
+    }
     
     switch definition.encoding {
     case .byte:
@@ -649,6 +663,8 @@ public class Decoder : NSObject {
       return SpeedStepMode(rawValue: values[0])!.title
     case .manufacturerCode:
       return ManufacturerCode(rawValue:UInt16(values[0]))!.title
+    case .speedTableType:
+      return SpeedTableType(rawValue:values[0])!.title
     case .esuCondition:
       return ESUCondition(rawValue: values[0])!.title
     case .esuConditionDriving:
@@ -663,6 +679,8 @@ public class Decoder : NSObject {
       return (values[0] == 0 ? SoundControlBasis.accelerationAndBrakeTime : SoundControlBasis.accelerationAndBrakeTimeAndTrainLoad).title
     case .esuSpeedTablePreset:
       return SpeedTablePreset.doNothing.title
+    case .threeValueSpeedTablePreset:
+      return ThreeValueSpeedTablePreset.identity.title
     case .esuDecoderPhysicalOutput:
       return esuDecoderPhysicalOutput.title
     case .esuRandomFunction:
@@ -689,23 +707,8 @@ public class Decoder : NSObject {
       return "\(values[speedTableIndex - 1])"
     case .esuTriggeredFunction:
       return TriggeredFunction(rawValue: values[0])!.title
-    case .hluSpeedLimit:
-      let index = property.rawValue - ProgrammerToolSettingsProperty.hluSpeedLimit1.rawValue
-      return "\(values[index])"
-    case .randomActiveMinMax:
-      let index = property.rawValue - ProgrammerToolSettingsProperty.randomActiveMinimum.rawValue
-      return "\(values[index])"
-    case .randomPassiveMinMax:
-      let index = property.rawValue - ProgrammerToolSettingsProperty.randomPassiveMinimum.rawValue
-      return "\(values[index])"
-    case .soundSlotMinMaxSoundSpeed:
-      let index = property.rawValue - ProgrammerToolSettingsProperty.soundSlotMinimumSoundSpeed.rawValue
-      return "\(values[index])"
     case .dWordHex:
       return UInt32(bigEndianData: values.reversed())!.toHex(numberOfDigits: 8)
-    case .steamChuffDuration:
-      let index = property.rawValue - ProgrammerToolSettingsProperty.smokeChuffsMinimumDuration.rawValue
-      return "\(values[index])"
     case .analogModeEnable:
       return values[1] == definition.mask![1] ? "true" : "false"
     case .manufacturerName:
@@ -743,25 +746,18 @@ public class Decoder : NSObject {
     formatter.minimumFractionDigits = 0
     formatter.maximumFractionDigits = maximumFractionDigits
 
-    let values = getProperty(property: property, propertyDefinition: definition)
+    var values = getProperty(property: property, propertyDefinition: definition)
+
+    if let baseProperty = property.minMaxBaseProperty {
+      let index = property.rawValue - baseProperty.rawValue
+      values = [values[index]]
+    }
 
     var doubleValue : Double
 
     switch definition.encoding {
     case .specialInt8:
       doubleValue = Double((Int8(values[0] & 0x7f) * (((values[0] & ByteMask.d7) == ByteMask.d7) ? -1 : 1)))
-    case .steamChuffDuration:
-      let index = property.rawValue - ProgrammerToolSettingsProperty.smokeChuffsMinimumDuration.rawValue
-      doubleValue = Double(values[index])
-    case .randomActiveMinMax:
-      let index = property.rawValue - ProgrammerToolSettingsProperty.randomActiveMinimum.rawValue
-      doubleValue = Double(values[index])
-    case .randomPassiveMinMax:
-      let index = property.rawValue - ProgrammerToolSettingsProperty.randomPassiveMinimum.rawValue
-      doubleValue = Double(values[index])
-    case .soundSlotMinMaxSoundSpeed:
-      let index = property.rawValue - ProgrammerToolSettingsProperty.soundSlotMinimumSoundSpeed.rawValue
-      doubleValue = Double(values[index])
     default:
       doubleValue = Double(values[0])
     }
@@ -909,6 +905,14 @@ public class Decoder : NSObject {
       newValues.append(ESUConditionDriving(title: string)!.rawValue)
     case .esuConditionDirection:
       newValues.append(ESUConditionDirection(title: string)!.rawValue)
+    case .threeValueSpeedTablePreset:
+      
+      let speedTablePreset = ThreeValueSpeedTablePreset(title: string)!
+      
+      if !speedTablePreset.speedTableValues.isEmpty {
+        newValues = speedTablePreset.speedTableValues
+      }
+
     case .esuSpeedTablePreset:
       
       let speedTablePreset = SpeedTablePreset(title: string)!
@@ -970,104 +974,12 @@ public class Decoder : NSObject {
         }
       }
       
-    case .hluSpeedLimit:
-      
-      newValues = getProperty(property: property, propertyDefinition: definition)
-      
-      let value = UInt8(string)!
-      
-      let hluIndex = property.rawValue - ProgrammerToolSettingsProperty.hluSpeedLimit1.rawValue
-      
-      newValues[hluIndex] = value
-      
-      if hluIndex > 0 {
-        for index in 0 ... hluIndex - 1 {
-          newValues[index] = min(newValues[index], value)
-        }
-      }
-      
-      if hluIndex < 4 {
-        for index in hluIndex + 1 ... 4 {
-          newValues[index] = max(newValues[index], value)
-        }
-      }
-      
-    case .steamChuffDuration:
-      
-      let index = property.rawValue - ProgrammerToolSettingsProperty.smokeChuffsMinimumDuration.rawValue
-
-      newValues = getProperty(property: property, propertyDefinition: definition)
-      
-      let value = UInt8(string)!
-      
-      newValues[index] = value
-      
-      if index == 0 && newValues[1] < value {
-        newValues[1] = value
-      }
-      
-      if index == 1 && newValues[0] > value {
-        newValues[0] = value
-      }
-      
-    case .randomActiveMinMax:
-      
-      let index = property.rawValue - ProgrammerToolSettingsProperty.randomActiveMinimum.rawValue
-
-      newValues = getProperty(property: property, propertyDefinition: definition)
-      
-      let value = UInt8(string)!
-      
-      newValues[index] = value
-      
-      if index == 0 && newValues[1] < value {
-        newValues[1] = value
-      }
-      
-      if index == 1 && newValues[0] > value {
-        newValues[0] = value
-      }
-      
-    case .soundSlotMinMaxSoundSpeed:
-      
-      let index = property.rawValue - ProgrammerToolSettingsProperty.soundSlotMinimumSoundSpeed.rawValue
-
-      newValues = getProperty(property: property, propertyDefinition: definition)
-      
-      let value = UInt8(string)!
-      
-      newValues[index] = value
-      
-      if index == 0 && newValues[1] < value {
-        newValues[1] = value
-      }
-      
-      if index == 1 && newValues[0] > value {
-        newValues[0] = value
-      }
-      
-    case .randomPassiveMinMax:
-      
-      let index = property.rawValue - ProgrammerToolSettingsProperty.randomPassiveMinimum.rawValue
-
-      newValues = getProperty(property: property, propertyDefinition: definition)
-      
-      let value = UInt8(string)!
-      
-      newValues[index] = value
-      
-      if index == 0 && newValues[1] < value {
-        newValues[1] = value
-      }
-      
-      if index == 1 && newValues[0] > value {
-        newValues[0] = value
-      }
-      
     case .esuTriggeredFunction:
       newValues.append(TriggeredFunction(title: string)!.rawValue)
     case .dWordHex:
       newValues = UInt32(hex: string)!.bigEndianData.reversed()
+    case .speedTableType:
+      newValues = [SpeedTableType(title:string)!.rawValue]
     case .analogModeEnable:
       
       let otherProperty : ProgrammerToolSettingsProperty = property == .enableACAnalogMode ? .enableDCAnalogMode : .enableACAnalogMode
@@ -1088,6 +1000,23 @@ public class Decoder : NSObject {
       break
     }
     
+    if let baseProperty = property.minMaxBaseProperty {
+      let index = property.rawValue - baseProperty.rawValue
+      let value = newValues[0]
+      newValues = getProperty(property: property, propertyDefinition: definition)
+      newValues[index] = value
+      if index > 0 {
+        for tempIndex in 0 ... index - 1 {
+          newValues[tempIndex] = min(newValues[tempIndex], value)
+        }
+      }
+      if index < newValues.count - 1 {
+        for tempIndex in index + 1 ... newValues.count - 1 {
+          newValues[tempIndex] = max(newValues[tempIndex], value)
+        }
+      }
+    }
+
     if !newValues.isEmpty {
       
       let values = getProperty(property: property, propertyDefinition: definition)

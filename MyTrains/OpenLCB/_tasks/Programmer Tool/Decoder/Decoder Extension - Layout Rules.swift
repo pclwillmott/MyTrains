@@ -414,6 +414,28 @@ extension Decoder {
         actionType     : .setIsHiddenToTestResult
       ),
       (
+        property1      : .speedTableType,
+        testType1      : .equal,
+        testValue1     : SpeedTableType.vStartvMidvHigh.title,
+        operator       : nil,
+        property2      : nil,
+        testType2      : nil,
+        testValue2     : nil,
+        actionProperty : [.esuSpeedTable, .speedTableIndex, .speedTableEntryValue, .speedTablePreset, .maximumSpeed, .minimumSpeed],
+        actionType     : .setIsHiddenToTestResult
+      ),
+      (
+        property1      : .speedTableType,
+        testType1      : .notEqual,
+        testValue1     : SpeedTableType.vStartvMidvHigh.title,
+        operator       : nil,
+        property2      : nil,
+        testType2      : nil,
+        testValue2     : nil,
+        actionProperty : [.vStart, .vMid, .vHigh, .threeValueSpeedTable, .threeValueSpeedTablePreset],
+        actionType     : .setIsHiddenToTestResult
+      ),
+      (
         property1      : .enableLoadControlBackEMF,
         testType1      : .equal,
         testValue1     : "false",

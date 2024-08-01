@@ -2544,6 +2544,9 @@
         }
       }
     },
+    "Default" : {
+
+    },
     "Default Date & Time" : {
       "comment" : "Used to indicate what is the initial date and time setting for a clock",
       "extractionState" : "stale",
@@ -4506,6 +4509,9 @@
     },
     "Hz" : {
       "comment" : "Used for the abbreviation of Hertz"
+    },
+    "ICE" : {
+
     },
     "Icon" : {
 
@@ -8053,6 +8059,9 @@
     "Speed Table Index" : {
 
     },
+    "Speed Table Type" : {
+
+    },
     "Speed that the locomotive was commanded to travel at" : {
 
     },
@@ -8452,6 +8461,9 @@
           }
         }
       }
+    },
+    "Switcher" : {
+
     },
     "Switching Lights" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
@@ -9272,6 +9284,12 @@
     "Use RFID readers for profiling." : {
       "comment" : "This is used for a tooltip."
     },
+    "Use speed curve" : {
+
+    },
+    "Use three values (VStart, VMid, VHigh)" : {
+
+    },
     "User Description" : {
       "comment" : "Used for the title of the User Description input field in CDI",
       "localizations" : {
@@ -9357,6 +9375,9 @@
 
     },
     "Verify Node ID Global" : {
+
+    },
+    "VHigh" : {
 
     },
     "View" : {
@@ -9516,6 +9537,9 @@
         }
       }
     },
+    "VMid" : {
+
+    },
     "Voltage difference indicating an ABC brake section" : {
 
     },
@@ -9526,6 +9550,9 @@
 
     },
     "Volume Control" : {
+
+    },
+    "VStart" : {
 
     },
     "Waiting time before direction change" : {

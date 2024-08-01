@@ -161,7 +161,7 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
       return
     }
     
-    decoder = Decoder(decoderType: .lokSound5)
+    decoder = Decoder(decoderType: .lokSound5Fx)
     decoder?.delegate = self
 
     observerId = appNode.addObserver(observer: self)
@@ -461,7 +461,6 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
         lblGroups[index].textColor = nil
         pnlSettingsView[index].isHidden = true
       }
-      displaySettingsInspector()
       btnGroups[currentSelector.rawValue].contentTintColor = NSColor.systemBlue
       lblGroups[currentSelector.rawValue].textColor = NSColor.systemBlue
       pnlSettingsView[currentSelector.rawValue].isHidden = false
@@ -518,8 +517,6 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
     }
     
     NSLayoutConstraint.activate(settingsConstraints)
-    
-    displaySettingsInspector()
     
   }
   
@@ -625,11 +622,7 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
     
   }
 
-  internal func displaySettingsInspector() {
-    
-    guard let decoder else {
-      return
-    }
+  @objc public func displaySettingsInspector(_ decoder: Decoder) {
     
     var index = 0
     
@@ -656,15 +649,19 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
             
             let propertyView = propertyViews[index]
             
-            if showGroupHeader {
-              stackView.addArrangedSubview(settingsGroupFields[section]!.view!)
-              showGroupHeader = false
-              showGroupSeparator = true
+            if propertyView.isExtant {
+              
+              if showGroupHeader {
+                stackView.addArrangedSubview(settingsGroupFields[section]!.view!)
+                showGroupHeader = false
+                showGroupSeparator = true
+              }
+              
+              stackView.addArrangedSubview(propertyView)
+              
+              propertyView.activateConstraints()
+              
             }
-            
-            stackView.addArrangedSubview(propertyView)
-            
-            propertyView.activateConstraints()
             
             index += 1
             
@@ -679,7 +676,6 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
       }
       
     }
-    
     
   }
 
@@ -844,10 +840,6 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
   @objc func reloadData(_ decoder: Decoder) {
     tableView?.reloadData()
     lblChangedCVs?.stringValue = decoder.cvTextList(list: decoder.cvsModified)
-  }
-
-  @objc func reloadSettings(_ decoder: Decoder) {
-    displaySettingsInspector()
   }
 
 }

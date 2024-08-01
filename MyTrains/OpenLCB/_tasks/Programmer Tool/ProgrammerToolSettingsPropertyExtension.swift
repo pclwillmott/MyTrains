@@ -414,7 +414,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : nil,
       infoMaxDecimalPlaces : nil,
       infoFormat           : nil,
-      requiredCapabilities : []
+      requiredCapabilities : [.respondsToNonDCCCommands]
     ),
 
     // DCC Consist Address
@@ -538,7 +538,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : nil,
       infoMaxDecimalPlaces : nil,
       infoFormat           : nil,
-      requiredCapabilities : []
+      requiredCapabilities : [.acAnalogMode]
     ),
 
     .acAnalogModeStartVoltage : (
@@ -557,8 +557,8 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : 0.1,
       infoMaxDecimalPlaces : 2,
       infoFormat           : nil,
-      requiredCapabilities : []
-    ), 
+      requiredCapabilities : [.acAnalogMode]
+    ),
 
     .acAnalogModeMaximumSpeedVoltage : (
       title                : String(localized: "Maximum Speed Voltage"),
@@ -576,7 +576,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : 0.1,
       infoMaxDecimalPlaces : 2,
       infoFormat           : nil,
-      requiredCapabilities : []
+      requiredCapabilities : [.acAnalogMode]
     ),
 
     // DC Analog Mode
@@ -698,7 +698,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : nil,
       infoMaxDecimalPlaces : nil,
       infoFormat           : nil,
-      requiredCapabilities : []
+      requiredCapabilities : [.highFrequencyPWMMotorControl]
     ),
 
     // Analog Voltage Hysteresis
@@ -934,14 +934,14 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : nil,
       infoMaxDecimalPlaces : nil,
       infoFormat           : nil,
-      requiredCapabilities : []
+      requiredCapabilities : [.sendZIMOZACKSignals]
     ),
 
     .hluSpeedLimit1 : (
       title                : String(localized: "HLU Speed Limit 1"),
       section              : .hluSettings,
       controlType          : .textFieldWithSlider,
-      encoding             : .hluSpeedLimit,
+      encoding             : .byte,
       cvIndexingMethod     : .standard,
       cv                   : [.cv_000_000_150, .cv_000_000_151, .cv_000_000_152, .cv_000_000_153, .cv_000_000_154],
       mask                 : [0xff, 0xff, 0xff, 0xff, 0xff],
@@ -960,7 +960,7 @@ extension ProgrammerToolSettingsProperty {
       title                : String(localized: "HLU Speed Limit 2 (Ultra Low)"),
       section              : .hluSettings,
       controlType          : .textFieldWithSlider,
-      encoding             : .hluSpeedLimit,
+      encoding             : .byte,
       cvIndexingMethod     : .standard,
       cv                   : [.cv_000_000_150, .cv_000_000_151, .cv_000_000_152, .cv_000_000_153, .cv_000_000_154],
       mask                 : [0xff, 0xff, 0xff, 0xff, 0xff],
@@ -979,7 +979,7 @@ extension ProgrammerToolSettingsProperty {
       title                : String(localized: "HLU Speed Limit 3"),
       section              : .hluSettings,
       controlType          : .textFieldWithSlider,
-      encoding             : .hluSpeedLimit,
+      encoding             : .byte,
       cvIndexingMethod     : .standard,
       cv                   : [.cv_000_000_150, .cv_000_000_151, .cv_000_000_152, .cv_000_000_153, .cv_000_000_154],
       mask                 : [0xff, 0xff, 0xff, 0xff, 0xff],
@@ -998,7 +998,7 @@ extension ProgrammerToolSettingsProperty {
       title                : String(localized: "HLU Speed Limit 4 (Low Speed)"),
       section              : .hluSettings,
       controlType          : .textFieldWithSlider,
-      encoding             : .hluSpeedLimit,
+      encoding             : .byte,
       cvIndexingMethod     : .standard,
       cv                   : [.cv_000_000_150, .cv_000_000_151, .cv_000_000_152, .cv_000_000_153, .cv_000_000_154],
       mask                 : [0xff, 0xff, 0xff, 0xff, 0xff],
@@ -1017,7 +1017,7 @@ extension ProgrammerToolSettingsProperty {
       title                : String(localized: "HLU Speed Limit 5"),
       section              : .hluSettings,
       controlType          : .textFieldWithSlider,
-      encoding             : .hluSpeedLimit,
+      encoding             : .byte,
       cvIndexingMethod     : .standard,
       cv                   : [.cv_000_000_150, .cv_000_000_151, .cv_000_000_152, .cv_000_000_153, .cv_000_000_154],
       mask                 : [0xff, 0xff, 0xff, 0xff, 0xff],
@@ -3185,7 +3185,7 @@ extension ProgrammerToolSettingsProperty {
       title                : String(localized: "Active Minimum"),
       section              : .randomFunctions,
       controlType          : .textFieldWithSlider,
-      encoding             : .randomActiveMinMax,
+      encoding             : .byte,
       cvIndexingMethod     : .esuRandomFunction,
       cv                   : [.cv_016_013_260, .cv_016_013_261],
       mask                 : [0xff, 0xff],
@@ -3204,7 +3204,7 @@ extension ProgrammerToolSettingsProperty {
       title                : String(localized: "Active Maximum"),
       section              : .randomFunctions,
       controlType          : .textFieldWithSlider,
-      encoding             : .randomActiveMinMax,
+      encoding             : .byte,
       cvIndexingMethod     : .esuRandomFunction,
       cv                   : [.cv_016_013_260, .cv_016_013_261],
       mask                 : [0xff, 0xff],
@@ -3223,7 +3223,7 @@ extension ProgrammerToolSettingsProperty {
       title                : String(localized: "Passive Minimum"),
       section              : .randomFunctions,
       controlType          : .textFieldWithSlider,
-      encoding             : .randomPassiveMinMax,
+      encoding             : .byte,
       cvIndexingMethod     : .esuRandomFunction,
       cv                   : [.cv_016_013_258, .cv_016_013_259],
       mask                 : [0xff, 0xff],
@@ -3242,7 +3242,7 @@ extension ProgrammerToolSettingsProperty {
       title                : String(localized: "Passive Maximum"),
       section              : .randomFunctions,
       controlType          : .textFieldWithSlider,
-      encoding             : .randomPassiveMinMax,
+      encoding             : .byte,
       cvIndexingMethod     : .esuRandomFunction,
       cv                   : [.cv_016_013_258, .cv_016_013_259],
       mask                 : [0xff, 0xff],
@@ -5774,6 +5774,120 @@ extension ProgrammerToolSettingsProperty {
 
     // Speed Table
 
+    .speedTableType : (
+      title                : String(localized: "Speed Table Type"),
+      section              : .speedTable,
+      controlType          : .comboBox,
+      encoding             : .speedTableType,
+      cvIndexingMethod     : .standard,
+      cv                   : [.cv_000_000_029],
+      mask                 : [0b00010000],
+      shift                : [0],
+      minValue             : nil,
+      maxValue             : nil,
+      trueDefaultValue     : nil,
+      infoType             : .none,
+      infoFactor           : nil,
+      infoMaxDecimalPlaces : nil,
+      infoFormat           : nil,
+      requiredCapabilities : [.threeValueSpeedTable]
+    ),
+    
+    .threeValueSpeedTable : (
+      title                : String(localized: "Speed Table"),
+      section              : .speedTable,
+      controlType          : .threeValueSpeedTable,
+      encoding             : .custom,
+      cvIndexingMethod     : .standard,
+      cv                   : [.cv_000_000_002, .cv_000_000_006, .cv_000_000_005],
+      mask                 : [0xff, 0xff, 0xff],
+      shift                : [0, 0, 0],
+      minValue             : 1,
+      maxValue             : 255,
+      trueDefaultValue     : nil,
+      infoType             : .none,
+      infoFactor           : nil,
+      infoMaxDecimalPlaces : nil,
+      infoFormat           : nil,
+      requiredCapabilities : [.threeValueSpeedTable]
+    ),
+
+    .vStart : (
+      title                : String(localized: "VStart"),
+      section              : .speedTable,
+      controlType          : .textFieldWithSlider,
+      encoding             : .byte,
+      cvIndexingMethod     : .standard,
+      cv                   : [.cv_000_000_002, .cv_000_000_006, .cv_000_000_005],
+      mask                 : [0xff, 0xff, 0xff],
+      shift                : [0, 0, 0],
+      minValue             : 1,
+      maxValue             : 255,
+      trueDefaultValue     : nil,
+      infoType             : .none,
+      infoFactor           : nil,
+      infoMaxDecimalPlaces : nil,
+      infoFormat           : nil,
+      requiredCapabilities : [.threeValueSpeedTable]
+    ),
+    
+    .vMid : (
+      title                : String(localized: "VMid"),
+      section              : .speedTable,
+      controlType          : .textFieldWithSlider,
+      encoding             : .byte,
+      cvIndexingMethod     : .standard,
+      cv                   : [.cv_000_000_002, .cv_000_000_006, .cv_000_000_005],
+      mask                 : [0xff, 0xff, 0xff],
+      shift                : [0, 0, 0],
+      minValue             : 1,
+      maxValue             : 255,
+      trueDefaultValue     : nil,
+      infoType             : .none,
+      infoFactor           : nil,
+      infoMaxDecimalPlaces : nil,
+      infoFormat           : nil,
+      requiredCapabilities : [.threeValueSpeedTable]
+    ),
+    
+    .vHigh : (
+      title                : String(localized: "VHigh"),
+      section              : .speedTable,
+      controlType          : .textFieldWithSlider,
+      encoding             : .byte,
+      cvIndexingMethod     : .standard,
+      cv                   : [.cv_000_000_002, .cv_000_000_006, .cv_000_000_005],
+      mask                 : [0xff, 0xff, 0xff],
+      shift                : [0, 0, 0],
+      minValue             : 1,
+      maxValue             : 255,
+      trueDefaultValue     : nil,
+      infoType             : .none,
+      infoFactor           : nil,
+      infoMaxDecimalPlaces : nil,
+      infoFormat           : nil,
+      requiredCapabilities : [.threeValueSpeedTable]
+    ),
+    
+    .threeValueSpeedTablePreset : (
+      title                : String(localized: "Preset"),
+      section              : .speedTable,
+      controlType          : .comboBox,
+      encoding             : .threeValueSpeedTablePreset,
+      cvIndexingMethod     : .standard,
+      cv                   : [.cv_000_000_002, .cv_000_000_006, .cv_000_000_005],
+      mask                 : [0xff, 0xff, 0xff],
+      shift                : [0, 0, 0],
+      minValue             : 1,
+      maxValue             : 255,
+      trueDefaultValue     : nil,
+      infoType             : .none,
+      infoFactor           : nil,
+      infoMaxDecimalPlaces : nil,
+      infoFormat           : nil,
+      requiredCapabilities : [.threeValueSpeedTable]
+    ),
+
     .esuSpeedTable : (
       title                : String(localized: ""),
       section              : .speedTable,
@@ -6086,9 +6200,9 @@ extension ProgrammerToolSettingsProperty {
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
       cvIndexingMethod     : .standard,
-      cv                   : [.cv_000_000_116],
-      mask                 : [0xff],
-      shift                : [0],
+      cv                   : [.cv_000_000_116, .cv_000_000_117],
+      mask                 : [0xff, 0xff],
+      shift                : [0, 0],
       minValue             : 25.0,
       maxValue             : 200.0,
       trueDefaultValue     : nil,
@@ -6105,9 +6219,9 @@ extension ProgrammerToolSettingsProperty {
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
       cvIndexingMethod     : .standard,
-      cv                   : [.cv_000_000_117],
-      mask                 : [0xff],
-      shift                : [0],
+      cv                   : [.cv_000_000_116, .cv_000_000_117],
+      mask                 : [0xff, 0xff],
+      shift                : [0, 0],
       minValue             : 25.0,
       maxValue             : 200.0,
       trueDefaultValue     : nil,
@@ -6124,9 +6238,9 @@ extension ProgrammerToolSettingsProperty {
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
       cvIndexingMethod     : .standard,
-      cv                   : [.cv_000_000_118],
-      mask                 : [0xff],
-      shift                : [0],
+      cv                   : [.cv_000_000_118, .cv_000_000_119],
+      mask                 : [0xff, 0xff],
+      shift                : [0, 0],
       minValue             : 3.0,
       maxValue             : 40.0,
       trueDefaultValue     : nil,
@@ -6143,9 +6257,9 @@ extension ProgrammerToolSettingsProperty {
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
       cvIndexingMethod     : .standard,
-      cv                   : [.cv_000_000_119],
-      mask                 : [0xff],
-      shift                : [0],
+      cv                   : [.cv_000_000_118, .cv_000_000_119],
+      mask                 : [0xff, 0xff],
+      shift                : [0, 0],
       minValue             : 3.0,
       maxValue             : 40.0,
       trueDefaultValue     : nil,
@@ -6362,7 +6476,7 @@ extension ProgrammerToolSettingsProperty {
       title                : String(localized: "Minimum Steam Chuff Duration"),
       section              : .smokeChuffs,
       controlType          : .textFieldWithSlider,
-      encoding             : .steamChuffDuration,
+      encoding             : .byte,
       cvIndexingMethod     : .standard,
       cv                   : [.cv_000_000_141, .cv_000_000_142],
       mask                 : [0xff, 0xff],
@@ -6381,7 +6495,7 @@ extension ProgrammerToolSettingsProperty {
       title                : String(localized: "Maximum Steam Chuff Duration"),
       section              : .smokeChuffs,
       controlType          : .textFieldWithSlider,
-      encoding             : .steamChuffDuration,
+      encoding             : .byte,
       cvIndexingMethod     : .standard,
       cv                   : [.cv_000_000_141, .cv_000_000_142],
       mask                 : [0xff, 0xff],
@@ -6416,7 +6530,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : nil,
       infoMaxDecimalPlaces : nil,
       infoFormat           : nil,
-      requiredCapabilities : []
+      requiredCapabilities : [.dccProtocol]
     ),
 
     .enableMarklinMotorolaProtocol : (
@@ -6435,7 +6549,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : nil,
       infoMaxDecimalPlaces : nil,
       infoFormat           : nil,
-      requiredCapabilities : []
+      requiredCapabilities : [.marklinMotorolaProtocol]
     ),
 
     .enableSelectrixProtocol : (
@@ -6454,7 +6568,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : nil,
       infoMaxDecimalPlaces : nil,
       infoFormat           : nil,
-      requiredCapabilities : []
+      requiredCapabilities : [.selectrixProtocol]
     ),
 
     .enableM4Protocol : (
@@ -6473,7 +6587,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : nil,
       infoMaxDecimalPlaces : nil,
       infoFormat           : nil,
-      requiredCapabilities : []
+      requiredCapabilities : [.m4Protocol]
     ),
 
     // Memory Settings
@@ -7142,7 +7256,7 @@ extension ProgrammerToolSettingsProperty {
       title                : String(localized: "Minimum Sound Speed"),
       section              : .soundSlotConfiguration,
       controlType          : .textFieldWithSlider,
-      encoding             : .soundSlotMinMaxSoundSpeed,
+      encoding             : .byte,
       cvIndexingMethod     : .esuSoundSlot,
       cv                   : [.cv_016_001_261, .cv_016_001_262],
       mask                 : [0xff, 0xff],
@@ -7161,7 +7275,7 @@ extension ProgrammerToolSettingsProperty {
       title                : String(localized: "Maximum Sound Speed"),
       section              : .soundSlotConfiguration,
       controlType          : .textFieldWithSlider,
-      encoding             : .soundSlotMinMaxSoundSpeed,
+      encoding             : .byte,
       cvIndexingMethod     : .esuSoundSlot,
       cv                   : [.cv_016_001_261, .cv_016_001_262],
       mask                 : [0xff, 0xff],

@@ -71,6 +71,8 @@
 		DA1ECC9828439DE500C4F963 /* UpdateFirmwareVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA1ECC9728439DE500C4F963 /* UpdateFirmwareVC.swift */; };
 		DA20941E2BC3012B00737A12 /* OpenLCBLocoNetCommandStation.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA20941D2BC3012B00737A12 /* OpenLCBLocoNetCommandStation.swift */; };
 		DA22B6BC2C1089510056F24A /* OpenLCBDigitraxDS64Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA22B6BB2C1089510056F24A /* OpenLCBDigitraxDS64Node.swift */; };
+		DA23FE7A2C5BD15300303AE2 /* ThreeValueSpeedTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA23FE792C5BD15300303AE2 /* ThreeValueSpeedTable.swift */; };
+		DA23FE7C2C5BDE6C00303AE2 /* ThreeValueSpeedTablePreset.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA23FE7B2C5BDE6C00303AE2 /* ThreeValueSpeedTablePreset.swift */; };
 		DA2785402837EAE700EDCBB7 /* MTSerialPortManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA27853F2837EAE700EDCBB7 /* MTSerialPortManager.swift */; };
 		DA28C2BA2801CC0300857471 /* DashBoard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA28C2B92801CC0300857471 /* DashBoard.storyboard */; };
 		DA28C2BD2801CC4800857471 /* DashBoardVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA28C2BC2801CC4800857471 /* DashBoardVC.swift */; };
@@ -452,6 +454,7 @@
 		DAEA212E2A5186EA008545A6 /* OpenLCBDatagramTimeout.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAEA212D2A5186EA008545A6 /* OpenLCBDatagramTimeout.swift */; };
 		DAEA21372A51BE65008545A6 /* LocoNetGateway Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAEA21362A51BE65008545A6 /* LocoNetGateway Extensions.swift */; };
 		DAEA9CFA272D8FBE00C9B3EC /* LocoNetMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAEA9CF9272D8FBE00C9B3EC /* LocoNetMessage.swift */; };
+		DAEC31D42C5BC18300890846 /* SpeedTableType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAEC31D32C5BC18300890846 /* SpeedTableType.swift */; };
 		DAEC694A2C4BEEFD008F1CFF /* ESUPhysicalOutputMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAEC69492C4BEEFD008F1CFF /* ESUPhysicalOutputMode.swift */; };
 		DAED17202A5ABC8D0051C9AF /* OpenLCBCANGateway.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAED171F2A5ABC8D0051C9AF /* OpenLCBCANGateway.swift */; };
 		DAED17222A5ABF4A0051C9AF /* MyTrains CAN Gateway.xml in Resources */ = {isa = PBXBuildFile; fileRef = DAED17212A5ABF4A0051C9AF /* MyTrains CAN Gateway.xml */; };
@@ -561,6 +564,8 @@
 		DA1ECC9728439DE500C4F963 /* UpdateFirmwareVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateFirmwareVC.swift; sourceTree = "<group>"; };
 		DA20941D2BC3012B00737A12 /* OpenLCBLocoNetCommandStation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBLocoNetCommandStation.swift; sourceTree = "<group>"; };
 		DA22B6BB2C1089510056F24A /* OpenLCBDigitraxDS64Node.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBDigitraxDS64Node.swift; sourceTree = "<group>"; };
+		DA23FE792C5BD15300303AE2 /* ThreeValueSpeedTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreeValueSpeedTable.swift; sourceTree = "<group>"; };
+		DA23FE7B2C5BDE6C00303AE2 /* ThreeValueSpeedTablePreset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreeValueSpeedTablePreset.swift; sourceTree = "<group>"; };
 		DA27853F2837EAE700EDCBB7 /* MTSerialPortManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MTSerialPortManager.swift; sourceTree = "<group>"; };
 		DA28C2B92801CC0300857471 /* DashBoard.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = DashBoard.storyboard; sourceTree = "<group>"; };
 		DA28C2BC2801CC4800857471 /* DashBoardVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashBoardVC.swift; sourceTree = "<group>"; };
@@ -952,6 +957,7 @@
 		DAEA212D2A5186EA008545A6 /* OpenLCBDatagramTimeout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBDatagramTimeout.swift; sourceTree = "<group>"; };
 		DAEA21362A51BE65008545A6 /* LocoNetGateway Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LocoNetGateway Extensions.swift"; sourceTree = "<group>"; };
 		DAEA9CF9272D8FBE00C9B3EC /* LocoNetMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocoNetMessage.swift; sourceTree = "<group>"; };
+		DAEC31D32C5BC18300890846 /* SpeedTableType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedTableType.swift; sourceTree = "<group>"; };
 		DAEC69492C4BEEFD008F1CFF /* ESUPhysicalOutputMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ESUPhysicalOutputMode.swift; sourceTree = "<group>"; };
 		DAED171F2A5ABC8D0051C9AF /* OpenLCBCANGateway.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBCANGateway.swift; sourceTree = "<group>"; };
 		DAED17212A5ABF4A0051C9AF /* MyTrains CAN Gateway.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "MyTrains CAN Gateway.xml"; sourceTree = "<group>"; };
@@ -1116,14 +1122,16 @@
 				DAAE3E3C2C4D261400F129B7 /* SmokeUnitControlMode.swift */,
 				DAAE3E3E2C4D2B8A00F129B7 /* ExternalSmokeUnitType.swift */,
 				DA0F378F2C47E9D8002C66D8 /* SoundControlBasis.swift */,
+				DAA5E7692C59036900EC43F0 /* ESUSoundSlot.swift */,
 				DA0F37912C47EFA4002C66D8 /* TriggeredFunction.swift */,
 				DA00D94F2C57EFDA00B26A83 /* SoundCV.swift */,
-				DAA5E7692C59036900EC43F0 /* ESUSoundSlot.swift */,
 				DAA5E76B2C5925DF00EC43F0 /* ESUFunctionIcon.swift */,
 				DA188A982C5A6D1800A50EFB /* ESUFunctionMapping.swift */,
 				DA6BA50D2C4930A30028EDA0 /* FunctionConsistMode.swift */,
 				DA6BA50F2C4931850028EDA0 /* FunctionAnalogMode.swift */,
 				DA6BA5132C4ADC270028EDA0 /* SpeedTablePreset.swift */,
+				DA23FE7B2C5BDE6C00303AE2 /* ThreeValueSpeedTablePreset.swift */,
+				DAEC31D32C5BC18300890846 /* SpeedTableType.swift */,
 				DAE8DD52286751BE0097C2D1 /* xManufacturer.swift */,
 				DA5A9F8F295C89FC00950479 /* NumberBase.swift */,
 				DA6E28E0285F86B900772641 /* Orientation.swift */,
@@ -1295,6 +1303,7 @@
 				DA6239332BCD827C000E9018 /* MyComboBox.swift */,
 				DAD22F7C2BD574E100F396AD /* FlippedView.swift */,
 				DA6BA5112C4A9BF10028EDA0 /* ESUSpeedTable.swift */,
+				DA23FE792C5BD15300303AE2 /* ThreeValueSpeedTable.swift */,
 			);
 			path = "_custom views";
 			sourceTree = "<group>";
@@ -2229,6 +2238,7 @@
 				DA2B5FD22C2863B000A15FAA /* SpeedProfilerEventType.swift in Sources */,
 				DA8AE0F0279B3074001E9311 /* SlotViewVC.swift in Sources */,
 				DAB93F1A2C04AA80006C0580 /* LayoutBuilderPaletteGroupingArea.swift in Sources */,
+				DA23FE7A2C5BD15300303AE2 /* ThreeValueSpeedTable.swift in Sources */,
 				DAF4D2D72B78F42A00759539 /* SpeedConstraintType.swift in Sources */,
 				DAB163EF2C3EE20000D7F23E /* ProgrammerToolSettingsSection.swift in Sources */,
 				DA8C2B172C3852DA001755AB /* Decoder.swift in Sources */,
@@ -2338,6 +2348,7 @@
 				DA7B4727273803BA00BCD587 /* LocomotiveStateWithTimeStamp.swift in Sources */,
 				DAB93F1C2C04AAD6006C0580 /* LayoutBuilderInspectorArea.swift in Sources */,
 				DA8F40152A4477A10037C222 /* LocoNetProtocol.swift in Sources */,
+				DA23FE7C2C5BDE6C00303AE2 /* ThreeValueSpeedTablePreset.swift in Sources */,
 				DA9B87262A2B686C00E9969E /* OpenLCBNodeConfigurationOptions.swift in Sources */,
 				DAEA212E2A5186EA008545A6 /* OpenLCBDatagramTimeout.swift in Sources */,
 				DA5BC98F2A1A4C5000D67ABE /* FloatExtensions.swift in Sources */,
@@ -2459,6 +2470,7 @@
 				DA56261329E1B64F00D465CC /* OpenLCBNetworkLayerState.swift in Sources */,
 				DAA867C427930C62008B6EEC /* IntExtensions.swift in Sources */,
 				DA7C509E2BD6D8FA0079E876 /* LayoutInspector.swift in Sources */,
+				DAEC31D42C5BC18300890846 /* SpeedTableType.swift in Sources */,
 				DA57A6E92A4496A1005C72B0 /* LocoNetLocomotiveState.swift in Sources */,
 				DA0B63DC2AF7CB04007C7CD6 /* OpenLCBNetworkObserverDelegate.swift in Sources */,
 				DA28C2BD2801CC4800857471 /* DashBoardVC.swift in Sources */,

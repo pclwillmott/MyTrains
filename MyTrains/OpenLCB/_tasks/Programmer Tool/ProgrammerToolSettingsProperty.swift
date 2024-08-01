@@ -310,9 +310,6 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
   case fmShiftMode5 = 329
   case fmShiftMode6 = 330
 
-  
-
-  
   // Sounds
   
   case fmSoundSlot1 = 258
@@ -366,6 +363,12 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
   
   case locomotiveName = 255
   case locoMaximumSpeed = 256
+  case speedTableType = 375
+  case threeValueSpeedTable = 379
+  case vStart = 376
+  case vMid = 377
+  case vHigh = 378
+  case threeValueSpeedTablePreset = 380
   case esuSpeedTable = 200
   case speedTableIndex = 201
   case speedTableEntryValue = 202
@@ -467,6 +470,10 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     return definition.controlType
   }
   
+  public var minMaxBaseProperty : ProgrammerToolSettingsProperty? {
+    return ProgrammerToolSettingsProperty.minMaxProperties[self]
+  }
+  
   public func cvLabel(decoder:Decoder) -> String? {
     
     guard let definition = ProgrammerToolSettingsProperty.definitions[self], let _cvs = definition.cv, let masks = definition.mask, let cvIndexingMethod = definition.cvIndexingMethod else {
@@ -512,24 +519,14 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     
     var cvs = _cvs
     
+    if let baseProperty = minMaxBaseProperty {
+      let index = rawValue - baseProperty.rawValue
+      cvs = [_cvs[index]]
+    }
+    
     switch definition.encoding {
-    case .hluSpeedLimit:
-      let hluIndex = self.rawValue - ProgrammerToolSettingsProperty.hluSpeedLimit1.rawValue
-      cvs = [_cvs[0] + hluIndex]
     case .speedTableValue:
       cvs = [_cvs[0] + (decoder.speedTableIndex - 1)]
-    case .steamChuffDuration:
-      let index = self.rawValue - ProgrammerToolSettingsProperty.smokeChuffsMinimumDuration.rawValue
-      cvs = [_cvs[index]]
-    case .randomActiveMinMax:
-      let index = self.rawValue - ProgrammerToolSettingsProperty.randomActiveMinimum.rawValue
-      cvs = [_cvs[index]]
-    case .randomPassiveMinMax:
-      let index = self.rawValue - ProgrammerToolSettingsProperty.randomPassiveMinimum.rawValue
-      cvs = [_cvs[index]]
-    case .soundSlotMinMaxSoundSpeed:
-      let index = self.rawValue - ProgrammerToolSettingsProperty.soundSlotMinimumSoundSpeed.rawValue
-      cvs = [_cvs[index]]
     default:
       break
     }
@@ -584,7 +581,42 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
 
   }
   
+  // MARK: Private Class Properties
+  
+  internal static let _minMaxPropertyDefs : [ProgrammerToolSettingsProperty:Int] = [
+    .slowSpeedBackEMFSamplingPeriod  : 2,
+    .slowSpeedLengthOfMeasurementGap : 2,
+    .randomPassiveMinimum            : 2,
+    .randomActiveMinimum             : 2,
+    .vStart                          : 3,
+    .soundSlotMinimumSoundSpeed      : 2,
+    .smokeChuffsMinimumDuration      : 2,
+    .hluSpeedLimit1                  : 5,
+  ]
+  
+  internal static var _minMaxProperties : [ProgrammerToolSettingsProperty:ProgrammerToolSettingsProperty]?
+  
   // MARK: Public Class Properties
+  
+  public static var minMaxProperties : [ProgrammerToolSettingsProperty:ProgrammerToolSettingsProperty] {
+    
+    if _minMaxProperties == nil {
+      
+      _minMaxProperties = [:]
+      
+      for (baseProperty, numberOfProperties) in _minMaxPropertyDefs {
+        for index in 0 ... numberOfProperties - 1 {
+          if let indexedProperty = ProgrammerToolSettingsProperty(rawValue: baseProperty.rawValue + index) {
+            _minMaxProperties![indexedProperty] = baseProperty
+          }
+        }
+      }
+
+    }
+
+    return _minMaxProperties!
+
+  }
   
   public static var propertyViews : [PTSettingsPropertyView] {
     

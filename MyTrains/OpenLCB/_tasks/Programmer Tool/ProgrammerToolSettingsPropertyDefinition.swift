@@ -75,6 +75,7 @@ public enum ProgrammerToolEncodingType : Int, CaseIterable {
   case esuSoundControlBasis
   case esuTriggeredFunction
   case esuSpeedTablePreset
+  case threeValueSpeedTablePreset
   case locomotiveAddressType
   case esuMarklinConsecutiveAddresses
   case esuSpeedStepMode
@@ -84,21 +85,21 @@ public enum ProgrammerToolEncodingType : Int, CaseIterable {
   case speedTableIndex
   case speedTableValue
   case analogModeEnable
-  case hluSpeedLimit
-  case steamChuffDuration
+//  case hluSpeedLimit
+//  case steamChuffDuration
   case esuRandomFunction
-  case randomActiveMinMax
-  case randomPassiveMinMax
   case soundCV
   case esuSoundSlot
-  case soundSlotMinMaxSoundSpeed
+//  case soundSlotMinMaxSoundSpeed
   case esuFunction
   case esuFunctionIcon
   case esuFunctionMapping
   case esuCondition
   case esuConditionDriving
   case esuConditionDirection
-
+  case speedTableType
+//  case vStartvMidvHigh
+  
 }
 
 public enum CVIndexingMethod {
