@@ -88,7 +88,7 @@ public class Decoder : NSObject {
   
   private var _cvsModified : [(cv: CV, value:UInt8)]?
   
-  private var propertyViewLookup : [ProgrammerToolSettingsProperty:PTSettingsPropertyView] = [:]
+  internal var propertyViewLookup : [ProgrammerToolSettingsProperty:PTSettingsPropertyView] = [:]
   
   private var cvLookup : [CV:[PTSettingsPropertyView]] = [:]
   
@@ -319,6 +319,61 @@ public class Decoder : NSObject {
     didSet {
       reloadIndexedViews(indexingMethod: .esuDecoderPhysicalOutput)
     }
+  }
+  
+  public var esuSupportedPhysicalOutputs : Set<ESUDecoderPhysicalOutput> {
+    
+    var result : Set<ESUDecoderPhysicalOutput> = [
+      .frontLight,
+      .frontLight_2,
+      .rearLight,
+      .rearLight_2,
+      .aux1,
+      .aux1_2,
+    ]
+
+    if decoderType.capabilities.intersection([.aux2toAux4]) == [.aux2toAux4] {
+      result = result.union([
+        .aux2,
+        .aux2_2,
+        .aux3,
+        .aux4,
+      ])
+    }
+
+    if decoderType.capabilities.intersection([.aux5toAux8]) == [.aux5toAux8] {
+      result = result.union([
+        .aux5,
+        .aux6,
+        .aux7,
+        .aux8,
+      ])
+    }
+
+    if decoderType.capabilities.intersection([.aux9toAux12]) == [.aux9toAux12] {
+      result = result.union([
+        .aux9,
+        .aux10,
+        .aux11,
+        .aux12,
+      ])
+    }
+        
+    if decoderType.capabilities.intersection([.aux13toAux18]) == [.aux13toAux18] {
+      
+      result = result.union([
+        .aux13,
+        .aux14,
+        .aux15,
+        .aux16,
+        .aux17,
+        .aux18,
+      ])
+      
+    }
+    
+    return result
+    
   }
   
   public var soundCV : SoundCV = .soundCV1 {

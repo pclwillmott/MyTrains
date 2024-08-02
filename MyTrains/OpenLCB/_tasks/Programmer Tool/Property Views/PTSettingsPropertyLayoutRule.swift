@@ -16,7 +16,8 @@ public typealias PTSettingsPropertyLayoutRule = (
   testType2      : PTLayoutRuleTestType?,
   testValue2     : String?,
   actionProperty : Set<ProgrammerToolSettingsProperty>,
-  actionType     : PTLayoutRuleActionType
+  actionType     : PTLayoutRuleActionType,
+  capability     : Set<DecoderCapability>
 )
 
 public enum PTLayoutRuleTestType {

@@ -942,7 +942,16 @@
     "AUX3" : {
 
     },
+    "AUX3 and AUX4 will not work while SUSI is enabled." : {
+
+    },
+    "AUX3 is not available while SUSI is enabled." : {
+
+    },
     "AUX4" : {
+
+    },
+    "AUX4 is not available while SUSI is enabled." : {
 
     },
     "AUX5" : {

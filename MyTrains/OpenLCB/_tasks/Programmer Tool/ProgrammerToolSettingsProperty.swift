@@ -136,6 +136,8 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
   case physicalOutputAUX10Warning = 224
   case physicalOutputAUX11Warning = 225
   case physicalOutputAUX12Warning = 226
+  case physicalOutputAUX3Warning = 381
+  case physicalOutputAUX4Warning = 382
   case physicalOutputPowerOnDelay = 166
   case physicalOutputPowerOffDelay = 167
   case physicalOutputEnableFunctionTimeout = 168
@@ -356,6 +358,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
   case enableSupportForBroadwayLimitedSteamEngineControl = 159
   case enableSUSIMaster = 160
   case susiWarning = 161
+  case susiWarningAux3Aux4 = 380
   case enableSUSISlave = 162
   case susiMapping = 242
   
@@ -368,7 +371,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
   case vStart = 376
   case vMid = 377
   case vHigh = 378
-  case threeValueSpeedTablePreset = 380
+  case threeValueSpeedTablePreset = 383
   case esuSpeedTable = 200
   case speedTableIndex = 201
   case speedTableEntryValue = 202

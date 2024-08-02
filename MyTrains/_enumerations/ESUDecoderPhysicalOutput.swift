@@ -93,14 +93,23 @@ public enum ESUDecoderPhysicalOutput : UInt8, CaseIterable {
   // MARK: Public Class Methods
   
   public static func populate(comboBox:NSComboBox, decoder:Decoder) {
+    
     let target = comboBox.target
     let action = comboBox.action
+    
     comboBox.target = nil
     comboBox.action = nil
+    
+    let validOutputs = decoder.esuSupportedPhysicalOutputs
+    
     comboBox.removeAllItems()
+    
     for item in ESUDecoderPhysicalOutput.allCases {
-      comboBox.addItem(withObjectValue: item.title)
+      if validOutputs.contains(item) {
+        comboBox.addItem(withObjectValue: item.title)
+      }
     }
+    
     comboBox.target = target
     comboBox.action = action
   }

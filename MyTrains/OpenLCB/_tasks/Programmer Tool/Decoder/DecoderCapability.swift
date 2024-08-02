@@ -6,6 +6,7 @@
 //
 
 import Foundation
+
 public enum DecoderCapability : CaseIterable {
   
   // MARK: Enumeration
@@ -19,5 +20,23 @@ public enum DecoderCapability : CaseIterable {
   case threeValueSpeedTable
   case highFrequencyPWMMotorControl
   case sendZIMOZACKSignals
-  
+  case digitalWheelSensorDisablesAUX10
+  case susiMasterDisablesAUX11
+  case susiMasterDisablesAUX12
+  case aux2toAux4
+  case aux5toAux8
+  case aux9toAux12
+  case aux13toAux18
+  case sensorConfiguration
+  case loadControlBackEMF
+  case motorOverloadProtection
+  case pwmFrequency
+  case automaticParkingBrake
+  case dynamicSoundControl
+  case sensorSettings
+  case susiMasterDisablesAUX3
+  case susiMasterDisablesAUX4
+  case susi
+  case broadway
+
 }
