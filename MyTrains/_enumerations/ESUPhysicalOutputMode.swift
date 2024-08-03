@@ -473,36 +473,7 @@ public enum ESUPhysicalOutputMode : UInt8, CaseIterable {
   
   public func title(decoder:Decoder) -> String {
     
-    let lookup : [ESUPhysicalOutputMode:[ESUDecoderPhysicalOutput:String]] = [
-      .pantograph : [
-        .aux9:  String(localized: "Pantograph 1"),
-        .aux10: String(localized: "Pantograph 2"),
-      ],
-      .servoOutputSteamEngineJohnsonBarControl : [
-        .aux15: String(localized: "Servo output 1 Steam engine Johnson Bar Control"),
-        .aux16: String(localized: "Servo output 2 Steam engine Johnson Bar Control"),
-        .aux17: String(localized: "Servo output 3 Steam engine Johnson Bar Control"),
-        .aux18: String(localized: "Servo output 4 Steam engine Johnson Bar Control"),
-        .aux11: String(localized: "Servo output 5 Steam engine Johnson Bar Control"),
-        .aux12: String(localized: "Servo output 6 Steam engine Johnson Bar Control"),
-      ],
-      .servoOutput: [
-        .aux15: String(localized: "Servo output 1"),
-        .aux16: String(localized: "Servo output 2"),
-        .aux17: String(localized: "Servo output 3"),
-        .aux18: String(localized: "Servo output 4"),
-        .aux11: String(localized: "Servo output 5"),
-        .aux12: String(localized: "Servo output 6"),
-      ],
-      .esuCoupler: [
-        .aux7:  String(localized: "ESU coupler 1"),
-        .aux15: String(localized: "ESU coupler 1"),
-        .aux8:  String(localized: "ESU coupler 2"),
-        .aux16: String(localized: "ESU coupler 2"),
-      ],
-    ]
-    
-    if let dictionary = lookup[self] {
+    if let dictionary = ESUPhysicalOutputMode.lookup[self] {
       if let title = dictionary[decoder.esuDecoderPhysicalOutput] {
         return title
       }
@@ -512,6 +483,37 @@ public enum ESUPhysicalOutputMode : UInt8, CaseIterable {
 
   }
   
+  // MARK: Private Class Methods
+  
+  private static let lookup : [ESUPhysicalOutputMode:[ESUDecoderPhysicalOutput:String]] = [
+    .pantograph : [
+      .aux9:  String(localized: "Pantograph 1"),
+      .aux10: String(localized: "Pantograph 2"),
+    ],
+    .servoOutputSteamEngineJohnsonBarControl : [
+      .aux15: String(localized: "Servo output 1 Steam engine Johnson Bar Control"),
+      .aux16: String(localized: "Servo output 2 Steam engine Johnson Bar Control"),
+      .aux17: String(localized: "Servo output 3 Steam engine Johnson Bar Control"),
+      .aux18: String(localized: "Servo output 4 Steam engine Johnson Bar Control"),
+      .aux11: String(localized: "Servo output 5 Steam engine Johnson Bar Control"),
+      .aux12: String(localized: "Servo output 6 Steam engine Johnson Bar Control"),
+    ],
+    .servoOutput: [
+      .aux15: String(localized: "Servo output 1"),
+      .aux16: String(localized: "Servo output 2"),
+      .aux17: String(localized: "Servo output 3"),
+      .aux18: String(localized: "Servo output 4"),
+      .aux11: String(localized: "Servo output 5"),
+      .aux12: String(localized: "Servo output 6"),
+    ],
+    .esuCoupler: [
+      .aux7:  String(localized: "ESU coupler 1"),
+      .aux15: String(localized: "ESU coupler 1"),
+      .aux8:  String(localized: "ESU coupler 2"),
+      .aux16: String(localized: "ESU coupler 2"),
+    ],
+  ]
+
   // MARK: Public Class Methods
   
   public static func populate(comboBox:NSComboBox, decoder:Decoder) {
@@ -577,7 +579,7 @@ public enum ESUPhysicalOutputMode : UInt8, CaseIterable {
       ok = ok && (item != .rocoCoupler || hasRocoCoupler.contains(output))
       ok = ok && (item != .externalControlledSmokeUnit || hasExternalControlledSmokeUnit.contains(output))
       ok = ok && (item != .servoOutput || hasServoOutput.contains(output))
-      ok = ok && (item != .servoOutputSteamEngineJohnsonBarControl || hasServoOutputJohnson.contains(output))
+      ok = ok && (item != .servoOutputSteamEngineJohnsonBarControl || (hasServoOutputJohnson.contains(output) /* && decoder.decoderType.capabilities.contains(.broadway) */))
       ok = ok && (item != .esuCoupler || hasESUCoupler.contains(output))
       ok = ok && (item != .externalControlledSmokeUnit || hasExternalSmokeUnit.contains(output))
       ok = ok && (item != .pantograph || hasPantograph.contains(output))

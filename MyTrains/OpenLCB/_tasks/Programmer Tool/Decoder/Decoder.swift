@@ -341,10 +341,15 @@ public class Decoder : NSObject {
       ])
     }
 
-    if decoderType.capabilities.intersection([.aux5toAux8]) == [.aux5toAux8] {
+    if decoderType.capabilities.intersection([.aux5toAux6]) == [.aux5toAux6] {
       result = result.union([
         .aux5,
         .aux6,
+      ])
+    }
+
+    if decoderType.capabilities.intersection([.aux7toAux8]) == [.aux7toAux8] {
+      result = result.union([
         .aux7,
         .aux8,
       ])
@@ -711,23 +716,41 @@ public class Decoder : NSObject {
     case .specialInt8:
       return "\(Int8(values[0] & 0x7f) * (((values[0] & ByteMask.d7) == ByteMask.d7) ? -1 : 1))"
     case .esuExternalSmokeUnitType:
-      return ExternalSmokeUnitType(rawValue: values[0])!.title
+      if let item = ExternalSmokeUnitType(rawValue: values[0]) {
+        return item.title
+      }
     case .esuMarklinConsecutiveAddresses:
-      return MarklinConsecutiveAddresses(rawValue: values[0])!.title
+      if let item = MarklinConsecutiveAddresses(rawValue: values[0]) {
+        return item.title
+      }
     case .esuSpeedStepMode:
-      return SpeedStepMode(rawValue: values[0])!.title
+      if let item = SpeedStepMode(rawValue: values[0]) {
+        return item.title
+      }
     case .manufacturerCode:
-      return ManufacturerCode(rawValue:UInt16(values[0]))!.title
+      if let item = ManufacturerCode(rawValue:UInt16(values[0])) {
+        return item.title
+      }
     case .speedTableType:
-      return SpeedTableType(rawValue:values[0])!.title
+      if let item = SpeedTableType(rawValue:values[0]) {
+        return item.title
+      }
     case .esuCondition:
-      return ESUCondition(rawValue: values[0])!.title
+      if let item = ESUCondition(rawValue: values[0]) {
+        return item.title
+      }
     case .esuConditionDriving:
-      return ESUConditionDriving(rawValue: values[0])!.title
+      if let item = ESUConditionDriving(rawValue: values[0]) {
+        return item.title
+      }
     case .esuConditionDirection:
-      return ESUConditionDirection(rawValue: values[0])!.title
+      if let item = ESUConditionDirection(rawValue: values[0]) {
+        return item.title
+      }
     case .esuDecoderSensorSettings:
-      return DecoderSensorSettings(rawValue: values[0])!.title
+      if let item = DecoderSensorSettings(rawValue: values[0]) {
+        return item.title
+      }
     case .esuSteamChuffMode:
       return (values[0] == 0 ? SteamChuffMode.useExternalWheelSensor : SteamChuffMode.playSteamChuffsAccordingToSpeed).title
     case .esuSoundControlBasis:
@@ -745,23 +768,33 @@ public class Decoder : NSObject {
     case .esuFunction:
       return esuFunction.title
     case .esuFunctionIcon:
-      return ESUFunctionIcon(rawValue: values[1])!.title
+      if let item = ESUFunctionIcon(rawValue: values[1]) {
+        return item.title
+      }
     case .esuSmokeUnitControlMode:
-      return SmokeUnitControlMode(rawValue: values[0])!.title
+      if let item = SmokeUnitControlMode(rawValue: values[0]) {
+        return item.title
+      }
     case .esuPhysicalOutputMode:
-      return ESUPhysicalOutputMode(rawValue: values[0])!.title(decoder: self)
+      if let item = ESUPhysicalOutputMode(rawValue: values[0]) {
+        return item.title(decoder: self)
+      }
     case .soundCV:
       return soundCV.title
     case .esuSoundSlot:
       return esuSoundSlot.title
     case .esuClassLightLogicLength:
-      return ClassLightLogicSequenceLength(rawValue: values[0])!.title
+      if let item = ClassLightLogicSequenceLength(rawValue: values[0]) {
+        return item.title
+      }
     case .speedTableIndex:
       return "\(speedTableIndex)"
     case .speedTableValue:
       return "\(values[speedTableIndex - 1])"
     case .esuTriggeredFunction:
-      return TriggeredFunction(rawValue: values[0])!.title
+      if let item = TriggeredFunction(rawValue: values[0]) {
+        return item.title
+      }
     case .dWordHex:
       return UInt32(bigEndianData: values.reversed())!.toHex(numberOfDigits: 8)
     case .analogModeEnable:
@@ -858,13 +891,13 @@ public class Decoder : NSObject {
   
   public func isValid(property:ProgrammerToolSettingsProperty, string:String, definition:ProgrammerToolSettingsPropertyDefinition? = nil) -> Bool {
     
-    guard let definition = definition ?? ProgrammerToolSettingsProperty.definitions[property], let maxValue = definition.maxValue, let minValue = definition.minValue else {
+    guard let definition = definition ?? ProgrammerToolSettingsProperty.definitions[property] else {
       return true
     }
     
     switch definition.encoding {
     case .zString:
-      guard Int(minValue) ... Int(maxValue) ~= string.utf8.count else {
+      guard let maxValue = definition.maxValue, let minValue = definition.minValue, Int(minValue) ... Int(maxValue) ~= string.utf8.count else {
         return false
       }
     case .dWordHex:
@@ -873,7 +906,7 @@ public class Decoder : NSObject {
       }
     case .speedTableValue:
       
-      guard let value = Int(string) else {
+      guard let maxValue = definition.maxValue, let minValue = definition.minValue, let value = Int(string) else {
         return false
       }
       
@@ -889,8 +922,56 @@ public class Decoder : NSObject {
         return false
       }
 
+    case .esuDecoderPhysicalOutput:
+      return ESUDecoderPhysicalOutput(title: string) != nil
+    case .esuPhysicalOutputMode:
+      return ESUPhysicalOutputMode(title: string, decoder: self) != nil
+    case .esuSteamChuffMode:
+      return SteamChuffMode(title: string) != nil
+    case .esuSmokeUnitControlMode:
+      return SmokeUnitControlMode(title: string) != nil
+    case .esuExternalSmokeUnitType:
+      return ExternalSmokeUnitType(title: string) != nil
+    case .esuSoundControlBasis:
+      return SoundControlBasis(title: string) != nil
+    case .esuTriggeredFunction:
+      return TriggeredFunction(title: string) != nil
+    case .esuSpeedTablePreset:
+      return SpeedTablePreset(title: string) != nil
+    case .threeValueSpeedTablePreset:
+      return ThreeValueSpeedTablePreset(title: string) != nil
+    case .locomotiveAddressType:
+      return LocomotiveAddressType(title: string) != nil
+    case .esuMarklinConsecutiveAddresses:
+      return MarklinConsecutiveAddresses(title: string) != nil
+    case .esuSpeedStepMode:
+      return SpeedStepMode(title: string) != nil
+    case .manufacturerCode:
+      return ManufacturerCode(title: string) != nil
+    case .esuDecoderSensorSettings:
+      return DecoderSensorSettings(title: string) != nil
+    case .esuClassLightLogicLength:
+      return ClassLightLogicSequenceLength(title: string) != nil
+    case .esuRandomFunction:
+      return ESURandomFunction(title: string) != nil
+    case .soundCV:
+      return SoundCV(title: string) != nil
+    case .esuSoundSlot:
+      return ESUSoundSlot(title: string) != nil
+    case .esuFunctionIcon:
+      return ESUFunctionIcon(title: string) != nil
+    case .esuFunctionMapping:
+      return ESUFunctionMapping(title: string) != nil
+    case .esuCondition:
+      return ESUCondition(title: string) != nil
+    case .esuConditionDriving:
+      return ESUConditionDriving(title: string) != nil
+    case .esuConditionDirection:
+      return ESUConditionDirection(title: string) != nil
+    case .speedTableType:
+      return SpeedTableType(title: string) != nil
     default:
-      guard let value = Int(string), value >= Int(minValue) && value <= Int(maxValue) else {
+      guard let maxValue = definition.maxValue, let minValue = definition.minValue, let value = Int(string), value >= Int(minValue) && value <= Int(maxValue) else {
         return false
       }
     }

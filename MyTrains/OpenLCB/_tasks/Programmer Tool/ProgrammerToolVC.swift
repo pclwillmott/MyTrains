@@ -161,7 +161,7 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
       return
     }
     
-    decoder = Decoder(decoderType: .lokSound5nanoDCCNext18)
+    decoder = Decoder(decoderType: .lokPilot5MKL)
     decoder?.delegate = self
 
     observerId = appNode.addObserver(observer: self)
@@ -633,6 +633,8 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
       let group = propertyView.group
       
       let hostView = pnlSettingsView[group.rawValue]
+      
+      pnlGroups[group.rawValue].isHidden = true
 
       if let stackView = (hostView as? ScrollVerticalStackView)?.stackView {
         
@@ -655,6 +657,7 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
                 stackView.addArrangedSubview(settingsGroupFields[section]!.view!)
                 showGroupHeader = false
                 showGroupSeparator = true
+                pnlGroups[group.rawValue].isHidden = false
               }
               
               stackView.addArrangedSubview(propertyView)

@@ -201,7 +201,7 @@ public enum ProgrammerToolSettingsSection : Int, CaseIterable {
       .brakeSettings
     ),
     .constantBrakeDistance : (
-      String(localized: "ConstantBrake Distance"),
+      String(localized: "Constant Brake Distance"),
       .brakeSettings
     ),
     .brakeSectionSettings : (

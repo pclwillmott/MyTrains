@@ -129,6 +129,8 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
   case timeToBridgePowerInterruption = 80
   case preserveDirection = 81
   case enableStartingDelay = 82
+  case enableStartingDelayIfVirtualDriveSoundEnabled = 383
+  case startingDelayIfVirtualDriveSoundEnabled = 384
   
   // Function Outputs
   
@@ -360,6 +362,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
   case susiWarning = 161
   case susiWarningAux3Aux4 = 380
   case enableSUSISlave = 162
+  case enableSimpleSUSI = 388
   case susiMapping = 242
   
   // Motor Settings
@@ -371,7 +374,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
   case vStart = 376
   case vMid = 377
   case vHigh = 378
-  case threeValueSpeedTablePreset = 383
+  case threeValueSpeedTablePreset = 386
   case esuSpeedTable = 200
   case speedTableIndex = 201
   case speedTableEntryValue = 202

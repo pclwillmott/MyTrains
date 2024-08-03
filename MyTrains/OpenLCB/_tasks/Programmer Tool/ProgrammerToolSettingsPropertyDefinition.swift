@@ -85,12 +85,9 @@ public enum ProgrammerToolEncodingType : Int, CaseIterable {
   case speedTableIndex
   case speedTableValue
   case analogModeEnable
-//  case hluSpeedLimit
-//  case steamChuffDuration
   case esuRandomFunction
   case soundCV
   case esuSoundSlot
-//  case soundSlotMinMaxSoundSpeed
   case esuFunction
   case esuFunctionIcon
   case esuFunctionMapping
@@ -98,7 +95,6 @@ public enum ProgrammerToolEncodingType : Int, CaseIterable {
   case esuConditionDriving
   case esuConditionDirection
   case speedTableType
-//  case vStartvMidvHigh
   
 }
 

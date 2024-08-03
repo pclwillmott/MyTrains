@@ -1935,10 +1935,10 @@
     "Connecting to Locomotive Failed" : {
 
     },
-    "Constant Brake Distance on Speed Step 0" : {
+    "Constant Brake Distance" : {
 
     },
-    "ConstantBrake Distance" : {
+    "Constant Brake Distance on Speed Step 0" : {
 
     },
     "Constraint #1 (%%UNITS_SCALE_SPEED%%)" : {
@@ -2587,6 +2587,9 @@
 
     },
     "Delay Starting if Drive Sound is Enabled" : {
+
+    },
+    "Delay Starting if Virtual Drive Sound is Enabled" : {
 
     },
     "Delay Time Before Exiting a Brake Section" : {
@@ -8887,6 +8890,9 @@
 
     },
     "Time to Bridge Power Interruption (PowerPack required)" : {
+
+    },
+    "Time to Wait before Start" : {
 
     },
     "Time until Automatic Power Off" : {
