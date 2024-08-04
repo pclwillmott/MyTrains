@@ -45,7 +45,8 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
   case consistAddress = 8
   case consistReverseDirection = 9
   case consistFunctions = 163
-  
+  case consistFunctionsLok4 = 390
+
   // Analog Settings
   
   case analogModeActiveFunctions = 164
@@ -96,7 +97,8 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
   case maximumSpeedWhenBrakeFunction2Active = 49
   case brakeFunction3BrakeTimeReduction = 50
   case maximumSpeedWhenBrakeFunction3Active = 51
-
+  case timeFromMaximumSpeedToStopWhenDynamicBrakeEnabled = 391
+  
   // DCC Settings
   
   case enableRailComFeedback = 54
@@ -127,10 +129,13 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
   case enableGearboxBacklashCompensation = 78
   case gearboxBacklashCompensation = 79
   case timeToBridgePowerInterruption = 80
+  case timeToBridgePowerInterruptionLok4 = 392
+  case timeToBridgePowerInterruptionWarning = 393
   case preserveDirection = 81
   case enableStartingDelay = 82
   case enableStartingDelayIfVirtualDriveSoundEnabled = 383
   case startingDelayIfVirtualDriveSoundEnabled = 384
+  case stopImmediatelyOnSpeedStep0 = 394
   
   // Function Outputs
   
@@ -357,6 +362,8 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
   // Compatibility
   
   case enableSerialFunctionModeF1toF8ForLGBMTS = 158
+  case enableMarklinDeltaMode = 395
+  case enableZIMOManualFunction = 396
   case enableSupportForBroadwayLimitedSteamEngineControl = 159
   case enableSUSIMaster = 160
   case susiWarning = 161
@@ -388,6 +395,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
   case regulationParameterI = 117
   case emfSlowSpeedSettings = 131
   case regulationParameterKSlow = 118
+  case regulationParameterISlow = 397
   case largestInternalSpeedStepThatUsesKSlow = 129
   case regulationInfluenceDuringSlowSpeed = 119
   case emfBackEMFSettings = 132

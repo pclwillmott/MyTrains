@@ -271,7 +271,9 @@ public class Decoder : NSObject {
   public var supportedFunctionsConsistMode : Set<FunctionConsistMode> {
     var result : Set<FunctionConsistMode> = []
     for item in FunctionConsistMode.allCases {
-      result.insert(item)
+      if let _ = item.cvMask(decoder: self) {
+        result.insert(item)
+      }
     }
     return result
   }
@@ -355,15 +357,20 @@ public class Decoder : NSObject {
       ])
     }
 
-    if decoderType.capabilities.intersection([.aux9toAux12]) == [.aux9toAux12] {
+    if decoderType.capabilities.intersection([.aux9toAux10]) == [.aux9toAux10] {
       result = result.union([
         .aux9,
         .aux10,
+      ])
+    }
+
+    if decoderType.capabilities.intersection([.aux11toAux12]) == [.aux11toAux12] {
+      result = result.union([
         .aux11,
         .aux12,
       ])
     }
-        
+
     if decoderType.capabilities.intersection([.aux13toAux18]) == [.aux13toAux18] {
       
       result = result.union([
@@ -525,12 +532,12 @@ public class Decoder : NSObject {
   }
   
   public func getConsistFunctionState(function:FunctionConsistMode) -> Bool {
-    let cvMask = function.cvMask
+    let cvMask = function.cvMask(decoder: self)!
     return getBool(cv: cvMask.cv, mask: cvMask.mask)!
   }
   
   public func setConsistFunctionState(function:FunctionConsistMode, state:Bool) {
-    let cvMask = function.cvMask
+    let cvMask = function.cvMask(decoder: self)!
     setBool(cv: cvMask.cv, mask: cvMask.mask, value: state)
   }
 
@@ -686,6 +693,10 @@ public class Decoder : NSObject {
     }
     
     var values = getProperty(property: property, propertyDefinition: definition)
+    
+    guard values.count > 0 else {
+      return ""
+    }
     
     if let baseProperty = property.minMaxBaseProperty {
       let index = property.rawValue - baseProperty.rawValue

@@ -494,7 +494,26 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : nil,
       infoMaxDecimalPlaces : nil,
       infoFormat           : nil,
-      requiredCapabilities : []
+      requiredCapabilities : [.lok5]
+    ),
+    
+    .consistFunctionsLok4 : (
+      title                : String(localized: "Select the functions that should respond to the consist address"),
+      section              : .activateFunctionsInConsistMode,
+      controlType          : .functionsConsistModeLok4,
+      encoding             : .custom,
+      cvIndexingMethod     : .standard,
+      cv                   : [.cv_000_000_021, .cv_000_000_022],
+      mask                 : [0xff, 0xff],
+      shift                : [0, 0],
+      minValue             : nil,
+      maxValue             : nil,
+      trueDefaultValue     : nil,
+      infoType             : .none,
+      infoFactor           : nil,
+      infoMaxDecimalPlaces : nil,
+      infoFormat           : nil,
+      requiredCapabilities : [.lok4]
     ),
 
     // MARK: Analog Settings
@@ -656,7 +675,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : nil,
       infoMaxDecimalPlaces : nil,
       infoFormat           : nil,
-      requiredCapabilities : []
+      requiredCapabilities : [.lok5]
     ),
 
     // Sound Control Behaviour
@@ -875,7 +894,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : nil,
       infoMaxDecimalPlaces : nil,
       infoFormat           : nil,
-      requiredCapabilities : []
+      requiredCapabilities : [.lok5]
     ),
 
     .waitingPeriodBeforeDirectionChange : (
@@ -894,7 +913,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : 1.0,
       infoMaxDecimalPlaces : 2,
       infoFormat           : nil,
-      requiredCapabilities : []
+      requiredCapabilities : [.lok5]
     ),
 
     // HLU Sections
@@ -915,7 +934,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : nil,
       infoMaxDecimalPlaces : nil,
       infoFormat           : nil,
-      requiredCapabilities : [.hluSections]
+      requiredCapabilities : [.zimoBrakeSections]
     ),
 
     .hluSendZIMOZACKSignals : (
@@ -1090,7 +1109,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : nil,
       infoMaxDecimalPlaces : nil,
       infoFormat           : nil,
-      requiredCapabilities : []
+      requiredCapabilities : [.lok5]
     ),
 
     .selectrixBrakeOnReversePolarity : (
@@ -1109,7 +1128,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : nil,
       infoMaxDecimalPlaces : nil,
       infoFormat           : nil,
-      requiredCapabilities : []
+      requiredCapabilities : [.lok5]
     ),
 
     // ConstantBrake Distance
@@ -1265,7 +1284,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : 1.0 / 61.0,
       infoMaxDecimalPlaces : 2,
       infoFormat           : nil,
-      requiredCapabilities : []
+      requiredCapabilities : [.lok5]
     ),
 
     // Brake Functions
@@ -1286,7 +1305,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : 100.0 / 255.0,
       infoMaxDecimalPlaces : 2,
       infoFormat           : nil,
-      requiredCapabilities : []
+      requiredCapabilities : [.lok5]
     ),
 
     .maximumSpeedWhenBrakeFunction1Active : (
@@ -1305,7 +1324,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : nil,
       infoMaxDecimalPlaces : nil,
       infoFormat           : nil,
-      requiredCapabilities : []
+      requiredCapabilities : [.lok5]
     ),
 
     .brakeFunction2BrakeTimeReduction : (
@@ -1324,7 +1343,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : 100.0 / 255.0,
       infoMaxDecimalPlaces : 2,
       infoFormat           : nil,
-      requiredCapabilities : []
+      requiredCapabilities : [.lok5]
     ),
 
     .maximumSpeedWhenBrakeFunction2Active : (
@@ -1343,7 +1362,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : nil,
       infoMaxDecimalPlaces : nil,
       infoFormat           : nil,
-      requiredCapabilities : []
+      requiredCapabilities : [.lok5]
     ),
 
     .brakeFunction3BrakeTimeReduction : (
@@ -1362,7 +1381,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : 100.0 / 255.0,
       infoMaxDecimalPlaces : 2,
       infoFormat           : nil,
-      requiredCapabilities : []
+      requiredCapabilities : [.lok5]
     ),
 
     .maximumSpeedWhenBrakeFunction3Active : (
@@ -1381,7 +1400,26 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : nil,
       infoMaxDecimalPlaces : nil,
       infoFormat           : nil,
-      requiredCapabilities : []
+      requiredCapabilities : [.lok5]
+    ),
+    
+    .timeFromMaximumSpeedToStopWhenDynamicBrakeEnabled : (
+      title                : String(localized: "Time from Maximum Speed to Stop, when Dynamic Brake is Enabled"),
+      section              : .brakeFunctions,
+      controlType          : .textFieldWithSlider,
+      encoding             : .byte,
+      cvIndexingMethod     : .standard,
+      cv                   : [.cv_000_000_179],
+      mask                 : [0xff],
+      shift                : [0],
+      minValue             : 0,
+      maxValue             : 255,
+      trueDefaultValue     : nil,
+      infoType             : .time,
+      infoFactor           : 0.25,
+      infoMaxDecimalPlaces : 2,
+      infoFormat           : nil,
+      requiredCapabilities : [.lok4]
     ),
 
     // MARK: DCC Settings
@@ -1581,7 +1619,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : 0.25,
       infoMaxDecimalPlaces : 2,
       infoFormat           : nil,
-      requiredCapabilities : []
+      requiredCapabilities : [.lok5]
     ),
 
     .enableDeceleration : (
@@ -1638,7 +1676,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : 0.25,
       infoMaxDecimalPlaces : 2,
       infoFormat           : nil,
-      requiredCapabilities : []
+      requiredCapabilities : [.lok5]
     ),
 
     // Reverse Mode
@@ -1756,7 +1794,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : nil,
       infoMaxDecimalPlaces : nil,
       infoFormat           : nil,
-      requiredCapabilities : []
+      requiredCapabilities : [.lok5]
     ),
 
     .shuntingModeTrim : (
@@ -1775,7 +1813,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : 1.0 / 128.0,
       infoMaxDecimalPlaces : 2,
       infoFormat           : String(localized:"%%VALUE%% × Drive Level"),
-      requiredCapabilities : []
+      requiredCapabilities : [.lok5]
     ),
 
     // Load Adjustment
@@ -1796,7 +1834,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : 1.0 / 128.0,
       infoMaxDecimalPlaces : 2,
       infoFormat           : nil,
-      requiredCapabilities : []
+      requiredCapabilities : [.lok5]
     ),
 
     .loadAdjustmentPrimaryLoad : (
@@ -1815,7 +1853,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : 1.0 / 128.0,
       infoMaxDecimalPlaces : 2,
       infoFormat           : nil,
-      requiredCapabilities : []
+      requiredCapabilities : [.lok5]
     ),
 
     // Gearbox Backlash
@@ -1836,7 +1874,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : nil,
       infoMaxDecimalPlaces : nil,
       infoFormat           : nil,
-      requiredCapabilities : []
+      requiredCapabilities : [.lok5]
     ),
 
     .gearboxBacklashCompensation : (
@@ -1855,7 +1893,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : 1.0 / 61.0,
       infoMaxDecimalPlaces : 2,
       infoFormat           : nil,
-      requiredCapabilities : []
+      requiredCapabilities : [.lok5]
     ),
 
     // Power Pack
@@ -1876,7 +1914,45 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : 0.032768,
       infoMaxDecimalPlaces : 2,
       infoFormat           : nil,
-      requiredCapabilities : []
+      requiredCapabilities : [.lok5]
+    ),
+    
+    .timeToBridgePowerInterruptionLok4 : (
+      title                : String(localized: "Time to Bridge Power Interruption (PowerPack required)"),
+      section              : .powerPack,
+      controlType          : .textFieldWithSlider,
+      encoding             : .byte,
+      cvIndexingMethod     : .standard,
+      cv                   : [.cv_000_000_113],
+      mask                 : [0xff],
+      shift                : [0],
+      minValue             : 0.0,
+      maxValue             : 255.0,
+      trueDefaultValue     : nil,
+      infoType             : .time,
+      infoFactor           : 0.01639216,
+      infoMaxDecimalPlaces : 2,
+      infoFormat           : nil,
+      requiredCapabilities : [.lok4]
+    ),
+    
+    .timeToBridgePowerInterruptionWarning : (
+      title                : String(localized: "Power pack directly soldered to the decoder will not work while AUX6 or SUSI is enabled."),
+      section              : .powerPack,
+      controlType          : .warning,
+      encoding             : .none,
+      cvIndexingMethod     : nil,
+      cv                   : nil,
+      mask                 : nil,
+      shift                : nil,
+      minValue             : nil,
+      maxValue             : nil,
+      trueDefaultValue     : nil,
+      infoType             : .none,
+      infoFactor           : nil,
+      infoMaxDecimalPlaces : nil,
+      infoFormat           : nil,
+      requiredCapabilities : [.lok4]
     ),
 
     // Preserve Direction
@@ -1958,6 +2034,27 @@ extension ProgrammerToolSettingsProperty {
       infoFormat           : nil,
       requiredCapabilities : [.noSound]
     ),
+
+    // Stop Behaviour
+    
+      .stopImmediatelyOnSpeedStep0 : (
+        title                : String(localized: "Stop Immediately on Speed Step 0"),
+        section              : .stopBehaviour,
+        controlType          : .checkBox,
+        encoding             : .boolBit,
+        cvIndexingMethod     : .standard,
+        cv                   : [.cv_000_000_245],
+        mask                 : [0b01000000],
+        shift                : [0],
+        minValue             : nil,
+        maxValue             : nil,
+        trueDefaultValue     : nil,
+        infoType             : .none,
+        infoFactor           : nil,
+        infoMaxDecimalPlaces : nil,
+        infoFormat           : nil,
+        requiredCapabilities : [.lok4]
+      ),
 
     // MARK: Function Outputs
 
@@ -2857,7 +2954,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : 0.008189,
       infoMaxDecimalPlaces : 2,
       infoFormat           : nil,
-      requiredCapabilities : []
+      requiredCapabilities : [.lok5]
     ),
 
     .fadeOutTimeOfLightEffects : (
@@ -2876,7 +2973,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : 0.008189,
       infoMaxDecimalPlaces : 2,
       infoFormat           : nil,
-      requiredCapabilities : []
+      requiredCapabilities : [.lok5]
     ),
 
     .logicalFunctionDimmerBrightnessReduction : (
@@ -2895,7 +2992,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : 100.0 / 128.0,
       infoMaxDecimalPlaces : 2,
       infoFormat           : nil,
-      requiredCapabilities : []
+      requiredCapabilities : [.lok5]
     ),
 
     .classLightLogicSequenceLength : (
@@ -2914,7 +3011,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : nil,
       infoMaxDecimalPlaces : nil,
       infoFormat           : nil,
-      requiredCapabilities : []
+      requiredCapabilities : [.lok5]
     ),
 
     .enforceSlaveCommunicationOnAUX3AndAUX4 : (
@@ -2933,7 +3030,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : nil,
       infoMaxDecimalPlaces : nil,
       infoFormat           : nil,
-      requiredCapabilities : []
+      requiredCapabilities : [.lok5]
     ),
 
     // Sensor Settings
@@ -3140,7 +3237,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : 1.0 / 61.0,
       infoMaxDecimalPlaces : 2,
       infoFormat           : nil,
-      requiredCapabilities : []
+      requiredCapabilities : [.lok5]
     ),
 
     .automaticUncouplingMoveTime : (
@@ -3178,7 +3275,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : nil,
       infoMaxDecimalPlaces : nil,
       infoFormat           : nil,
-      requiredCapabilities : []
+      requiredCapabilities : [.lok5]
     ),
     
     .randomStop : (
@@ -3197,7 +3294,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : nil,
       infoMaxDecimalPlaces : nil,
       infoFormat           : nil,
-      requiredCapabilities : []
+      requiredCapabilities : [.lok5]
     ),
     
     .randomDrive : (
@@ -3216,7 +3313,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : nil,
       infoMaxDecimalPlaces : nil,
       infoFormat           : nil,
-      requiredCapabilities : []
+      requiredCapabilities : [.lok5]
     ),
     
     .randomOnlyPlayWhenDrivingSoundEnabled : (
@@ -3235,7 +3332,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : nil,
       infoMaxDecimalPlaces : nil,
       infoFormat           : nil,
-      requiredCapabilities : []
+      requiredCapabilities : [.lok5]
     ),
     
     .randomTriggeredFunction : (
@@ -3254,7 +3351,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : nil,
       infoMaxDecimalPlaces : nil,
       infoFormat           : nil,
-      requiredCapabilities : []
+      requiredCapabilities : [.lok5]
     ),
     
     .randomActiveMinimum : (
@@ -3273,7 +3370,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : 1.0,
       infoMaxDecimalPlaces : 0,
       infoFormat           : nil,
-      requiredCapabilities : []
+      requiredCapabilities : [.lok5]
     ),
     
     .randomActiveMaximum : (
@@ -3292,7 +3389,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : 1.0,
       infoMaxDecimalPlaces : 0,
       infoFormat           : nil,
-      requiredCapabilities : []
+      requiredCapabilities : [.lok5]
     ),
     
     .randomPassiveMinimum : (
@@ -3311,7 +3408,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : 1.0,
       infoMaxDecimalPlaces : 0,
       infoFormat           : nil,
-      requiredCapabilities : []
+      requiredCapabilities : [.lok5]
     ),
     
     .randomPassiveMaximum : (
@@ -3330,7 +3427,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : 1.0,
       infoMaxDecimalPlaces : 0,
       infoFormat           : nil,
-      requiredCapabilities : []
+      requiredCapabilities : [.lok5]
     ),
     
     .esuFunction : (
@@ -4457,7 +4554,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : nil,
       infoMaxDecimalPlaces : nil,
       infoFormat           : nil,
-      requiredCapabilities : [.aux9toAux12]
+      requiredCapabilities : [.aux9toAux10]
     ),
     
     .fmAux10 : (
@@ -4476,7 +4573,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : nil,
       infoMaxDecimalPlaces : nil,
       infoFormat           : nil,
-      requiredCapabilities : [.aux9toAux12]
+      requiredCapabilities : [.aux9toAux10]
     ),
     
     .fmAux11 : (
@@ -4495,7 +4592,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : nil,
       infoMaxDecimalPlaces : nil,
       infoFormat           : nil,
-      requiredCapabilities : [.aux9toAux12]
+      requiredCapabilities : [.aux11toAux12]
     ),
     
     .fmAux12 : (
@@ -4514,7 +4611,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : nil,
       infoMaxDecimalPlaces : nil,
       infoFormat           : nil,
-      requiredCapabilities : [.aux9toAux12]
+      requiredCapabilities : [.aux11toAux12]
     ),
     
     .fmAux13 : (
@@ -5706,6 +5803,44 @@ extension ProgrammerToolSettingsProperty {
       infoFormat           : nil,
       requiredCapabilities : []
     ),
+    
+    .enableMarklinDeltaMode : (
+      title                : String(localized: "Enable Märklin Delta Mode"),
+      section              : .settingsForCertainCommandStations,
+      controlType          : .checkBox,
+      encoding             : .boolBit,
+      cvIndexingMethod     : .standard,
+      cv                   : [.cv_000_000_049],
+      mask                 : [0b00000100],
+      shift                : [0],
+      minValue             : nil,
+      maxValue             : nil,
+      trueDefaultValue     : nil,
+      infoType             : .none,
+      infoFactor           : nil,
+      infoMaxDecimalPlaces : nil,
+      infoFormat           : nil,
+      requiredCapabilities : [.lok4]
+    ),
+    
+    .enableZIMOManualFunction : (
+      title                : String(localized: "Enable ZIMO Manual Function"),
+      section              : .settingsForCertainCommandStations,
+      controlType          : .checkBox,
+      encoding             : .boolBit,
+      cvIndexingMethod     : .standard,
+      cv                   : [.cv_000_000_049],
+      mask                 : [0b01000000],
+      shift                : [0],
+      minValue             : nil,
+      maxValue             : nil,
+      trueDefaultValue     : nil,
+      infoType             : .none,
+      infoFactor           : nil,
+      infoMaxDecimalPlaces : nil,
+      infoFormat           : nil,
+      requiredCapabilities : [.lok4]
+    ),
 
     // Broadway Limited Steam Engine Control
 
@@ -5746,7 +5881,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : nil,
       infoMaxDecimalPlaces : nil,
       infoFormat           : nil,
-      requiredCapabilities : [.susi]
+      requiredCapabilities : [.susi, .lok5]
     ),
     
     .enableSimpleSUSI : (
@@ -5823,7 +5958,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : nil,
       infoMaxDecimalPlaces : nil,
       infoFormat           : nil,
-      requiredCapabilities : [.susi]
+      requiredCapabilities : [.susi, .lok5]
     ),
     
     .susiMapping : (
@@ -6268,7 +6403,26 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : nil,
       infoMaxDecimalPlaces : nil,
       infoFormat           : nil,
-      requiredCapabilities : [.loadControlBackEMF]
+      requiredCapabilities : [.loadControlBackEMF, .lok5]
+    ),
+    
+    .regulationParameterISlow : (
+      title                : String(localized: "Regulation Parameter \"I Slow\""),
+      section              : .loadControlBackEMF,
+      controlType          : .textFieldWithSlider,
+      encoding             : .byte,
+      cvIndexingMethod     : .standard,
+      cv                   : [.cv_000_000_051],
+      mask                 : [0xff],
+      shift                : [0],
+      minValue             : 0.0,
+      maxValue             : 255.0,
+      trueDefaultValue     : nil,
+      infoType             : .time,
+      infoFactor           : 0.001019608,
+      infoMaxDecimalPlaces : 2,
+      infoFormat           : nil,
+      requiredCapabilities : [.loadControlBackEMF, .lok4]
     ),
 
     .regulationInfluenceDuringSlowSpeed : (
@@ -6306,7 +6460,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : nil,
       infoMaxDecimalPlaces : nil,
       infoFormat           : nil,
-      requiredCapabilities : [.loadControlBackEMF]
+      requiredCapabilities : [.loadControlBackEMF, .lok5]
     ),
 
     .slowSpeedBackEMFSamplingPeriod : (
@@ -6325,7 +6479,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : 1.0 / 10000.0,
       infoMaxDecimalPlaces : 2,
       infoFormat           : nil,
-      requiredCapabilities : [.loadControlBackEMF]
+      requiredCapabilities : [.loadControlBackEMF, .lok5]
     ),
 
     .fullSpeedBackEMFSamplingPeriod : (
@@ -6344,7 +6498,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : 1.0 / 10000.0,
       infoMaxDecimalPlaces : 2,
       infoFormat           : nil,
-      requiredCapabilities : [.loadControlBackEMF]
+      requiredCapabilities : [.loadControlBackEMF, .lok5]
     ),
 
     .slowSpeedLengthOfMeasurementGap : (
@@ -6363,7 +6517,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : 1.0 / 10000.0,
       infoMaxDecimalPlaces : 2,
       infoFormat           : nil,
-      requiredCapabilities : [.loadControlBackEMF]
+      requiredCapabilities : [.loadControlBackEMF, .lok5]
     ),
 
     .fullSpeedLengthOfMeasurementGap : (
@@ -6382,7 +6536,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : 1.0 / 10000.0,
       infoMaxDecimalPlaces : 2,
       infoFormat           : nil,
-      requiredCapabilities : [.loadControlBackEMF]
+      requiredCapabilities : [.loadControlBackEMF, .lok5]
     ),
 
     // Motor Overload Protection
@@ -6422,7 +6576,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : nil,
       infoMaxDecimalPlaces : nil,
       infoFormat           : nil,
-      requiredCapabilities : [.motorOverloadProtection]
+      requiredCapabilities : [.motorOverloadProtection, .lok5]
     ),
 
     .motorCurrentLimiterLimit : (
@@ -6441,7 +6595,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : 100.0 / 255.0,
       infoMaxDecimalPlaces : 2,
       infoFormat           : nil,
-      requiredCapabilities : [.motorOverloadProtection]
+      requiredCapabilities : [.motorOverloadProtection, .lok5]
     ),
 
     // PWM Frequency

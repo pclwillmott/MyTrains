@@ -35,7 +35,8 @@ extension DecoderType {
       .aux5toAux6,
       .aux7toAux8,
       .aux13toAux18,
-      .aux9toAux12,
+      .aux9toAux10,
+      .aux11toAux12,
       .sensorConfiguration,
       .loadControlBackEMF,
       .motorOverloadProtection,
@@ -49,6 +50,8 @@ extension DecoderType {
       .esuSmokeUnit,
       .soundControlBehaviour,
       .hluSections,
+      .lok5,
+      .zimoBrakeSections,
     ],
     
     .lokSound5DCC : [
@@ -62,7 +65,8 @@ extension DecoderType {
       .aux2toAux4,
       .aux5toAux6,
       .aux7toAux8,
-      .aux9toAux12,
+      .aux9toAux10,
+      .aux11toAux12,
       .aux13toAux18,
       .sensorConfiguration,
       .loadControlBackEMF,
@@ -77,6 +81,8 @@ extension DecoderType {
       .esuSmokeUnit,
       .soundControlBehaviour,
       .hluSections,
+      .lok5,
+      .zimoBrakeSections,
     ],
     
     .lokSound5micro : [
@@ -94,7 +100,8 @@ extension DecoderType {
       .aux2toAux4,
       .aux5toAux6,
       .aux7toAux8,
-      .aux9toAux12,
+      .aux9toAux10,
+      .aux11toAux12,
       .aux13toAux18,
       .sensorConfiguration,
       .loadControlBackEMF,
@@ -108,6 +115,8 @@ extension DecoderType {
       .esuSmokeUnit,
       .soundControlBehaviour,
       .hluSections,
+      .lok5,
+      .zimoBrakeSections,
     ],
     
     .lokSound5microDCC : [
@@ -120,7 +129,8 @@ extension DecoderType {
       .aux2toAux4,
       .aux5toAux6,
       .aux7toAux8,
-      .aux9toAux12,
+      .aux9toAux10,
+      .aux11toAux12,
       .aux13toAux18,
       .sensorConfiguration,
       .loadControlBackEMF,
@@ -134,6 +144,8 @@ extension DecoderType {
       .esuSmokeUnit,
       .soundControlBehaviour,
       .hluSections,
+      .lok5,
+      .zimoBrakeSections,
     ],
     
     .lokSound5microDCCDirect : [
@@ -157,6 +169,8 @@ extension DecoderType {
       .esuSmokeUnit,
       .soundControlBehaviour,
       .hluSections,
+      .lok5,
+      .zimoBrakeSections,
     ],
     
     .lokSound5microDCCDirectAtlasLegacy : [
@@ -177,6 +191,8 @@ extension DecoderType {
       .esuSmokeUnit,
       .soundControlBehaviour,
       .hluSections,
+      .lok5,
+      .zimoBrakeSections,
     ],
     
     .lokSound5microDCCDirectAtlasS2 : [
@@ -196,6 +212,8 @@ extension DecoderType {
       .esuSmokeUnit,
       .soundControlBehaviour,
       .hluSections,
+      .lok5,
+      .zimoBrakeSections,
     ],
     
     .lokSound5nanoDCC : [
@@ -205,7 +223,8 @@ extension DecoderType {
       .aux2toAux4,
       .aux5toAux6,
       .aux7toAux8,
-      .aux9toAux12,
+      .aux9toAux10,
+      .aux11toAux12,
       .aux13toAux18,
       .sensorConfiguration,
       .loadControlBackEMF,
@@ -220,6 +239,8 @@ extension DecoderType {
       .esuSmokeUnit,
       .soundControlBehaviour,
       .hluSections,
+      .lok5,
+      .zimoBrakeSections,
     ],
     
     .lokSound5nanoDCCNext18 : [
@@ -229,7 +250,8 @@ extension DecoderType {
       .aux2toAux4,
       .aux5toAux6,
       .aux7toAux8,
-      .aux9toAux12,
+      .aux9toAux10,
+      .aux11toAux12,
       .aux13toAux18,
       .sensorConfiguration,
       .loadControlBackEMF,
@@ -245,6 +267,8 @@ extension DecoderType {
       .esuSmokeUnit,
       .soundControlBehaviour,
       .hluSections,
+      .lok5,
+      .zimoBrakeSections,
     ],
     
     .lokSound5L : [
@@ -263,7 +287,8 @@ extension DecoderType {
       .aux5toAux6,
       .aux7toAux8,
       .aux13toAux18,
-      .aux9toAux12,
+      .aux9toAux10,
+      .aux11toAux12,
       .sensorConfiguration,
       .loadControlBackEMF,
       .motorOverloadProtection,
@@ -276,6 +301,8 @@ extension DecoderType {
       .esuSmokeUnit,
       .soundControlBehaviour,
       .hluSections,
+      .lok5,
+      .zimoBrakeSections,
     ],
     
     .lokSound5LDCC : [
@@ -289,7 +316,8 @@ extension DecoderType {
       .aux5toAux6,
       .aux7toAux8,
       .aux13toAux18,
-      .aux9toAux12,
+      .aux9toAux10,
+      .aux11toAux12,
       .sensorConfiguration,
       .loadControlBackEMF,
       .motorOverloadProtection,
@@ -303,6 +331,8 @@ extension DecoderType {
       .esuSmokeUnit,
       .soundControlBehaviour,
       .hluSections,
+      .lok5,
+      .zimoBrakeSections,
     ],
     
     .lokSound5XL : [
@@ -320,7 +350,8 @@ extension DecoderType {
       .aux5toAux6,
       .aux7toAux8,
       .aux13toAux18,
-      .aux9toAux12,
+      .aux9toAux10,
+      .aux11toAux12,
       .sensorConfiguration,
       .loadControlBackEMF,
       .motorOverloadProtection,
@@ -332,6 +363,8 @@ extension DecoderType {
       .esuSmokeUnit,
       .soundControlBehaviour,
       .hluSections,
+      .lok5,
+      .zimoBrakeSections,
     ],
     
     .lokSound5Fx : [
@@ -342,7 +375,8 @@ extension DecoderType {
       .aux2toAux4,
       .aux5toAux6,
       .aux7toAux8,
-      .aux9toAux12,
+      .aux9toAux10,
+      .aux11toAux12,
       .respondsToNonDCCCommands,
       .acAnalogMode,
       .sensorSettings,
@@ -351,6 +385,8 @@ extension DecoderType {
       .esuSmokeUnit,
       .soundControlBehaviour,
       .hluSections,
+      .lok5,
+      .zimoBrakeSections,
     ],
     
     .lokSound5FxDCC : [
@@ -358,7 +394,8 @@ extension DecoderType {
       .aux2toAux4,
       .aux5toAux6,
       .aux7toAux8,
-      .aux9toAux12,
+      .aux9toAux10,
+      .aux11toAux12,
       .sensorSettings,
       .susi,
       .threeValueSpeedTable,
@@ -366,6 +403,8 @@ extension DecoderType {
       .esuSmokeUnit,
       .soundControlBehaviour,
       .hluSections,
+      .lok5,
+      .zimoBrakeSections,
    ],
     
     .lokSound5MKL : [
@@ -384,7 +423,8 @@ extension DecoderType {
       .aux5toAux6,
       .aux7toAux8,
       .aux13toAux18,
-      .aux9toAux12,
+      .aux9toAux10,
+      .aux11toAux12,
       .sensorConfiguration,
       .loadControlBackEMF,
       .motorOverloadProtection,
@@ -398,6 +438,8 @@ extension DecoderType {
       .esuSmokeUnit,
       .soundControlBehaviour,
       .hluSections,
+      .lok5,
+      .zimoBrakeSections,
     ],
     
     .lokSound5microKATO : [
@@ -410,7 +452,8 @@ extension DecoderType {
       .aux2toAux4,
       .aux5toAux6,
       .aux7toAux8,
-      .aux9toAux12,
+      .aux9toAux10,
+      .aux11toAux12,
       .aux13toAux18,
       .sensorSettings,
       .sensorConfiguration,
@@ -426,9 +469,30 @@ extension DecoderType {
       .esuSmokeUnit,
       .soundControlBehaviour,
       .hluSections,
+      .lok5,
+      .zimoBrakeSections,
     ],
     
-    .lokSoundV4_0 : [],
+    .lokSoundV4_0 : [
+      .dccProtocol,
+      .marklinMotorolaProtocol,
+      .selectrixProtocol,
+      .respondsToNonDCCCommands,
+      .susi,
+      .simpleSUSI,
+      .threeValueSpeedTable,
+      .aux2toAux4,
+      .aux5toAux6,
+      .aux7toAux8,
+      .aux9toAux10,
+      .acAnalogMode,
+      .sound,
+      .lok4,
+      .zimoBrakeSections,
+      .loadControlBackEMF,
+      .motorOverloadProtection,
+    ],
+    
     .lokSoundSelect : [],
     .lokSoundmicroV4_0 : [],
     .lokSoundSelectdirect_micro : [],
@@ -459,7 +523,8 @@ extension DecoderType {
       .aux5toAux6,
       .aux7toAux8,
       .aux13toAux18,
-      .aux9toAux12,
+      .aux9toAux10,
+      .aux11toAux12,
       .sensorConfiguration,
       .loadControlBackEMF,
       .motorOverloadProtection,
@@ -470,6 +535,8 @@ extension DecoderType {
       .susi,
       .noSound,
       .hluSections,
+      .lok5,
+      .zimoBrakeSections,
     ],
     
     .lokPilot5DCC : [
@@ -483,7 +550,8 @@ extension DecoderType {
       .aux5toAux6,
       .aux7toAux8,
       .aux13toAux18,
-      .aux9toAux12,
+      .aux9toAux10,
+      .aux11toAux12,
       .sensorConfiguration,
       .loadControlBackEMF,
       .motorOverloadProtection,
@@ -495,6 +563,8 @@ extension DecoderType {
       .noSound,
       .threeValueSpeedTable,
       .hluSections,
+      .lok5,
+      .zimoBrakeSections,
     ],
     
     .lokPilot5micro : [
@@ -514,6 +584,8 @@ extension DecoderType {
       .noSound,
       .threeValueSpeedTable,
       .hluSections,
+      .lok5,
+      .zimoBrakeSections,
     ],
     
     .lokPilot5microDCC : [
@@ -530,6 +602,8 @@ extension DecoderType {
       .noSound,
       .threeValueSpeedTable,
       .hluSections,
+      .lok5,
+      .zimoBrakeSections,
     ],
     
     .lokPilot5microDCCDirect : [
@@ -552,6 +626,8 @@ extension DecoderType {
       .soundControlBehaviour,
       .noSound,
       .hluSections,
+      .lok5,
+      .zimoBrakeSections,
     ],
     
     .lokPilot5microNext18 : [
@@ -566,7 +642,8 @@ extension DecoderType {
       .aux2toAux4,
       .aux5toAux6,
       .aux7toAux8,
-      .aux9toAux12,
+      .aux9toAux10,
+      .aux11toAux12,
       .aux13toAux18,
       .loadControlBackEMF,
       .motorOverloadProtection,
@@ -581,6 +658,8 @@ extension DecoderType {
       .susiMasterDisablesAUX3,
       .susiMasterDisablesAUX4,
       .hluSections,
+      .lok5,
+      .zimoBrakeSections,
     ],
     
     .lokPilot5microNext18DCC : [
@@ -591,7 +670,8 @@ extension DecoderType {
       .aux2toAux4,
       .aux5toAux6,
       .aux7toAux8,
-      .aux9toAux12,
+      .aux9toAux10,
+      .aux11toAux12,
       .aux13toAux18,
       .loadControlBackEMF,
       .motorOverloadProtection,
@@ -605,6 +685,8 @@ extension DecoderType {
       .susiMasterDisablesAUX4,
       .threeValueSpeedTable,
       .hluSections,
+      .lok5,
+      .zimoBrakeSections,
     ],
     
     .lokPilot5nanoDCC : [
@@ -615,7 +697,8 @@ extension DecoderType {
       .aux2toAux4,
       .aux5toAux6,
       .aux7toAux8,
-      .aux9toAux12,
+      .aux9toAux10,
+      .aux11toAux12,
       .aux13toAux18,
       .loadControlBackEMF,
       .motorOverloadProtection,
@@ -628,6 +711,8 @@ extension DecoderType {
       .threeValueSpeedTable,
       .sensorSettings,
       .hluSections,
+      .lok5,
+      .zimoBrakeSections,
     ],
     
     .lokPilot5L : [
@@ -642,7 +727,8 @@ extension DecoderType {
       .aux2toAux4,
       .aux5toAux6,
       .aux7toAux8,
-      .aux9toAux12,
+      .aux9toAux10,
+      .aux11toAux12,
       .aux13toAux18,
       .loadControlBackEMF,
       .motorOverloadProtection,
@@ -657,6 +743,8 @@ extension DecoderType {
       .susiMasterDisablesAUX11,
       .susiMasterDisablesAUX12,
       .hluSections,
+      .lok5,
+      .zimoBrakeSections,
     ],
     
     .lokPilot5LDCC : [
@@ -667,7 +755,8 @@ extension DecoderType {
       .aux2toAux4,
       .aux5toAux6,
       .aux7toAux8,
-      .aux9toAux12,
+      .aux9toAux10,
+      .aux11toAux12,
       .aux13toAux18,
       .loadControlBackEMF,
       .motorOverloadProtection,
@@ -682,6 +771,8 @@ extension DecoderType {
       .susiMasterDisablesAUX12,
       .threeValueSpeedTable,
       .hluSections,
+      .lok5,
+      .zimoBrakeSections,
     ],
     
     .lokPilot5Fx : [
@@ -693,12 +784,15 @@ extension DecoderType {
       .aux2toAux4,
       .aux5toAux6,
       .aux7toAux8,
-      .aux9toAux12,
+      .aux9toAux10,
+      .aux11toAux12,
       .noSound,
       .susi,
       .sensorSettings,
       .acAnalogMode,
       .hluSections,
+      .lok5,
+      .zimoBrakeSections,
     ],
     
     .lokPilot5FxDCC : [
@@ -707,12 +801,15 @@ extension DecoderType {
       .aux2toAux4,
       .aux5toAux6,
       .aux7toAux8,
-      .aux9toAux12,
+      .aux9toAux10,
+      .aux11toAux12,
       .noSound,
       .susi,
       .sensorSettings,
       .threeValueSpeedTable,
       .hluSections,
+      .lok5,
+      .zimoBrakeSections,
     ],
     
     .lokPilot5Fxmicro : [
@@ -725,6 +822,8 @@ extension DecoderType {
       .noSound,
       .threeValueSpeedTable,
       .hluSections,
+      .lok5,
+      .zimoBrakeSections,
     ],
     
     .lokPilot5FxmicroDCC : [
@@ -734,6 +833,8 @@ extension DecoderType {
       .noSound,
       .threeValueSpeedTable,
       .hluSections,
+      .lok5,
+      .zimoBrakeSections,
     ],
     
     .lokPilot5FxmicroNext18 : [
@@ -744,7 +845,8 @@ extension DecoderType {
       .aux2toAux4,
       .aux5toAux6,
       .aux7toAux8,
-      .aux9toAux12,
+      .aux9toAux10,
+      .aux11toAux12,
       .aux13toAux18,
       .noSound,
       .acAnalogMode,
@@ -753,6 +855,8 @@ extension DecoderType {
       .susiMasterDisablesAUX4,
       .susiMasterDisablesAUX3,
       .hluSections,
+      .lok5,
+      .zimoBrakeSections,
     ],
     
     .lokPilot5FxmicroNext18DCC : [
@@ -760,7 +864,8 @@ extension DecoderType {
       .aux2toAux4,
       .aux5toAux6,
       .aux7toAux8,
-      .aux9toAux12,
+      .aux9toAux10,
+      .aux11toAux12,
       .aux13toAux18,
       .noSound,
       .sensorConfiguration,
@@ -769,6 +874,8 @@ extension DecoderType {
       .susiMasterDisablesAUX3,
       .threeValueSpeedTable,
       .hluSections,
+      .lok5,
+      .zimoBrakeSections,
     ],
     
     .lokPilot5MKL : [
@@ -783,7 +890,8 @@ extension DecoderType {
       .aux2toAux4,
       .aux5toAux6,
       .aux7toAux8,
-      .aux9toAux12,
+      .aux9toAux10,
+      .aux11toAux12,
       .aux13toAux18,
       .loadControlBackEMF,
       .motorOverloadProtection,
@@ -798,6 +906,8 @@ extension DecoderType {
       .susiMasterDisablesAUX12,
       .acAnalogMode,
       .hluSections,
+      .lok5,
+      .zimoBrakeSections,
     ],
     
     .lokPilot5MKLDCC : [
@@ -808,7 +918,8 @@ extension DecoderType {
       .aux2toAux4,
       .aux5toAux6,
       .aux7toAux8,
-      .aux9toAux12,
+      .aux9toAux10,
+      .aux11toAux12,
       .aux13toAux18,
       .loadControlBackEMF,
       .motorOverloadProtection,
@@ -823,6 +934,8 @@ extension DecoderType {
       .susiMasterDisablesAUX12,
       .threeValueSpeedTable,
       .hluSections,
+      .lok5,
+      .zimoBrakeSections,
     ],
     
     .lokPilot5Basic : [
@@ -830,7 +943,8 @@ extension DecoderType {
       .aux2toAux4,
       .aux5toAux6,
       .aux7toAux8,
-      .aux9toAux12,
+      .aux9toAux10,
+      .aux11toAux12,
       .aux13toAux18,
       .loadControlBackEMF,
       .motorOverloadProtection,
@@ -841,6 +955,7 @@ extension DecoderType {
       .sensorSettings,
       .threeValueSpeedTable,
       .simpleSUSI,
+      .lok5,
     ],
     
     .lokPilotV4_0 : [],

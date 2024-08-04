@@ -26,7 +26,8 @@ public enum DecoderCapability : CaseIterable {
   case aux2toAux4
   case aux5toAux6
   case aux7toAux8
-  case aux9toAux12
+  case aux9toAux10
+  case aux11toAux12
   case aux13toAux18
   case sensorConfiguration
   case loadControlBackEMF
@@ -44,6 +45,9 @@ public enum DecoderCapability : CaseIterable {
   case esuSmokeUnit
   case soundControlBehaviour
   case hluSections
+  case zimoBrakeSections
   case simpleSUSI
-
+  case lok5
+  case lok4
+  
 }

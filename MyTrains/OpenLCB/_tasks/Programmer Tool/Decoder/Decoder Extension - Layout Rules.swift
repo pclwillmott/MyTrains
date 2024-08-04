@@ -306,6 +306,18 @@ extension Decoder {
         capability     : [.susiMasterDisablesAUX11]
       ),
       (
+        property1      : .enableSimpleSUSI,
+        testType1      : .equal,
+        testValue1     : "false",
+        operator       : nil,
+        property2      : nil,
+        testType2      : nil,
+        testValue2     : nil,
+        actionProperty : [.timeToBridgePowerInterruptionWarning],
+        actionType     : .setIsHiddenToTestResult,
+        capability     : [.lok4]
+      ),
+      (
         property1      : .physicalOutput,
         testType1      : .equal,
         testValue1     : ESUDecoderPhysicalOutput.aux12.title,

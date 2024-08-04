@@ -57,6 +57,7 @@ public enum ProgrammerToolSettingsSection : Int, CaseIterable {
   case powerPack = 26
   case preserveDirection = 27
   case startingDelay = 28
+  case stopBehaviour = 62
   
   // Function Outputs
   
@@ -92,7 +93,7 @@ public enum ProgrammerToolSettingsSection : Int, CaseIterable {
   
   // Motor Settings
   
-  case locomotiveInformation = 62
+  case locomotiveInformation = 63
   case speedTable = 40
   case loadControlBackEMF = 41
   case motorOverloadProtection = 42
@@ -254,6 +255,10 @@ public enum ProgrammerToolSettingsSection : Int, CaseIterable {
     ),
     .startingDelay : (
       String(localized: "Starting Delay"),
+      .drivingCharacteristics
+    ),
+    .stopBehaviour : (
+      String(localized: "Stop Behaviour"),
       .drivingCharacteristics
     ),
     .physicalOutputConfiguration : (

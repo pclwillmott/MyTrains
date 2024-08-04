@@ -3165,6 +3165,9 @@
     "Enable Load Control / Back EMF" : {
 
     },
+    "Enable Märklin Delta Mode" : {
+
+    },
     "Enable Minimum Distance of Steam Chuffs" : {
 
     },
@@ -3189,6 +3192,9 @@
     "Enable Secondary Trigger" : {
 
     },
+    "Enable Serial User Standard Interface" : {
+
+    },
     "Enable Serial User Standard Interface (SUSI Master)" : {
 
     },
@@ -3205,6 +3211,9 @@
 
     },
     "Enable Threshold for Load Operation" : {
+
+    },
+    "Enable ZIMO Manual Function" : {
 
     },
     "Enabled" : {
@@ -6472,6 +6481,9 @@
     "Power pack control" : {
 
     },
+    "Power pack directly soldered to the decoder will not work while AUX6 or SUSI is enabled." : {
+
+    },
     "Power Supply Brownout Detected Node" : {
 
     },
@@ -6878,6 +6890,9 @@
       }
     },
     "Regulation Influence During Slow Speed" : {
+
+    },
+    "Regulation Parameter \"I Slow\"" : {
 
     },
     "Regulation Parameter \"I\"" : {
@@ -8210,6 +8225,12 @@
         }
       }
     },
+    "Stop Behaviour" : {
+
+    },
+    "Stop Immediately on Speed Step 0" : {
+
+    },
     "Stop Position (%%UNITS_ACTUAL_DISTANCE%%)" : {
 
     },
@@ -8884,6 +8905,9 @@
       "comment" : "This is used for a tooltip."
     },
     "Time from Maximum Speed to Stop" : {
+
+    },
+    "Time from Maximum Speed to Stop, when Dynamic Brake is Enabled" : {
 
     },
     "Time from Stop to Maximum Speed" : {
