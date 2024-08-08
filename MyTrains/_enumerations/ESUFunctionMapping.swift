@@ -188,10 +188,15 @@ public enum ESUFunctionMapping : Int, CaseIterable {
   
   // MARK: Public Class Methods
   
-  public static func populate(comboBox:NSComboBox) {
+  public static func populate(comboBox:NSComboBox, decoder:Decoder) {
+    
+    let maxFunction = decoder.decoderType.capabilities.contains(.lok5) ? ESUFunctionMapping.mapping72 : ESUFunctionMapping.mapping40
+    
     comboBox.removeAllItems()
     for item in ESUFunctionMapping.allCases {
-      comboBox.addItem(withObjectValue: item.title)
+      if item.rawValue <= maxFunction.rawValue {
+        comboBox.addItem(withObjectValue: item.title)
+      }
     }
   }
 

@@ -44,6 +44,7 @@ public enum ESUSoundSlot : Int, CaseIterable {
   case soundSlot30 = 29
   case soundSlot31 = 30
   case soundSlot32 = 31
+  case randomSounds = 34
   case brakeSound = 32
   case gearShiftSound = 33
 
@@ -66,7 +67,27 @@ public enum ESUSoundSlot : Int, CaseIterable {
   }
 
   public func cvIndexOffset(decoder:Decoder) -> Int {
-    return self.rawValue * 8
+    
+    var index : Int
+    
+    if decoder.decoderType.capabilities.contains(.lok4) {
+      switch self {
+      case .randomSounds:
+        index = 24
+      case .brakeSound:
+        index = 25
+      case .gearShiftSound:
+        index = 26
+      default:
+        index = rawValue
+      }
+    }
+    else {
+      index = self.rawValue
+    }
+    
+    return index * 8
+    
   }
 
   // MARK: Public Class Properties
@@ -106,14 +127,89 @@ public enum ESUSoundSlot : Int, CaseIterable {
     .soundSlot32    : String(localized:"Sound Slot 32"),
     .brakeSound     : String(localized:"Brake Sound"),
     .gearShiftSound : String(localized:"Gear Shift Sound"),
+    .randomSounds   : String(localized:"Random Sounds"),
   ]
 
   // MARK: Public Class Methods
   
-  public static func populate(comboBox:NSComboBox) {
+  public static func populate(comboBox:NSComboBox, decoder:Decoder) {
+    
+    var slots : Set<ESUSoundSlot> = []
+    
+    if decoder.decoderType.capabilities.contains(.lok4) {
+      slots = slots.union([
+        .soundSlot1,
+        .soundSlot2,
+        .soundSlot3,
+        .soundSlot4,
+        .soundSlot5,
+        .soundSlot6,
+        .soundSlot7,
+        .soundSlot8,
+        .soundSlot9,
+        .soundSlot10,
+        .soundSlot11,
+        .soundSlot12,
+        .soundSlot13,
+        .soundSlot14,
+        .soundSlot15,
+        .soundSlot16,
+        .soundSlot17,
+        .soundSlot18,
+        .soundSlot19,
+        .soundSlot20,
+        .soundSlot21,
+        .soundSlot22,
+        .soundSlot23,
+        .soundSlot24,
+        .randomSounds,
+        .brakeSound,
+        .gearShiftSound,
+      ])
+    }
+    else {
+      slots = slots.union([
+        .soundSlot1,
+        .soundSlot2,
+        .soundSlot3,
+        .soundSlot4,
+        .soundSlot5,
+        .soundSlot6,
+        .soundSlot7,
+        .soundSlot8,
+        .soundSlot9,
+        .soundSlot10,
+        .soundSlot11,
+        .soundSlot12,
+        .soundSlot13,
+        .soundSlot14,
+        .soundSlot15,
+        .soundSlot16,
+        .soundSlot17,
+        .soundSlot18,
+        .soundSlot19,
+        .soundSlot21,
+        .soundSlot22,
+        .soundSlot23,
+        .soundSlot24,
+        .soundSlot25,
+        .soundSlot26,
+        .soundSlot27,
+        .soundSlot28,
+        .soundSlot29,
+        .soundSlot30,
+        .soundSlot31,
+        .soundSlot32,
+        .brakeSound,
+        .gearShiftSound,
+      ])
+    }
+    
     comboBox.removeAllItems()
     for item in ESUSoundSlot.allCases {
-      comboBox.addItem(withObjectValue: item.title)
+      if slots.contains(item) {
+        comboBox.addItem(withObjectValue: item.title)
+      }
     }
   }
 

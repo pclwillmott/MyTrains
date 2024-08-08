@@ -197,6 +197,9 @@
         }
       }
     },
+    "20kHz motor pulse frequency" : {
+
+    },
     "25 seconds" : {
       "comment" : "Used to select a sampling period",
       "localizations" : {
@@ -264,6 +267,9 @@
           }
         }
       }
+    },
+    "40kHz motor pulse frequency" : {
+
     },
     "45 seconds" : {
       "comment" : "Used to select a sampling period",
@@ -574,6 +580,9 @@
 
     },
     "Actual Values" : {
+
+    },
+    "Adaptive Regulation Frequency" : {
 
     },
     "Add Item to Group" : {
@@ -1044,6 +1053,9 @@
           }
         }
       }
+    },
+    "Back EMF Sampling Period" : {
+
     },
     "Back EMF Settings" : {
 
@@ -1580,6 +1592,9 @@
     },
     "cm/s" : {
       "comment" : "Used for the abbreviation of centimeters per second"
+    },
+    "Coast Mode: Increase Sound Acceleration by the following value" : {
+
     },
     "Coast Operation" : {
 
@@ -2290,6 +2305,9 @@
     "DC Analog Mode" : {
 
     },
+    "DC Motor PWM Frequency" : {
+
+    },
     "DCC 14" : {
       "comment" : "Used for LocoNet train control protocol selection",
       "localizations" : {
@@ -2992,6 +3010,9 @@
           }
         }
       }
+    },
+    "Dynamic Brake Settings" : {
+
     },
     "Dynamic Sound Control" : {
 
@@ -4434,6 +4455,12 @@
         }
       }
     },
+    "Heavy Load and Coast Mode" : {
+
+    },
+    "Heavy Load: Increase Sound Acceleration by the following value" : {
+
+    },
     "Hertz" : {
 
     },
@@ -4770,6 +4797,12 @@
     },
     "K" : {
       "comment" : "Used for the abbreviation of Kelvin"
+    },
+    "Keep Constant Speed during Coast Mode" : {
+
+    },
+    "Keep Constant Speed during Heavy Load" : {
+
     },
     "Kelvin" : {
 
@@ -5480,6 +5513,9 @@
     "Master Volume" : {
 
     },
+    "Maximum Distance" : {
+
+    },
     "Maximum Heat while Locomotive is Driving" : {
 
     },
@@ -5658,6 +5694,9 @@
     },
     "Minimize" : {
       "comment" : "Used for a menu title"
+    },
+    "Minimum Distance" : {
+
     },
     "Minimum Distance of Steam Chuffs" : {
 
@@ -6670,6 +6709,9 @@
     "Random Functions" : {
 
     },
+    "Random Sounds" : {
+
+    },
     "Read" : {
 
     },
@@ -7368,7 +7410,7 @@
     "Sequence Position" : {
 
     },
-    "Serial Function Mode for LGB MTS" : {
+    "Serial Function Mode F1 - F8 for LGB MTS" : {
 
     },
     "Serial Number" : {
@@ -7940,6 +7982,9 @@
 
     },
     "Sound Project Overview" : {
+
+    },
+    "Sound Selection" : {
 
     },
     "Sound Settings" : {

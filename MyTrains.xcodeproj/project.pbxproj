@@ -365,6 +365,7 @@
 		DAA777CC2A20C861008EAF02 /* OpenLCBClockType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA777CB2A20C861008EAF02 /* OpenLCBClockType.swift */; };
 		DAA777CE2A20CFE1008EAF02 /* OpenLCBClockDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA777CD2A20CFE1008EAF02 /* OpenLCBClockDelegate.swift */; };
 		DAA777D02A20D734008EAF02 /* OpenLCBClockState.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA777CF2A20D734008EAF02 /* OpenLCBClockState.swift */; };
+		DAA795F72C64CFF400994EAA /* ESUDCMotorPWMFrequency.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA795F62C64CFF400994EAA /* ESUDCMotorPWMFrequency.swift */; };
 		DAA799E22C3313EA0006D2BE /* ESUCVExtract.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA799E12C3313EA0006D2BE /* ESUCVExtract.swift */; };
 		DAA7BEB32B501FCA00508140 /* Scale.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA7BEB22B501FCA00508140 /* Scale.swift */; };
 		DAA7BEB52B50328800508140 /* LayoutNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA7BEB42B50328800508140 /* LayoutNode.swift */; };
@@ -860,6 +861,7 @@
 		DAA777CB2A20C861008EAF02 /* OpenLCBClockType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBClockType.swift; sourceTree = "<group>"; };
 		DAA777CD2A20CFE1008EAF02 /* OpenLCBClockDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBClockDelegate.swift; sourceTree = "<group>"; };
 		DAA777CF2A20D734008EAF02 /* OpenLCBClockState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBClockState.swift; sourceTree = "<group>"; };
+		DAA795F62C64CFF400994EAA /* ESUDCMotorPWMFrequency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ESUDCMotorPWMFrequency.swift; sourceTree = "<group>"; };
 		DAA799E12C3313EA0006D2BE /* ESUCVExtract.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ESUCVExtract.swift; sourceTree = "<group>"; };
 		DAA7BEB22B501FCA00508140 /* Scale.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scale.swift; sourceTree = "<group>"; };
 		DAA7BEB42B50328800508140 /* LayoutNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoutNode.swift; sourceTree = "<group>"; };
@@ -1118,6 +1120,7 @@
 				DA188A9A2C5A93F100A50EFB /* ESUCondition.swift */,
 				DA188A9C2C5A951200A50EFB /* ESUConditionDriving.swift */,
 				DA188A9E2C5A957F00A50EFB /* ESUConditionDirection.swift */,
+				DAA795F62C64CFF400994EAA /* ESUDCMotorPWMFrequency.swift */,
 				DA0F378D2C47D471002C66D8 /* SteamChuffMode.swift */,
 				DAAE3E3C2C4D261400F129B7 /* SmokeUnitControlMode.swift */,
 				DAAE3E3E2C4D2B8A00F129B7 /* ExternalSmokeUnitType.swift */,
@@ -2332,6 +2335,7 @@
 				DA5B6AAC29EAEDB20095F7D5 /* OpenLCBCANFrameFlag.swift in Sources */,
 				DA6403EF2A24EF62001CE29B /* OpenLCBMemorySpace.swift in Sources */,
 				DACE0ED32A2FF98800FB79BC /* OpenLCBClockOperatingMode.swift in Sources */,
+				DAA795F72C64CFF400994EAA /* ESUDCMotorPWMFrequency.swift in Sources */,
 				DA7243F828A81165003157CA /* ThrottleMode.swift in Sources */,
 				DA19A10E2A4469B00048C55E /* LocoNetGateway Extensions - Unused.swift in Sources */,
 				DA1B79F9285F3885009E1189 /* UnitSpeed.swift in Sources */,

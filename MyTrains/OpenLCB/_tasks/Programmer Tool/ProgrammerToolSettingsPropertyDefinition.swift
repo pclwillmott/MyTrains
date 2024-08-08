@@ -95,6 +95,7 @@ public enum ProgrammerToolEncodingType : Int, CaseIterable {
   case esuConditionDriving
   case esuConditionDirection
   case speedTableType
+  case esuDCMotorPWMFrequency
   
 }
 

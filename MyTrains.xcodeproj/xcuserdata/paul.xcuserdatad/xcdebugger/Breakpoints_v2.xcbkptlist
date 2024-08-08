@@ -622,8 +622,8 @@
             filePath = "MyTrains/OpenLCB/_tasks/Programmer Tool/Property Views/PTSettingsPropertyView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1013"
-            endingLineNumber = "1013"
+            startingLineNumber = "1015"
+            endingLineNumber = "1015"
             landmarkName = "reload()"
             landmarkType = "7">
          </BreakpointContent>
@@ -638,10 +638,10 @@
             filePath = "MyTrains/OpenLCB/_tasks/Programmer Tool/ProgrammerToolSettingsPropertyExtension.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1041"
-            endingLineNumber = "1041"
-            landmarkName = "definitions"
-            landmarkType = "24">
+            startingLineNumber = "1040"
+            endingLineNumber = "1040"
+            landmarkName = "ProgrammerToolSettingsProperty"
+            landmarkType = "21">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -654,10 +654,26 @@
             filePath = "MyTrains/OpenLCB/_tasks/Programmer Tool/Decoder/DecoderType - Capabilities.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "936"
-            endingLineNumber = "936"
+            startingLineNumber = "1277"
+            endingLineNumber = "1277"
             landmarkName = "capabilityLookup"
             landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "96FAE070-A57B-450E-B284-02CF93117E7D"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MyTrains/_enumerations/ESUDecoderPhysicalOutput.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "63"
+            endingLineNumber = "63"
+            landmarkName = "cvIndexOffset(decoder:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

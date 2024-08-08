@@ -58,7 +58,26 @@ public enum ESUDecoderPhysicalOutput : UInt8, CaseIterable {
   // MARK: Public Methods
   
   public func cvIndexOffset(decoder:Decoder) -> Int {
-    return Int(self.rawValue) * 8
+    
+    if decoder.decoderType.capabilities.contains(.lok5) {
+      return Int(self.rawValue) * 8
+    }
+    else {
+      var index : ESUDecoderPhysicalOutput
+      switch self {
+      case .frontLight_2:
+        index = .aux11
+      case .rearLight_2:
+        index = .aux12
+      case .aux1_2:
+        index = .aux13
+      case .aux2_2:
+        index = .aux14
+      default:
+        index = self
+      }
+      return Int(index.rawValue) * 8
+    }
   }
   
   // MARK: Public Class Properties

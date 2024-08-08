@@ -553,7 +553,7 @@ extension Decoder {
         property2      : nil,
         testType2      : nil,
         testValue2     : nil,
-        actionProperty : [.slowSpeedBackEMFSamplingPeriod, .slowSpeedLengthOfMeasurementGap, .regulationParameterI, .regulationReference, .fullSpeedBackEMFSamplingPeriod, .regulationParameterKSlow, .largestInternalSpeedStepThatUsesKSlow, .regulationParameterK, .fullSpeedLengthOfMeasurementGap],
+        actionProperty : [.slowSpeedBackEMFSamplingPeriod, .slowSpeedLengthOfMeasurementGap, .regulationParameterI, .regulationReference, .fullSpeedBackEMFSamplingPeriod, .regulationParameterKSlow, .largestInternalSpeedStepThatUsesKSlow, .regulationParameterK, .fullSpeedLengthOfMeasurementGap, .regulationParameterISlow, .regulationInfluenceDuringSlowSpeed, .adaptiveRegulationFrequencyEnabled, .backEMFSamplingPeriod, .emfBasicSettings, .emfSlowSpeedSettings],
         actionType     : .setIsHiddenToTestResult,
         capability     : []
       ),

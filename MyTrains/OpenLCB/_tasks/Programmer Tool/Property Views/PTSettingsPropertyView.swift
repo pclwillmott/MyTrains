@@ -932,12 +932,8 @@ public class PTSettingsPropertyView : NSView, NSTextFieldDelegate {
       SpeedTablePreset.populate(comboBox: comboBox)
     case .soundCV:
       SoundCV.populate(comboBox: comboBox)
-    case .esuSoundSlot:
-      ESUSoundSlot.populate(comboBox: comboBox)
     case .esuFunctionIcon:
       ESUFunctionIcon.populate(comboBox: comboBox)
-    case .esuFunctionMapping:
-      ESUFunctionMapping.populate(comboBox: comboBox)
     case .esuCondition:
       ESUCondition.populate(comboBox: comboBox)
     case .esuConditionDriving:
@@ -948,6 +944,8 @@ public class PTSettingsPropertyView : NSView, NSTextFieldDelegate {
       SpeedTableType.populate(comboBox: comboBox)
     case .threeValueSpeedTablePreset:
       ThreeValueSpeedTablePreset.populate(comboBox: comboBox)
+    case .esuDCMotorPWMFrequency:
+      ESUDCMotorPWMFrequency.populate(comboBox: comboBox)
     default:
       break
     }
@@ -971,6 +969,10 @@ public class PTSettingsPropertyView : NSView, NSTextFieldDelegate {
       ESUDecoderPhysicalOutput.populate(comboBox: comboBox, decoder: decoder)
     case .physicalOutputOutputMode:
       ESUPhysicalOutputMode.populate(comboBox: comboBox, decoder: decoder)
+    case .esuSoundSlot:
+      ESUSoundSlot.populate(comboBox: comboBox, decoder: decoder)
+    case .esuFunctionMapping:
+      ESUFunctionMapping.populate(comboBox: comboBox, decoder: decoder)
     default:
       break
     }

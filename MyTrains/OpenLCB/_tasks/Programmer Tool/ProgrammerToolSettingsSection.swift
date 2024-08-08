@@ -41,6 +41,7 @@ public enum ProgrammerToolSettingsSection : Int, CaseIterable {
   case constantBrakeDistance = 15
   case brakeSectionSettings = 16
   case brakeFunctions = 17
+  case dynamicBrakeSettings = 68
   
   // DCC Settings
   
@@ -96,6 +97,7 @@ public enum ProgrammerToolSettingsSection : Int, CaseIterable {
   case locomotiveInformation = 63
   case speedTable = 40
   case loadControlBackEMF = 41
+  case dcMotorPWMFrequency = 65
   case motorOverloadProtection = 42
   case pwmFrequency = 43
   case automaticParkingBrake = 44
@@ -113,11 +115,14 @@ public enum ProgrammerToolSettingsSection : Int, CaseIterable {
   
   // Sound Settings
   
+  case soundSelection = 64
   case steamChuffs = 50
+  case randomSounds = 66
   case volume = 51
   case toneControl = 52
   case brakeSound = 53
   case dynamicSoundControl = 54
+  case heavyLoadCoastControl = 67
   
   // Sound Slot Settings
   
@@ -140,6 +145,18 @@ public enum ProgrammerToolSettingsSection : Int, CaseIterable {
     .decoderInformation : (
       String(localized: "Decoder Information"),
       .info
+    ),
+    .soundSelection : (
+      String(localized: "Sound Selection"),
+      .soundSettings
+    ),
+    .randomSounds : (
+      String(localized: "Random Sounds"),
+      .soundSettings
+    ),
+    .heavyLoadCoastControl : (
+      String(localized: "Heavy Load and Coast Mode"),
+      .soundSettings
     ),
     .locomotiveAddress : (
       String(localized: "Locomotive Address"),
@@ -165,9 +182,17 @@ public enum ProgrammerToolSettingsSection : Int, CaseIterable {
       String(localized: "AC Analog Mode"),
       .analogSettings
     ),
+    .dynamicBrakeSettings : (
+      String(localized: "Dynamic Brake Settings"),
+      .brakeSettings
+    ),
     .dcAnalogMode : (
       String(localized: "DC Analog Mode"),
       .analogSettings
+    ),
+    .dcMotorPWMFrequency : (
+      String(localized: "DC Motor PWM Frequency"),
+      .motorSettings
     ),
     .quantumEngineer : (
       String(localized: "Quantum Engineer"),

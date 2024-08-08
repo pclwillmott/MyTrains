@@ -49,5 +49,13 @@ public enum DecoderCapability : CaseIterable {
   case simpleSUSI
   case lok5
   case lok4
+  case abcBrakeSections
+  case startingDelay
+  case smokeChuffs
+  case marklinDeltaMode
+  case powerPackSolderedWarning
+  case serialFunctionModeForLGBMTS
+  case constantBrakeDistance
+  case automaticUncoupling
   
 }

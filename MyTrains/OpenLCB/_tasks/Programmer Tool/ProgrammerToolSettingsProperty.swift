@@ -388,8 +388,8 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
   case speedTablePreset = 203
   case minimumSpeed = 112
   case maximumSpeed = 113
-  case emfBasicSettings = 130
   case enableLoadControlBackEMF = 114
+  case emfBasicSettings = 130
   case regulationReference = 115
   case regulationParameterK = 116
   case regulationParameterI = 117
@@ -403,6 +403,9 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
   case fullSpeedBackEMFSamplingPeriod = 121
   case slowSpeedLengthOfMeasurementGap = 122
   case fullSpeedLengthOfMeasurementGap = 123
+  case adaptiveRegulationFrequencyEnabled = 398
+  case backEMFSamplingPeriod = 399
+  case dcMotorPWMFrequency = 400
   case enableMotorOverloadProtection = 124
   case enableMotorCurrentLimiter = 125
   case motorCurrentLimiterLimit = 126
@@ -433,6 +436,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
   
   // Sound Settings
   
+  case soundSelection = 401
   case steamChuffMode = 133
   case distanceOfSteamChuffsAtSpeedStep1 = 134
   case triggerImpulsesPerSteamChuff = 140
@@ -442,6 +446,8 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
   case secondaryTriggerDistanceReduction = 137
   case enableMinimumDistanceOfSteamChuffs = 138
   case minimumDistanceofSteamChuffs = 139
+  case randomSoundsMinimumDistance = 402
+  case randomSoundsMaximumDistance = 403
   case masterVolume = 142
   case fadeSoundVolumeReduction = 143
   case soundFadeOutFadeInTime = 144
@@ -458,6 +464,10 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
   case enableIdleOperationThreshold = 155
   case idleOperationThreshold = 156
   case idleOperationTriggeredFunction = 157
+  case heavyLoadIncreaseSoundAcceleration = 404
+  case heavyLoadKeepConstantSpeed = 405
+  case coastModeIncreaseSoundAcceleration = 406
+  case coastModeKeepConstantSpeed = 407
 
   // Sound Slot Settings
   
@@ -606,6 +616,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     .soundSlotMinimumSoundSpeed      : 2,
     .smokeChuffsMinimumDuration      : 2,
     .hluSpeedLimit1                  : 5,
+    .randomSoundsMinimumDistance     : 2,
   ]
   
   internal static var _minMaxProperties : [ProgrammerToolSettingsProperty:ProgrammerToolSettingsProperty]?

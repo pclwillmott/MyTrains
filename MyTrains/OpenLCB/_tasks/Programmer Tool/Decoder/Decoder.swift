@@ -320,6 +320,8 @@ public class Decoder : NSObject {
   public var esuDecoderPhysicalOutput : ESUDecoderPhysicalOutput = .frontLight {
     didSet {
       reloadIndexedViews(indexingMethod: .esuDecoderPhysicalOutput)
+      _layoutRules = nil
+      applyLayoutRules()
     }
   }
   
@@ -692,6 +694,29 @@ public class Decoder : NSObject {
       return ""
     }
     
+    switch definition.encoding {
+    case .esuSpeedTablePreset:
+      return SpeedTablePreset.doNothing.title
+    case .threeValueSpeedTablePreset:
+      return ThreeValueSpeedTablePreset.identity.title
+    case .esuDecoderPhysicalOutput:
+      return esuDecoderPhysicalOutput.title
+    case .esuRandomFunction:
+      return esuRandomFunction.title
+    case .esuFunctionMapping:
+      return esuFunctionMapping.title
+    case .esuFunction:
+      return esuFunction.title
+    case .soundCV:
+      return soundCV.title
+    case .esuSoundSlot:
+      return esuSoundSlot.title
+    case .speedTableIndex:
+      return "\(speedTableIndex)"
+    default:
+      break
+    }
+    
     var values = getProperty(property: property, propertyDefinition: definition)
     
     guard values.count > 0 else {
@@ -762,22 +787,14 @@ public class Decoder : NSObject {
       if let item = DecoderSensorSettings(rawValue: values[0]) {
         return item.title
       }
+    case .esuDCMotorPWMFrequency:
+      if let item = ESUDCMotorPWMFrequency(rawValue:values[0]) {
+        return item.title
+      }
     case .esuSteamChuffMode:
       return (values[0] == 0 ? SteamChuffMode.useExternalWheelSensor : SteamChuffMode.playSteamChuffsAccordingToSpeed).title
     case .esuSoundControlBasis:
       return (values[0] == 0 ? SoundControlBasis.accelerationAndBrakeTime : SoundControlBasis.accelerationAndBrakeTimeAndTrainLoad).title
-    case .esuSpeedTablePreset:
-      return SpeedTablePreset.doNothing.title
-    case .threeValueSpeedTablePreset:
-      return ThreeValueSpeedTablePreset.identity.title
-    case .esuDecoderPhysicalOutput:
-      return esuDecoderPhysicalOutput.title
-    case .esuRandomFunction:
-      return esuRandomFunction.title
-    case .esuFunctionMapping:
-      return esuFunctionMapping.title
-    case .esuFunction:
-      return esuFunction.title
     case .esuFunctionIcon:
       if let item = ESUFunctionIcon(rawValue: values[1]) {
         return item.title
@@ -790,16 +807,10 @@ public class Decoder : NSObject {
       if let item = ESUPhysicalOutputMode(rawValue: values[0]) {
         return item.title(decoder: self)
       }
-    case .soundCV:
-      return soundCV.title
-    case .esuSoundSlot:
-      return esuSoundSlot.title
     case .esuClassLightLogicLength:
       if let item = ClassLightLogicSequenceLength(rawValue: values[0]) {
         return item.title
       }
-    case .speedTableIndex:
-      return "\(speedTableIndex)"
     case .speedTableValue:
       return "\(values[speedTableIndex - 1])"
     case .esuTriggeredFunction:
@@ -981,6 +992,8 @@ public class Decoder : NSObject {
       return ESUConditionDirection(title: string) != nil
     case .speedTableType:
       return SpeedTableType(title: string) != nil
+    case .esuDCMotorPWMFrequency:
+      return ESUDCMotorPWMFrequency(title: string) != nil
     default:
       guard let maxValue = definition.maxValue, let minValue = definition.minValue, let value = Int(string), value >= Int(minValue) && value <= Int(maxValue) else {
         return false
@@ -1093,6 +1106,8 @@ public class Decoder : NSObject {
       esuFunction = TriggeredFunction(title: string)!
     case .esuFunctionMapping:
       esuFunctionMapping = ESUFunctionMapping(title: string)!
+    case .esuDCMotorPWMFrequency:
+      newValues.append(ESUDCMotorPWMFrequency(title:string)!.rawValue)
     case .esuSmokeUnitControlMode:
       newValues.append(SmokeUnitControlMode(title: string)!.rawValue)
     case .esuPhysicalOutputMode:
