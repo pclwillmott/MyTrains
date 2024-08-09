@@ -46,6 +46,8 @@ public class PTSettingsPropertyView : NSView, NSTextFieldDelegate {
     
     threeValueSpeedTable = nil
     
+    nmraSpeedTable = nil
+    
   }
   
   // MARK: Controls
@@ -75,6 +77,8 @@ public class PTSettingsPropertyView : NSView, NSTextFieldDelegate {
   private var sfLabels : [NSTextField] = []
   
   private var threeValueSpeedTable : ThreeValueSpeedTable?
+  
+  private var nmraSpeedTable : NMRASpeedTable?
   
   // MARK: Private Properties
   
@@ -228,8 +232,10 @@ public class PTSettingsPropertyView : NSView, NSTextFieldDelegate {
       .comboBoxDynamic,
       .description,
       .functionsAnalogMode,
+      .functionsAnalogModeLok3,
       .functionsConsistMode,
       .functionsConsistModeLok4,
+      .functionsConsistModeLok3,
       .label,
       .textField,
       .textFieldWithSlider,
@@ -533,6 +539,38 @@ public class PTSettingsPropertyView : NSView, NSTextFieldDelegate {
         
       }
       
+    case .nmraSpeedTable:
+      
+      nmraSpeedTable = NMRASpeedTable()
+      
+      if let speedTable = nmraSpeedTable {
+        
+        speedTable.translatesAutoresizingMaskIntoConstraints = false
+        
+        self.addSubview(speedTable)
+        
+        viewConstraints.append(speedTable.topAnchor.constraint(equalTo: self.topAnchor))
+        
+        viewConstraints.append(speedTable.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: leadingOffset))
+
+        viewConstraints.append(speedTable.heightAnchor.constraint(equalToConstant: 400))
+        
+        viewConstraints.append(speedTable.widthAnchor.constraint(equalToConstant: 600))
+        
+        viewConstraints.append(self.bottomAnchor.constraint(greaterThanOrEqualTo: speedTable.bottomAnchor))
+        
+        viewConstraints.append(self.trailingAnchor.constraint(greaterThanOrEqualToSystemSpacingAfter: speedTable.trailingAnchor, multiplier: 1.0))
+        
+        if let cvLabel {
+          
+          viewConstraints.append(cvLabel.leadingAnchor.constraint(greaterThanOrEqualToSystemSpacingAfter: speedTable.trailingAnchor, multiplier: 1.0))
+
+          viewConstraints.append(cvLabel.centerYAnchor.constraint(equalTo: speedTable.centerYAnchor))
+
+        }
+        
+      }
+      
     case .threeValueSpeedTable:
       
       threeValueSpeedTable = ThreeValueSpeedTable()
@@ -676,6 +714,100 @@ public class PTSettingsPropertyView : NSView, NSTextFieldDelegate {
         var topAnchor : NSLayoutYAxisAnchor = label.bottomAnchor
         
         for item in FunctionAnalogMode.allCases {
+          
+          let button = NSButton(checkboxWithTitle: item.title, target: self, action: #selector(buttonAnalogAction(_:)))
+          
+          button.translatesAutoresizingMaskIntoConstraints = false
+          
+          self.addSubview(button)
+          
+          button.tag = Int(item.rawValue)
+          
+          functionButtons.append(button)
+          
+          if let lastButton {
+            
+            viewConstraints.append(button.leadingAnchor.constraint(equalToSystemSpacingAfter: lastButton.trailingAnchor, multiplier: 1.0))
+            
+          }
+          else {
+            
+            viewConstraints.append(button.leadingAnchor.constraint(equalTo: label.leadingAnchor))
+            
+          }
+          
+          viewConstraints.append(button.topAnchor.constraint(equalToSystemSpacingBelow: topAnchor, multiplier: 1.0))
+          
+          viewConstraints.append(self.bottomAnchor.constraint(greaterThanOrEqualTo: button.bottomAnchor))
+          
+          viewConstraints.append(self.trailingAnchor.constraint(greaterThanOrEqualToSystemSpacingAfter: button.trailingAnchor, multiplier: 1.0))
+          
+          lastButton = button
+          
+          buttonCount += 1
+          
+          if buttonCount == 4 {
+            
+            if let cvLabel {
+              
+              viewConstraints.append(cvLabel.leadingAnchor.constraint(greaterThanOrEqualToSystemSpacingAfter: button.trailingAnchor, multiplier: 1.0))
+              
+            }
+            
+            lastButton = nil
+            buttonCount = 0
+            topAnchor = button.bottomAnchor
+            
+          }
+
+        }
+        
+        for button1 in functionButtons {
+          for button2 in functionButtons {
+            if !(button1 === button2) {
+              viewConstraints.append(button1.widthAnchor.constraint(greaterThanOrEqualTo: button2.widthAnchor))
+            }
+          }
+        }
+        
+      }
+      
+    case .functionsAnalogModeLok3:
+    
+      if let label {
+        
+        if let cvLabel {
+          
+          viewConstraints.append(cvLabel.topAnchor.constraint(equalToSystemSpacingBelow: label.bottomAnchor, multiplier: 1.0))
+          
+        }
+        
+        var lastButton : NSButton?
+        
+        var buttonCount = 0
+        
+        var topAnchor : NSLayoutYAxisAnchor = label.bottomAnchor
+        
+        let functions : [FunctionAnalogMode] = [
+          .frontLight,
+          .rearLight,
+          .f1,
+          .f2,
+          .f3,
+          .f4,
+          .f5,
+          .f6,
+          .f7,
+          .f8,
+          .f9_f,
+          .f9_r,
+          .f10_f,
+          .f10_r,
+          .f11,
+          .f12,
+        ]
+        
+        for item in functions {
           
           let button = NSButton(checkboxWithTitle: item.title, target: self, action: #selector(buttonAnalogAction(_:)))
           
@@ -886,6 +1018,97 @@ public class PTSettingsPropertyView : NSView, NSTextFieldDelegate {
         
       }
 
+    case .functionsConsistModeLok3:
+
+      if let label {
+        
+        if let cvLabel {
+          
+          viewConstraints.append(cvLabel.topAnchor.constraint(equalToSystemSpacingBelow: label.bottomAnchor, multiplier: 1.0))
+          
+        }
+        
+        var lastButton : NSButton?
+        
+        var buttonCount = 0
+        
+        var topAnchor : NSLayoutYAxisAnchor = label.bottomAnchor
+        
+        let functions : [FunctionConsistMode] = [
+          .frontLight,
+          .rearLight,
+          .f1,
+          .f2,
+          .f3,
+          .f4,
+          .f5,
+          .f6,
+          .f7,
+          .f8,
+          .f9,
+          .f10,
+          .f11,
+          .f12,
+        ]
+        
+        for item in functions {
+          
+          let button = NSButton(checkboxWithTitle: item.title, target: self, action: #selector(buttonConsistAction(_:)))
+          
+          button.translatesAutoresizingMaskIntoConstraints = false
+          
+          self.addSubview(button)
+          
+          button.tag = Int(item.rawValue)
+          
+          functionButtons.append(button)
+          
+          if let lastButton {
+            
+            viewConstraints.append(button.leadingAnchor.constraint(equalToSystemSpacingAfter: lastButton.trailingAnchor, multiplier: 1.0))
+            
+          }
+          else {
+            
+            viewConstraints.append(button.leadingAnchor.constraint(equalTo: label.leadingAnchor))
+            
+          }
+          
+          viewConstraints.append(button.topAnchor.constraint(equalToSystemSpacingBelow: topAnchor, multiplier: 1.0))
+          
+          viewConstraints.append(self.bottomAnchor.constraint(greaterThanOrEqualTo: button.bottomAnchor))
+          
+          viewConstraints.append(self.trailingAnchor.constraint(greaterThanOrEqualToSystemSpacingAfter: button.trailingAnchor, multiplier: 1.0))
+          
+          lastButton = button
+          
+          buttonCount += 1
+          
+          if buttonCount == 4 {
+            
+            if let cvLabel {
+              
+              viewConstraints.append(cvLabel.leadingAnchor.constraint(greaterThanOrEqualToSystemSpacingAfter: button.trailingAnchor, multiplier: 1.0))
+              
+            }
+            
+            lastButton = nil
+            buttonCount = 0
+            topAnchor = button.bottomAnchor
+            
+          }
+
+        }
+        
+        for button1 in functionButtons {
+          for button2 in functionButtons {
+            if !(button1 === button2) {
+              viewConstraints.append(button1.widthAnchor.constraint(greaterThanOrEqualTo: button2.widthAnchor))
+            }
+          }
+        }
+        
+      }
     default:
       break
     }
@@ -969,6 +1192,8 @@ public class PTSettingsPropertyView : NSView, NSTextFieldDelegate {
       ESUDecoderPhysicalOutput.populate(comboBox: comboBox, decoder: decoder)
     case .physicalOutputOutputMode:
       ESUPhysicalOutputMode.populate(comboBox: comboBox, decoder: decoder)
+    case .physicalOutputModeB:
+      ESUPhysicalOutputModeB.populate(comboBox: comboBox, decoder: decoder)
     case .esuSoundSlot:
       ESUSoundSlot.populate(comboBox: comboBox, decoder: decoder)
     case .esuFunctionMapping:
@@ -1006,6 +1231,8 @@ public class PTSettingsPropertyView : NSView, NSTextFieldDelegate {
       
       let value = decoder.getValue(property: property)
       
+      debugLog("\(property)")
+      
       switch definition.controlType {
       case .checkBox:
         checkBox!.boolValue = value == "true"
@@ -1028,10 +1255,13 @@ public class PTSettingsPropertyView : NSView, NSTextFieldDelegate {
       case .esuSpeedTable:
         speedTable!.decoder = decoder
         speedTable?.needsDisplay = true
+      case .nmraSpeedTable:
+        nmraSpeedTable!.decoder = decoder
+        nmraSpeedTable?.needsDisplay = true
       case .threeValueSpeedTable:
         threeValueSpeedTable?.decoder = decoder
         threeValueSpeedTable?.needsDisplay = true
-      case .functionsAnalogMode:
+      case .functionsAnalogMode, .functionsAnalogModeLok3:
         
         let supported = decoder.supportedFunctionsAnalogMode
         

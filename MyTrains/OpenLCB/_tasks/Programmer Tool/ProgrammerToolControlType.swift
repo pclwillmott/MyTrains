@@ -22,9 +22,12 @@ public enum ProgrammerToolControlType {
   case comboBoxDynamic
   case functionsConsistMode
   case functionsConsistModeLok4
+  case functionsConsistModeLok3
   case functionsAnalogMode
+  case functionsAnalogModeLok3
   case esuSpeedTable
   case esuSUSIMapping
   case threeValueSpeedTable
+  case nmraSpeedTable
 
 }

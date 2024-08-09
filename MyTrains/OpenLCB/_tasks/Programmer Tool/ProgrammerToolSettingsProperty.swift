@@ -38,6 +38,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
   case locomotiveAddressLong = 3
   case marklinConsecutiveAddresses = 5
   case locomotiveAddressWarning = 6
+  case enableSecondAddressForMotorolaCommands = 408
   
   // DCC Consist Address
   
@@ -46,10 +47,12 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
   case consistReverseDirection = 9
   case consistFunctions = 163
   case consistFunctionsLok4 = 390
+  case consistFunctionsLok3 = 419
 
   // Analog Settings
   
   case analogModeActiveFunctions = 164
+  case analogModeActiveFunctionsLok3 = 420
   case enableACAnalogMode = 10
   case acAnalogModeStartVoltage = 11
   case acAnalogModeMaximumSpeedVoltage = 12
@@ -62,6 +65,8 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
   case analogVoltageHysteresisDescription = 19
   case analogMotorHysteresisVoltage = 20
   case analogFunctionDifferenceVoltage = 21
+  case disableMotorPWM = 409
+  case disableFunctionOutputPWM = 410
 
   // Brake Settings
   
@@ -73,6 +78,10 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
   case enableABCShuttleTrain = 27
   case waitingPeriodBeforeDirectionChange = 28
   case hluAllowZIMO = 29
+  case allowMarklinBrakeSections = 411
+  case allowZIMOBrakeSections = 414
+  case allowLenzBrakeSections = 412
+  case allowTrixBrakeSections = 413
   case hluSendZIMOZACKSignals = 30
   case hluSpeedLimit1 = 31
   case hluSpeedLimit2 = 32
@@ -140,6 +149,9 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
   // Function Outputs
   
   case physicalOutput = 165
+  case physicalOutputModeB = 415
+  case physicalOutputBrightnessB = 416
+  case physicalOutputPulseLengthB = 417
   case physicalOutputAUX10Warning = 224
   case physicalOutputAUX11Warning = 225
   case physicalOutputAUX12Warning = 226
@@ -187,7 +199,9 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
   
   // Function Settings
   
+  case triggerUserSoundsOnFunctionStatusChange = 422
   case frequencyForBlinkingEffects = 92
+  case frequencyForBlinkingEffectsB = 421
   case gradeCrossingHoldingTime = 93
   case fadeInTimeOfLightEffects = 94
   case fadeOutTimeOfLightEffects = 95
@@ -371,13 +385,16 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
   case enableSUSISlave = 162
   case enableSimpleSUSI = 388
   case susiMapping = 242
-  
+  case disableMotorEMKMeasureDescription = 423
+  case disableMotorEMKMeasure = 424
+
   // Motor Settings
   
   case locomotiveName = 255
   case locoMaximumSpeed = 256
   case speedTableType = 375
   case threeValueSpeedTable = 379
+  case nmraSpeedTable = 425
   case vStart = 376
   case vMid = 377
   case vHigh = 378

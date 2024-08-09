@@ -149,6 +149,8 @@
 		DA595E182B8924E600ADF87B /* OpenLCBNodeVirtual - Messages - Datagram Transport.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA595E172B8924E600ADF87B /* OpenLCBNodeVirtual - Messages - Datagram Transport.swift */; };
 		DA595E1A2B89270B00ADF87B /* OpenLCBNodeVirtual - Messages - Event Transport.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA595E192B89270B00ADF87B /* OpenLCBNodeVirtual - Messages - Event Transport.swift */; };
 		DA595E1C2B892C5D00ADF87B /* OpenLCBNodeVirtual - Messages - Message Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA595E1B2B892C5D00ADF87B /* OpenLCBNodeVirtual - Messages - Message Network.swift */; };
+		DA59FFB02C6651E90089FFEF /* ESUPhysicalOutputModeB.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA59FFAF2C6651E90089FFEF /* ESUPhysicalOutputModeB.swift */; };
+		DA59FFB22C6686BF0089FFEF /* NMRASpeedTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA59FFB12C6686BF0089FFEF /* NMRASpeedTable.swift */; };
 		DA5A9F90295C89FC00950479 /* NumberBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5A9F8F295C89FC00950479 /* NumberBase.swift */; };
 		DA5B4601276F4E38005CA03C /* DatabaseConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5B4600276F4E38005CA03C /* DatabaseConstants.swift */; };
 		DA5B4607276F6917005CA03C /* ComboBoxDBDS.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5B4606276F6917005CA03C /* ComboBoxDBDS.swift */; };
@@ -644,6 +646,8 @@
 		DA595E172B8924E600ADF87B /* OpenLCBNodeVirtual - Messages - Datagram Transport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OpenLCBNodeVirtual - Messages - Datagram Transport.swift"; sourceTree = "<group>"; };
 		DA595E192B89270B00ADF87B /* OpenLCBNodeVirtual - Messages - Event Transport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OpenLCBNodeVirtual - Messages - Event Transport.swift"; sourceTree = "<group>"; };
 		DA595E1B2B892C5D00ADF87B /* OpenLCBNodeVirtual - Messages - Message Network.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OpenLCBNodeVirtual - Messages - Message Network.swift"; sourceTree = "<group>"; };
+		DA59FFAF2C6651E90089FFEF /* ESUPhysicalOutputModeB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ESUPhysicalOutputModeB.swift; sourceTree = "<group>"; };
+		DA59FFB12C6686BF0089FFEF /* NMRASpeedTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NMRASpeedTable.swift; sourceTree = "<group>"; };
 		DA5A9F8F295C89FC00950479 /* NumberBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberBase.swift; sourceTree = "<group>"; };
 		DA5B4600276F4E38005CA03C /* DatabaseConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseConstants.swift; sourceTree = "<group>"; };
 		DA5B4606276F6917005CA03C /* ComboBoxDBDS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComboBoxDBDS.swift; sourceTree = "<group>"; };
@@ -1116,6 +1120,7 @@
 				DAE524FD2C454D60000FC319 /* DecoderSensorSettings.swift */,
 				DAE524FF2C459854000FC319 /* ESUDecoderPhysicalOutput.swift */,
 				DAEC69492C4BEEFD008F1CFF /* ESUPhysicalOutputMode.swift */,
+				DA59FFAF2C6651E90089FFEF /* ESUPhysicalOutputModeB.swift */,
 				DA9CBFB72C5696CE00CC54B7 /* ESURandomFunction.swift */,
 				DA188A9A2C5A93F100A50EFB /* ESUCondition.swift */,
 				DA188A9C2C5A951200A50EFB /* ESUConditionDriving.swift */,
@@ -1307,6 +1312,7 @@
 				DAD22F7C2BD574E100F396AD /* FlippedView.swift */,
 				DA6BA5112C4A9BF10028EDA0 /* ESUSpeedTable.swift */,
 				DA23FE792C5BD15300303AE2 /* ThreeValueSpeedTable.swift */,
+				DA59FFB12C6686BF0089FFEF /* NMRASpeedTable.swift */,
 			);
 			path = "_custom views";
 			sourceTree = "<group>";
@@ -2237,6 +2243,7 @@
 				DA408A5A2B5829C3005EBBDE /* AppMode.swift in Sources */,
 				DAFFB65B2B5D49680035AC74 /* CreateVirtualNodeVC.swift in Sources */,
 				DA31688B2BCACBD000059B6C /* SWBNodeLink.swift in Sources */,
+				DA59FFB22C6686BF0089FFEF /* NMRASpeedTable.swift in Sources */,
 				DA5714392C54023200FA91DA /* Decoder Extension - Layout Rules.swift in Sources */,
 				DA2B5FD22C2863B000A15FAA /* SpeedProfilerEventType.swift in Sources */,
 				DA8AE0F0279B3074001E9311 /* SlotViewVC.swift in Sources */,
@@ -2410,6 +2417,7 @@
 				DAA54F7F2A217CDA005CED7E /* OpenLCBNodeConfigurationTool.swift in Sources */,
 				DAB93F262C04D306006C0580 /* LayoutBuilderGeneralArea.swift in Sources */,
 				DABC089B2B1B895B00260605 /* LocoNetIMMPacketRepeat.swift in Sources */,
+				DA59FFB02C6651E90089FFEF /* ESUPhysicalOutputModeB.swift in Sources */,
 				DA5BA7DD2C4FF6DD0051407C /* UnitCurrent.swift in Sources */,
 				DAB4A73F2B40483700CD5256 /* CDIMapView.swift in Sources */,
 				DAA777CC2A20C861008EAF02 /* OpenLCBClockType.swift in Sources */,

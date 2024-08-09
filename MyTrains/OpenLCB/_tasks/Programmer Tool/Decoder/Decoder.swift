@@ -47,6 +47,8 @@ public class Decoder : NSObject {
       setSavedValue(cv: item.cv, value: item.defaultValue)
     }
     
+    esuDecoderPhysicalOutput = decoderType.capabilities.contains(.singleFrontRearAux1Aux2) ? .frontLightOnly : .frontLight
+    
     revertToSaved()
 
   }
@@ -281,7 +283,9 @@ public class Decoder : NSObject {
   public var supportedFunctionsAnalogMode : Set<FunctionAnalogMode> {
     var result : Set<FunctionAnalogMode> = []
     for item in FunctionAnalogMode.allCases {
-      result.insert(item)
+      if let _ = item.cvMask(decoder: self) {
+        result.insert(item)
+      }
     }
     return result
   }
@@ -327,6 +331,19 @@ public class Decoder : NSObject {
   
   public var esuSupportedPhysicalOutputs : Set<ESUDecoderPhysicalOutput> {
     
+    let capabilities = decoderType.capabilities
+    
+    if capabilities.contains(.singleFrontRearAux1Aux2) {
+      return [
+        .frontLightOnly,
+        .rearLightOnly,
+        .aux1Only,
+        .aux2Only,
+        .aux3,
+        .aux4,
+      ]
+    }
+    
     var result : Set<ESUDecoderPhysicalOutput> = [
       .frontLight,
       .frontLight_2,
@@ -336,7 +353,7 @@ public class Decoder : NSObject {
       .aux1_2,
     ]
 
-    if decoderType.capabilities.intersection([.aux2toAux4]) == [.aux2toAux4] {
+    if capabilities.intersection([.aux2toAux4]) == [.aux2toAux4] {
       result = result.union([
         .aux2,
         .aux2_2,
@@ -345,35 +362,35 @@ public class Decoder : NSObject {
       ])
     }
 
-    if decoderType.capabilities.intersection([.aux5toAux6]) == [.aux5toAux6] {
+    if capabilities.intersection([.aux5toAux6]) == [.aux5toAux6] {
       result = result.union([
         .aux5,
         .aux6,
       ])
     }
 
-    if decoderType.capabilities.intersection([.aux7toAux8]) == [.aux7toAux8] {
+    if capabilities.intersection([.aux7toAux8]) == [.aux7toAux8] {
       result = result.union([
         .aux7,
         .aux8,
       ])
     }
 
-    if decoderType.capabilities.intersection([.aux9toAux10]) == [.aux9toAux10] {
+    if capabilities.intersection([.aux9toAux10]) == [.aux9toAux10] {
       result = result.union([
         .aux9,
         .aux10,
       ])
     }
 
-    if decoderType.capabilities.intersection([.aux11toAux12]) == [.aux11toAux12] {
+    if capabilities.intersection([.aux11toAux12]) == [.aux11toAux12] {
       result = result.union([
         .aux11,
         .aux12,
       ])
     }
 
-    if decoderType.capabilities.intersection([.aux13toAux18]) == [.aux13toAux18] {
+    if capabilities.intersection([.aux13toAux18]) == [.aux13toAux18] {
       
       result = result.union([
         .aux13,
@@ -544,12 +561,12 @@ public class Decoder : NSObject {
   }
 
   public func getAnalogFunctionState(function:FunctionAnalogMode) -> Bool {
-    let cvMask = function.cvMask
+    let cvMask = function.cvMask(decoder: self)!
     return getBool(cv: cvMask.cv, mask: cvMask.mask)!
   }
   
   public func setAnalogFunctionState(function:FunctionAnalogMode, state:Bool) {
-    let cvMask = function.cvMask
+    let cvMask = function.cvMask(decoder: self)!
     setBool(cv: cvMask.cv, mask: cvMask.mask, value: state)
   }
 
@@ -807,6 +824,10 @@ public class Decoder : NSObject {
       if let item = ESUPhysicalOutputMode(rawValue: values[0]) {
         return item.title(decoder: self)
       }
+    case .esuPhysicalOutputModeB:
+      if let item = ESUPhysicalOutputModeB(rawValue: values[0]) {
+        return item.title(decoder: self)
+      }
     case .esuClassLightLogicLength:
       if let item = ClassLightLogicSequenceLength(rawValue: values[0]) {
         return item.title
@@ -948,6 +969,8 @@ public class Decoder : NSObject {
       return ESUDecoderPhysicalOutput(title: string) != nil
     case .esuPhysicalOutputMode:
       return ESUPhysicalOutputMode(title: string, decoder: self) != nil
+    case .esuPhysicalOutputModeB:
+      return ESUPhysicalOutputModeB(title: string, decoder: self) != nil
     case .esuSteamChuffMode:
       return SteamChuffMode(title: string) != nil
     case .esuSmokeUnitControlMode:
@@ -1112,6 +1135,8 @@ public class Decoder : NSObject {
       newValues.append(SmokeUnitControlMode(title: string)!.rawValue)
     case .esuPhysicalOutputMode:
       newValues.append(ESUPhysicalOutputMode(title: string, decoder: self)!.rawValue)
+    case .esuPhysicalOutputModeB:
+      newValues.append(ESUPhysicalOutputModeB(title: string, decoder: self)!.rawValue)
     case .esuClassLightLogicLength:
       newValues.append(ClassLightLogicSequenceLength(title: string)!.rawValue)
     case .speedTableIndex:

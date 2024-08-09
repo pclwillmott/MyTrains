@@ -692,10 +692,22 @@
     "Allow Data Transmission on Channel 2" : {
 
     },
+    "Allow Lenz Brake Sections" : {
+
+    },
+    "Allow Märklin Brake Sections" : {
+
+    },
     "Allow Shunt" : {
       "comment" : "This is used for the title of a check box where the user can select if shunting is allowed in reverese direction on this switchbaord item."
     },
+    "Allow Trix Brake Sections" : {
+
+    },
     "Allow ZIMO (HLU) Brake Sections" : {
+
+    },
+    "Allowed Brake Sections" : {
 
     },
     "Alternate Clock 1" : {
@@ -736,6 +748,9 @@
 
     },
     "Analog Mode Motor Control" : {
+
+    },
+    "Analog Mode PWM" : {
 
     },
     "Analog Settings" : {
@@ -936,10 +951,16 @@
     "Automatic Uncoupling Wait Time" : {
 
     },
+    "AUX1" : {
+
+    },
     "AUX1 [1]" : {
 
     },
     "AUX1 [2]" : {
+
+    },
+    "AUX2" : {
 
     },
     "AUX2 [1]" : {
@@ -2825,6 +2846,15 @@
     "Disable Brake Sound" : {
 
     },
+    "Disable Function Output PWM (always maximum brightness)" : {
+
+    },
+    "Disable motor EMK measure" : {
+
+    },
+    "Disable Motor PWM" : {
+
+    },
     "Disabled" : {
       "comment" : "Used to indicate that something is disabled",
       "localizations" : {
@@ -2842,6 +2872,9 @@
         }
       }
     },
+    "Disables the motor EMK measure, if load control is disabled. This setting must be checked for use with a Softdrive Sinus motor." : {
+
+    },
     "Discard Changes" : {
 
     },
@@ -2855,6 +2888,12 @@
 
     },
     "Ditch Light" : {
+
+    },
+    "Ditch light (Phase 1)" : {
+
+    },
+    "Ditch light (Phase 2)" : {
 
     },
     "Ditch light type 1" : {
@@ -3208,6 +3247,9 @@
 
     },
     "Enable Reverse Trimming" : {
+
+    },
+    "Enable second address for Motorola commands" : {
 
     },
     "Enable Secondary Trigger" : {
@@ -3668,7 +3710,19 @@
     "F9" : {
 
     },
+    "F9 (f)" : {
+
+    },
+    "F9 (r)" : {
+
+    },
     "F10" : {
+
+    },
+    "F10 (f)" : {
+
+    },
+    "F10 (r)" : {
 
     },
     "F11" : {
@@ -3892,6 +3946,12 @@
 
     },
     "Flash light" : {
+
+    },
+    "Flash light (Phase 1)" : {
+
+    },
+    "Flash light (Phase 2)" : {
 
     },
     "Forward" : {
@@ -5751,6 +5811,9 @@
     "Motor Current Limiter Limit" : {
 
     },
+    "Motor EMK Measure" : {
+
+    },
     "Motor Hysteresis Voltage" : {
 
     },
@@ -6616,6 +6679,12 @@
 
     },
     "Protocol Support Reply" : {
+
+    },
+    "Pulse" : {
+
+    },
+    "Pulse Length" : {
 
     },
     "Purple" : {
@@ -7978,6 +8047,9 @@
     "Sound Fade-In and Fade-Out Time" : {
 
     },
+    "Sound Function Behaviour" : {
+
+    },
     "Sound Lock" : {
 
     },
@@ -9102,6 +9174,9 @@
 
     },
     "Trigger smoke chuff" : {
+
+    },
+    "Trigger user sounds on function status change (LokSound 2 behaviour)" : {
 
     },
     "Triggered Function" : {

@@ -136,7 +136,7 @@ public enum ESUSoundSlot : Int, CaseIterable {
     
     var slots : Set<ESUSoundSlot> = []
     
-    if decoder.decoderType.capabilities.contains(.lok4) {
+    if decoder.decoderType.capabilities.contains(.soundSlot1to24) {
       slots = slots.union([
         .soundSlot1,
         .soundSlot2,
@@ -162,46 +162,42 @@ public enum ESUSoundSlot : Int, CaseIterable {
         .soundSlot22,
         .soundSlot23,
         .soundSlot24,
-        .randomSounds,
-        .brakeSound,
-        .gearShiftSound,
       ])
     }
-    else {
+    
+    if decoder.decoderType.capabilities.contains(.soundSlot25to27) {
       slots = slots.union([
-        .soundSlot1,
-        .soundSlot2,
-        .soundSlot3,
-        .soundSlot4,
-        .soundSlot5,
-        .soundSlot6,
-        .soundSlot7,
-        .soundSlot8,
-        .soundSlot9,
-        .soundSlot10,
-        .soundSlot11,
-        .soundSlot12,
-        .soundSlot13,
-        .soundSlot14,
-        .soundSlot15,
-        .soundSlot16,
-        .soundSlot17,
-        .soundSlot18,
-        .soundSlot19,
-        .soundSlot21,
-        .soundSlot22,
-        .soundSlot23,
-        .soundSlot24,
         .soundSlot25,
         .soundSlot26,
         .soundSlot27,
+      ])
+    }
+
+    if decoder.decoderType.capabilities.contains(.soundSlot28to32) {
+      slots = slots.union([
         .soundSlot28,
         .soundSlot29,
         .soundSlot30,
         .soundSlot31,
         .soundSlot32,
+      ])
+    }
+
+    if decoder.decoderType.capabilities.contains(.soundSlotBrake) {
+      slots = slots.union([
         .brakeSound,
+      ])
+    }
+
+    if decoder.decoderType.capabilities.contains(.soundSlotGearShift) {
+      slots = slots.union([
         .gearShiftSound,
+      ])
+    }
+
+    if decoder.decoderType.capabilities.contains(.soundSlotRandom) {
+      slots = slots.union([
+        .randomSounds,
       ])
     }
     

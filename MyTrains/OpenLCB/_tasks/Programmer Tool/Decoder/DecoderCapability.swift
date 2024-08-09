@@ -57,5 +57,28 @@ public enum DecoderCapability : CaseIterable {
   case serialFunctionModeForLGBMTS
   case constantBrakeDistance
   case automaticUncoupling
+  case soundSlot1to24
+  case soundSlot25to27
+  case soundSlot28to32
+  case soundSlotGearShift
+  case soundSlotBrake
+  case soundSlotRandom
+  case lok3
+  case physicalOutputsPropertiesA
+  case physicalOutputsPropertiesB
+  case functionIcons
+  case locoMaximumSpeedAndName
+  case singleFrontRearAux1Aux2
+  case analogModeActiveFunctions
+  case railCom
+  case frequencyForBlinkingEffectsA
+  case frequencyForBlinkingEffectsB
+  case gradeCrossingHoldingTime
+  case triggerSoundsOnFunctionStatusChange
+  case analogModeHysteresis
+  case zimoManualFunction
+  case disableMotorEMKMeasure
+  case esuSpeedTable
+  case nmraSpeedTable
   
 }

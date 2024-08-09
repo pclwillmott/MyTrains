@@ -66,12 +66,19 @@ public enum FunctionConsistMode : UInt8, CaseIterable {
   // MARK: Public Methods
   
   public func cvMask(decoder:Decoder) -> (cv:CV, mask:UInt8)? {
-    if decoder.decoderType.capabilities.contains(.lok5) {
+    
+    let capabilities = decoder.decoderType.capabilities
+    
+    if capabilities.contains(.lok5) {
       return FunctionConsistMode.masks_lok5[self]
     }
-    else {
+    else if capabilities.contains(.lok4){
       return FunctionConsistMode.masks_lok4[self]
     }
+    else {
+      return FunctionConsistMode.masks_lok3[self]
+    }
+    
   }
   
   // MARK: Private Class Properties
@@ -113,38 +120,38 @@ public enum FunctionConsistMode : UInt8, CaseIterable {
   ]
 
   private static let masks_lok5 : [FunctionConsistMode:(cv:CV, mask:UInt8)] = [
+    .f1         : (.cv_000_000_021, ByteMask.d0),
+    .f2         : (.cv_000_000_021, ByteMask.d1),
+    .f3         : (.cv_000_000_021, ByteMask.d2),
+    .f4         : (.cv_000_000_021, ByteMask.d3),
+    .f5         : (.cv_000_000_021, ByteMask.d4),
+    .f6         : (.cv_000_000_021, ByteMask.d5),
+    .f7         : (.cv_000_000_021, ByteMask.d6),
+    .f8         : (.cv_000_000_021, ByteMask.d7),
     .frontLight : (.cv_000_000_022, ByteMask.d0),
     .rearLight  : (.cv_000_000_022, ByteMask.d1),
-    .f1  : (.cv_000_000_021, ByteMask.d0),
-    .f2  : (.cv_000_000_021, ByteMask.d1),
-    .f3  : (.cv_000_000_021, ByteMask.d2),
-    .f4  : (.cv_000_000_021, ByteMask.d3),
-    .f5  : (.cv_000_000_021, ByteMask.d4),
-    .f6  : (.cv_000_000_021, ByteMask.d5),
-    .f7  : (.cv_000_000_021, ByteMask.d6),
-    .f8  : (.cv_000_000_021, ByteMask.d7),
-    .f9  : (.cv_000_000_022, ByteMask.d2),
-    .f10 : (.cv_000_000_022, ByteMask.d3),
-    .f11 : (.cv_000_000_022, ByteMask.d4),
-    .f12 : (.cv_000_000_022, ByteMask.d5),
-    .f13 : (.cv_000_000_022, ByteMask.d6),
-    .f14 : (.cv_000_000_022, ByteMask.d7),
-    .f15 : (.cv_000_000_109, ByteMask.d0),
-    .f16 : (.cv_000_000_109, ByteMask.d1),
-    .f17 : (.cv_000_000_109, ByteMask.d2),
-    .f18 : (.cv_000_000_109, ByteMask.d3),
-    .f19 : (.cv_000_000_109, ByteMask.d4),
-    .f20 : (.cv_000_000_109, ByteMask.d5),
-    .f21 : (.cv_000_000_109, ByteMask.d6),
-    .f22 : (.cv_000_000_109, ByteMask.d7),
-    .f23 : (.cv_000_000_110, ByteMask.d0),
-    .f24 : (.cv_000_000_110, ByteMask.d1),
-    .f25 : (.cv_000_000_110, ByteMask.d2),
-    .f26 : (.cv_000_000_110, ByteMask.d3),
-    .f27 : (.cv_000_000_110, ByteMask.d4),
-    .f28 : (.cv_000_000_110, ByteMask.d5),
-    .f29 : (.cv_000_000_110, ByteMask.d6),
-    .f30 : (.cv_000_000_110, ByteMask.d7),
+    .f9         : (.cv_000_000_022, ByteMask.d2),
+    .f10        : (.cv_000_000_022, ByteMask.d3),
+    .f11        : (.cv_000_000_022, ByteMask.d4),
+    .f12        : (.cv_000_000_022, ByteMask.d5),
+    .f13        : (.cv_000_000_022, ByteMask.d6),
+    .f14        : (.cv_000_000_022, ByteMask.d7),
+    .f15        : (.cv_000_000_109, ByteMask.d0),
+    .f16        : (.cv_000_000_109, ByteMask.d1),
+    .f17        : (.cv_000_000_109, ByteMask.d2),
+    .f18        : (.cv_000_000_109, ByteMask.d3),
+    .f19        : (.cv_000_000_109, ByteMask.d4),
+    .f20        : (.cv_000_000_109, ByteMask.d5),
+    .f21        : (.cv_000_000_109, ByteMask.d6),
+    .f22        : (.cv_000_000_109, ByteMask.d7),
+    .f23        : (.cv_000_000_110, ByteMask.d0),
+    .f24        : (.cv_000_000_110, ByteMask.d1),
+    .f25        : (.cv_000_000_110, ByteMask.d2),
+    .f26        : (.cv_000_000_110, ByteMask.d3),
+    .f27        : (.cv_000_000_110, ByteMask.d4),
+    .f28        : (.cv_000_000_110, ByteMask.d5),
+    .f29        : (.cv_000_000_110, ByteMask.d6),
+    .f30        : (.cv_000_000_110, ByteMask.d7),
   ]
 
   private static let masks_lok4 : [FunctionConsistMode:(cv:CV, mask:UInt8)] = [
@@ -164,6 +171,23 @@ public enum FunctionConsistMode : UInt8, CaseIterable {
     .f13 : (.cv_000_000_022, ByteMask.d5),
     .f14 : (.cv_000_000_022, ByteMask.d6),
     .f15 : (.cv_000_000_022, ByteMask.d7),
+  ]
+
+  private static let masks_lok3 : [FunctionConsistMode:(cv:CV, mask:UInt8)] = [
+    .f1         : (.cv_000_000_021, ByteMask.d0),
+    .f2         : (.cv_000_000_021, ByteMask.d1),
+    .f3         : (.cv_000_000_021, ByteMask.d2),
+    .f4         : (.cv_000_000_021, ByteMask.d3),
+    .f5         : (.cv_000_000_021, ByteMask.d4),
+    .f6         : (.cv_000_000_021, ByteMask.d5),
+    .f7         : (.cv_000_000_021, ByteMask.d6),
+    .f8         : (.cv_000_000_021, ByteMask.d7),
+    .frontLight : (.cv_000_000_022, ByteMask.d0),
+    .rearLight  : (.cv_000_000_022, ByteMask.d1),
+    .f9         : (.cv_000_000_022, ByteMask.d2),
+    .f10        : (.cv_000_000_022, ByteMask.d3),
+    .f11        : (.cv_000_000_022, ByteMask.d4),
+    .f12        : (.cv_000_000_022, ByteMask.d5),
   ]
 
 }
