@@ -109,6 +109,8 @@
 		DA441D2C2C1C981C00AF0165 /* ShapePart.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA441D2B2C1C981C00AF0165 /* ShapePart.swift */; };
 		DA441D2E2C1C985600AF0165 /* ShapePartType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA441D2D2C1C985600AF0165 /* ShapePartType.swift */; };
 		DA441D302C1C988200AF0165 /* ActionColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA441D2F2C1C988200AF0165 /* ActionColor.swift */; };
+		DA45BDD62C67744800FAD8E6 /* ESUDCMotorPWMFrequencyLok3.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA45BDD52C67744800FAD8E6 /* ESUDCMotorPWMFrequencyLok3.swift */; };
+		DA45BDD82C67847500FAD8E6 /* ESUSoundType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA45BDD72C67847500FAD8E6 /* ESUSoundType.swift */; };
 		DA467B9D281CAFDA00AB9650 /* NSColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA467B9C281CAFDA00AB9650 /* NSColorExtensions.swift */; };
 		DA467B9F281CBAF900AB9650 /* NSRectExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA467B9E281CBAF900AB9650 /* NSRectExtensions.swift */; };
 		DA47E5412C3AB6DD00A1D803 /* DecoderDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA47E5402C3AB6DD00A1D803 /* DecoderDelegate.swift */; };
@@ -284,7 +286,7 @@
 		DA8C2B872C386970001755AB /* LokPilot 5 Fx micro DCC [5.10.166].cvlist in Resources */ = {isa = PBXBuildFile; fileRef = DA8C2B3D2C386967001755AB /* LokPilot 5 Fx micro DCC [5.10.166].cvlist */; };
 		DA8C2B882C386970001755AB /* LokPilot 5 Fx [5.10.166].cvlist in Resources */ = {isa = PBXBuildFile; fileRef = DA8C2B3E2C386967001755AB /* LokPilot 5 Fx [5.10.166].cvlist */; };
 		DA8C2B892C386970001755AB /* LokPilot V4.0 DCC [4.16.9247].cvlist in Resources */ = {isa = PBXBuildFile; fileRef = DA8C2B3F2C386968001755AB /* LokPilot V4.0 DCC [4.16.9247].cvlist */; };
-		DA8C2B8A2C386970001755AB /* LokSound XL V3.5 [0.0.6093su].cvlist in Resources */ = {isa = PBXBuildFile; fileRef = DA8C2B402C386968001755AB /* LokSound XL V3.5 [0.0.6093su].cvlist */; };
+		DA8C2B8A2C386970001755AB /* LokSound XL V3.5 [0.0.6093].cvlist in Resources */ = {isa = PBXBuildFile; fileRef = DA8C2B402C386968001755AB /* LokSound XL V3.5 [0.0.6093].cvlist */; };
 		DA8C2B8B2C386970001755AB /* LokPilot 5 micro DCC Direct [5.10.166].cvlist in Resources */ = {isa = PBXBuildFile; fileRef = DA8C2B412C386968001755AB /* LokPilot 5 micro DCC Direct [5.10.166].cvlist */; };
 		DA8C2B8C2C386970001755AB /* LokPilot V3.0 DCC [0.0.6607].cvlist in Resources */ = {isa = PBXBuildFile; fileRef = DA8C2B422C386968001755AB /* LokPilot V3.0 DCC [0.0.6607].cvlist */; };
 		DA8C2B8D2C386970001755AB /* LokPilot Fx V3.0 [0.0.6442].cvlist in Resources */ = {isa = PBXBuildFile; fileRef = DA8C2B432C386969001755AB /* LokPilot Fx V3.0 [0.0.6442].cvlist */; };
@@ -607,6 +609,8 @@
 		DA441D2B2C1C981C00AF0165 /* ShapePart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShapePart.swift; sourceTree = "<group>"; };
 		DA441D2D2C1C985600AF0165 /* ShapePartType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShapePartType.swift; sourceTree = "<group>"; };
 		DA441D2F2C1C988200AF0165 /* ActionColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionColor.swift; sourceTree = "<group>"; };
+		DA45BDD52C67744800FAD8E6 /* ESUDCMotorPWMFrequencyLok3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ESUDCMotorPWMFrequencyLok3.swift; sourceTree = "<group>"; };
+		DA45BDD72C67847500FAD8E6 /* ESUSoundType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ESUSoundType.swift; sourceTree = "<group>"; };
 		DA467B9C281CAFDA00AB9650 /* NSColorExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSColorExtensions.swift; sourceTree = "<group>"; };
 		DA467B9E281CBAF900AB9650 /* NSRectExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSRectExtensions.swift; sourceTree = "<group>"; };
 		DA47E5402C3AB6DD00A1D803 /* DecoderDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecoderDelegate.swift; sourceTree = "<group>"; };
@@ -782,7 +786,7 @@
 		DA8C2B3D2C386967001755AB /* LokPilot 5 Fx micro DCC [5.10.166].cvlist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "LokPilot 5 Fx micro DCC [5.10.166].cvlist"; sourceTree = "<group>"; };
 		DA8C2B3E2C386967001755AB /* LokPilot 5 Fx [5.10.166].cvlist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "LokPilot 5 Fx [5.10.166].cvlist"; sourceTree = "<group>"; };
 		DA8C2B3F2C386968001755AB /* LokPilot V4.0 DCC [4.16.9247].cvlist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "LokPilot V4.0 DCC [4.16.9247].cvlist"; sourceTree = "<group>"; };
-		DA8C2B402C386968001755AB /* LokSound XL V3.5 [0.0.6093su].cvlist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "LokSound XL V3.5 [0.0.6093su].cvlist"; sourceTree = "<group>"; };
+		DA8C2B402C386968001755AB /* LokSound XL V3.5 [0.0.6093].cvlist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "LokSound XL V3.5 [0.0.6093].cvlist"; sourceTree = "<group>"; };
 		DA8C2B412C386968001755AB /* LokPilot 5 micro DCC Direct [5.10.166].cvlist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "LokPilot 5 micro DCC Direct [5.10.166].cvlist"; sourceTree = "<group>"; };
 		DA8C2B422C386968001755AB /* LokPilot V3.0 DCC [0.0.6607].cvlist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "LokPilot V3.0 DCC [0.0.6607].cvlist"; sourceTree = "<group>"; };
 		DA8C2B432C386969001755AB /* LokPilot Fx V3.0 [0.0.6442].cvlist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "LokPilot Fx V3.0 [0.0.6442].cvlist"; sourceTree = "<group>"; };
@@ -1126,6 +1130,8 @@
 				DA188A9C2C5A951200A50EFB /* ESUConditionDriving.swift */,
 				DA188A9E2C5A957F00A50EFB /* ESUConditionDirection.swift */,
 				DAA795F62C64CFF400994EAA /* ESUDCMotorPWMFrequency.swift */,
+				DA45BDD52C67744800FAD8E6 /* ESUDCMotorPWMFrequencyLok3.swift */,
+				DA45BDD72C67847500FAD8E6 /* ESUSoundType.swift */,
 				DA0F378D2C47D471002C66D8 /* SteamChuffMode.swift */,
 				DAAE3E3C2C4D261400F129B7 /* SmokeUnitControlMode.swift */,
 				DAAE3E3E2C4D2B8A00F129B7 /* ExternalSmokeUnitType.swift */,
@@ -1715,7 +1721,7 @@
 				DA8C2B342C386965001755AB /* LokSound V4.0 [4.17.9249].cvlist */,
 				DA8C2B362C386965001755AB /* LokSound V4.0 M4 [4.17.9249].cvlist */,
 				DA8C2B552C38696D001755AB /* LokSound V4.0 M4 OEM [4.17.9249].cvlist */,
-				DA8C2B402C386968001755AB /* LokSound XL V3.5 [0.0.6093su].cvlist */,
+				DA8C2B402C386968001755AB /* LokSound XL V3.5 [0.0.6093].cvlist */,
 				DA8C2B5B2C38696E001755AB /* LokSound XL V4.0 [4.17.9249].cvlist */,
 			);
 			path = "CV EXPORTS";
@@ -2168,7 +2174,7 @@
 				DA8A05652B53FE1A003A39D7 /* MyTrains Layout.xml in Resources */,
 				DAAA9C232A0FDD8600A5B9D6 /* ViewNodeInfo.storyboard in Resources */,
 				DA8C2B802C386970001755AB /* LokSound V4.0 M4 [4.17.9249].cvlist in Resources */,
-				DA8C2B8A2C386970001755AB /* LokSound XL V3.5 [0.0.6093su].cvlist in Resources */,
+				DA8C2B8A2C386970001755AB /* LokSound XL V3.5 [0.0.6093].cvlist in Resources */,
 				DAFACF592A26C5E0007C10F0 /* MyTrains Clock.xml in Resources */,
 				DA95D6BF28083E9800D9F1B6 /* GroupSetup.storyboard in Resources */,
 				DA8C2B6A2C386970001755AB /* LokPilot Basic [0.9.0].cvlist in Resources */,
@@ -2451,6 +2457,7 @@
 				DAA66BD22A092DC2001804AC /* StringExtensions.swift in Sources */,
 				DAAA9C212A0FAE0100A5B9D6 /* OpenLCBDatagramType.swift in Sources */,
 				DA51FB9C29D88320002CAAC1 /* LCCCANFrame.swift in Sources */,
+				DA45BDD62C67744800FAD8E6 /* ESUDCMotorPWMFrequencyLok3.swift in Sources */,
 				DA7AFCA32C4E71350074A45D /* ProgrammerToolSettingsPropertyDefinition.swift in Sources */,
 				DA56261529E1BE7800D465CC /* OpenLCBMTI.swift in Sources */,
 				DA347B6C2B9F43A00089CED9 /* OpenLCBConfigurationToolManager.swift in Sources */,
@@ -2483,6 +2490,7 @@
 				DAA867C427930C62008B6EEC /* IntExtensions.swift in Sources */,
 				DA7C509E2BD6D8FA0079E876 /* LayoutInspector.swift in Sources */,
 				DAEC31D42C5BC18300890846 /* SpeedTableType.swift in Sources */,
+				DA45BDD82C67847500FAD8E6 /* ESUSoundType.swift in Sources */,
 				DA57A6E92A4496A1005C72B0 /* LocoNetLocomotiveState.swift in Sources */,
 				DA0B63DC2AF7CB04007C7CD6 /* OpenLCBNetworkObserverDelegate.swift in Sources */,
 				DA28C2BD2801CC4800857471 /* DashBoardVC.swift in Sources */,

@@ -161,7 +161,7 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
       return
     }
     
-    decoder = Decoder(decoderType: .lokSoundV3_5)
+    decoder = Decoder(decoderType: .lokPilotV3_0)
     decoder?.delegate = self
 
     observerId = appNode.addObserver(observer: self)

@@ -177,6 +177,9 @@
         }
       }
     },
+    "15kHz motor pulse frequency" : {
+
+    },
     "16 2/3 Hz flickering" : {
 
     },
@@ -233,6 +236,9 @@
           }
         }
       }
+    },
+    "31kHz motor pulse frequency" : {
+
     },
     "35 seconds" : {
       "comment" : "Used to select a sampling period",
@@ -2720,6 +2726,12 @@
         }
       }
     },
+    "Diesel Hydraulical" : {
+
+    },
+    "Diesel Mechanical" : {
+
+    },
     "Difference between commanded speed and actual speed in the forward direction" : {
 
     },
@@ -2849,6 +2861,9 @@
     "Disable Function Output PWM (always maximum brightness)" : {
 
     },
+    "Disable load dependent sound" : {
+
+    },
     "Disable motor EMK measure" : {
 
     },
@@ -2884,7 +2899,13 @@
     "Display Protocol" : {
 
     },
+    "Distance of Gear Steps" : {
+
+    },
     "Distance of Steam Chuffs at Speed Step 1" : {
+
+    },
+    "Distance of Steam Chuffs at Speed Step 2 (steepness)" : {
 
     },
     "Ditch Light" : {
@@ -2995,6 +3016,9 @@
     "Drive Sound" : {
 
     },
+    "Drive Sound Speed" : {
+
+    },
     "Drive Until Locomotive Stops in Specified Period" : {
 
     },
@@ -3059,6 +3083,9 @@
     "Each event has a unique id. You can enter the event ids applicable to the turnout or crossing in the \"Events Inspector\". The \"New\" button may be used to get a new event id from the application's pool of event ids. The copy and paste buttons are provided as a convenience for copying event ids to and/or from a configuration tool.\n\nThe speed limits applicable for the specific turnout or crossing can be set by using the \"Speed Constraints Inspector\". Any speed constraints set for the turnout or crossing will override any speed constraints set as layout properties. You can set your preferred units of speed in the application preferences. Different speed constarints can be set for \"Direction Next\" and \"Direction Previous\". \"Direction Next\" and \"Direction Previous\" are defined by the blocks of track connected to the turnout or crossing." : {
 
     },
+    "Earliest Relative Start Position" : {
+
+    },
     "Edit" : {
       "comment" : "Used for a menu title",
       "localizations" : {
@@ -3109,6 +3136,9 @@
           }
         }
       }
+    },
+    "Electric or Diesel Electric" : {
+
     },
     "Electrification" : {
       "comment" : "This is used for the title of a combo box where the user can select the applicable electrification type for the switchboard item."
@@ -3265,6 +3295,9 @@
 
     },
     "Enable Shunting Mode Trimming" : {
+
+    },
+    "Enable Sound Steam Shift" : {
 
     },
     "Enable Support for Broadway Limited Steam Engine Control" : {
@@ -4947,6 +4980,9 @@
     "Last Frame  " : {
 
     },
+    "Latest Relative End Position" : {
+
+    },
     "Layout" : {
       "comment" : "Used for a menu title\nUsed to create a default OpenLCB virtual name",
       "localizations" : {
@@ -5202,6 +5238,9 @@
 
     },
     "Load Control / Back EMF" : {
+
+    },
+    "Load Dependent Sound" : {
 
     },
     "Location Services" : {
@@ -5573,6 +5612,9 @@
     "Master Volume" : {
 
     },
+    "Maximum (Full Speed)" : {
+
+    },
     "Maximum Distance" : {
 
     },
@@ -5754,6 +5796,9 @@
     },
     "Minimize" : {
       "comment" : "Used for a menu title"
+    },
+    "Minimum (Lowest Speed)" : {
+
     },
     "Minimum Distance" : {
 
@@ -6517,6 +6562,9 @@
     "Permitted directions of travel for a train on this switchboard item." : {
       "comment" : "This is used for a tooltip."
     },
+    "Persistent Acceleration" : {
+
+    },
     "Persistent Function" : {
 
     },
@@ -7000,6 +7048,9 @@
         }
       }
     },
+    "Regulation Influence" : {
+
+    },
     "Regulation Influence During Slow Speed" : {
 
     },
@@ -7424,6 +7475,9 @@
     },
     "Select the required route." : {
       "comment" : "This is used for a tooltip."
+    },
+    "Select the sound type of your locomotive" : {
+
     },
     "Select the starting block for the route." : {
       "comment" : "This is used for a tooltip."
@@ -8167,6 +8221,12 @@
     "Sound Slot Settings" : {
 
     },
+    "Sound Steam Shift" : {
+
+    },
+    "Sound Type" : {
+
+    },
     "Soundfader Mute" : {
 
     },
@@ -8304,6 +8364,12 @@
           }
         }
       }
+    },
+    "Steam Locomotive with External Sensor" : {
+
+    },
+    "Steam Locomotive without External Sensor" : {
+
     },
     "Step Lights" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
@@ -9021,6 +9087,9 @@
     "Time between the sensor triggering and the sensor reporting such trigger." : {
       "comment" : "This is used for a tooltip."
     },
+    "Time for one steam shift cycle" : {
+
+    },
     "Time from Maximum Speed to Stop" : {
 
     },
@@ -9168,6 +9237,9 @@
       }
     },
     "Treble" : {
+
+    },
+    "Trigger Impulses" : {
 
     },
     "Trigger Impulses per Steam Chuff" : {
@@ -9709,6 +9781,15 @@
 
     },
     "Volume Control" : {
+
+    },
+    "Volume Control 1 (horn / whistle)" : {
+
+    },
+    "Volume Control 2 (bell)" : {
+
+    },
+    "Volume Control 3 (auxiliary)" : {
 
     },
     "VStart" : {

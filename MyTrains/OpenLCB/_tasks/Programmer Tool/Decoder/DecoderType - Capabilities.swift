@@ -72,6 +72,7 @@ extension DecoderType {
       .gradeCrossingHoldingTime,
       .analogModeHysteresis,
       .esuSpeedTable,
+      .dccAddresses,
     ],
     
     .lokSound5DCC : [
@@ -123,6 +124,7 @@ extension DecoderType {
       .gradeCrossingHoldingTime,
       .analogModeHysteresis,
       .esuSpeedTable,
+      .dccAddresses,
     ],
     
     .lokSound5micro : [
@@ -177,6 +179,7 @@ extension DecoderType {
       .gradeCrossingHoldingTime,
       .analogModeHysteresis,
       .esuSpeedTable,
+      .dccAddresses,
     ],
     
     .lokSound5microDCC : [
@@ -226,6 +229,7 @@ extension DecoderType {
       .gradeCrossingHoldingTime,
       .analogModeHysteresis,
       .esuSpeedTable,
+      .dccAddresses,
     ],
     
     .lokSound5microDCCDirect : [
@@ -271,6 +275,7 @@ extension DecoderType {
       .gradeCrossingHoldingTime,
       .analogModeHysteresis,
       .esuSpeedTable,
+      .dccAddresses,
     ],
     
     .lokSound5microDCCDirectAtlasLegacy : [
@@ -313,6 +318,7 @@ extension DecoderType {
       .gradeCrossingHoldingTime,
       .analogModeHysteresis,
       .esuSpeedTable,
+      .dccAddresses,
     ],
     
     .lokSound5microDCCDirectAtlasS2 : [
@@ -354,6 +360,7 @@ extension DecoderType {
       .gradeCrossingHoldingTime,
       .analogModeHysteresis,
       .esuSpeedTable,
+      .dccAddresses,
     ],
     
     .lokSound5nanoDCC : [
@@ -401,6 +408,7 @@ extension DecoderType {
       .gradeCrossingHoldingTime,
       .analogModeHysteresis,
       .esuSpeedTable,
+      .dccAddresses,
     ],
     
     .lokSound5nanoDCCNext18 : [
@@ -449,6 +457,7 @@ extension DecoderType {
       .gradeCrossingHoldingTime,
       .analogModeHysteresis,
       .esuSpeedTable,
+      .dccAddresses,
     ],
     
     .lokSound5L : [
@@ -503,6 +512,7 @@ extension DecoderType {
       .gradeCrossingHoldingTime,
       .analogModeHysteresis,
       .esuSpeedTable,
+      .dccAddresses,
     ],
     
     .lokSound5LDCC : [
@@ -553,6 +563,7 @@ extension DecoderType {
       .gradeCrossingHoldingTime,
       .analogModeHysteresis,
       .esuSpeedTable,
+      .dccAddresses,
    ],
     
     .lokSound5XL : [
@@ -605,6 +616,7 @@ extension DecoderType {
       .gradeCrossingHoldingTime,
       .analogModeHysteresis,
       .esuSpeedTable,
+      .dccAddresses,
     ],
     
     .lokSound5Fx : [
@@ -647,6 +659,7 @@ extension DecoderType {
       .gradeCrossingHoldingTime,
       .analogModeHysteresis,
       .esuSpeedTable,
+      .dccAddresses,
     ],
     
     .lokSound5FxDCC : [
@@ -685,6 +698,7 @@ extension DecoderType {
       .gradeCrossingHoldingTime,
       .analogModeHysteresis,
       .esuSpeedTable,
+      .dccAddresses,
    ],
     
     .lokSound5MKL : [
@@ -740,6 +754,7 @@ extension DecoderType {
       .gradeCrossingHoldingTime,
       .analogModeHysteresis,
       .esuSpeedTable,
+      .dccAddresses,
     ],
     
     .lokSound5microKATO : [
@@ -791,6 +806,7 @@ extension DecoderType {
       .gradeCrossingHoldingTime,
       .analogModeHysteresis,
       .esuSpeedTable,
+      .dccAddresses,
     ],
     
     .lokSoundV4_0 : [
@@ -833,6 +849,7 @@ extension DecoderType {
       .analogModeHysteresis,
       .zimoManualFunction,
       .esuSpeedTable,
+      .dccAddresses,
     ],
     
     .lokSoundSelect : [
@@ -862,6 +879,7 @@ extension DecoderType {
       .analogModeHysteresis,
       .zimoManualFunction,
       .esuSpeedTable,
+      .dccAddresses,
     ],
     
     .lokSoundmicroV4_0 : [
@@ -902,6 +920,7 @@ extension DecoderType {
       .analogModeHysteresis,
       .zimoManualFunction,
       .esuSpeedTable,
+      .dccAddresses,
     ],
     
     .lokSoundSelectdirect_micro : [
@@ -940,6 +959,7 @@ extension DecoderType {
       .analogModeHysteresis,
       .zimoManualFunction,
       .esuSpeedTable,
+      .dccAddresses,
     ],
     
     .lokSoundSelectOEM : [
@@ -969,6 +989,7 @@ extension DecoderType {
       .analogModeHysteresis,
       .zimoManualFunction,
       .esuSpeedTable,
+      .dccAddresses,
     ],
     
     .lokSoundXLV4_0 : [
@@ -1012,6 +1033,7 @@ extension DecoderType {
       .analogModeHysteresis,
       .zimoManualFunction,
       .esuSpeedTable,
+      .dccAddresses,
     ],
     
     .lokSoundV4_0M4 : [
@@ -1054,6 +1076,7 @@ extension DecoderType {
       .analogModeHysteresis,
       .zimoManualFunction,
       .esuSpeedTable,
+      .dccAddresses,
     ],
     
     .lokSoundV4_0M4OEM : [
@@ -1096,6 +1119,7 @@ extension DecoderType {
       .analogModeHysteresis,
       .zimoManualFunction,
       .esuSpeedTable,
+      .dccAddresses,
     ],
     
     .lokSoundLV4_0 : [
@@ -1137,6 +1161,7 @@ extension DecoderType {
       .analogModeHysteresis,
       .zimoManualFunction,
       .esuSpeedTable,
+      .dccAddresses,
     ],
     
     .lokSoundSelectL : [
@@ -1170,6 +1195,7 @@ extension DecoderType {
       .analogModeHysteresis,
       .zimoManualFunction,
       .esuSpeedTable,
+      .dccAddresses,
    ],
     
     .lokSoundV3_5 : [
@@ -1187,11 +1213,55 @@ extension DecoderType {
       .disableMotorEMKMeasure,
       .threeValueSpeedTable,
       .nmraSpeedTable,
+      .loadControlBackEMF,
+      .smokeChuffs,
+      .dccAddresses,
+      .lok3AnalogFunctions,
     ],
     
-    .lokSoundXLV3_5 : [],
-    .lokSoundV3_0M4 : [],
-    .lokSoundmicroV3_5 : [],
+    .lokSoundXLV3_5 : [
+      .aux2toAux4,
+      .aux5toAux6,
+      .sound,
+      .lok3,
+      .physicalOutputsPropertiesB,
+      .singleFrontRearAux1Aux2,
+      .acAnalogMode,
+      .frequencyForBlinkingEffectsB,
+      .triggerSoundsOnFunctionStatusChange,
+      .serialFunctionModeForLGBMTS,
+      .marklinDeltaMode,
+      .zimoManualFunction,
+      .disableMotorEMKMeasure,
+      .threeValueSpeedTable,
+      .nmraSpeedTable,
+      .loadControlBackEMF,
+      .smokeChuffs,
+      .dccAddresses,
+      .lok3AnalogFunctions,
+    ],
+    
+    .lokSoundV3_0M4 : [], // THIS IS A REAL SPECIAL CASE - NO CVs
+    
+    .lokSoundmicroV3_5 : [
+      .aux2toAux4,
+      .sound,
+      .lok3,
+      .physicalOutputsPropertiesB,
+      .singleFrontRearAux1Aux2,
+      .frequencyForBlinkingEffectsB,
+      .triggerSoundsOnFunctionStatusChange,
+      .serialFunctionModeForLGBMTS,
+      .marklinDeltaMode,
+      .zimoManualFunction,
+      .disableMotorEMKMeasure,
+      .threeValueSpeedTable,
+      .nmraSpeedTable,
+      .loadControlBackEMF,
+      .smokeChuffs,
+      .dccAddresses,
+      .lok3AnalogFunctions,
+    ],
     
     .lokPilot5 : [
       .dccProtocol,
@@ -1238,6 +1308,7 @@ extension DecoderType {
       .gradeCrossingHoldingTime,
       .analogModeHysteresis,
       .esuSpeedTable,
+      .dccAddresses,
     ],
  
     .lokPilot5DCC : [
@@ -1281,6 +1352,7 @@ extension DecoderType {
       .gradeCrossingHoldingTime,
       .analogModeHysteresis,
       .esuSpeedTable,
+      .dccAddresses,
     ],
     
     .lokPilot5micro : [
@@ -1317,6 +1389,7 @@ extension DecoderType {
       .gradeCrossingHoldingTime,
       .analogModeHysteresis,
       .esuSpeedTable,
+      .dccAddresses,
     ],
     
     .lokPilot5microDCC : [
@@ -1350,6 +1423,7 @@ extension DecoderType {
       .gradeCrossingHoldingTime,
       .analogModeHysteresis,
       .esuSpeedTable,
+      .dccAddresses,
     ],
     
     .lokPilot5microDCCDirect : [
@@ -1389,6 +1463,7 @@ extension DecoderType {
       .gradeCrossingHoldingTime,
       .analogModeHysteresis,
       .esuSpeedTable,
+      .dccAddresses,
     ],
     
     .lokPilot5microNext18 : [
@@ -1436,6 +1511,7 @@ extension DecoderType {
       .gradeCrossingHoldingTime,
       .analogModeHysteresis,
       .esuSpeedTable,
+      .dccAddresses,
     ],
     
     .lokPilot5microNext18DCC : [
@@ -1478,6 +1554,7 @@ extension DecoderType {
       .gradeCrossingHoldingTime,
       .analogModeHysteresis,
       .esuSpeedTable,
+      .dccAddresses,
     ],
     
     .lokPilot5nanoDCC : [
@@ -1519,6 +1596,7 @@ extension DecoderType {
       .gradeCrossingHoldingTime,
       .analogModeHysteresis,
       .esuSpeedTable,
+      .dccAddresses,
     ],
     
     .lokPilot5L : [
@@ -1566,6 +1644,7 @@ extension DecoderType {
       .gradeCrossingHoldingTime,
       .analogModeHysteresis,
       .esuSpeedTable,
+      .dccAddresses,
     ],
     
     .lokPilot5LDCC : [
@@ -1609,6 +1688,7 @@ extension DecoderType {
       .gradeCrossingHoldingTime,
       .analogModeHysteresis,
       .esuSpeedTable,
+      .dccAddresses,
     ],
     
     .lokPilot5Fx : [
@@ -1644,6 +1724,7 @@ extension DecoderType {
       .gradeCrossingHoldingTime,
       .analogModeHysteresis,
       .esuSpeedTable,
+      .dccAddresses,
     ],
     
     .lokPilot5FxDCC : [
@@ -1676,6 +1757,7 @@ extension DecoderType {
       .gradeCrossingHoldingTime,
       .analogModeHysteresis,
       .esuSpeedTable,
+      .dccAddresses,
     ],
     
     .lokPilot5Fxmicro : [
@@ -1705,6 +1787,7 @@ extension DecoderType {
       .gradeCrossingHoldingTime,
       .analogModeHysteresis,
       .esuSpeedTable,
+      .dccAddresses,
     ],
     
     .lokPilot5FxmicroDCC : [
@@ -1731,6 +1814,7 @@ extension DecoderType {
       .gradeCrossingHoldingTime,
       .analogModeHysteresis,
       .esuSpeedTable,
+      .dccAddresses,
     ],
     
     .lokPilot5FxmicroNext18 : [
@@ -1768,7 +1852,8 @@ extension DecoderType {
       .gradeCrossingHoldingTime,
       .analogModeHysteresis,
       .esuSpeedTable,
-    ],
+      .dccAddresses,
+   ],
     
     .lokPilot5FxmicroNext18DCC : [
       .dccProtocol,
@@ -1802,6 +1887,7 @@ extension DecoderType {
       .gradeCrossingHoldingTime,
       .analogModeHysteresis,
       .esuSpeedTable,
+      .dccAddresses,
     ],
     
     .lokPilot5MKL : [
@@ -1849,6 +1935,7 @@ extension DecoderType {
       .gradeCrossingHoldingTime,
       .analogModeHysteresis,
       .esuSpeedTable,
+      .dccAddresses,
     ],
     
     .lokPilot5MKLDCC : [
@@ -1892,6 +1979,7 @@ extension DecoderType {
       .gradeCrossingHoldingTime,
       .analogModeHysteresis,
       .esuSpeedTable,
+      .dccAddresses,
     ],
     
     .lokPilot5Basic : [
@@ -1927,6 +2015,7 @@ extension DecoderType {
       .gradeCrossingHoldingTime,
       .analogModeHysteresis,
       .esuSpeedTable,
+      .dccAddresses,
     ],
     
     .lokPilotV4_0 : [
@@ -1960,6 +2049,7 @@ extension DecoderType {
       .analogModeHysteresis,
       .zimoManualFunction,
       .esuSpeedTable,
+      .dccAddresses,
     ],
     
     .lokPilotV4_0DCC : [
@@ -1988,6 +2078,7 @@ extension DecoderType {
       .analogModeHysteresis,
       .zimoManualFunction,
       .esuSpeedTable,
+      .dccAddresses,
     ],
     
     .lokPilotV4_0DCCPX : [
@@ -2016,7 +2107,8 @@ extension DecoderType {
       .analogModeHysteresis,
       .zimoManualFunction,
       .esuSpeedTable,
-    ],
+      .dccAddresses,
+   ],
     
     .lokPilotmicroV4_0 : [
       .dccProtocol,
@@ -2043,6 +2135,7 @@ extension DecoderType {
       .analogModeHysteresis,
       .zimoManualFunction,
       .esuSpeedTable,
+      .dccAddresses,
     ],
     
     .lokPilotmicroV4_0DCC : [
@@ -2066,6 +2159,7 @@ extension DecoderType {
       .analogModeHysteresis,
       .zimoManualFunction,
       .esuSpeedTable,
+      .dccAddresses,
     ],
     
     .lokPilotV4_0M4 : [
@@ -2098,7 +2192,8 @@ extension DecoderType {
       .analogModeHysteresis,
       .zimoManualFunction,
       .esuSpeedTable,
-    ],
+      .dccAddresses,
+   ],
     
     .lokPilotXLV4_0 : [
       .dccProtocol,
@@ -2133,6 +2228,7 @@ extension DecoderType {
       .analogModeHysteresis,
       .zimoManualFunction,
       .esuSpeedTable,
+      .dccAddresses,
     ],
     
     .lokPilotFxV4_0 : [
@@ -2161,6 +2257,7 @@ extension DecoderType {
       .analogModeHysteresis,
       .zimoManualFunction,
       .esuSpeedTable,
+      .dccAddresses,
     ],
     
     .lokPilotV4_0M4MKL : [
@@ -2193,6 +2290,7 @@ extension DecoderType {
       .analogModeHysteresis,
       .zimoManualFunction,
       .esuSpeedTable,
+      .dccAddresses,
     ],
     
     .lokPilotMicroSlideInV4_0DCC : [
@@ -2222,12 +2320,34 @@ extension DecoderType {
       .analogModeHysteresis,
       .zimoManualFunction,
       .esuSpeedTable,
+      .dccAddresses,
    ],
     
     .lokPilotStandardV1_0 : [],
     .lokPilotNanoStandardV1_0 : [],
     .lokPilotFxNanoV1_0 : [],
-    .lokPilotV3_0 : [],
+    
+    .lokPilotV3_0 : [
+      .aux2toAux4,
+      .sound,
+      .lok3,
+      .physicalOutputsPropertiesB,
+      .singleFrontRearAux1Aux2,
+      .frequencyForBlinkingEffectsB,
+      .triggerSoundsOnFunctionStatusChange,
+      .serialFunctionModeForLGBMTS,
+      .marklinDeltaMode,
+      .zimoManualFunction,
+      .disableMotorEMKMeasure,
+      .threeValueSpeedTable,
+      .nmraSpeedTable,
+      .loadControlBackEMF,
+      .smokeChuffs,
+      .dccAddresses,
+      .lok3AnalogFunctions,
+      .acAnalogMode,
+    ],
+    
     .lokPilotV3_0DCC : [],
     .lokPilotV3_0M4 : [],
     .lokPilotV3_0OEM : [],
@@ -2236,6 +2356,7 @@ extension DecoderType {
     .lokPilotXLV3_0 : [],
     .lokPilotFxV3_0 : [],
     .lokPilotFxmicroV3_0 : [],
+    
 //    .signalPilot : [],
 //    .switchPilot3 : [],
 //    .switchPilot3Plus : [],

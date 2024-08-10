@@ -1169,6 +1169,10 @@ public class PTSettingsPropertyView : NSView, NSTextFieldDelegate {
       ThreeValueSpeedTablePreset.populate(comboBox: comboBox)
     case .esuDCMotorPWMFrequency:
       ESUDCMotorPWMFrequency.populate(comboBox: comboBox)
+    case .esuSoundType:
+      ESUSoundType.populate(comboBox: comboBox)
+    case .esuDCMotorPWMFrequencyLok3:
+      ESUDCMotorPWMFrequencyLok3.populate(comboBox: comboBox)
     default:
       break
     }
@@ -1281,7 +1285,7 @@ public class PTSettingsPropertyView : NSView, NSTextFieldDelegate {
           
         }
         
-      case .functionsConsistMode, .functionsConsistModeLok4:
+      case .functionsConsistMode, .functionsConsistModeLok4, .functionsConsistModeLok3:
         
         for button in functionButtons {
           

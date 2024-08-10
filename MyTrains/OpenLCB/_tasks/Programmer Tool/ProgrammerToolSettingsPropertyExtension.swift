@@ -337,7 +337,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : nil,
       infoMaxDecimalPlaces : nil,
       infoFormat           : nil,
-      requiredCapabilities : []
+      requiredCapabilities : [.dccAddresses]
     ),
 
     .locomotiveAddressShort : (
@@ -356,7 +356,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : nil,
       infoMaxDecimalPlaces : nil,
       infoFormat           : nil,
-      requiredCapabilities : []
+      requiredCapabilities : [.dccAddresses]
     ),
 
     .locomotiveAddressLong : (
@@ -375,7 +375,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : nil,
       infoMaxDecimalPlaces : nil,
       infoFormat           : nil,
-      requiredCapabilities : []
+      requiredCapabilities : [.dccAddresses]
     ),
 
     .marklinConsecutiveAddresses : (
@@ -453,7 +453,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : nil,
       infoMaxDecimalPlaces : nil,
       infoFormat           : nil,
-      requiredCapabilities : []
+      requiredCapabilities : [.dccAddresses]
     ),
 
     .consistAddress : (
@@ -472,7 +472,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : nil,
       infoMaxDecimalPlaces : nil,
       infoFormat           : nil,
-      requiredCapabilities : []
+      requiredCapabilities : [.dccAddresses]
     ),
 
     .consistReverseDirection : (
@@ -491,7 +491,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : nil,
       infoMaxDecimalPlaces : nil,
       infoFormat           : nil,
-      requiredCapabilities : []
+      requiredCapabilities : [.dccAddresses]
     ),
 
     // Activate Functions in Consist Mode
@@ -512,7 +512,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : nil,
       infoMaxDecimalPlaces : nil,
       infoFormat           : nil,
-      requiredCapabilities : [.lok5]
+      requiredCapabilities : [.lok5, .dccAddresses]
     ),
     
     .consistFunctionsLok4 : (
@@ -531,7 +531,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : nil,
       infoMaxDecimalPlaces : nil,
       infoFormat           : nil,
-      requiredCapabilities : [.lok4]
+      requiredCapabilities : [.lok4, .dccAddresses]
     ),
     
     .consistFunctionsLok3 : (
@@ -550,7 +550,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : nil,
       infoMaxDecimalPlaces : nil,
       infoFormat           : nil,
-      requiredCapabilities : [.lok3]
+      requiredCapabilities : [.lok3, .dccAddresses]
     ),
 
     // MARK: Analog Settings
@@ -592,7 +592,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : nil,
       infoMaxDecimalPlaces : nil,
       infoFormat           : nil,
-      requiredCapabilities : [.lok3]
+      requiredCapabilities : [.lok3AnalogFunctions]
     ),
 
     // AC Analog Mode
@@ -632,7 +632,26 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : 0.1,
       infoMaxDecimalPlaces : 2,
       infoFormat           : nil,
-      requiredCapabilities : [.acAnalogMode]
+      requiredCapabilities : [.acAnalogMode, .esuSpeedTable]
+    ),
+    
+    .acAnalogModeStartVoltageLok3 : (
+      title                : String(localized: "Start Voltage (minimum speed)"),
+      section              : .acAnalogMode,
+      controlType          : .textFieldWithSlider,
+      encoding             : .byte,
+      cvIndexingMethod     : .standard,
+      cv                   : [.cv_000_000_127],
+      mask                 : [0xff],
+      shift                : [0],
+      minValue             : 0.0,
+      maxValue             : 127.0,
+      trueDefaultValue     : nil,
+      infoType             : .voltage,
+      infoFactor           : 0.2,
+      infoMaxDecimalPlaces : 2,
+      infoFormat           : nil,
+      requiredCapabilities : [.acAnalogMode, .lok3]
     ),
 
     .acAnalogModeMaximumSpeedVoltage : (
@@ -651,7 +670,26 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : 0.1,
       infoMaxDecimalPlaces : 2,
       infoFormat           : nil,
-      requiredCapabilities : [.acAnalogMode]
+      requiredCapabilities : [.acAnalogMode, .esuSpeedTable]
+    ),
+    
+    .acAnalogModeMaximumSpeedVoltageLok3 : (
+      title                : String(localized: "Maximum Speed Voltage"),
+      section              : .acAnalogMode,
+      controlType          : .textFieldWithSlider,
+      encoding             : .byte,
+      cvIndexingMethod     : .standard,
+      cv                   : [.cv_000_000_128],
+      mask                 : [0xff],
+      shift                : [0],
+      minValue             : 0.0,
+      maxValue             : 127.0,
+      trueDefaultValue     : nil,
+      infoType             : .voltage,
+      infoFactor           : 0.2,
+      infoMaxDecimalPlaces : 2,
+      infoFormat           : nil,
+      requiredCapabilities : [.acAnalogMode, .lok3]
     ),
 
     // DC Analog Mode
@@ -691,8 +729,27 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : 0.1,
       infoMaxDecimalPlaces : 2,
       infoFormat           : nil,
-      requiredCapabilities : []
-    ),    
+      requiredCapabilities : [.esuSpeedTable]
+    ),
+    
+      .dcAnalogModeStartVoltageLok3 : (
+        title                : String(localized: "Start Voltage (minimum speed)"),
+        section              : .dcAnalogMode,
+        controlType          : .textFieldWithSlider,
+        encoding             : .byte,
+        cvIndexingMethod     : .standard,
+        cv                   : [.cv_000_000_125],
+        mask                 : [0xff],
+        shift                : [0],
+        minValue             : 0.0,
+        maxValue             : 127.0,
+        trueDefaultValue     : nil,
+        infoType             : .voltage,
+        infoFactor           : 0.2,
+        infoMaxDecimalPlaces : 2,
+        infoFormat           : nil,
+        requiredCapabilities : [.lok3]
+      ),
 
     .dcAnalogModeMaximumSpeedVoltage : (
       title                : String(localized: "Maximum Speed Voltage"),
@@ -710,7 +767,26 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : 0.1,
       infoMaxDecimalPlaces : 2,
       infoFormat           : nil,
-      requiredCapabilities : []
+      requiredCapabilities : [.esuSpeedTable]
+    ),
+    
+    .dcAnalogModeMaximumSpeedVoltageLok3 : (
+      title                : String(localized: "Maximum Speed Voltage"),
+      section              : .dcAnalogMode,
+      controlType          : .textFieldWithSlider,
+      encoding             : .byte,
+      cvIndexingMethod     : .standard,
+      cv                   : [.cv_000_000_126],
+      mask                 : [0xff],
+      shift                : [0],
+      minValue             : 0.0,
+      maxValue             : 127.0,
+      trueDefaultValue     : nil,
+      infoType             : .voltage,
+      infoFactor           : 0.2,
+      infoMaxDecimalPlaces : 2,
+      infoFormat           : nil,
+      requiredCapabilities : [.lok3]
     ),
 
     // Quantum Engineer
@@ -1772,7 +1848,26 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : 0.25,
       infoMaxDecimalPlaces : 2,
       infoFormat           : nil,
-      requiredCapabilities : []
+      requiredCapabilities : [.esuSpeedTable]
+    ),
+    
+    .accelerationRateLok3 : (
+      title                : String(localized: "Time from Stop to Maximum Speed"),
+      section              : .accelerationAndDeceleration,
+      controlType          : .textFieldWithSlider,
+      encoding             : .byte,
+      cvIndexingMethod     : .standard,
+      cv                   : [.cv_000_000_003],
+      mask                 : [0xff],
+      shift                : [0],
+      minValue             : 1.0,
+      maxValue             : 64.0,
+      trueDefaultValue     : nil,
+      infoType             : .time,
+      infoFactor           : 0.8959375,
+      infoMaxDecimalPlaces : 2,
+      infoFormat           : nil,
+      requiredCapabilities : [.lok3]
     ),
 
     .accelerationAdjustment : (
@@ -1829,7 +1924,26 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : 0.25,
       infoMaxDecimalPlaces : 2,
       infoFormat           : nil,
-      requiredCapabilities : []
+      requiredCapabilities : [.esuSpeedTable]
+    ),
+    
+    .decelerationRateLok3 : (
+      title                : String(localized: "Time from Maximum Speed to Stop"),
+      section              : .accelerationAndDeceleration,
+      controlType          : .textFieldWithSlider,
+      encoding             : .byte,
+      cvIndexingMethod     : .standard,
+      cv                   : [.cv_000_000_004],
+      mask                 : [0xff],
+      shift                : [0],
+      minValue             : 1.0,
+      maxValue             : 64.0,
+      trueDefaultValue     : nil,
+      infoType             : .time,
+      infoFactor           : 0.8959375,
+      infoMaxDecimalPlaces : 2,
+      infoFormat           : nil,
+      requiredCapabilities : [.lok3]
     ),
 
     .decelerationAdjustment : (
@@ -6516,7 +6630,26 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : nil,
       infoMaxDecimalPlaces : nil,
       infoFormat           : nil,
-      requiredCapabilities : []
+      requiredCapabilities : [.esuSpeedTable]
+    ),
+    
+    .speedTableEntryValueB : (
+      title                : String(localized: "Value"),
+      section              : .speedTable,
+      controlType          : .textField,
+      encoding             : .speedTableValueB,
+      cvIndexingMethod     : .standard,
+      cv                   : [.cv_000_000_067, .cv_000_000_068, .cv_000_000_069, .cv_000_000_070, .cv_000_000_071, .cv_000_000_072, .cv_000_000_073, .cv_000_000_074, .cv_000_000_075, .cv_000_000_076, .cv_000_000_077, .cv_000_000_078, .cv_000_000_079, .cv_000_000_080, .cv_000_000_081, .cv_000_000_082, .cv_000_000_083, .cv_000_000_084, .cv_000_000_085, .cv_000_000_086, .cv_000_000_087, .cv_000_000_088, .cv_000_000_089, .cv_000_000_090, .cv_000_000_091, .cv_000_000_092, .cv_000_000_093, .cv_000_000_094],
+      mask                 : [0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff],
+      shift                : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      minValue             : 1.0,
+      maxValue             : 255.0,
+      trueDefaultValue     : nil,
+      infoType             : .none,
+      infoFactor           : nil,
+      infoMaxDecimalPlaces : nil,
+      infoFormat           : nil,
+      requiredCapabilities : [.nmraSpeedTable]
     ),
 
     .speedTablePreset : (
@@ -6573,7 +6706,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : 100.0 / 255.0,
       infoMaxDecimalPlaces : 2,
       infoFormat           : nil,
-      requiredCapabilities : []
+      requiredCapabilities : [.esuSpeedTable]
     ),
 
     // Load Control / Back EMF
@@ -6632,7 +6765,26 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : 0.1,
       infoMaxDecimalPlaces : 2,
       infoFormat           : nil,
-      requiredCapabilities : [.loadControlBackEMF]
+      requiredCapabilities : [.loadControlBackEMF, .esuSpeedTable]
+    ),
+    
+    .regulationReferenceLok3 : (
+      title                : String(localized: "Regulation Reference"),
+      section              : .loadControlBackEMF,
+      controlType          : .textFieldWithSlider,
+      encoding             : .byte,
+      cvIndexingMethod     : .standard,
+      cv                   : [.cv_000_000_053],
+      mask                 : [0xff],
+      shift                : [0],
+      minValue             : 0.0,
+      maxValue             : 80.0,
+      trueDefaultValue     : nil,
+      infoType             : .voltage,
+      infoFactor           : 0.25,
+      infoMaxDecimalPlaces : 2,
+      infoFormat           : nil,
+      requiredCapabilities : [.loadControlBackEMF, .lok3]
     ),
 
     .regulationParameterK : (
@@ -6651,7 +6803,26 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : nil,
       infoMaxDecimalPlaces : nil,
       infoFormat           : nil,
-      requiredCapabilities : [.loadControlBackEMF]
+      requiredCapabilities : [.loadControlBackEMF, .esuSpeedTable]
+    ),
+    
+    .regulationParameterKLok3 : (
+      title                : String(localized: "Regulation Parameter \"K\""),
+      section              : .loadControlBackEMF,
+      controlType          : .textFieldWithSlider,
+      encoding             : .byte,
+      cvIndexingMethod     : .standard,
+      cv                   : [.cv_000_000_054],
+      mask                 : [0xff],
+      shift                : [0],
+      minValue             : 0.0,
+      maxValue             : 80.0,
+      trueDefaultValue     : nil,
+      infoType             : .none,
+      infoFactor           : nil,
+      infoMaxDecimalPlaces : nil,
+      infoFormat           : nil,
+      requiredCapabilities : [.loadControlBackEMF, .lok3]
     ),
 
     .regulationParameterI : (
@@ -6670,7 +6841,26 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : 2.0 / 1000.0,
       infoMaxDecimalPlaces : 2,
       infoFormat           : nil,
-      requiredCapabilities : [.loadControlBackEMF]
+      requiredCapabilities : [.loadControlBackEMF, .esuSpeedTable]
+    ),
+    
+    .regulationParameterILok3 : (
+      title                : String(localized: "Regulation Parameter \"I\""),
+      section              : .loadControlBackEMF,
+      controlType          : .textFieldWithSlider,
+      encoding             : .byte,
+      cvIndexingMethod     : .standard,
+      cv                   : [.cv_000_000_055],
+      mask                 : [0xff],
+      shift                : [0],
+      minValue             : 0.0,
+      maxValue             : 80.0,
+      trueDefaultValue     : nil,
+      infoType             : .none,
+      infoFactor           : nil,
+      infoMaxDecimalPlaces : nil,
+      infoFormat           : nil,
+      requiredCapabilities : [.loadControlBackEMF, .lok3]
     ),
 
     .emfSlowSpeedSettings : (
@@ -6708,7 +6898,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : nil,
       infoMaxDecimalPlaces : nil,
       infoFormat           : nil,
-      requiredCapabilities : [.loadControlBackEMF]
+      requiredCapabilities : [.loadControlBackEMF, .esuSpeedTable]
     ),
 
     .largestInternalSpeedStepThatUsesKSlow : (
@@ -6765,7 +6955,26 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : 100.0 / 255.0,
       infoMaxDecimalPlaces : 2,
       infoFormat           : nil,
-      requiredCapabilities : [.loadControlBackEMF]
+      requiredCapabilities : [.loadControlBackEMF, .esuSpeedTable]
+    ),
+    
+    .regulationInfluenceLok3 : (
+      title                : String(localized: "Regulation Influence"),
+      section              : .loadControlBackEMF,
+      controlType          : .textFieldWithSlider,
+      encoding             : .byte,
+      cvIndexingMethod     : .standard,
+      cv                   : [.cv_000_000_056],
+      mask                 : [0xff],
+      shift                : [0],
+      minValue             : 0.0,
+      maxValue             : 64.0,
+      trueDefaultValue     : nil,
+      infoType             : .percentage,
+      infoFactor           : 100.0 / 64.0,
+      infoMaxDecimalPlaces : 2,
+      infoFormat           : nil,
+      requiredCapabilities : [.loadControlBackEMF, .lok3]
     ),
 
     .emfBackEMFSettings : (
@@ -6919,6 +7128,25 @@ extension ProgrammerToolSettingsProperty {
         infoFormat           : nil,
         requiredCapabilities : [.lok4]
       ),
+    
+    .dcMotorPWMFrequencyLok3   : (
+      title                : String(localized: "DC Motor PWM Frequency"),
+      section              : .dcMotorPWMFrequency,
+      controlType          : .comboBox,
+      encoding             : .esuDCMotorPWMFrequencyLok3,
+      cvIndexingMethod     : .standard,
+      cv                   : [.cv_000_000_049],
+      mask                 : [0b00000010],
+      shift                : [0],
+      minValue             : nil,
+      maxValue             : nil,
+      trueDefaultValue     : nil,
+      infoType             : .none,
+      infoFactor           : nil,
+      infoMaxDecimalPlaces : nil,
+      infoFormat           : nil,
+      requiredCapabilities : [.lok3]
+    ),
 
     // Motor Overload Protection
 
@@ -7101,6 +7329,101 @@ extension ProgrammerToolSettingsProperty {
       requiredCapabilities : [.esuSmokeUnit]
     ),
 
+    .esuSoundType : (
+      title                : String(localized: "Select the sound type of your locomotive"),
+      section              : .soundType,
+      controlType          : .comboBox,
+      encoding             : .esuSoundType,
+      cvIndexingMethod     : .standard,
+      cv                   : [.cv_000_000_057, .cv_000_000_058],
+      mask                 : [0xff, 0xff],
+      shift                : [0, 0],
+      minValue             : 0.0,
+      maxValue             : 255.0,
+      trueDefaultValue     : nil,
+      infoType             : .none,
+      infoFactor           : nil,
+      infoMaxDecimalPlaces : nil,
+      infoFormat           : nil,
+      requiredCapabilities : [.lok3, .sound]
+    ),
+    
+    .esuDistanceOfGearSteps : (
+      title                : String(localized: "Distance of Gear Steps"),
+      section              : .soundType,
+      controlType          : .textFieldWithSlider,
+      encoding             : .byte,
+      cvIndexingMethod     : .standard,
+      cv                   : [.cv_000_000_058],
+      mask                 : [0xff],
+      shift                : [0],
+      minValue             : 1,
+      maxValue             : 250,
+      trueDefaultValue     : nil,
+      infoType             : .none,
+      infoFactor           : nil,
+      infoMaxDecimalPlaces : nil,
+      infoFormat           : nil,
+      requiredCapabilities : [.lok3, .sound]
+    ),
+    
+    .esuDistanceOfSteamChuffsAtSpeedStep1 : (
+      title                : String(localized: "Distance of Steam Chuffs at Speed Step 1"),
+      section              : .soundType,
+      controlType          : .textFieldWithSlider,
+      encoding             : .byte,
+      cvIndexingMethod     : .standard,
+      cv                   : [.cv_000_000_057],
+      mask                 : [0xff],
+      shift                : [0],
+      minValue             : 1,
+      maxValue             : 250,
+      trueDefaultValue     : nil,
+      infoType             : .time,
+      infoFactor           : 0.064,
+      infoMaxDecimalPlaces : 2,
+      infoFormat           : nil,
+      requiredCapabilities : [.lok3, .sound]
+    ),
+    
+    .esuDistanceofSteamChuffsAtSpeedStep2 : (
+      title                : String(localized: "Distance of Steam Chuffs at Speed Step 2 (steepness)"),
+      section              : .soundType,
+      controlType          : .textFieldWithSlider,
+      encoding             : .byte,
+      cvIndexingMethod     : .standard,
+      cv                   : [.cv_000_000_058],
+      mask                 : [0xff],
+      shift                : [0],
+      minValue             : 1,
+      maxValue             : 250,
+      trueDefaultValue     : nil,
+      infoType             : .none,
+      infoFactor           : nil,
+      infoMaxDecimalPlaces : nil,
+      infoFormat           : nil,
+      requiredCapabilities : [.lok3, .sound]
+    ),
+    
+    .esuTriggerImpulses : (
+      title                : String(localized: "Trigger Impulses"),
+      section              : .soundType,
+      controlType          : .textFieldWithSlider,
+      encoding             : .byte,
+      cvIndexingMethod     : .standard,
+      cv                   : [.cv_000_000_058],
+      mask                 : [0xff],
+      shift                : [0],
+      minValue             : 1,
+      maxValue             : 250,
+      trueDefaultValue     : nil,
+      infoType             : .none,
+      infoFactor           : nil,
+      infoMaxDecimalPlaces : nil,
+      infoFormat           : nil,
+      requiredCapabilities : [.lok3, .sound]
+    ),
+
     .soundSelection : (
       title                : String(localized: "Sound Configuration"),
       section              : .soundSelection,
@@ -7119,7 +7442,7 @@ extension ProgrammerToolSettingsProperty {
       infoFormat           : nil,
       requiredCapabilities : [.lok4, .sound]
     ),
-    
+
     // Smoke Chuffs
 
     .smokeChuffsDurationRelativeToTriggerDistance : (
@@ -7138,7 +7461,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : 100.0 / 256.0, // I think this should be 100.0 / 255.0
       infoMaxDecimalPlaces : 2,
       infoFormat           : nil,
-      requiredCapabilities : [.smokeChuffs]
+      requiredCapabilities : [.smokeChuffs, .esuSpeedTable]
     ),
 
     .smokeChuffsMinimumDuration : (
@@ -7157,7 +7480,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : 0.004078431,
       infoMaxDecimalPlaces : 2,
       infoFormat           : nil,
-      requiredCapabilities : [.smokeChuffs]
+      requiredCapabilities : [.smokeChuffs, .esuSpeedTable]
     ),
 
     .smokeChuffsMaximumDuration : (
@@ -7176,7 +7499,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : 0.004078431,
       infoMaxDecimalPlaces : 2,
       infoFormat           : nil,
-      requiredCapabilities : [.smokeChuffs]
+      requiredCapabilities : [.smokeChuffs, .esuSpeedTable]
     ),
 
     // MARK: Special Options
@@ -7277,7 +7600,26 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : nil,
       infoMaxDecimalPlaces : nil,
       infoFormat           : nil,
-      requiredCapabilities : []
+      requiredCapabilities : [.esuSpeedTable]
+    ),
+    
+    .memoryPersistentFunctionLok3 : (
+      title                : String(localized: "Persistent Function"),
+      section              : .memorySettings,
+      controlType          : .checkBox,
+      encoding             : .boolBit,
+      cvIndexingMethod     : .standard,
+      cv                   : [.cv_000_000_124],
+      mask                 : [0b00000010],
+      shift                : [0],
+      minValue             : nil,
+      maxValue             : nil,
+      trueDefaultValue     : nil,
+      infoType             : .none,
+      infoFactor           : nil,
+      infoMaxDecimalPlaces : nil,
+      infoFormat           : nil,
+      requiredCapabilities : [.lok3]
     ),
 
     .memoryPersistentSpeed : (
@@ -7296,7 +7638,45 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : nil,
       infoMaxDecimalPlaces : nil,
       infoFormat           : nil,
-      requiredCapabilities : []
+      requiredCapabilities : [.esuSpeedTable]
+    ),
+    
+    .memoryPersistentSpeedLok3 : (
+      title                : String(localized: "Persistent Speed"),
+      section              : .memorySettings,
+      controlType          : .checkBox,
+      encoding             : .boolBit,
+      cvIndexingMethod     : .standard,
+      cv                   : [.cv_000_000_124],
+      mask                 : [0b00000100],
+      shift                : [0],
+      minValue             : nil,
+      maxValue             : nil,
+      trueDefaultValue     : nil,
+      infoType             : .none,
+      infoFactor           : nil,
+      infoMaxDecimalPlaces : nil,
+      infoFormat           : nil,
+      requiredCapabilities : [.lok3]
+    ),
+
+    .memoryPersistentAccelerationLok3 : (
+      title                : String(localized: "Persistent Acceleration"),
+      section              : .memorySettings,
+      controlType          : .checkBox,
+      encoding             : .boolBit,
+      cvIndexingMethod     : .standard,
+      cv                   : [.cv_000_000_124],
+      mask                 : [0b00001000],
+      shift                : [0],
+      minValue             : nil,
+      maxValue             : nil,
+      trueDefaultValue     : nil,
+      infoType             : .none,
+      infoFactor           : nil,
+      infoMaxDecimalPlaces : nil,
+      infoFormat           : nil,
+      requiredCapabilities : [.lok3]
     ),
 
     // RailComPlus and M4 Master Decoder Synchronization
@@ -7357,8 +7737,48 @@ extension ProgrammerToolSettingsProperty {
       infoFormat           : nil,
       requiredCapabilities : [.lok5]
     ),
-
+    
     // MARK: Sound Settings
+
+    // Drive Sound Speed
+        
+    .esuDriveSoundSpeedMinimum : (
+      title                : String(localized: "Minimum (Lowest Speed)"),
+      section              : .driveSoundSpeed,
+      controlType          : .textFieldWithSlider,
+      encoding             : .byte,
+      cvIndexingMethod     : .standard,
+      cv                   : [.cv_000_000_059],
+      mask                 : [0xff],
+      shift                : [0],
+      minValue             : 0,
+      maxValue             : 64,
+      trueDefaultValue     : nil,
+      infoType             : .percentage,
+      infoFactor           : 200.0 / 64.0,
+      infoMaxDecimalPlaces : 2,
+      infoFormat           : nil,
+      requiredCapabilities : [.sound, .lok3]
+    ),
+    
+    .esuDriveSoundSpeedMaximum : (
+      title                : String(localized: "Maximum (Full Speed)"),
+      section              : .driveSoundSpeed,
+      controlType          : .textFieldWithSlider,
+      encoding             : .byte,
+      cvIndexingMethod     : .standard,
+      cv                   : [.cv_000_000_060],
+      mask                 : [0xff],
+      shift                : [0],
+      minValue             : 0,
+      maxValue             : 64,
+      trueDefaultValue     : nil,
+      infoType             : .percentage,
+      infoFactor           : 200.0 / 64.0,
+      infoMaxDecimalPlaces : 2,
+      infoFormat           : nil,
+      requiredCapabilities : [.sound, .lok3]
+    ),
 
     // Steam Chuffs
 
@@ -7378,7 +7798,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : nil,
       infoMaxDecimalPlaces : nil,
       infoFormat           : nil,
-      requiredCapabilities : [.smokeChuffs]
+      requiredCapabilities : [.smokeChuffs, .esuSpeedTable]
     ),
 
     .distanceOfSteamChuffsAtSpeedStep1 : (
@@ -7397,7 +7817,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : 0.032,
       infoMaxDecimalPlaces : 2,
       infoFormat           : nil,
-      requiredCapabilities : [.smokeChuffs]
+      requiredCapabilities : [.smokeChuffs, .esuSpeedTable]
     ),
 
     .triggerImpulsesPerSteamChuff : (
@@ -7416,7 +7836,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : nil,
       infoMaxDecimalPlaces : nil,
       infoFormat           : nil,
-      requiredCapabilities : [.smokeChuffs]
+      requiredCapabilities : [.smokeChuffs, .esuSpeedTable]
     ),
 
     .divideTriggerImpulsesInTwoIfShuntingModeEnabled : (
@@ -7435,7 +7855,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : nil,
       infoMaxDecimalPlaces : nil,
       infoFormat           : nil,
-      requiredCapabilities : [.smokeChuffs]
+      requiredCapabilities : [.smokeChuffs, .esuSpeedTable]
     ),
 
     .steamChuffAdjustmentAtHigherSpeedSteps : (
@@ -7454,7 +7874,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : nil,
       infoMaxDecimalPlaces : nil,
       infoFormat           : nil,
-      requiredCapabilities : [.smokeChuffs]
+      requiredCapabilities : [.smokeChuffs, .esuSpeedTable]
     ),
 
     .enableSecondaryTrigger : (
@@ -7473,7 +7893,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : nil,
       infoMaxDecimalPlaces : nil,
       infoFormat           : nil,
-      requiredCapabilities : [.smokeChuffs]
+      requiredCapabilities : [.smokeChuffs, .esuSpeedTable]
     ),
 
     .secondaryTriggerDistanceReduction : (
@@ -7492,7 +7912,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : 0.001,
       infoMaxDecimalPlaces : 2,
       infoFormat           : nil,
-      requiredCapabilities : [.smokeChuffs]
+      requiredCapabilities : [.smokeChuffs, .esuSpeedTable]
     ),
 
     .enableMinimumDistanceOfSteamChuffs : (
@@ -7530,7 +7950,104 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : 0.001,
       infoMaxDecimalPlaces : 2,
       infoFormat           : nil,
-      requiredCapabilities : [.smokeChuffs]
+      requiredCapabilities : [.smokeChuffs, .esuSpeedTable]
+    ),
+    
+    .minimumDistanceofSteamChuffsLok3 : (
+      title                : String(localized: "Minimum Distance of Steam Chuffs"),
+      section              : .steamChuffs,
+      controlType          : .textFieldWithSlider,
+      encoding             : .byte,
+      cvIndexingMethod     : .standard,
+      cv                   : [.cv_000_000_249],
+      mask                 : [0xff],
+      shift                : [0],
+      minValue             : 1.0,
+      maxValue             : 255.0,
+      trueDefaultValue     : nil,
+      infoType             : .time,
+      infoFactor           : 0.000117647,
+      infoMaxDecimalPlaces : 2,
+      infoFormat           : nil,
+      requiredCapabilities : [.smokeChuffs, .lok3]
+    ),
+    
+    // Sound Steam Shift
+    
+    .enableSoundSteamShift : (
+      title                : String(localized: "Enable Sound Steam Shift"),
+      section              : .soundSteamShift,
+      controlType          : .checkBox,
+      encoding             : .boolNZ,
+      cvIndexingMethod     : .standard,
+      cv                   : [.cv_000_000_250],
+      mask                 : [0xff],
+      shift                : [0],
+      minValue             : nil,
+      maxValue             : nil,
+      trueDefaultValue     : 1,
+      infoType             : .none,
+      infoFactor           : nil,
+      infoMaxDecimalPlaces : nil,
+      infoFormat           : nil,
+      requiredCapabilities : [.sound, .lok3]
+    ),
+    
+    .timeForOneSteamShiftCycle : (
+      title                : String(localized: "Time for one steam shift cycle"),
+      section              : .soundSteamShift,
+      controlType          : .textFieldWithSlider,
+      encoding             : .byte,
+      cvIndexingMethod     : .standard,
+      cv                   : [.cv_000_000_250],
+      mask                 : [0xff],
+      shift                : [0],
+      minValue             : 1.0,
+      maxValue             : 255.0,
+      trueDefaultValue     : nil,
+      infoType             : .none,
+      infoFactor           : nil,
+      infoMaxDecimalPlaces : nil,
+      infoFormat           : nil,
+      requiredCapabilities : [.sound, .lok3]
+    ),
+    
+    .earliestRelativeStartPosition : (
+      title                : String(localized: "Earliest Relative Start Position"),
+      section              : .soundSteamShift,
+      controlType          : .textFieldWithSlider,
+      encoding             : .byte,
+      cvIndexingMethod     : .standard,
+      cv                   : [.cv_000_000_251],
+      mask                 : [0xff],
+      shift                : [0],
+      minValue             : 0.0,
+      maxValue             : 255.0,
+      trueDefaultValue     : nil,
+      infoType             : .percentage,
+      infoFactor           : 100.0 / 255.0,
+      infoMaxDecimalPlaces : 2,
+      infoFormat           : nil,
+      requiredCapabilities : [.sound, .lok3]
+    ),
+    
+    .latestRelativeEndPosition : (
+      title                : String(localized: "Latest Relative End Position"),
+      section              : .soundSteamShift,
+      controlType          : .textFieldWithSlider,
+      encoding             : .byte,
+      cvIndexingMethod     : .standard,
+      cv                   : [.cv_000_000_252],
+      mask                 : [0xff],
+      shift                : [0],
+      minValue             : 0.0,
+      maxValue             : 255.0,
+      trueDefaultValue     : nil,
+      infoType             : .percentage,
+      infoFactor           : 100.0 / 255.0,
+      infoMaxDecimalPlaces : 2,
+      infoFormat           : nil,
+      requiredCapabilities : [.sound, .lok3]
     ),
 
     // Volume
@@ -7551,7 +8068,83 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : 100.0 / 128.0,
       infoMaxDecimalPlaces : 2,
       infoFormat           : nil,
-      requiredCapabilities : [.sound]
+      requiredCapabilities : [.sound, .esuSpeedTable]
+    ),
+    
+    .masterVolumeLok3 : (
+      title                : String(localized: "Master Volume"),
+      section              : .volume,
+      controlType          : .textFieldWithSlider,
+      encoding             : .byte,
+      cvIndexingMethod     : .standard,
+      cv                   : [.cv_000_000_063],
+      mask                 : [0xff],
+      shift                : [0],
+      minValue             : 0,
+      maxValue             : 64,
+      trueDefaultValue     : nil,
+      infoType             : .percentage,
+      infoFactor           : 100.0 / 64.0,
+      infoMaxDecimalPlaces : 2,
+      infoFormat           : nil,
+      requiredCapabilities : [.sound, .lok3]
+    ),
+    
+    .volumeControl1 : (
+      title                : String(localized: "Volume Control 1 (horn / whistle)"),
+      section              : .volume,
+      controlType          : .textFieldWithSlider,
+      encoding             : .byte,
+      cvIndexingMethod     : .standard,
+      cv                   : [.cv_000_000_121],
+      mask                 : [0xff],
+      shift                : [0],
+      minValue             : 0,
+      maxValue             : 64,
+      trueDefaultValue     : nil,
+      infoType             : .percentage,
+      infoFactor           : 100.0 / 64.0,
+      infoMaxDecimalPlaces : 2,
+      infoFormat           : nil,
+      requiredCapabilities : [.sound, .lok3]
+    ),
+    
+    .volumeControl2 : (
+      title                : String(localized: "Volume Control 2 (bell)"),
+      section              : .volume,
+      controlType          : .textFieldWithSlider,
+      encoding             : .byte,
+      cvIndexingMethod     : .standard,
+      cv                   : [.cv_000_000_122],
+      mask                 : [0xff],
+      shift                : [0],
+      minValue             : 0,
+      maxValue             : 64,
+      trueDefaultValue     : nil,
+      infoType             : .percentage,
+      infoFactor           : 100.0 / 64.0,
+      infoMaxDecimalPlaces : 2,
+      infoFormat           : nil,
+      requiredCapabilities : [.sound, .lok3]
+    ),
+    
+    .volumeControl3 : (
+      title                : String(localized: "Volume Control 3 (auxiliary)"),
+      section              : .volume,
+      controlType          : .textFieldWithSlider,
+      encoding             : .byte,
+      cvIndexingMethod     : .standard,
+      cv                   : [.cv_000_000_123],
+      mask                 : [0xff],
+      shift                : [0],
+      minValue             : 0,
+      maxValue             : 64,
+      trueDefaultValue     : nil,
+      infoType             : .percentage,
+      infoFactor           : 100.0 / 64.0,
+      infoMaxDecimalPlaces : 2,
+      infoFormat           : nil,
+      requiredCapabilities : [.sound, .lok3]
     ),
 
     .fadeSoundVolumeReduction : (
@@ -7570,7 +8163,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : 100.0 / 128.0,
       infoMaxDecimalPlaces : 2,
       infoFormat           : nil,
-      requiredCapabilities : [.sound]
+      requiredCapabilities : [.sound, .esuSpeedTable]
     ),
 
     .soundFadeOutFadeInTime : (
@@ -7650,9 +8243,9 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : nil,
       infoMaxDecimalPlaces : nil,
       infoFormat           : nil,
-      requiredCapabilities : [.sound]
+      requiredCapabilities : [.sound, .esuSpeedTable]
     ),
-
+    
     .brakeSoundSwitchingOffThreshold : (
       title                : String(localized: "Switching Off Threshold"),
       section              : .brakeSound,
@@ -7669,7 +8262,45 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : nil,
       infoMaxDecimalPlaces : nil,
       infoFormat           : nil,
-      requiredCapabilities : [.sound]
+      requiredCapabilities : [.sound, .esuSpeedTable]
+    ),
+    
+    .brakeSoundSwitchingOffThresholdLok3 : (
+      title                : String(localized: "Switching Off Threshold"),
+      section              : .brakeSound,
+      controlType          : .textFieldWithSlider,
+      encoding             : .byte,
+      cvIndexingMethod     : .standard,
+      cv                   : [.cv_000_000_064],
+      mask                 : [0xff],
+      shift                : [0],
+      minValue             : 0,
+      maxValue             : 64,
+      trueDefaultValue     : nil,
+      infoType             : .none,
+      infoFactor           : nil,
+      infoMaxDecimalPlaces : nil,
+      infoFormat           : nil,
+      requiredCapabilities : [.sound, .lok3]
+    ),
+    
+    .disableLoadDependentSound : (
+      title                : String(localized: "Disable load dependent sound"),
+      section              : .loadDependentSound,
+      controlType          : .checkBox,
+      encoding             : .boolBit,
+      cvIndexingMethod     : .standard,
+      cv                   : [.cv_000_000_124],
+      mask                 : [0b00010000],
+      shift                : [0],
+      minValue             : nil,
+      maxValue             : nil,
+      trueDefaultValue     : nil,
+      infoType             : .none,
+      infoFactor           : nil,
+      infoMaxDecimalPlaces : nil,
+      infoFormat           : nil,
+      requiredCapabilities : [.sound, .lok3]
     ),
 
     // Dynamic Sound Control
@@ -7864,6 +8495,25 @@ extension ProgrammerToolSettingsProperty {
       requiredCapabilities : [.lok4, .sound]
     ),
     
+    .randomSoundsMinimumDistanceLok3 : (
+      title                : String(localized: "Minimum Distance"),
+      section              : .randomSounds,
+      controlType          : .textFieldWithSlider,
+      encoding             : .byte,
+      cvIndexingMethod     : .standard,
+      cv                   : [.cv_000_000_061, .cv_000_000_062],
+      mask                 : [0xff, 0xff],
+      shift                : [0, 0],
+      minValue             : 0,
+      maxValue             : 64,
+      trueDefaultValue     : nil,
+      infoType             : .time,
+      infoFactor           : 1.0,
+      infoMaxDecimalPlaces : 0,
+      infoFormat           : nil,
+      requiredCapabilities : [.lok3, .sound]
+    ),
+
     .randomSoundsMaximumDistance : (
       title                : String(localized: "Maximum Distance"),
       section              : .randomSounds,
@@ -7883,6 +8533,25 @@ extension ProgrammerToolSettingsProperty {
       requiredCapabilities : [.lok4, .sound]
     ),
     
+    .randomSoundsMaximumDistanceLok3 : (
+      title                : String(localized: "Maximum Distance"),
+      section              : .randomSounds,
+      controlType          : .textFieldWithSlider,
+      encoding             : .byte,
+      cvIndexingMethod     : .standard,
+      cv                   : [.cv_000_000_061, .cv_000_000_062],
+      mask                 : [0xff, 0xff],
+      shift                : [0, 0],
+      minValue             : 0,
+      maxValue             : 64,
+      trueDefaultValue     : nil,
+      infoType             : .time,
+      infoFactor           : 1.0,
+      infoMaxDecimalPlaces : 0,
+      infoFormat           : nil,
+      requiredCapabilities : [.lok3, .sound]
+    ),
+
     .heavyLoadIncreaseSoundAcceleration : (
       title                : String(localized: "Heavy Load: Increase Sound Acceleration by the following value"),
       section              : .heavyLoadCoastControl,

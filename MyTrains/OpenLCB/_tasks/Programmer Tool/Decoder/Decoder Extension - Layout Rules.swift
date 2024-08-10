@@ -522,6 +522,66 @@ extension Decoder {
         capability     : []
       ),
       (
+        property1      : .esuSoundType,
+        testType1      : .equal,
+        testValue1     : ESUSoundType.dieselHydraulical.title,
+        operator       : nil,
+        property2      : nil,
+        testType2      : nil,
+        testValue2     : nil,
+        actionProperty : [.esuDistanceOfGearSteps, .esuDistanceofSteamChuffsAtSpeedStep2, .esuDistanceOfSteamChuffsAtSpeedStep1, .esuTriggerImpulses],
+        actionType     : .setIsHiddenToTestResult,
+        capability     : [.lok3]
+      ),
+      (
+        property1      : .esuSoundType,
+        testType1      : .equal,
+        testValue1     : ESUSoundType.dieselMechanical.title,
+        operator       : nil,
+        property2      : nil,
+        testType2      : nil,
+        testValue2     : nil,
+        actionProperty : [.esuDistanceOfGearSteps, .esuDistanceofSteamChuffsAtSpeedStep2, .esuDistanceOfSteamChuffsAtSpeedStep1, .esuTriggerImpulses],
+        actionType     : .setIsHiddenToTestResult,
+        capability     : [.lok3]
+      ),
+      (
+        property1      : .esuSoundType,
+        testType1      : .equal,
+        testValue1     : ESUSoundType.electricOrDieselElectric.title,
+        operator       : nil,
+        property2      : nil,
+        testType2      : nil,
+        testValue2     : nil,
+        actionProperty : [.esuDistanceofSteamChuffsAtSpeedStep2, .esuDistanceOfSteamChuffsAtSpeedStep1, .esuTriggerImpulses],
+        actionType     : .setIsHiddenToTestResult,
+        capability     : [.lok3]
+      ),
+      (
+        property1      : .esuSoundType,
+        testType1      : .equal,
+        testValue1     : ESUSoundType.steamLocomotiveWithoutExternalSensor.title,
+        operator       : nil,
+        property2      : nil,
+        testType2      : nil,
+        testValue2     : nil,
+        actionProperty : [.esuDistanceOfGearSteps,  .esuTriggerImpulses],
+        actionType     : .setIsHiddenToTestResult,
+        capability     : [.lok3]
+      ),
+      (
+        property1      : .esuSoundType,
+        testType1      : .equal,
+        testValue1     : ESUSoundType.steamLocomotiveWithExternalSensor.title,
+        operator       : nil,
+        property2      : nil,
+        testType2      : nil,
+        testValue2     : nil,
+        actionProperty : [.esuDistanceOfGearSteps, .esuDistanceofSteamChuffsAtSpeedStep2, .esuDistanceOfSteamChuffsAtSpeedStep1],
+        actionType     : .setIsHiddenToTestResult,
+        capability     : [.lok3]
+      ),
+      (
         property1      : .speedTableType,
         testType1      : .equal,
         testValue1     : SpeedTableType.vStartvMidvHigh.title,
@@ -529,7 +589,7 @@ extension Decoder {
         property2      : nil,
         testType2      : nil,
         testValue2     : nil,
-        actionProperty : [.esuSpeedTable, .speedTableIndex, .speedTableEntryValue, .speedTablePreset, .maximumSpeed, .minimumSpeed, .nmraSpeedTable],
+        actionProperty : [.esuSpeedTable, .speedTableIndex, .speedTableEntryValue, .speedTablePreset, .maximumSpeed, .minimumSpeed, .nmraSpeedTable, .speedTableEntryValueB],
         actionType     : .setIsHiddenToTestResult,
         capability     : []
       ),
@@ -553,7 +613,7 @@ extension Decoder {
         property2      : nil,
         testType2      : nil,
         testValue2     : nil,
-        actionProperty : [.slowSpeedBackEMFSamplingPeriod, .slowSpeedLengthOfMeasurementGap, .regulationParameterI, .regulationReference, .fullSpeedBackEMFSamplingPeriod, .regulationParameterKSlow, .largestInternalSpeedStepThatUsesKSlow, .regulationParameterK, .fullSpeedLengthOfMeasurementGap, .regulationParameterISlow, .regulationInfluenceDuringSlowSpeed, .adaptiveRegulationFrequencyEnabled, .backEMFSamplingPeriod, .emfBasicSettings, .emfSlowSpeedSettings],
+        actionProperty : [.slowSpeedBackEMFSamplingPeriod, .slowSpeedLengthOfMeasurementGap, .regulationParameterI, .regulationReference, .fullSpeedBackEMFSamplingPeriod, .regulationParameterKSlow, .largestInternalSpeedStepThatUsesKSlow, .regulationParameterK, .fullSpeedLengthOfMeasurementGap, .regulationParameterISlow, .regulationInfluenceDuringSlowSpeed, .adaptiveRegulationFrequencyEnabled, .backEMFSamplingPeriod, .emfBasicSettings, .emfSlowSpeedSettings, .regulationReferenceLok3, .regulationParameterKLok3, .regulationParameterILok3, .regulationInfluenceLok3],
         actionType     : .setIsHiddenToTestResult,
         capability     : []
       ),
@@ -625,7 +685,19 @@ extension Decoder {
         property2      : nil,
         testType2      : nil,
         testValue2     : nil,
-        actionProperty : [.minimumDistanceofSteamChuffs],
+        actionProperty : [.minimumDistanceofSteamChuffs, .minimumDistanceofSteamChuffsLok3],
+        actionType     : .setIsHiddenToTestResult,
+        capability     : []
+      ),
+      (
+        property1      : .enableSoundSteamShift,
+        testType1      : .equal,
+        testValue1     : "false",
+        operator       : nil,
+        property2      : nil,
+        testType2      : nil,
+        testValue2     : nil,
+        actionProperty : [.timeForOneSteamShiftCycle, .earliestRelativeStartPosition, .latestRelativeEndPosition],
         actionType     : .setIsHiddenToTestResult,
         capability     : []
       ),

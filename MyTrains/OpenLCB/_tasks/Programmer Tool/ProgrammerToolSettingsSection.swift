@@ -119,14 +119,18 @@ public enum ProgrammerToolSettingsSection : Int, CaseIterable {
   
   // Sound Settings
   
+  case soundType = 73
+  case driveSoundSpeed = 74
   case soundSelection = 64
   case steamChuffs = 50
   case randomSounds = 71
   case volume = 51
   case toneControl = 52
   case brakeSound = 53
+  case loadDependentSound = 76
   case dynamicSoundControl = 54
   case heavyLoadCoastControl = 67
+  case soundSteamShift = 75
   
   // Sound Slot Settings
   
@@ -149,6 +153,18 @@ public enum ProgrammerToolSettingsSection : Int, CaseIterable {
     .decoderInformation : (
       String(localized: "Decoder Information"),
       .info
+    ),
+    .driveSoundSpeed : (
+      String(localized: "Drive Sound Speed"),
+      .soundSettings
+    ),
+    .loadDependentSound : (
+      String(localized: "Load Dependent Sound"),
+      .soundSettings
+    ),
+    .soundSteamShift : (
+      String(localized: "Sound Steam Shift"),
+      .soundSettings
     ),
     .soundSelection : (
       String(localized: "Sound Selection"),
@@ -416,6 +432,10 @@ public enum ProgrammerToolSettingsSection : Int, CaseIterable {
     ),
     .volume : (
       String(localized: "Volume"),
+      .soundSettings
+    ),
+    .soundType : (
+      String(localized: "Sound Type"),
       .soundSettings
     ),
     .toneControl : (

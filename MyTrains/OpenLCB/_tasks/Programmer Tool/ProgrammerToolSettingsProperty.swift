@@ -56,9 +56,13 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
   case enableACAnalogMode = 10
   case acAnalogModeStartVoltage = 11
   case acAnalogModeMaximumSpeedVoltage = 12
+  case acAnalogModeStartVoltageLok3 = 441
+  case acAnalogModeMaximumSpeedVoltageLok3 = 456
   case enableDCAnalogMode = 13
   case dcAnalogModeStartVoltage = 14
   case dcAnalogModeMaximumSpeedVoltage = 15
+  case dcAnalogModeStartVoltageLok3 = 457
+  case dcAnalogModeMaximumSpeedVoltageLok3 = 458
   case enableQuantumEngineer = 16
   case ignoreAccelerationDecelerationInSoundSchedule = 17
   case useHighFrequencyPWMMotorControl = 18
@@ -122,9 +126,11 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
   
   case enableAcceleration = 63
   case accelerationRate = 64
+  case accelerationRateLok3 = 459
   case accelerationAdjustment = 65
   case enableDeceleration = 66
   case decelerationRate = 67
+  case decelerationRateLok3 = 460
   case decelerationAdjustment = 68
   case reverseMode = 69
   case enableForwardTrim = 70
@@ -402,6 +408,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
   case esuSpeedTable = 200
   case speedTableIndex = 201
   case speedTableEntryValue = 202
+  case speedTableEntryValueB = 426
   case speedTablePreset = 203
   case minimumSpeed = 112
   case maximumSpeed = 113
@@ -410,11 +417,15 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
   case regulationReference = 115
   case regulationParameterK = 116
   case regulationParameterI = 117
+  case regulationReferenceLok3 = 427
+  case regulationParameterKLok3 = 428
+  case regulationParameterILok3 = 429
   case emfSlowSpeedSettings = 131
   case regulationParameterKSlow = 118
   case regulationParameterISlow = 397
   case largestInternalSpeedStepThatUsesKSlow = 129
   case regulationInfluenceDuringSlowSpeed = 119
+  case regulationInfluenceLok3 = 430
   case emfBackEMFSettings = 132
   case slowSpeedBackEMFSamplingPeriod = 120
   case fullSpeedBackEMFSamplingPeriod = 121
@@ -423,6 +434,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
   case adaptiveRegulationFrequencyEnabled = 398
   case backEMFSamplingPeriod = 399
   case dcMotorPWMFrequency = 400
+  case dcMotorPWMFrequencyLok3 = 431
   case enableMotorOverloadProtection = 124
   case enableMotorCurrentLimiter = 125
   case motorCurrentLimiterLimit = 126
@@ -447,12 +459,22 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
   case enableM4Protocol = 86
   case memoryPersistentFunction = 87
   case memoryPersistentSpeed = 88
+  case memoryPersistentFunctionLok3 = 432
+  case memoryPersistentSpeedLok3 = 433
+  case memoryPersistentAccelerationLok3 = 434
   case enableRailComPlusSynchronization = 89
   case m4MasterDecoderManufacturer = 90
   case m4MasterDecoderSerialNumber = 91
   
   // Sound Settings
   
+  case esuSoundType = 435
+  case esuDistanceOfGearSteps = 436
+  case esuDistanceOfSteamChuffsAtSpeedStep1 = 437
+  case esuDistanceofSteamChuffsAtSpeedStep2 = 438
+  case esuTriggerImpulses = 439
+  case esuDriveSoundSpeedMinimum = 442
+  case esuDriveSoundSpeedMaximum = 443
   case soundSelection = 401
   case steamChuffMode = 133
   case distanceOfSteamChuffsAtSpeedStep1 = 134
@@ -463,15 +485,23 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
   case secondaryTriggerDistanceReduction = 137
   case enableMinimumDistanceOfSteamChuffs = 138
   case minimumDistanceofSteamChuffs = 139
+  case minimumDistanceofSteamChuffsLok3 = 450
   case randomSoundsMinimumDistance = 402
   case randomSoundsMaximumDistance = 403
+  case randomSoundsMinimumDistanceLok3 = 444
+  case randomSoundsMaximumDistanceLok3 = 445
   case masterVolume = 142
+  case masterVolumeLok3 = 440
+  case volumeControl1 = 446
+  case volumeControl2 = 447
+  case volumeControl3 = 448
   case fadeSoundVolumeReduction = 143
   case soundFadeOutFadeInTime = 144
   case soundBass = 145
   case soundTreble = 146
   case brakeSoundSwitchingOnThreshold = 147
   case brakeSoundSwitchingOffThreshold = 148
+  case brakeSoundSwitchingOffThresholdLok3 = 449
   case soundControlBasis = 149
   case trainLoadAtLowSpeed = 150
   case trainLoadAtHighSpeed = 151
@@ -481,10 +511,15 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
   case enableIdleOperationThreshold = 155
   case idleOperationThreshold = 156
   case idleOperationTriggeredFunction = 157
+  case disableLoadDependentSound = 455
   case heavyLoadIncreaseSoundAcceleration = 404
   case heavyLoadKeepConstantSpeed = 405
   case coastModeIncreaseSoundAcceleration = 406
   case coastModeKeepConstantSpeed = 407
+  case enableSoundSteamShift = 451
+  case timeForOneSteamShiftCycle = 452
+  case earliestRelativeStartPosition = 453
+  case latestRelativeEndPosition = 454
 
   // Sound Slot Settings
   
@@ -634,6 +669,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     .smokeChuffsMinimumDuration      : 2,
     .hluSpeedLimit1                  : 5,
     .randomSoundsMinimumDistance     : 2,
+    .randomSoundsMinimumDistanceLok3 : 2,
   ]
   
   internal static var _minMaxProperties : [ProgrammerToolSettingsProperty:ProgrammerToolSettingsProperty]?

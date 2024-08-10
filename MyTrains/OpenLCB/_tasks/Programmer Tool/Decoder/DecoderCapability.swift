@@ -64,6 +64,7 @@ public enum DecoderCapability : CaseIterable {
   case soundSlotBrake
   case soundSlotRandom
   case lok3
+  case lok3AnalogFunctions
   case physicalOutputsPropertiesA
   case physicalOutputsPropertiesB
   case functionIcons
@@ -80,5 +81,6 @@ public enum DecoderCapability : CaseIterable {
   case disableMotorEMKMeasure
   case esuSpeedTable
   case nmraSpeedTable
+  case dccAddresses
   
 }

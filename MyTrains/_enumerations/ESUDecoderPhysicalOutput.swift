@@ -102,6 +102,10 @@ public enum ESUDecoderPhysicalOutput : UInt8, CaseIterable {
         return 4
       case .aux4:
         return 5
+      case .aux5:
+        return 6
+      case .aux6:
+        return 7
       default:
         return 0
       }

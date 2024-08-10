@@ -321,6 +321,12 @@ public class Decoder : NSObject {
     }
   }
   
+  private var esuSoundType : ESUSoundType = .dieselHydraulical {
+    didSet {
+      applyLayoutRules()
+    }
+  }
+  
   public var esuDecoderPhysicalOutput : ESUDecoderPhysicalOutput = .frontLight {
     didSet {
       reloadIndexedViews(indexingMethod: .esuDecoderPhysicalOutput)
@@ -333,35 +339,41 @@ public class Decoder : NSObject {
     
     let capabilities = decoderType.capabilities
     
+    var result : Set<ESUDecoderPhysicalOutput> = []
+    
     if capabilities.contains(.singleFrontRearAux1Aux2) {
-      return [
+      result = result.union([
         .frontLightOnly,
         .rearLightOnly,
         .aux1Only,
-        .aux2Only,
-        .aux3,
-        .aux4,
-      ]
+      ])
+      if capabilities.intersection([.aux2toAux4]) == [.aux2toAux4] {
+        result = result.union([
+          .aux2Only,
+          .aux3,
+          .aux4,
+        ])
+      }
+    }
+    else {
+      result = result.union([
+        .frontLight,
+        .frontLight_2,
+        .rearLight,
+        .rearLight_2,
+        .aux1,
+        .aux1_2,
+      ])
+      if capabilities.intersection([.aux2toAux4]) == [.aux2toAux4] {
+        result = result.union([
+          .aux2,
+          .aux2_2,
+          .aux3,
+          .aux4,
+        ])
+      }
     }
     
-    var result : Set<ESUDecoderPhysicalOutput> = [
-      .frontLight,
-      .frontLight_2,
-      .rearLight,
-      .rearLight_2,
-      .aux1,
-      .aux1_2,
-    ]
-
-    if capabilities.intersection([.aux2toAux4]) == [.aux2toAux4] {
-      result = result.union([
-        .aux2,
-        .aux2_2,
-        .aux3,
-        .aux4,
-      ])
-    }
-
     if capabilities.intersection([.aux5toAux6]) == [.aux5toAux6] {
       result = result.union([
         .aux5,
@@ -714,6 +726,8 @@ public class Decoder : NSObject {
     switch definition.encoding {
     case .esuSpeedTablePreset:
       return SpeedTablePreset.doNothing.title
+    case .esuSoundType:
+      return esuSoundType.title
     case .threeValueSpeedTablePreset:
       return ThreeValueSpeedTablePreset.identity.title
     case .esuDecoderPhysicalOutput:
@@ -808,6 +822,10 @@ public class Decoder : NSObject {
       if let item = ESUDCMotorPWMFrequency(rawValue:values[0]) {
         return item.title
       }
+    case .esuDCMotorPWMFrequencyLok3:
+      if let item = ESUDCMotorPWMFrequencyLok3(rawValue:values[0]) {
+        return item.title
+      }
     case .esuSteamChuffMode:
       return (values[0] == 0 ? SteamChuffMode.useExternalWheelSensor : SteamChuffMode.playSteamChuffsAccordingToSpeed).title
     case .esuSoundControlBasis:
@@ -832,7 +850,7 @@ public class Decoder : NSObject {
       if let item = ClassLightLogicSequenceLength(rawValue: values[0]) {
         return item.title
       }
-    case .speedTableValue:
+    case .speedTableValue, .speedTableValueB:
       return "\(values[speedTableIndex - 1])"
     case .esuTriggeredFunction:
       if let item = TriggeredFunction(rawValue: values[0]) {
@@ -965,10 +983,22 @@ public class Decoder : NSObject {
         return false
       }
 
+    case .speedTableValueB:
+      
+      guard let maxValue = definition.maxValue, let minValue = definition.minValue, let value = Int(string) else {
+        return false
+      }
+      
+      if !(Int(minValue) ... Int(maxValue) ~= value) {
+        return false
+      }
+      
     case .esuDecoderPhysicalOutput:
       return ESUDecoderPhysicalOutput(title: string) != nil
     case .esuPhysicalOutputMode:
       return ESUPhysicalOutputMode(title: string, decoder: self) != nil
+    case .esuSoundType:
+      return ESUSoundType(title:string) != nil
     case .esuPhysicalOutputModeB:
       return ESUPhysicalOutputModeB(title: string, decoder: self) != nil
     case .esuSteamChuffMode:
@@ -1017,6 +1047,8 @@ public class Decoder : NSObject {
       return SpeedTableType(title: string) != nil
     case .esuDCMotorPWMFrequency:
       return ESUDCMotorPWMFrequency(title: string) != nil
+    case .esuDCMotorPWMFrequencyLok3:
+      return ESUDCMotorPWMFrequencyLok3(title: string) != nil
     default:
       guard let maxValue = definition.maxValue, let minValue = definition.minValue, let value = Int(string), value >= Int(minValue) && value <= Int(maxValue) else {
         return false
@@ -1123,6 +1155,32 @@ public class Decoder : NSObject {
       soundCV = SoundCV(title: string)!
     case .esuSoundSlot:
       esuSoundSlot = ESUSoundSlot(title: string)!
+      
+    case .esuSoundType:
+      
+      let item = ESUSoundType(title: string)!
+      
+      if item != esuSoundType {
+        
+        esuSoundType = item
+        
+        let values = getProperty(property: property)
+        
+        switch esuSoundType {
+        case .dieselHydraulical:
+          newValues = [0, 0]
+        case .dieselMechanical:
+          newValues = [1, 0]
+        case .electricOrDieselElectric:
+          newValues = [0, max(values[1], 1)]
+        case .steamLocomotiveWithoutExternalSensor:
+          newValues = [max(values[0], 1), max(values[1], 1)]
+        case .steamLocomotiveWithExternalSensor:
+          newValues = [0, max(values[1], 1)]
+        }
+        
+      }
+      
     case .esuRandomFunction:
       esuRandomFunction = ESURandomFunction(title: string)!
     case .esuFunction:
@@ -1131,6 +1189,8 @@ public class Decoder : NSObject {
       esuFunctionMapping = ESUFunctionMapping(title: string)!
     case .esuDCMotorPWMFrequency:
       newValues.append(ESUDCMotorPWMFrequency(title:string)!.rawValue)
+    case .esuDCMotorPWMFrequencyLok3:
+      newValues.append(ESUDCMotorPWMFrequencyLok3(title:string)!.rawValue)
     case .esuSmokeUnitControlMode:
       newValues.append(SmokeUnitControlMode(title: string)!.rawValue)
     case .esuPhysicalOutputMode:
@@ -1157,6 +1217,26 @@ public class Decoder : NSObject {
       
       if speedTableIndex < 27 {
         for index in speedTableIndex + 1 ... 27 {
+          newValues[index - 1] = max(newValues[index - 1], value)
+        }
+      }
+      
+    case .speedTableValueB:
+      
+      newValues = getProperty(property: property, propertyDefinition: definition)
+      
+      let value = UInt8(string)!
+      
+      newValues[speedTableIndex - 1] = value
+      
+      if speedTableIndex > 1 {
+        for index in 1 ... speedTableIndex - 1 {
+          newValues[index - 1] = min(newValues[index - 1], value)
+        }
+      }
+      
+      if speedTableIndex < 28 {
+        for index in speedTableIndex + 1 ... 28 {
           newValues[index - 1] = max(newValues[index - 1], value)
         }
       }

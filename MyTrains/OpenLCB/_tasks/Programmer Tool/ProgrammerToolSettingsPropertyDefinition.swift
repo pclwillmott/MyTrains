@@ -85,6 +85,7 @@ public enum ProgrammerToolEncodingType : Int, CaseIterable {
   case esuClassLightLogicLength
   case speedTableIndex
   case speedTableValue
+  case speedTableValueB
   case analogModeEnable
   case esuRandomFunction
   case soundCV
@@ -97,7 +98,9 @@ public enum ProgrammerToolEncodingType : Int, CaseIterable {
   case esuConditionDirection
   case speedTableType
   case esuDCMotorPWMFrequency
-  
+  case esuDCMotorPWMFrequencyLok3
+  case esuSoundType
+
 }
 
 public enum CVIndexingMethod {
