@@ -116,6 +116,7 @@ public enum ProgrammerToolSettingsSection : Int, CaseIterable {
   case enabledProtocols = 47
   case memorySettings = 48
   case railComDecoderSync = 49
+  case motorBrake = 76
   
   // Sound Settings
   
@@ -127,7 +128,7 @@ public enum ProgrammerToolSettingsSection : Int, CaseIterable {
   case volume = 51
   case toneControl = 52
   case brakeSound = 53
-  case loadDependentSound = 76
+  case loadDependentSound = 77
   case dynamicSoundControl = 54
   case heavyLoadCoastControl = 67
   case soundSteamShift = 75
@@ -181,6 +182,10 @@ public enum ProgrammerToolSettingsSection : Int, CaseIterable {
     .locomotiveAddress : (
       String(localized: "Locomotive Address"),
       .address
+    ),
+    .motorBrake : (
+      String(localized: "Motor Brake"),
+      .specialOptions
     ),
     .dccConsistAddress : (
       String(localized: "DCC Consist Address"),

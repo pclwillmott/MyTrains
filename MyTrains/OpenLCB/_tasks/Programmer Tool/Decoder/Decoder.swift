@@ -794,6 +794,10 @@ public class Decoder : NSObject {
       if let item = SpeedStepMode(rawValue: values[0]) {
         return item.title
       }
+    case .esuBrakingMode:
+      if let item = ESUBrakingMode(rawValue:values[0]) {
+        return item.title
+      }
     case .manufacturerCode:
       if let item = ManufacturerCode(rawValue:UInt16(values[0])) {
         return item.title
@@ -1009,6 +1013,8 @@ public class Decoder : NSObject {
       return ExternalSmokeUnitType(title: string) != nil
     case .esuSoundControlBasis:
       return SoundControlBasis(title: string) != nil
+    case .esuBrakingMode:
+      return ESUBrakingMode(title:string) != nil
     case .esuTriggeredFunction:
       return TriggeredFunction(title: string) != nil
     case .esuSpeedTablePreset:
@@ -1193,6 +1199,8 @@ public class Decoder : NSObject {
       newValues.append(ESUDCMotorPWMFrequencyLok3(title:string)!.rawValue)
     case .esuSmokeUnitControlMode:
       newValues.append(SmokeUnitControlMode(title: string)!.rawValue)
+    case .esuBrakingMode:
+      newValues.append(ESUBrakingMode(title: string)!.rawValue)
     case .esuPhysicalOutputMode:
       newValues.append(ESUPhysicalOutputMode(title: string, decoder: self)!.rawValue)
     case .esuPhysicalOutputModeB:

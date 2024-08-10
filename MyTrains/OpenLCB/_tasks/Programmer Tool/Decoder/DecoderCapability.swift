@@ -82,5 +82,7 @@ public enum DecoderCapability : CaseIterable {
   case esuSpeedTable
   case nmraSpeedTable
   case dccAddresses
+  case marklinConsecutiveAddresses
+  case disableMotorBrake
   
 }

@@ -695,6 +695,9 @@
     "Alias Mapping Enquiry Frame" : {
 
     },
+    "Allow Command Confirmation on Channel 1" : {
+
+    },
     "Allow Data Transmission on Channel 2" : {
 
     },
@@ -1258,6 +1261,9 @@
     "Brake if right rail signal in driving direction is more positive than the left rail" : {
 
     },
+    "Brake immediately" : {
+
+    },
     "Brake light" : {
 
     },
@@ -1315,6 +1321,9 @@
           }
         }
       }
+    },
+    "Braking Mode" : {
+
     },
     "Brazil" : {
       "comment" : "This is the name of a country."
@@ -2864,6 +2873,9 @@
     "Disable load dependent sound" : {
 
     },
+    "Disable Motor Brake" : {
+
+    },
     "Disable motor EMK measure" : {
 
     },
@@ -3017,6 +3029,9 @@
 
     },
     "Drive Sound Speed" : {
+
+    },
+    "Drive to breakpoint then brake" : {
 
     },
     "Drive Until Locomotive Stops in Specified Period" : {
@@ -5852,6 +5867,9 @@
           }
         }
       }
+    },
+    "Motor Brake" : {
+
     },
     "Motor Current Limiter Limit" : {
 

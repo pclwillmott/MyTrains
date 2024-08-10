@@ -622,8 +622,8 @@
             filePath = "MyTrains/OpenLCB/_tasks/Programmer Tool/Property Views/PTSettingsPropertyView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1246"
-            endingLineNumber = "1246"
+            startingLineNumber = "1248"
+            endingLineNumber = "1248"
             landmarkName = "reload()"
             landmarkType = "7">
          </BreakpointContent>
@@ -718,8 +718,8 @@
             filePath = "MyTrains/OpenLCB/_tasks/Programmer Tool/ProgrammerToolSettingsProperty.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "486"
-            endingLineNumber = "486"
+            startingLineNumber = "491"
+            endingLineNumber = "491"
             landmarkName = "ProgrammerToolSettingsProperty"
             landmarkType = "13">
          </BreakpointContent>

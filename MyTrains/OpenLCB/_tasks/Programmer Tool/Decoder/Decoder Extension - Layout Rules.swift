@@ -270,6 +270,18 @@ extension Decoder {
         capability     : [.noSound]
       ),
       (
+        property1      : .enableStartingDelayIfVirtualDriveSoundEnabledLok3,
+        testType1      : .equal,
+        testValue1     : "false",
+        operator       : nil,
+        property2      : nil,
+        testType2      : nil,
+        testValue2     : nil,
+        actionProperty : [.startingDelayIfVirtualDriveSoundEnabledLok3],
+        actionType     : .setIsHiddenToTestResult,
+        capability     : [.noSound, .lok3]
+      ),
+      (
         property1      : .physicalOutput,
         testType1      : .equal,
         testValue1     : ESUDecoderPhysicalOutput.aux10.title,

@@ -1173,6 +1173,8 @@ public class PTSettingsPropertyView : NSView, NSTextFieldDelegate {
       ESUSoundType.populate(comboBox: comboBox)
     case .esuDCMotorPWMFrequencyLok3:
       ESUDCMotorPWMFrequencyLok3.populate(comboBox: comboBox)
+    case .esuBrakingMode:
+      ESUBrakingMode.populate(comboBox: comboBox)
     default:
       break
     }

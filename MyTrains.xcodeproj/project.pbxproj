@@ -79,6 +79,7 @@
 		DA29E9482BC8042300E6A757 /* PanelView.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA29E9472BC8042200E6A757 /* PanelView.storyboard */; };
 		DA29E94A2BC8043500E6A757 /* PanelViewVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA29E9492BC8043500E6A757 /* PanelViewVC.swift */; };
 		DA29E94E2BC85C8900E6A757 /* SwitchboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA29E94D2BC85C8900E6A757 /* SwitchboardView.swift */; };
+		DA2AB2862C67D35700DF4BF6 /* ESUBrakingMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA2AB2852C67D35700DF4BF6 /* ESUBrakingMode.swift */; };
 		DA2B5FD22C2863B000A15FAA /* SpeedProfilerEventType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA2B5FD12C2863B000A15FAA /* SpeedProfilerEventType.swift */; };
 		DA311BAC2A7BB8CC0019FDCE /* OpenLCBValidity.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA311BAB2A7BB8CC0019FDCE /* OpenLCBValidity.swift */; };
 		DA3168892BCAC84300059B6C /* SwitchboardOperationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA3168882BCAC84300059B6C /* SwitchboardOperationsView.swift */; };
@@ -577,6 +578,7 @@
 		DA29E9472BC8042200E6A757 /* PanelView.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = PanelView.storyboard; sourceTree = "<group>"; };
 		DA29E9492BC8043500E6A757 /* PanelViewVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PanelViewVC.swift; sourceTree = "<group>"; };
 		DA29E94D2BC85C8900E6A757 /* SwitchboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchboardView.swift; sourceTree = "<group>"; };
+		DA2AB2852C67D35700DF4BF6 /* ESUBrakingMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ESUBrakingMode.swift; sourceTree = "<group>"; };
 		DA2B5FD12C2863B000A15FAA /* SpeedProfilerEventType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedProfilerEventType.swift; sourceTree = "<group>"; };
 		DA311BAB2A7BB8CC0019FDCE /* OpenLCBValidity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBValidity.swift; sourceTree = "<group>"; };
 		DA3168882BCAC84300059B6C /* SwitchboardOperationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchboardOperationsView.swift; sourceTree = "<group>"; };
@@ -1131,6 +1133,7 @@
 				DA188A9E2C5A957F00A50EFB /* ESUConditionDirection.swift */,
 				DAA795F62C64CFF400994EAA /* ESUDCMotorPWMFrequency.swift */,
 				DA45BDD52C67744800FAD8E6 /* ESUDCMotorPWMFrequencyLok3.swift */,
+				DA2AB2852C67D35700DF4BF6 /* ESUBrakingMode.swift */,
 				DA45BDD72C67847500FAD8E6 /* ESUSoundType.swift */,
 				DA0F378D2C47D471002C66D8 /* SteamChuffMode.swift */,
 				DAAE3E3C2C4D261400F129B7 /* SmokeUnitControlMode.swift */,
@@ -2566,6 +2569,7 @@
 				DAFFB65F2B5D87C80035AC74 /* SelectLayoutVC.swift in Sources */,
 				DA8479972A34CA87003067E6 /* OpenLCBClockSubState.swift in Sources */,
 				DA0946542843C06A00F1AB81 /* DMF.swift in Sources */,
+				DA2AB2862C67D35700DF4BF6 /* ESUBrakingMode.swift in Sources */,
 				DAA030962AEE94B600BC5659 /* OpenLCBHardwareNodeState.swift in Sources */,
 				DAB93F1E2C04AB24006C0580 /* LayoutBuilderPanelArea.swift in Sources */,
 				DA60140B29F448B000AD9ACD /* OpenLCBNodeMemoryAddressSpace.swift in Sources */,

@@ -394,7 +394,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : nil,
       infoMaxDecimalPlaces : nil,
       infoFormat           : nil,
-      requiredCapabilities : [.respondsToNonDCCCommands]
+      requiredCapabilities : [.marklinConsecutiveAddresses, ]
     ),
 
     .locomotiveAddressWarning : (
@@ -432,7 +432,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : nil,
       infoMaxDecimalPlaces : nil,
       infoFormat           : nil,
-      requiredCapabilities : [.lok3]
+      requiredCapabilities : [.lok3, .respondsToNonDCCCommands]
     ),
 
     // DCC Consist Address
@@ -1418,6 +1418,25 @@ extension ProgrammerToolSettingsProperty {
       infoFormat           : nil,
       requiredCapabilities : [.constantBrakeDistance]
     ),
+    
+    .brakingModeLok3 : (
+      title                : String(localized: "Braking Mode"),
+      section              : .constantBrakeDistance,
+      controlType          : .comboBox,
+      encoding             : .esuBrakingMode,
+      cvIndexingMethod     : .standard,
+      cv                   : [.cv_000_000_245],
+      mask                 : [0b00000001],
+      shift                : [0],
+      minValue             : nil,
+      maxValue             : nil,
+      trueDefaultValue     : nil,
+      infoType             : .none,
+      infoFactor           : nil,
+      infoMaxDecimalPlaces : nil,
+      infoFormat           : nil,
+      requiredCapabilities : [.constantBrakeDistance, .lok3]
+    ),
 
     .differentBrakeDistanceBackwards : (
       title                : String(localized: "Different Brake Distance While Driving Backwards"),
@@ -1435,7 +1454,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : nil,
       infoMaxDecimalPlaces : nil,
       infoFormat           : nil,
-      requiredCapabilities : [.constantBrakeDistance]
+      requiredCapabilities : [.constantBrakeDistance, .esuSpeedTable]
     ),
 
     .brakeDistanceLengthBackwards : (
@@ -1454,7 +1473,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : nil,
       infoMaxDecimalPlaces : nil,
       infoFormat           : nil,
-      requiredCapabilities : [.constantBrakeDistance]
+      requiredCapabilities : [.constantBrakeDistance, .esuSpeedTable]
     ),
 
     .driveUntilLocomotiveStopsInSpecifiedPeriod : (
@@ -1473,7 +1492,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : nil,
       infoMaxDecimalPlaces : nil,
       infoFormat           : nil,
-      requiredCapabilities : [.constantBrakeDistance]
+      requiredCapabilities : [.constantBrakeDistance, .esuSpeedTable]
     ),
 
     .stoppingPeriod : (
@@ -1492,7 +1511,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : 0.25,
       infoMaxDecimalPlaces : 2,
       infoFormat           : nil,
-      requiredCapabilities : [.constantBrakeDistance]
+      requiredCapabilities : [.constantBrakeDistance, .esuSpeedTable]
     ),
 
     .constantBrakeDistanceOnSpeedStep0 : (
@@ -1511,7 +1530,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : nil,
       infoMaxDecimalPlaces : nil,
       infoFormat           : nil,
-      requiredCapabilities : [.constantBrakeDistance]
+      requiredCapabilities : [.constantBrakeDistance, .esuSpeedTable]
     ),
 
     // Brake Section Settings
@@ -1709,7 +1728,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : nil,
       infoMaxDecimalPlaces : nil,
       infoFormat           : nil,
-      requiredCapabilities : [.railCom]
+      requiredCapabilities : [.railCom, .esuSpeedTable]
     ),
 
     .sendFollowingToCommandStation : (
@@ -1767,6 +1786,25 @@ extension ProgrammerToolSettingsProperty {
       infoMaxDecimalPlaces : nil,
       infoFormat           : nil,
       requiredCapabilities : [.railCom]
+    ),
+    
+    .allowCommandConfirmationOnChannel1 : (
+      title                : String(localized: "Allow Command Confirmation on Channel 1"),
+      section              : .railComSettings,
+      controlType          : .checkBox,
+      encoding             : .boolBit,
+      cvIndexingMethod     : .standard,
+      cv                   : [.cv_000_000_028],
+      mask                 : [0b00000100],
+      shift                : [0],
+      minValue             : nil,
+      maxValue             : nil,
+      trueDefaultValue     : nil,
+      infoType             : .none,
+      infoFactor           : nil,
+      infoMaxDecimalPlaces : nil,
+      infoFormat           : nil,
+      requiredCapabilities : [.railCom, .lok3]
     ),
 
     // Speed Step Mode
@@ -2299,9 +2337,28 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : nil,
       infoMaxDecimalPlaces : nil,
       infoFormat           : nil,
-      requiredCapabilities : [.noSound]
+      requiredCapabilities : [.noSound, .esuSpeedTable]
     ),
     
+    .enableStartingDelayIfVirtualDriveSoundEnabledLok3 : (
+      title                : String(localized: "Delay Starting if Virtual Drive Sound is Enabled"),
+      section              : .startingDelay,
+      controlType          : .checkBox,
+      encoding             : .boolNZ,
+      cvIndexingMethod     : .standard,
+      cv                   : [.cv_000_000_253],
+      mask                 : [0xff],
+      shift                : [0],
+      minValue             : nil,
+      maxValue             : nil,
+      trueDefaultValue     : 1,
+      infoType             : .none,
+      infoFactor           : nil,
+      infoMaxDecimalPlaces : nil,
+      infoFormat           : nil,
+      requiredCapabilities : [.noSound, .lok3]
+    ),
+
     .startingDelayIfVirtualDriveSoundEnabled : (
       title                : String(localized: "Time to Wait before Start"),
       section              : .startingDelay,
@@ -2318,7 +2375,25 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : 0.065529,
       infoMaxDecimalPlaces : 2,
       infoFormat           : nil,
-      requiredCapabilities : [.noSound]
+      requiredCapabilities : [.noSound, .esuSpeedTable]
+    ),
+    .startingDelayIfVirtualDriveSoundEnabledLok3 : (
+      title                : String(localized: "Time to Wait before Start"),
+      section              : .startingDelay,
+      controlType          : .textFieldWithSlider,
+      encoding             : .byte,
+      cvIndexingMethod     : .standard,
+      cv                   : [.cv_000_000_253],
+      mask                 : [0xff],
+      shift                : [0],
+      minValue             : 1,
+      maxValue             : 255,
+      trueDefaultValue     : nil,
+      infoType             : .time,
+      infoFactor           : 0.065529,
+      infoMaxDecimalPlaces : 2,
+      infoFormat           : nil,
+      requiredCapabilities : [.noSound, .lok3]
     ),
 
     // Stop Behaviour
@@ -7678,6 +7753,25 @@ extension ProgrammerToolSettingsProperty {
       infoFormat           : nil,
       requiredCapabilities : [.lok3]
     ),
+    
+    .disableMotorBrake : (
+      title                : String(localized: "Disable Motor Brake"),
+      section              : .motorBrake,
+      controlType          : .checkBox,
+      encoding             : .boolBit,
+      cvIndexingMethod     : .standard,
+      cv                   : [.cv_000_000_124],
+      mask                 : [0b00010000],
+      shift                : [0],
+      minValue             : nil,
+      maxValue             : nil,
+      trueDefaultValue     : nil,
+      infoType             : .none,
+      infoFactor           : nil,
+      infoMaxDecimalPlaces : nil,
+      infoFormat           : nil,
+      requiredCapabilities : [.disableMotorBrake]
+    ),
 
     // RailComPlus and M4 Master Decoder Synchronization
 
@@ -7931,7 +8025,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : nil,
       infoMaxDecimalPlaces : nil,
       infoFormat           : nil,
-      requiredCapabilities : [.smokeChuffs]
+      requiredCapabilities : [.smokeChuffs, .sound]
     ),
 
     .minimumDistanceofSteamChuffs : (
@@ -7969,7 +8063,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : 0.000117647,
       infoMaxDecimalPlaces : 2,
       infoFormat           : nil,
-      requiredCapabilities : [.smokeChuffs, .lok3]
+      requiredCapabilities : [.smokeChuffs, .lok3, .sound]
     ),
     
     // Sound Steam Shift

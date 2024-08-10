@@ -100,7 +100,7 @@ public enum ProgrammerToolEncodingType : Int, CaseIterable {
   case esuDCMotorPWMFrequency
   case esuDCMotorPWMFrequencyLok3
   case esuSoundType
-
+  case esuBrakingMode
 }
 
 public enum CVIndexingMethod {

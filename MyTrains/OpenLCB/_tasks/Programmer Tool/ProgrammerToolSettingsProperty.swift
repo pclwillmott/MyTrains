@@ -37,9 +37,9 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
   case locomotiveAddressShort = 2
   case locomotiveAddressLong = 3
   case marklinConsecutiveAddresses = 5
-  case locomotiveAddressWarning = 6
   case enableSecondAddressForMotorolaCommands = 408
-  
+  case locomotiveAddressWarning = 6
+
   // DCC Consist Address
   
   case enableDCCConsistAddress = 7
@@ -98,6 +98,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
   case selectrixBrakeOnReversePolarity = 53
   case enableConstantBrakeDistance = 38
   case brakeDistanceLength = 39
+  case brakingModeLok3 = 461
   case differentBrakeDistanceBackwards = 40
   case brakeDistanceLengthBackwards = 41
   case driveUntilLocomotiveStopsInSpecifiedPeriod = 42
@@ -119,6 +120,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
   case sendFollowingToCommandStation = 56
   case sendAddressViaBroadcastOnChannel1 = 57
   case allowDataTransmissionOnChannel2 = 58
+  case allowCommandConfirmationOnChannel1 = 487
   case detectSpeedStepModeAutomatically = 59
   case speedStepMode = 60
   
@@ -149,7 +151,9 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
   case preserveDirection = 81
   case enableStartingDelay = 82
   case enableStartingDelayIfVirtualDriveSoundEnabled = 383
+  case enableStartingDelayIfVirtualDriveSoundEnabledLok3 = 489
   case startingDelayIfVirtualDriveSoundEnabled = 384
+  case startingDelayIfVirtualDriveSoundEnabledLok3 = 488
   case stopImmediatelyOnSpeedStep0 = 394
   
   // Function Outputs
@@ -465,6 +469,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
   case enableRailComPlusSynchronization = 89
   case m4MasterDecoderManufacturer = 90
   case m4MasterDecoderSerialNumber = 91
+  case disableMotorBrake = 490
   
   // Sound Settings
   
