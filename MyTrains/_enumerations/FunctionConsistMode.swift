@@ -69,15 +69,17 @@ public enum FunctionConsistMode : UInt8, CaseIterable {
     
     let capabilities = decoder.decoderType.capabilities
     
-    if capabilities.contains(.lok5) {
+    if !capabilities.intersection([.consistFunctionsFRF1F30]).isEmpty {
       return FunctionConsistMode.masks_lok5[self]
     }
-    else if capabilities.contains(.lok4){
+    else if !capabilities.intersection([.consistFunctionsF0F15]).isEmpty {
       return FunctionConsistMode.masks_lok4[self]
     }
-    else {
+    else if !capabilities.intersection([.consistFunctionsFRF1F12]).isEmpty {
       return FunctionConsistMode.masks_lok3[self]
     }
+    
+    return nil
     
   }
   

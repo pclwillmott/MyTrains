@@ -345,13 +345,17 @@ public class Decoder : NSObject {
       result = result.union([
         .frontLightOnly,
         .rearLightOnly,
-        .aux1Only,
       ])
-      if capabilities.intersection([.aux2toAux4]) == [.aux2toAux4] {
+      if capabilities.intersection([.aux3toAux4]) == [.aux3toAux4] {
         result = result.union([
-          .aux2Only,
           .aux3,
           .aux4,
+        ])
+      }
+      if capabilities.intersection([.aux1toAux2]) == [.aux1toAux2] {
+        result = result.union([
+          .aux1Only,
+          .aux2Only,
         ])
       }
     }
@@ -361,13 +365,17 @@ public class Decoder : NSObject {
         .frontLight_2,
         .rearLight,
         .rearLight_2,
-        .aux1,
-        .aux1_2,
       ])
-      if capabilities.intersection([.aux2toAux4]) == [.aux2toAux4] {
+      if capabilities.intersection([.aux1toAux2]) == [.aux1toAux2] {
         result = result.union([
+          .aux1,
+          .aux1_2,
           .aux2,
           .aux2_2,
+        ])
+      }
+      if capabilities.intersection([.aux3toAux4]) == [.aux3toAux4] {
+        result = result.union([
           .aux3,
           .aux4,
         ])
@@ -1309,8 +1317,6 @@ public class Decoder : NSObject {
     }
     
     applyLayoutRules(property:property)
-    
-    return
     
   }
   

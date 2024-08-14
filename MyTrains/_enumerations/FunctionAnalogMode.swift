@@ -56,11 +56,11 @@ public enum FunctionAnalogMode : UInt8, CaseIterable {
   
   public func cvMask(decoder:Decoder) -> (cv:CV, mask:UInt8)? {
     
-    if decoder.decoderType.capabilities.contains(.lok3) {
-      return FunctionAnalogMode.masks_lok3[self]
+    if !decoder.decoderType.capabilities.intersection([.analogFunctionsLF1F15]).isEmpty {
+      return FunctionAnalogMode.masks_lok4[self]
     }
     else {
-      return FunctionAnalogMode.masks_lok4[self]
+      return FunctionAnalogMode.masks_lok3[self]
     }
     
   }

@@ -45,20 +45,19 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
   case enableDCCConsistAddress = 7
   case consistAddress = 8
   case consistReverseDirection = 9
-  case consistFunctions = 163
-  case consistFunctionsLok4 = 390
-  case consistFunctionsLok3 = 419
+  case consistFunctions4 = 163
+  case consistFunctions2 = 390
 
   // Analog Settings
   
-  case analogModeActiveFunctions = 164
-  case analogModeActiveFunctionsLok3 = 420
+  case analogFunctions = 164
   case enableACAnalogMode = 10
   case acAnalogModeStartVoltage = 11
   case acAnalogModeMaximumSpeedVoltage = 12
   case acAnalogModeStartVoltageLok3 = 441
   case acAnalogModeMaximumSpeedVoltageLok3 = 456
   case enableDCAnalogMode = 13
+  case enableDCAnalogModeSimple = 420
   case dcAnalogModeStartVoltage = 14
   case dcAnalogModeMaximumSpeedVoltage = 15
   case dcAnalogModeStartVoltageLok3 = 457
@@ -81,11 +80,12 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
   case abcReducedSpeed = 26
   case enableABCShuttleTrain = 27
   case waitingPeriodBeforeDirectionChange = 28
-  case hluAllowZIMO = 29
   case allowMarklinBrakeSections = 411
   case allowZIMOBrakeSections = 414
   case allowLenzBrakeSections = 412
+  case allowLenzBrakeSectionsB = 504
   case allowTrixBrakeSections = 413
+  case hluAllowZIMO = 29
   case hluSendZIMOZACKSignals = 30
   case hluSpeedLimit1 = 31
   case hluSpeedLimit2 = 32
@@ -129,11 +129,17 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
   case enableAcceleration = 63
   case accelerationRate = 64
   case accelerationRateLok3 = 459
-  case accelerationAdjustment = 65
+  case accelerationRateBasic = 498
+  case accelerationRateESU = 507
+  case accelerationAdjustmentA = 65
+  case accelerationAdjustmentB = 509
   case enableDeceleration = 66
   case decelerationRate = 67
   case decelerationRateLok3 = 460
-  case decelerationAdjustment = 68
+  case decelerationRateBasic = 499
+  case decelerationRateESU = 508
+  case decelerationAdjustmentA = 68
+  case decelerationAdjustmentB = 510
   case reverseMode = 69
   case enableForwardTrim = 70
   case forwardTrim = 71
@@ -150,14 +156,20 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
   case timeToBridgePowerInterruptionWarning = 393
   case preserveDirection = 81
   case enableStartingDelay = 82
-  case enableStartingDelayIfVirtualDriveSoundEnabled = 383
-  case enableStartingDelayIfVirtualDriveSoundEnabledLok3 = 489
-  case startingDelayIfVirtualDriveSoundEnabled = 384
-  case startingDelayIfVirtualDriveSoundEnabledLok3 = 488
+  case enableStartingDelayIfVirtualDriveSoundEnabledCV252 = 383
+  case enableStartingDelayIfVirtualDriveSoundEnabledCV253 = 489
+  case enableStartingDelayIfVirtualDriveSoundEnabledCV221 = 496
+  case enableStartingDelayIfVirtualDriveSoundEnabledCV128 = 419
+  case startingDelayIfVirtualDriveSoundEnabledCV253 = 488
+  case startingDelayIfVirtualDriveSoundEnabledCV221 = 495
+  case startingDelayIfVirtualDriveSoundEnabledCV252 = 384
+  case startingDelayIfVirtualDriveSoundEnabledCV128 = 497
   case stopImmediatelyOnSpeedStep0 = 394
   
   // Function Outputs
   
+  case brightnessOfLightAndFunctionOutputsCV54 = 491
+  case brightnessOfLightAndFunctionOutputsCV63 = 500
   case physicalOutput = 165
   case physicalOutputModeB = 415
   case physicalOutputBrightnessB = 416
@@ -205,7 +217,6 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
   case physicalOutputRule17Reverse = 193
   case physicalOutputDimmer = 194
   case physicalOutputLEDMode = 195
-
   
   // Function Settings
   
@@ -415,12 +426,20 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
   case speedTableEntryValueB = 426
   case speedTablePreset = 203
   case minimumSpeed = 112
+  case minimumSpeedB = 505
   case maximumSpeed = 113
+  case maximumSpeedB = 506
   case enableLoadControlBackEMF = 114
   case emfBasicSettings = 130
   case regulationReference = 115
+  case regulationReferenceB = 492
+  case regulationReferenceC = 501
   case regulationParameterK = 116
+  case regulationParameterKB = 493
+  case regulationParameterKC = 502
   case regulationParameterI = 117
+  case regulationParameterIB = 494
+  case regulationParameterIC = 503
   case regulationReferenceLok3 = 427
   case regulationParameterKLok3 = 428
   case regulationParameterILok3 = 429

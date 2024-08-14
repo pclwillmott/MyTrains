@@ -136,7 +136,7 @@ public enum ESUSoundSlot : Int, CaseIterable {
     
     var slots : Set<ESUSoundSlot> = []
     
-    if decoder.decoderType.capabilities.contains(.soundSlot1to24) {
+    if decoder.decoderType.capabilities.contains(.soundSlot1to10) {
       slots = slots.union([
         .soundSlot1,
         .soundSlot2,
@@ -148,6 +148,11 @@ public enum ESUSoundSlot : Int, CaseIterable {
         .soundSlot8,
         .soundSlot9,
         .soundSlot10,
+      ])
+    }
+
+    if decoder.decoderType.capabilities.contains(.soundSlot11to24) {
+      slots = slots.union([
         .soundSlot11,
         .soundSlot12,
         .soundSlot13,
@@ -164,7 +169,7 @@ public enum ESUSoundSlot : Int, CaseIterable {
         .soundSlot24,
       ])
     }
-    
+
     if decoder.decoderType.capabilities.contains(.soundSlot25to27) {
       slots = slots.union([
         .soundSlot25,

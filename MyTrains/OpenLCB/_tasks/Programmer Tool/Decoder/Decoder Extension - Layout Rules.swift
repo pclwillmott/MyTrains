@@ -126,6 +126,18 @@ extension Decoder {
         capability     : []
       ),
       (
+        property1      : .enableStartingDelayIfVirtualDriveSoundEnabledCV128,
+        testType1      : .equal,
+        testValue1     : "false",
+        operator       : nil,
+        property2      : nil,
+        testType2      : nil,
+        testValue2     : nil,
+        actionProperty : [.startingDelayIfVirtualDriveSoundEnabledCV128],
+        actionType     : .setIsHiddenToTestResult,
+        capability     : []
+      ),
+      (
         property1      : .driveUntilLocomotiveStopsInSpecifiedPeriod,
         testType1      : .equal,
         testValue1     : "false",
@@ -145,7 +157,7 @@ extension Decoder {
         property2      : nil,
         testType2      : nil,
         testValue2     : nil,
-        actionProperty : [.sendAddressViaBroadcastOnChannel1, .sendFollowingToCommandStation, .enableRailComPlusAutomaticAnnouncement, .allowDataTransmissionOnChannel2],
+        actionProperty : [.sendAddressViaBroadcastOnChannel1, .sendFollowingToCommandStation, .enableRailComPlusAutomaticAnnouncement, .allowDataTransmissionOnChannel2, .allowCommandConfirmationOnChannel1],
         actionType     : .setIsHiddenToTestResult,
         capability     : []
       ),
@@ -159,7 +171,7 @@ extension Decoder {
         testValue2     : nil,
         actionProperty : [.speedStepMode],
         actionType     : .setIsHiddenToTestResult,
-        capability     : []
+        capability     : [.detectSpeedStepAutomatically]
       ),
       (
         property1      : .enableAcceleration,
@@ -169,7 +181,7 @@ extension Decoder {
         property2      : nil,
         testType2      : nil,
         testValue2     : nil,
-        actionProperty : [.accelerationAdjustment, .accelerationRate],
+        actionProperty : [.accelerationAdjustmentA, .accelerationRate, .accelerationRateBasic, .accelerationAdjustmentB, .accelerationRateESU, .accelerationRateLok3, .accelerationRateBasic],
         actionType     : .setIsHiddenToTestResult,
         capability     : []
       ),
@@ -181,7 +193,7 @@ extension Decoder {
         property2      : nil,
         testType2      : nil,
         testValue2     : nil,
-        actionProperty : [.decelerationRate, .decelerationAdjustment],
+        actionProperty : [.decelerationRate, .decelerationAdjustmentA, .decelerationRateBasic, .decelerationAdjustmentB, .decelerationRateESU, .decelerationRateLok3, .decelerationRateBasic],
         actionType     : .setIsHiddenToTestResult,
         capability     : []
       ),
@@ -258,26 +270,38 @@ extension Decoder {
         capability     : []
       ),
       (
-        property1      : .enableStartingDelayIfVirtualDriveSoundEnabled,
+        property1      : .enableStartingDelayIfVirtualDriveSoundEnabledCV253,
         testType1      : .equal,
         testValue1     : "false",
         operator       : nil,
         property2      : nil,
         testType2      : nil,
         testValue2     : nil,
-        actionProperty : [.startingDelayIfVirtualDriveSoundEnabled],
+        actionProperty : [.startingDelayIfVirtualDriveSoundEnabledCV253],
         actionType     : .setIsHiddenToTestResult,
         capability     : [.noSound]
       ),
       (
-        property1      : .enableStartingDelayIfVirtualDriveSoundEnabledLok3,
+        property1      : .enableStartingDelayIfVirtualDriveSoundEnabledCV252,
         testType1      : .equal,
         testValue1     : "false",
         operator       : nil,
         property2      : nil,
         testType2      : nil,
         testValue2     : nil,
-        actionProperty : [.startingDelayIfVirtualDriveSoundEnabledLok3],
+        actionProperty : [.startingDelayIfVirtualDriveSoundEnabledCV252],
+        actionType     : .setIsHiddenToTestResult,
+        capability     : [.noSound, .lok3]
+      ),
+      (
+        property1      : .enableStartingDelayIfVirtualDriveSoundEnabledCV221,
+        testType1      : .equal,
+        testValue1     : "false",
+        operator       : nil,
+        property2      : nil,
+        testType2      : nil,
+        testValue2     : nil,
+        actionProperty : [.startingDelayIfVirtualDriveSoundEnabledCV221],
         actionType     : .setIsHiddenToTestResult,
         capability     : [.noSound, .lok3]
       ),
