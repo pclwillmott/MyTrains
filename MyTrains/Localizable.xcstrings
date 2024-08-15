@@ -3285,6 +3285,9 @@
     "Enable Motor Overload Protection" : {
 
     },
+    "Enable Output Driver on AUX3 and AUX4" : {
+
+    },
     "Enable Quantum Engineer Support" : {
 
     },

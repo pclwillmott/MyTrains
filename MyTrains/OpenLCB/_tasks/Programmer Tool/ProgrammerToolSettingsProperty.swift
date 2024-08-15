@@ -224,11 +224,13 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
   case frequencyForBlinkingEffects = 92
   case frequencyForBlinkingEffectsB = 421
   case gradeCrossingHoldingTime = 93
+  case gradeCrossingHoldingTimeB = 512
   case fadeInTimeOfLightEffects = 94
   case fadeOutTimeOfLightEffects = 95
   case logicalFunctionDimmerBrightnessReduction = 96
   case classLightLogicSequenceLength = 97
   case enforceSlaveCommunicationOnAUX3AndAUX4 = 98
+  case enforceOutputDriverOnAUX3AndAUX4 = 511
   case decoderSensorSettings = 99
   case sensor1DigitalSensorInputEnabled = 227
   case sensor1EnableAnalogSensorInput = 228
@@ -437,9 +439,10 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
   case regulationParameterK = 116
   case regulationParameterKB = 493
   case regulationParameterKC = 502
-  case regulationParameterI = 117
+  case regulationParameterIA = 117
   case regulationParameterIB = 494
   case regulationParameterIC = 503
+  case regulationParameterID = 513
   case regulationReferenceLok3 = 427
   case regulationParameterKLok3 = 428
   case regulationParameterILok3 = 429

@@ -352,9 +352,13 @@ public class Decoder : NSObject {
           .aux4,
         ])
       }
-      if capabilities.intersection([.aux1toAux2]) == [.aux1toAux2] {
+      if capabilities.intersection([.aux1]) == [.aux1] {
         result = result.union([
           .aux1Only,
+        ])
+      }
+      if capabilities.intersection([.aux2]) == [.aux2] {
+        result = result.union([
           .aux2Only,
         ])
       }
@@ -366,10 +370,14 @@ public class Decoder : NSObject {
         .rearLight,
         .rearLight_2,
       ])
-      if capabilities.intersection([.aux1toAux2]) == [.aux1toAux2] {
+      if capabilities.intersection([.aux1]) == [.aux1] {
         result = result.union([
           .aux1,
           .aux1_2,
+        ])
+      }
+      if capabilities.intersection([.aux2]) == [.aux2] {
+        result = result.union([
           .aux2,
           .aux2_2,
         ])

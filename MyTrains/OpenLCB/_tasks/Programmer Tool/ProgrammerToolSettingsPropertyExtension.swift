@@ -2390,7 +2390,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : nil,
       infoMaxDecimalPlaces : nil,
       infoFormat           : nil,
-      requiredCapabilities : [.lok4, .powerPackSolderedWarning]
+      requiredCapabilities : [.powerPackSolderedWarning]
     ),
 
     // Preserve Direction
@@ -3621,6 +3621,25 @@ extension ProgrammerToolSettingsProperty {
       infoFormat           : nil,
       requiredCapabilities : [.gradeCrossingHoldingTime]
     ),
+    
+    .gradeCrossingHoldingTimeB : (
+      title                : String(localized: "Grade Crossing Holding Time"),
+      section              : .generalPhysicalOutputSettings,
+      controlType          : .textFieldWithSlider,
+      encoding             : .byte,
+      cvIndexingMethod     : .standard,
+      cv                   : [.cv_000_000_132],
+      mask                 : [0xff],
+      shift                : [0],
+      minValue             : 0.0,
+      maxValue             : 255.0,
+      trueDefaultValue     : nil,
+      infoType             : .time,
+      infoFactor           : 0.0650196,
+      infoMaxDecimalPlaces : 2,
+      infoFormat           : nil,
+      requiredCapabilities : [.gradeCrossingHoldingTimeB]
+    ),
 
     .fadeInTimeOfLightEffects : (
       title                : String(localized: "Fade-In Time of Light Effects"),
@@ -3715,6 +3734,25 @@ extension ProgrammerToolSettingsProperty {
       infoMaxDecimalPlaces : nil,
       infoFormat           : nil,
       requiredCapabilities : [.enforceSlaveCommunicationOnAUX3AndAUX4]
+    ),
+    
+    .enforceOutputDriverOnAUX3AndAUX4 : (
+      title                : String(localized: "Enable Output Driver on AUX3 and AUX4"),
+      section              : .generalPhysicalOutputSettings,
+      controlType          : .checkBox,
+      encoding             : .boolBit,
+      cvIndexingMethod     : .standard,
+      cv                   : [.cv_000_000_124],
+      mask                 : [0b10000000],
+      shift                : [0],
+      minValue             : nil,
+      maxValue             : nil,
+      trueDefaultValue     : nil,
+      infoType             : .none,
+      infoFactor           : nil,
+      infoMaxDecimalPlaces : nil,
+      infoFormat           : nil,
+      requiredCapabilities : [.enforceOutputDriverOnAUX3AndAUX4]
     ),
 
     // Sensor Settings
@@ -5086,7 +5124,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : nil,
       infoMaxDecimalPlaces : nil,
       infoFormat           : nil,
-      requiredCapabilities : [.aux1toAux2, .functionMappings]
+      requiredCapabilities : [.aux2, .functionMappings]
     ),
     
     .fmAux2_2 : (
@@ -5105,7 +5143,7 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : nil,
       infoMaxDecimalPlaces : nil,
       infoFormat           : nil,
-      requiredCapabilities : [.aux1toAux2, .functionMappings]
+      requiredCapabilities : [.aux2, .functionMappings]
     ),
     
     .fmAux3 : (
@@ -7242,7 +7280,7 @@ extension ProgrammerToolSettingsProperty {
       requiredCapabilities : [.loadControlBackEMF, .loadControlBackEMFC]
     ),
 
-    .regulationParameterI : (
+    .regulationParameterIA : (
       title                : String(localized: "Regulation Parameter \"I\""),
       section              : .loadControlBackEMF,
       controlType          : .textFieldWithSlider,
@@ -7258,9 +7296,28 @@ extension ProgrammerToolSettingsProperty {
       infoFactor           : 2.0 / 1000.0,
       infoMaxDecimalPlaces : 2,
       infoFormat           : nil,
-      requiredCapabilities : [.loadControlBackEMF, .loadControlBackEMFA]
+      requiredCapabilities : [.loadControlBackEMF, .loadControlBackEMFA, .regulationParameterIA]
     ),
     
+    .regulationParameterID : (
+      title                : String(localized: "Regulation Parameter \"I\""),
+      section              : .loadControlBackEMF,
+      controlType          : .textFieldWithSlider,
+      encoding             : .byte,
+      cvIndexingMethod     : .standard,
+      cv                   : [.cv_000_000_055],
+      mask                 : [0xff],
+      shift                : [0],
+      minValue             : 0.0,
+      maxValue             : 255.0,
+      trueDefaultValue     : nil,
+      infoType             : .time,
+      infoFactor           : 0.0010196,
+      infoMaxDecimalPlaces : 2,
+      infoFormat           : nil,
+      requiredCapabilities : [.loadControlBackEMF, .loadControlBackEMFA, .regulationParameterID]
+    ),
+
     .regulationParameterILok3 : (
       title                : String(localized: "Regulation Parameter \"I\""),
       section              : .loadControlBackEMF,

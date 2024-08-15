@@ -72,13 +72,15 @@ public enum DecoderCapability : CaseIterable {
   case trimming
   case loadAdjustment
   case timeToBridgePowerInterruption
+  case powerPackSolderedWarning
   case preserveDirection
 
   // Function Outputs
   
   case physicalOutputs
   case singleFrontRearAux1Aux2
-  case aux1toAux2
+  case aux1
+  case aux2
   case aux3toAux4
   case aux5toAux6
   case aux7toAux8
@@ -98,7 +100,9 @@ public enum DecoderCapability : CaseIterable {
   case frequencyForBlinkingEffectsA
   case frequencyForBlinkingEffectsB
   case gradeCrossingHoldingTime
+  case gradeCrossingHoldingTimeB
   case enforceSlaveCommunicationOnAUX3AndAUX4
+  case enforceOutputDriverOnAUX3AndAUX4
   case sensorSettings
   case sensorConfiguration
   case automaticUncoupling
@@ -124,6 +128,8 @@ public enum DecoderCapability : CaseIterable {
   case minMaxSpeedB
   case loadControlBackEMF
   case regulationReference
+  case regulationParameterIA
+  case regulationParameterID
   case loadControlBackEMFA
   case loadControlBackEMFB
   case loadControlBackEMFC
@@ -172,7 +178,6 @@ public enum DecoderCapability : CaseIterable {
   case noSound
   case startingDelay
   case marklinDeltaMode
-  case powerPackSolderedWarning
   case functionIcons
   case triggerSoundsOnFunctionStatusChange
   case zimoManualFunction

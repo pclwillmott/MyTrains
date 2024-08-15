@@ -164,7 +164,7 @@ extension Decoder {
       (
         property1      : .detectSpeedStepModeAutomatically,
         testType1      : .equal,
-        testValue1     : "false",
+        testValue1     : "true",
         operator       : nil,
         property2      : nil,
         testType2      : nil,
@@ -649,7 +649,7 @@ extension Decoder {
         property2      : nil,
         testType2      : nil,
         testValue2     : nil,
-        actionProperty : [.slowSpeedBackEMFSamplingPeriod, .slowSpeedLengthOfMeasurementGap, .regulationParameterI, .regulationReference, .fullSpeedBackEMFSamplingPeriod, .regulationParameterKSlow, .largestInternalSpeedStepThatUsesKSlow, .regulationParameterK, .fullSpeedLengthOfMeasurementGap, .regulationParameterISlow, .regulationInfluenceDuringSlowSpeed, .adaptiveRegulationFrequencyEnabled, .backEMFSamplingPeriod, .emfBasicSettings, .emfSlowSpeedSettings, .regulationReferenceLok3, .regulationParameterKLok3, .regulationParameterILok3, .regulationInfluenceLok3],
+        actionProperty : [.slowSpeedBackEMFSamplingPeriod, .slowSpeedLengthOfMeasurementGap, .regulationParameterID, .regulationParameterID, .regulationReference, .fullSpeedBackEMFSamplingPeriod, .regulationParameterKSlow, .largestInternalSpeedStepThatUsesKSlow, .regulationParameterK, .fullSpeedLengthOfMeasurementGap, .regulationParameterISlow, .regulationInfluenceDuringSlowSpeed, .adaptiveRegulationFrequencyEnabled, .backEMFSamplingPeriod, .emfBasicSettings, .emfSlowSpeedSettings, .regulationReferenceLok3, .regulationParameterKLok3, .regulationParameterILok3, .regulationInfluenceLok3],
         actionType     : .setIsHiddenToTestResult,
         capability     : []
       ),
