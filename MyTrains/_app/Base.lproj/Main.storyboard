@@ -264,6 +264,9 @@
                                         <menuItem title="Train Speed Profiler" tag="3021" id="aMs-aa-A5g">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                         </menuItem>
+                                        <menuItem title="LokProgrammer Monitor" tag="3045" id="kE6-oZ-4jO">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                        </menuItem>
                                         <menuItem isSeparatorItem="YES" tag="9999" id="9CR-ch-QM0"/>
                                         <menuItem title="LocoNet Firmware Update" tag="3022" id="Wbv-ch-h4F">
                                             <modifierMask key="keyEquivalentModifierMask"/>

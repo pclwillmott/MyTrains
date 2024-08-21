@@ -1225,6 +1225,18 @@
         }
       }
     },
+    "kE6-oZ-4jO.title" : {
+      "comment" : "Class = \"NSMenuItem\"; title = \"LokProgrammer Monitor\"; ObjectID = \"kE6-oZ-4jO\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "LokProgrammer Monitor"
+          }
+        }
+      }
+    },
     "kIP-vf-haE.title" : {
       "comment" : "Class = \"NSMenuItem\"; title = \"Show Sidebar\"; ObjectID = \"kIP-vf-haE\";",
       "extractionState" : "extracted_with_value",

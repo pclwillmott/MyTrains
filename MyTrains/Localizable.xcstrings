@@ -5440,6 +5440,9 @@
     "Logical Functions" : {
 
     },
+    "LokProgrammer Monitor" : {
+      "comment" : "Used for a menu title"
+    },
     "LokSound 4 3 Point" : {
 
     },

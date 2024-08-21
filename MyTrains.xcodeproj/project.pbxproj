@@ -404,6 +404,9 @@
 		DAB163F32C3EE5ED00D7F23E /* ProgrammerToolControlType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAB163F22C3EE5ED00D7F23E /* ProgrammerToolControlType.swift */; };
 		DAB163F72C3EF31600D7F23E /* ProgrammerToolSettingsSectionField.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAB163F62C3EF31600D7F23E /* ProgrammerToolSettingsSectionField.swift */; };
 		DAB26FF92BD1362300AC1B29 /* SwitchboardEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAB26FF82BD1362300AC1B29 /* SwitchboardEditorView.swift */; };
+		DAB448522C736F4D00D1303A /* LokProgrammerMonitor.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DAB448512C736F4D00D1303A /* LokProgrammerMonitor.storyboard */; };
+		DAB448542C73715F00D1303A /* LokProgrammerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAB448532C73715F00D1303A /* LokProgrammerVC.swift */; };
+		DAB448572C73C25600D1303A /* ORSSerial in Frameworks */ = {isa = PBXBuildFile; productRef = DAB448562C73C25600D1303A /* ORSSerial */; };
 		DAB4A7392B3F0E7D00CD5256 /* CDIGroupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAB4A7382B3F0E7D00CD5256 /* CDIGroupView.swift */; };
 		DAB4A73B2B3F282100CD5256 /* CDIDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAB4A73A2B3F282100CD5256 /* CDIDataView.swift */; };
 		DAB4A73D2B3F30BA00CD5256 /* CDITextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAB4A73C2B3F30BA00CD5256 /* CDITextView.swift */; };
@@ -911,6 +914,8 @@
 		DAB163F22C3EE5ED00D7F23E /* ProgrammerToolControlType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgrammerToolControlType.swift; sourceTree = "<group>"; };
 		DAB163F62C3EF31600D7F23E /* ProgrammerToolSettingsSectionField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgrammerToolSettingsSectionField.swift; sourceTree = "<group>"; };
 		DAB26FF82BD1362300AC1B29 /* SwitchboardEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchboardEditorView.swift; sourceTree = "<group>"; };
+		DAB448512C736F4D00D1303A /* LokProgrammerMonitor.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LokProgrammerMonitor.storyboard; sourceTree = "<group>"; };
+		DAB448532C73715F00D1303A /* LokProgrammerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LokProgrammerVC.swift; sourceTree = "<group>"; };
 		DAB4A7382B3F0E7D00CD5256 /* CDIGroupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CDIGroupView.swift; sourceTree = "<group>"; };
 		DAB4A73A2B3F282100CD5256 /* CDIDataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CDIDataView.swift; sourceTree = "<group>"; };
 		DAB4A73C2B3F30BA00CD5256 /* CDITextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CDITextView.swift; sourceTree = "<group>"; };
@@ -1008,6 +1013,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DAB448572C73C25600D1303A /* ORSSerial in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1819,6 +1825,7 @@
 		DAA83DE9272C37670075CBCD /* MyTrains */ = {
 			isa = PBXGroup;
 			children = (
+				DAB448502C736F2300D1303A /* ESU LokProgrammer */,
 				DA7B2CFA2B2F391500327281 /* _app */,
 				DA7B2D112B2F4FEB00327281 /* _classes */,
 				DA7B2CFB2B2F3EC100327281 /* _custom views */,
@@ -1849,6 +1856,15 @@
 				DAA85DB82BB490FC0011DE82 /* MyTrainsTests.swift */,
 			);
 			path = MyTrainsTests;
+			sourceTree = "<group>";
+		};
+		DAB448502C736F2300D1303A /* ESU LokProgrammer */ = {
+			isa = PBXGroup;
+			children = (
+				DAB448512C736F4D00D1303A /* LokProgrammerMonitor.storyboard */,
+				DAB448532C73715F00D1303A /* LokProgrammerVC.swift */,
+			);
+			path = "ESU LokProgrammer";
 			sourceTree = "<group>";
 		};
 		DAB93F162C04A869006C0580 /* Layout Builder */ = {
@@ -2033,6 +2049,7 @@
 			);
 			name = MyTrains;
 			packageProductDependencies = (
+				DAB448562C73C25600D1303A /* ORSSerial */,
 			);
 			productName = MyTrains;
 			productReference = DAA83DE7272C37670075CBCD /* MyTrains.app */;
@@ -2087,6 +2104,7 @@
 			);
 			mainGroup = DAA83DDE272C37670075CBCD;
 			packageReferences = (
+				DAB448552C73BFC200D1303A /* XCRemoteSwiftPackageReference "ORSSerialPort" */,
 			);
 			productRefGroup = DAA83DE8272C37670075CBCD /* Products */;
 			projectDirPath = "";
@@ -2190,6 +2208,7 @@
 				DAFFB65D2B5D877F0035AC74 /* SelectLayout.storyboard in Resources */,
 				DA568FC82B94DDAD0008086E /* Main.storyboard in Resources */,
 				DA8C2BA92C386970001755AB /* LokPilot Fx Nano V1.0 [1.2.1415].cvlist in Resources */,
+				DAB448522C736F4D00D1303A /* LokProgrammerMonitor.storyboard in Resources */,
 				DAA7BEBB2B504EE900508140 /* Localizable.xcstrings in Resources */,
 				DA8C2B782C386970001755AB /* LokPilot V4.0 M4 [4.16.9247].cvlist in Resources */,
 				DA8C2B772C386970001755AB /* LokPilot 5 micro DCC [5.10.166].cvlist in Resources */,
@@ -2497,6 +2516,7 @@
 				DA57A6E92A4496A1005C72B0 /* LocoNetLocomotiveState.swift in Sources */,
 				DA0B63DC2AF7CB04007C7CD6 /* OpenLCBNetworkObserverDelegate.swift in Sources */,
 				DA28C2BD2801CC4800857471 /* DashBoardVC.swift in Sources */,
+				DAB448542C73715F00D1303A /* LokProgrammerVC.swift in Sources */,
 				DA1ECC9828439DE500C4F963 /* UpdateFirmwareVC.swift in Sources */,
 				DA1DA5EC28280FCD00E0F993 /* FlowControl.swift in Sources */,
 				DA93CAE62A40C4F10014D2E2 /* OpenLCBTractionListenerNode.swift in Sources */,
@@ -2927,6 +2947,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		DAB448552C73BFC200D1303A /* XCRemoteSwiftPackageReference "ORSSerialPort" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/armadsen/ORSSerialPort.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.1.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		DAB448562C73C25600D1303A /* ORSSerial */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DAB448552C73BFC200D1303A /* XCRemoteSwiftPackageReference "ORSSerialPort" */;
+			productName = ORSSerial;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = DAA83DDF272C37670075CBCD /* Project object */;
 }

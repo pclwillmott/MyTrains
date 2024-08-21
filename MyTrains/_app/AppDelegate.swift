@@ -268,6 +268,13 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
       }
       MyTrainsWindow.openLCBMonitor.showWindow()
 
+    case .lokProgrammerMonitor:
+      
+      if isWindowOpen(viewType: viewType) {
+        return
+      }
+      MyTrainsWindow.lokProgrammerMonitor.showWindow()
+
     case .throttle:
       let networkLayer = appDelegate.networkLayer
       guard let throttle = networkLayer!.getThrottle()  else {
@@ -572,6 +579,9 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
       case .configLCCNetwork:
         openWindow(viewType: .openLCBNetworkView)
         
+      case .lokProgrammerMonitor:
+        openWindow(viewType: .lokProgrammerMonitor)
+        
       case .configClock:
         let networkLayer = appDelegate.networkLayer
         
@@ -740,6 +750,7 @@ public enum MyTrainsWindow : String {
   case initApp                           = "InitApp"
   case panelView                         = "PanelView"
   case layoutBuilder                     = "LayoutBuilder"
+  case lokProgrammerMonitor              = "LokProgrammerMonitor"
   
   // MARK: Public Properties
   
