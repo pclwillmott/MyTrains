@@ -235,11 +235,15 @@ extension UInt16 {
     
   }
   
-  init(hex:String) {
+  init?(hex:String) {
     
     self.init()
     
-    self = UInt16(hex, radix: 16) ?? 0
+    guard let temp = UInt16(hex, radix: 16) else {
+      return nil
+    }
+    
+    self = temp
     
   }
 
