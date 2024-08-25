@@ -222,7 +222,7 @@ public enum DecoderType : UInt64, CaseIterable {
               result.append((cvConstant, cvValue))
               
               if cvConstant == .cv_000_000_008 && cvValue == 0x97 {
-                addESUDecoderInfoCDs = true
+            //    addESUDecoderInfoCDs = true
               }
               
             }

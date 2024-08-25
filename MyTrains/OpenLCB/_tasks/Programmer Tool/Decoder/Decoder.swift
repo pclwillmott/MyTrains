@@ -165,6 +165,14 @@ public class Decoder : NSObject {
     return _cvs
   }
   
+  public var cvSet : Set<CV> {
+    var result : Set<CV> = []
+    for cv in cvs {
+      result.insert(cv.cv)
+    }
+    return result
+  }
+  
   public var visibleCVs : [(cv: CV, defaultValue:UInt8)] {
     return _visibleCVs
   }

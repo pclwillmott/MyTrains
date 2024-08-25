@@ -92,7 +92,65 @@ class LokProgrammerVC : MyTrainsViewController, MTSerialPortDelegate, ORSSerialP
     }
     
     txtView.font = NSFont(name: "Menlo", size: 12)
-
+    
+    let string = "AD 96 C1 72 D3 30 10 86 EF CC F0 0E 3B 3E 95 43 63 CB 4E 9B D0 71 D2 49 E2 52 A0 F5 24 93 10 3A C3 4D C4 4A ED 41 96 52 4B 72 DA 3E 0F 6F C1 81 03 0F C4 2B 20 B9 29 03 43 A8 65 C3 31 8E B4 FF 97 CD FE FF FA FB 97 AF E1 E9 6D 4E A1 24 85 C8 38 1B 38 A8 E3 39 40 D8 8A 27 19 BB 1E 38 4A AE 0F FB CE E9 F0 F9 B3 30 27 12 83 3E CB C4 C0 49 A5 DC 9C B8 EE 76 BB ED 10 A1 3A 44 B9 BE 87 3C F7 72 7A 31 9B 4F CF E7 A3 38 3E 9B BB B1 BE 90 60 89 1D 7D 1B 20 14 5C B1 44 50 2E 21 4B 06 8E F7 F0 54 3F 4F 88 58 15 D9 46 6A 79 53 FE 84 62 23 9C 10 67 F8 1E 79 1E 1C 1C 75 BB 81 FF 22 74 7F 39 F7 F4 55 C2 9C E1 E2 2A 02 E4 23 88 17 30 9A 80 66 3B 42 01 94 3E FC 59 26 74 7F 82 ED E3 44 35 9C 46 6C A4 24 87 39 CE 74 1B 83 C6 02 BE 45 23 52 5E 30 F0 5B B6 E0 B5 B9 3C C7 2C E1 39 CC 28 BE C3 1F 29 69 4C 19 D8 52 A2 FF 40 F9 8E 73 29 1A 23 1E 5B FC 53 46 6D A9 87 5B 6D 5A F4 A0 67 D1 83 AA B4 76 4E 8B 2E 4C 2A 2A 58 6E 1A 83 BD B4 00 BB D4 4E 38 D6 26 85 19 C9 D6 04 CC 17 2D 18 CF 15 2E 12 01 57 69 26 A4 66 2D 7B 80 BC 3E 4C 19 BD 6B 6E AC BA 04 A8 34 CD 69 0F 21 18 17 F8 13 01 04 55 8D E6 5A 36 26 AB 24 5A F4 E4 0D 93 84 D2 6C 87 18 41 D9 6D CE D7 B5 E0 BB 50 45 49 D8 8D CA 88 14 AB 94 B0 16 A8 AF CC 47 02 E2 46 11 AC C3 6A 4F A2 D4 81 D6 79 C0 28 9D CD E0 76 5F 0E D4 D5 EE DB D6 6E C1 6D 63 91 DD 70 8F D5 FD 3D 29 DA C4 98 B6 C2 AE 86 0B 51 51 FE B5 52 DD 46 B0 D9 8D BF C1 3E 91 EB 56 E1 3B CA 0A 5D 29 A3 89 4E 1F D0 2D 6E 31 C2 BE 8D C5 96 0B 88 32 F3 AA A1 67 50 12 9C C3 21 BC E5 29 13 FA E0 18 17 70 D0 0B BA A8 D7 76 D5 47 FA 47 4C D2 6A C0 5B 4C B6 5F B7 E1 1E A5 A2 78 09 11 E7 05 2C 28 CE 9B EF D1 BA F7 09 D3 A6 0F 6A 8D 29 15 D7 A4 F8 F6 59 19 AF 37 EC C8 6E 8D 3E 28 37 47 B4 0B 4B 92 8B 7F 49 A3 2A D8 83 00 62 45 E5 63 76 56 1C 50 1E D5 21 87 AE 79 17 1D FE 00 83 E4 19 9E BD 0A"
+    
+/*    let bits = string.split(separator: " ")
+    
+    var result = ""
+    for bit in bits {
+      if let byte = UInt8(bit, radix: 16) {
+        if let str = String(bytes: [byte], encoding: .utf8), let char = str.first {
+          if char.isLetter || char.isNumber || char.isPunctuation {
+            result += "\(char)"
+          }
+        }
+      }
+    }
+    print(result)
+*/
+    
+    let decoders : [DecoderType] = [
+ /*     .lokPilot5,
+      .lokPilot5Basic,
+      .lokPilot5micro,
+      .lokSound5micro,
+      .lokPilot5L,
+      .lokSound5L,
+      .lokPilot5Fx,
+      .lokSound5Fx,
+      .lokSound5XL,
+      .lokPilot5DCC,
+      .lokPilot5MKL,
+      .lokSound5DCC,
+      .lokSound5MKL,
+      .lokPilot5LDCC,
+      .lokSound5LDCC,
+      .lokPilot5MKLDCC,
+      .lokPilot5Fxmicro,
+      .lokPilot5nanoDCC,
+      .lokSound5nanoDCC,
+      .lokPilot5microDCC,
+      .lokSound5microDCC,
+      .lokSound5microKATO,
+      .lokPilot5microNext18,
+      .lokPilot5FxDCC,
+      .lokSound5FxDCC, */
+      .lokSound5,
+    ]
+    
+    let decoder1 = Decoder(decoderType: .lokSound5DCC)
+    
+    for decoderType in decoders {
+      
+      let decoder2 = Decoder(decoderType: decoderType)
+      
+      let common = decoder2.cvSet.intersection(decoder1.cvSet)
+      
+      let unique = decoder2.cvSet.subtracting(decoder1.cvSet)
+      
+      print("\(decoderType.title) Common: \(common.count) Unique: \(unique.count) \(unique)")
+    }
   }
   
   // MARK: Private Properties
@@ -245,7 +303,7 @@ class LokProgrammerVC : MyTrainsViewController, MTSerialPortDelegate, ORSSerialP
     
     // LOKPROGRAMMER INFO
     
-    
+   /*
     "7F 7F 01 6E 00 81",
     "7F 7F 01 6F 01 81",
     "7F 7F 01 70 02 00 81",
@@ -257,10 +315,11 @@ class LokProgrammerVC : MyTrainsViewController, MTSerialPortDelegate, ORSSerialP
     "7F 7F 01 76 02 06 81",
     "7F 7F 01 77 02 07 81",
     "7F 7F 01 78 02 08 81",
-    
+    */
     
     // DECODER INFO
   
+    /*
     "7F 7F 01 79 00 81",
     "7F 7F 01 7A 10 02 00 20 19 81",
     
@@ -377,7 +436,7 @@ class LokProgrammerVC : MyTrainsViewController, MTSerialPortDelegate, ORSSerialP
      
     "7F 7F 01 50 10 00 00 00 00 81",
     "7F 7F 01 51 16 00 81",
-    
+    */
     // READING CVs
     
     "7F 7F 01 52 10 02 00 20 19 81",
@@ -430,7 +489,7 @@ class LokProgrammerVC : MyTrainsViewController, MTSerialPortDelegate, ORSSerialP
     "7F 7F 01 7D 2A 14 79 0D 04 A0 09 E0 40 81",
     "7F 7F 01 7E 18 4B 81",
     "7F 7F 01 00 2B 14 79 C8 81",
-     
+     /*
     "7F 7F 01 7B 2A 14 79 01 09 00 00 08 81",
     "7F 7F 01 7C 18 4B 81",
     "7F 7F 01 7D 2B 14 79 C8 81",
@@ -438,7 +497,7 @@ class LokProgrammerVC : MyTrainsViewController, MTSerialPortDelegate, ORSSerialP
     "7F 7F 01 7E 2A 14 79 01 09 12 03 19 81",
     "7F 7F 01 00 18 4B 81",
     "7F 7F 01 01 2B 14 79 C8 81",
-    
+    */
     "7F 7F 01 01 10 00 00 00 00 81",
   ]
   
@@ -573,62 +632,79 @@ class LokProgrammerVC : MyTrainsViewController, MTSerialPortDelegate, ORSSerialP
     
     if packet.isRX {
       
-      if let lastCommand, lastCommand.sequenceNumber == packet.sequenceNumber, packet.dword != nil {
+      if let lastCommand, lastCommand.sequenceNumber == packet.sequenceNumber {
 
-        switch lastCommand.packetType {
-        case .getLokProgrammerManufacturerCode:
-          dump += "LokProgrammer Manufacturer Code: \(packet.dword!.toHex(numberOfDigits: 8))\n"
-        case .getLokProgrammerProductId:
-          dump += "LokProgrammer Product ID: \(packet.dword!.toHex(numberOfDigits: 8))\n"
-        case .getLokProgrammerInfoA:
-          dump += "LokProgrammer Info A: \(packet.dword!.toHex(numberOfDigits: 8))\n"
-        case .getLokProgrammerInfoB:
-          dump += "LokProgrammer Info B: \(packet.dword!.toHex(numberOfDigits: 8))\n"
-        case .getLokProgrammerBootCodeVersion:
-          dump += "LokProgrammer Boot Code Version: \(LokPacket.versionNumber(dword: packet.dword!))\n"
-        case .getLokProgrammerBootCodeDate:
-          dump += "LokProgrammer Boot Code Date: \(LokPacket.date(dword: packet.dword!))\n"
-        case .getLokProgrammerACodeVersion:
-          dump += "LokProgrammer A Code Version: \(LokPacket.versionNumber(dword: packet.dword!))\n"
-        case .getLokProgrammerACodeDate:
-          dump += "LokProgrammer A Code Date: \(LokPacket.date(dword: packet.dword!))\n"
-        case .getLokProgrammerInfoC:
-          dump += "LokProgrammer Info C: \(packet.dword!.toHex(numberOfDigits: 8))\n"
-        case .readData:
-          if let last2A, packet.dword != nil {
-            switch last2A.packetType {
-            case .initReadForDecoderProductId:
-              dump += "Decoder Product ID: \(packet.dword!.toHex(numberOfDigits: 8))\n"
-              if let dword = packet.dword, let decoderType = DecoderType.esuProductIdLookup[dword] {
-                dump += "Decoder Type: \(decoderType.title)\n"
+        if lastCommand.packetType == .readCVBit || lastCommand.packetType == .readIndexedCVBit {
+          print(packet.payload)
+        }
+        else if packet.dword != nil {
+          
+          switch lastCommand.packetType {
+          case .getLokProgrammerManufacturerCode:
+            dump += "LokProgrammer Manufacturer Code: \(packet.dword!.toHex(numberOfDigits: 8))\n"
+          case .getLokProgrammerProductId:
+            dump += "LokProgrammer Product ID: \(packet.dword!.toHex(numberOfDigits: 8))\n"
+          case .getLokProgrammerInfoA:
+            dump += "LokProgrammer Info A: \(packet.dword!.toHex(numberOfDigits: 8))\n"
+          case .getLokProgrammerInfoB:
+            dump += "LokProgrammer Info B: \(packet.dword!.toHex(numberOfDigits: 8))\n"
+          case .getLokProgrammerBootCodeVersion:
+            dump += "LokProgrammer Boot Code Version: \(LokPacket.versionNumber(dword: packet.dword!))\n"
+          case .getLokProgrammerBootCodeDate:
+            dump += "LokProgrammer Boot Code Date: \(LokPacket.date(dword: packet.dword!))\n"
+          case .getLokProgrammerACodeVersion:
+            dump += "LokProgrammer A Code Version: \(LokPacket.versionNumber(dword: packet.dword!))\n"
+          case .getLokProgrammerACodeDate:
+            dump += "LokProgrammer A Code Date: \(LokPacket.date(dword: packet.dword!))\n"
+          case .getLokProgrammerInfoC:
+            dump += "LokProgrammer Info C: \(packet.dword!.toHex(numberOfDigits: 8))\n"
+          case .readData:
+            
+            if let last2A {
+              
+              switch last2A.packetType {
+              case .initReadForDecoderProductId:
+                dump += "Decoder Product ID: \(packet.dword!.toHex(numberOfDigits: 8))\n"
+                if let dword = packet.dword, let decoderType = DecoderType.esuProductIdLookup[dword] {
+                  dump += "Decoder Type: \(decoderType.title)\n"
+                }
+              case .initReadForDecoderManufacturerCode:
+                dump += "Decoder Manufacturer Code: \(packet.dword!.toHex(numberOfDigits: 8))\n"
+              case .initReadForDecoderProductionInfo:
+                dump += "Decoder Production Info: \(packet.dword!.toHex(numberOfDigits: 8))\n"
+              case .initReadForDecoderSerialNumber:
+                dump += "Decoder Serial Number: \(packet.dword!.toHex(numberOfDigits: 8))\n"
+              case .initReadForDecoderBootcodeVersion:
+                dump += "Decoder Bootcode Version: \(LokPacket.versionNumber(dword: packet.dword!))\n"
+              case .initReadForDecoderFirmwareVersion:
+                dump += "Decoder Firmware Version: \(LokPacket.versionNumber(dword: packet.dword!))\n"
+              case .initReadForDecoderProductionDate:
+                dump += "Decoder Production Date: \(LokPacket.date(dword: packet.dword!))\n"
+              case .initReadForDecoderBootcodeDate:
+                dump += "Decoder Bootcode Date: \(LokPacket.date(dword: packet.dword!))\n"
+              case .initReadForDecoderFirmwareDate:
+                dump += "Decoder Firmware Date: \(LokPacket.date(dword: packet.dword!))\n"
+              case .initReadForDecoderFirmwareType:
+                dump += "Decoder Firmware Type: \(packet.dword!)\n"
+              default:
+                break
               }
-            case .initReadForDecoderManufacturerCode:
-              dump += "Decoder Manufacturer Code: \(packet.dword!.toHex(numberOfDigits: 8))\n"
-            case .initReadForDecoderProductionInfo:
-              dump += "Decoder Production Info: \(packet.dword!.toHex(numberOfDigits: 8))\n"
-            case .initReadForDecoderSerialNumber:
-              dump += "Decoder Serial Number: \(packet.dword!.toHex(numberOfDigits: 8))\n"
-            case .initReadForDecoderBootcodeVersion:
-              dump += "Decoder Bootcode Version: \(LokPacket.versionNumber(dword: packet.dword!))\n"
-            case .initReadForDecoderFirmwareVersion:
-              dump += "Decoder Firmware Version: \(LokPacket.versionNumber(dword: packet.dword!))\n"
-            case .initReadForDecoderProductionDate:
-              dump += "Decoder Production Date: \(LokPacket.date(dword: packet.dword!))\n"
-            case .initReadForDecoderBootcodeDate:
-              dump += "Decoder Bootcode Date: \(LokPacket.date(dword: packet.dword!))\n"
-            case .initReadForDecoderFirmwareDate:
-              dump += "Decoder Firmware Date: \(LokPacket.date(dword: packet.dword!))\n"
-            case .initReadForDecoderFirmwareType:
-              dump += "Decoder Firmware Type: \(packet.dword!)\n"
-            default:
-              break
+            }
+            
+          default:
+            break
+          }
+        }
+        else if let last2A, lastCommand.packetType == .readData, let address = last2A.address, let ok = packet.isCheckSumOK, ok {
+          for index in 0 ... packet.payload.count - 3 {
+            cvs[Int(address) + index] = packet.payload[index + 2]
+          }
+          if address == 0x9a0 {
+            for index : UInt16 in 0 ... UInt16(cvs.count) - 1 {
+              print("\(index.toHex(numberOfDigits: 4)): \(cvs[Int(index)])")
             }
           }
-          
-        default:
-          break
         }
-        
       }
       
       switch packet.packetType {
@@ -647,6 +723,14 @@ class LokProgrammerVC : MyTrainsViewController, MTSerialPortDelegate, ORSSerialP
         if let sequenceNumber = packet.sequenceNumberForRead, let address = packet.address, let count = packet.numberOfBytesToRead {
           dump += "Sequence number: \(sequenceNumber.toHex(numberOfDigits: 2)) Address: \(address.toHex(numberOfDigits: 4)) Number of bytes: \(count)\n"
         }
+      case .writeCV, .testCVValue, .testIndexedCVValue:
+        if let cvNumber = packet.cvNumber, let cvValue = packet.cvValue {
+          dump += "CV\(cvNumber) = \(cvValue)\n"
+        }
+      case .readCVBit:
+        if let cvNumber = packet.cvNumber, let cvBit = packet.cvBit {
+          dump += "CV\(cvNumber) d\(cvBit)\n"
+        }
       default:
         break
       }
@@ -662,6 +746,8 @@ class LokProgrammerVC : MyTrainsViewController, MTSerialPortDelegate, ORSSerialP
   }
   
 }
+
+private var cvs : [UInt8] = [UInt8](repeating: 0x00, count: 2688)
 
 public enum LokPacketType : CaseIterable {
 
@@ -698,8 +784,16 @@ public enum LokPacketType : CaseIterable {
   case lokProgrammerCommandError
   case lokProgrammerTidyUp
   case setLokProgrammerMode
+  case setSingleCVMode
   case lokProgrammerTestA
   case lokProgrammerTestB
+  case readIndexedCVBit
+  case writeIndexedCV
+  case readCVBit
+  case writeCV
+  case activateDecoder
+  case testCVValue
+  case testIndexedCVValue
 }
 
 public enum LokDataType : UInt8 {
@@ -820,6 +914,41 @@ public class LokPacket {
           
         case 0x2b:
           _packetType = .readData
+        case 0x34:
+          if packet.count == 16 {
+            if packet[5] == 0x3a && packet[6] == 0x64 && packet[7] == 0x12 && packet[8] == 0x02 && packet[9] == 0x05 && packet[10] == 0x05 {
+              // 7F 7F 01 4C 34 3A 64 12 02 05 05 75 00 00 75 81
+              if packet[11] == 0x75 {
+                _packetType = .testIndexedCVValue
+              }
+              // 7F 7F 01 5A 34 3A 64 12 02 05 05 74 00 10 64 81
+              else if packet[11] == 0x74 {
+                _packetType = .testCVValue
+              }
+              // 7F 7F 01 73 34 3A 64 12 02 05 05 78 00 E0 98 81
+              else if packet[11] == 0x78 {
+                _packetType = .readCVBit
+              }
+              // 7F 7F 01 78 34 3A 64 12 02 05 05 79 00 E0 99 81
+              else if packet[11] == 0x79 {
+                _packetType = .readIndexedCVBit
+              }
+              // 7F 7F 01 62 34 3A 64 12 02 05 05 7C 1E 10 72 81
+              else if packet[11] == 0x7c {
+                _packetType = .writeCV
+              }
+              // 7F 7F 01 76 34 3A 64 12 02 05 05 7D 00 01 7C 81
+              else if packet[11] == 0x7d {
+                _packetType = .writeIndexedCV
+              }
+            }
+          }
+          else if packet.count == 15 {
+            // 7F 7F 01 25 34 3A 64 12 02 01 00 00 00 00 81
+            if packet[5] == 0x3a && packet[6] == 0x64 && packet[7] == 0x12 && packet[8] == 0x02 && packet[9] == 0x01 && packet[10] == 0x00 && packet[11] == 0x00 && packet[12] == 0x00 && packet[13] == 0x00 {
+              _packetType = .activateDecoder
+            }
+          }
         case 0x10:
           if packet.count == 10 {
             
@@ -831,7 +960,10 @@ public class LokPacket {
             else if packet[5] == 0x02 && packet[6] == 0x00 && packet[7] == 0x20 && packet[8] == 0x19 {
               _packetType = .setLokProgrammerMode
             }
-            
+            // 7F 7F 01 1F 10 02 00 28 19 81
+            else if packet[5] == 0x02 && packet[6] == 0x00 && packet[7] == 0x28 && packet[8] == 0x19 {
+              _packetType = .setSingleCVMode
+            }
           }
           
         default:
@@ -983,6 +1115,54 @@ public class LokPacket {
     }
     // 7F 7F 01 7D 2A 14 79 0D 04 A0 09 E0 40 81
     return packet[7]
+  }
+  
+  public var cvNumber : UInt16? {
+    
+    let validTypes : Set<LokPacketType> = [
+      .readCVBit, .readIndexedCVBit, .writeCV, .writeIndexedCV, .testCVValue, .testIndexedCVValue]
+    
+    guard validTypes.contains(packetType) else {
+      return nil
+    }
+    // 7F 7F 01 78 34 3A 64 12 02 05 05 79 00 E0 99 81 indexed
+    // 7F 7F 01 4C 34 3A 64 12 02 05 05 75 00 00 75 81 indexed
+    // 7F 7F 01 5A 34 3A 64 12 02 05 05 74 00 10 64 81 regular
+    var offset : UInt16 = 0
+    switch packetType {
+    case .readIndexedCVBit, .writeIndexedCV, .testIndexedCVValue:
+      offset = 256
+    case .testCVValue, .readCVBit, .writeCV:
+      offset = 0
+    default:
+      break
+    }
+    return offset + UInt16(packet[12]) + 1
+    
+  }
+  
+  public var cvValue : UInt8? {
+
+    let validTypes : Set<LokPacketType> = [.writeCV, .testCVValue, .testIndexedCVValue, .writeIndexedCV]
+    
+    guard validTypes.contains(packetType) else {
+      return nil
+    }
+
+    return packet[13]
+
+  }
+
+  public var cvBit : UInt8? {
+
+    let validTypes : Set<LokPacketType> = [.readCVBit, .readIndexedCVBit]
+    
+    guard validTypes.contains(packetType) else {
+      return nil
+    }
+
+    return packet[13] & 0x0f
+
   }
 
   public var errorCode : UInt8? {
