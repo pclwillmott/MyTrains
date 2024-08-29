@@ -7,7 +7,58 @@
 
 import Foundation
 
+public enum DCCPacketTypeNew : CaseIterable {
+  
+  // MARK: Enumeration
+  
+  case directModeWriteBit
+  case directModeVerifyBit
+  case directModeWriteByte
+  case directModeVerifyByte
+  case addressOnlyVerifyAddress
+  case addressOnlyWriteAddress
+  case physicalRegisterVerifyByte
+  case physicalRegisterWriteByte
+  case pagedModeVerifyByte
+  case pagedModeWriteByte
+  case pagePresetInstruction
+  case digitalDecoderResetPacket
+  case digitalDecoderIdlePacket
+  case speedAndDirectionPacket
+  case speedStepControl128
+  case analogFunctionGroup
+  case functionFLF1F4
+  case functionF5F8
+  case functionF9F12
+  case binaryStateControlLongForm
+  case timeAndDateCommand
+  case systemTime
+  case binaryStateControlShortForm
+  case functionF13F20
+  case functionF21F28
+  case functionF29F36
+  case functionF37F44
+  case functionF45F52
+  case functionF53F60
+  case functionF61F68
+  case cvAccessAccelerationAdjustment
+  case cvAccessDeclerationAdjustment
+  case cvAccessLongAddress
+  case cvAccessIndexedCVs
+  case cvAccessVerifyByte
+  case cvAccessWriteByte
+  case cvAccessVerifyBit
+  case cvAccessWriteBit
+  case unknown
+  
+}
+
 public enum DCCPacketType : UInt8 {
+  
+  // MARK: Enumeration
+  
+  // MARK: Deprecated
+  
   case dccF0F4             = 0b10000000
   case dccF5F8             = 0b10110000
   case dccF9F12            = 0b10100000
@@ -27,4 +78,5 @@ public enum DCCPacketType : UInt8 {
 //  case dccSpdDir128
 //  case dccUnknown
 //  case dccUnitialized
+
 }

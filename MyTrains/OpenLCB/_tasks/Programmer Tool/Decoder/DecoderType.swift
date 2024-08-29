@@ -6,8 +6,18 @@
 //
 
 import Foundation
+import AppKit
 
-public enum DecoderType : UInt64, CaseIterable {
+public struct DecoderDefinition : Codable {
+  var decoderType : DecoderType
+  var esuProductIds : [UInt32]
+  var cvs : [CV]
+  var defaultValues : [UInt8]
+  var mapping : [Int]
+  var properties : [ProgrammerToolSettingsProperty]
+}
+
+public enum DecoderType : UInt64, Codable, CaseIterable {
   
   // MARK: Enumeration
   
@@ -96,6 +106,18 @@ public enum DecoderType : UInt64, CaseIterable {
     self = id
   }
   
+  // MARK: Constructors
+  
+  init?(title:String) {
+    for temp in DecoderType.allCases {
+      if temp.title == title {
+        self = temp
+        return
+      }
+    }
+    return nil
+  }
+  
   // MARK: Public Properties
   
   public var allCVlists : [CVList] {
@@ -147,6 +169,38 @@ public enum DecoderType : UInt64, CaseIterable {
     return DecoderType.cvListPrefix[self]!
   }
   
+  public var definition : DecoderDefinition {
+    
+    var result = DecoderDefinition(decoderType: self, esuProductIds: [], cvs: [], defaultValues: [], mapping: [], properties: [])
+    
+    let list = allCVlists[0]
+    let cvs = cvList(filename: list.filename)
+    
+    for cv in cvs {
+      result.cvs.append(cv.cv)
+      result.defaultValues.append(cv.defaultValue)
+      result.mapping.append(-1)
+    }
+    
+    for (productId, decoderType) in DecoderType.esuProductIdLookup {
+      if decoderType == self {
+        result.esuProductIds.append(productId)
+      }
+    }
+    
+    result.esuProductIds.sort {$0 < $1}
+    
+    for property in ProgrammerToolSettingsProperty.allCases {
+      let requiredCapabilities = property.definition.requiredCapabilities
+      if capabilities.intersection(requiredCapabilities) == requiredCapabilities {
+        result.properties.append(property)
+      }
+    }
+
+    return result
+    
+  }
+  
   // MARK: Public Methods
   
   public func isSettingsPropertySupported(property:ProgrammerToolSettingsProperty) -> Bool {
@@ -165,9 +219,11 @@ public enum DecoderType : UInt64, CaseIterable {
     
     do {
       
-      let text = try String(contentsOfFile: "\(Bundle.main.resourcePath!)/\(filename)", encoding: String.Encoding.utf8)
+      var text = try String(contentsOfFile: "\(Bundle.main.resourcePath!)/\(filename)", encoding: String.Encoding.utf8)
       
-      let lines = text.split(separator: "\r\n")
+      text = text.replacingOccurrences(of: "\r", with: "")
+      
+      let lines = text.split(separator: "\n")
       
       var cv31 : UInt8 = 0
       
@@ -563,4 +619,11 @@ public enum DecoderType : UInt64, CaseIterable {
     
   ]
  
+  public static func populate(comboBox:NSComboBox) {
+    comboBox.removeAllItems()
+    for item in DecoderType.allCases {
+      comboBox.addItem(withObjectValue: item.title)
+    }
+  }
+
 }

@@ -1603,6 +1603,18 @@
         }
       }
     },
+    "q0T-3P-nSe.title" : {
+      "comment" : "Class = \"NSMenuItem\"; title = \"Decoder Editor\"; ObjectID = \"q0T-3P-nSe\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Decoder Editor"
+          }
+        }
+      }
+    },
     "Q4n-AY-BBa.ibShadowedToolTip" : {
       "comment" : "Class = \"NSButton\"; ibShadowedToolTip = \"Zoom Out\"; ObjectID = \"Q4n-AY-BBa\";",
       "extractionState" : "stale",

@@ -2576,6 +2576,9 @@
     "Decoder address." : {
       "comment" : "This is used for a tooltip."
     },
+    "Decoder Editor" : {
+      "comment" : "Used for a menu title"
+    },
     "Decoder Information" : {
 
     },

@@ -126,6 +126,10 @@
 		DA497BC32B9DDFDB00D96ACA /* MyTrainsViewType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA497BC22B9DDFDB00D96ACA /* MyTrainsViewType.swift */; };
 		DA497BC52B9E0B6600D96ACA /* InitApp.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA497BC42B9E0B6600D96ACA /* InitApp.storyboard */; };
 		DA497BC72B9E0B7600D96ACA /* InitAppVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA497BC62B9E0B7600D96ACA /* InitAppVC.swift */; };
+		DA50288D2C80C0EA00CCE0DA /* DecoderEditor.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA50288C2C80C0EA00CCE0DA /* DecoderEditor.storyboard */; };
+		DA50288F2C80C26000CCE0DA /* DecoderEditorVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA50288E2C80C26000CCE0DA /* DecoderEditorVC.swift */; };
+		DA5028912C80C71A00CCE0DA /* DecoderCVTableViewDS.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5028902C80C71A00CCE0DA /* DecoderCVTableViewDS.swift */; };
+		DA5028932C80D25400CCE0DA /* DecoderPropertyTableViewDS.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5028922C80D25400CCE0DA /* DecoderPropertyTableViewDS.swift */; };
 		DA50C2F32B77AC1A00C2F6A1 /* UnitTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA50C2F22B77AC1A00C2F6A1 /* UnitTime.swift */; };
 		DA50C2F52B77B8D400C2F6A1 /* SensorType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA50C2F42B77B8D400C2F6A1 /* SensorType.swift */; };
 		DA50C2F72B77F09F00C2F6A1 /* SignalType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA50C2F62B77F09F00C2F6A1 /* SignalType.swift */; };
@@ -201,6 +205,8 @@
 		DA6BA5102C4931850028EDA0 /* FunctionAnalogMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA6BA50F2C4931850028EDA0 /* FunctionAnalogMode.swift */; };
 		DA6BA5122C4A9BF10028EDA0 /* ESUSpeedTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA6BA5112C4A9BF10028EDA0 /* ESUSpeedTable.swift */; };
 		DA6BA5142C4ADC270028EDA0 /* SpeedTablePreset.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA6BA5132C4ADC270028EDA0 /* SpeedTablePreset.swift */; };
+		DA6D570A2C7CCBA1009B25A5 /* DCCPacket.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA6D57092C7CCBA1009B25A5 /* DCCPacket.swift */; };
+		DA6D570C2C7CDE97009B25A5 /* DCCDecoderMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA6D570B2C7CDE97009B25A5 /* DCCDecoderMode.swift */; };
 		DA6E28DF285F827600772641 /* SwitchboardItemType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA6E28DE285F827600772641 /* SwitchboardItemType.swift */; };
 		DA6E28E1285F86B900772641 /* Orientation.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA6E28E0285F86B900772641 /* Orientation.swift */; };
 		DA6E28E3285F8F1A00772641 /* TrackElectrificationType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA6E28E2285F8F1A00772641 /* TrackElectrificationType.swift */; };
@@ -630,6 +636,10 @@
 		DA497BC22B9DDFDB00D96ACA /* MyTrainsViewType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTrainsViewType.swift; sourceTree = "<group>"; };
 		DA497BC42B9E0B6600D96ACA /* InitApp.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = InitApp.storyboard; sourceTree = "<group>"; };
 		DA497BC62B9E0B7600D96ACA /* InitAppVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitAppVC.swift; sourceTree = "<group>"; };
+		DA50288C2C80C0EA00CCE0DA /* DecoderEditor.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = DecoderEditor.storyboard; sourceTree = "<group>"; };
+		DA50288E2C80C26000CCE0DA /* DecoderEditorVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecoderEditorVC.swift; sourceTree = "<group>"; };
+		DA5028902C80C71A00CCE0DA /* DecoderCVTableViewDS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecoderCVTableViewDS.swift; sourceTree = "<group>"; };
+		DA5028922C80D25400CCE0DA /* DecoderPropertyTableViewDS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecoderPropertyTableViewDS.swift; sourceTree = "<group>"; };
 		DA50C2F22B77AC1A00C2F6A1 /* UnitTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitTime.swift; sourceTree = "<group>"; };
 		DA50C2F42B77B8D400C2F6A1 /* SensorType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorType.swift; sourceTree = "<group>"; };
 		DA50C2F62B77F09F00C2F6A1 /* SignalType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignalType.swift; sourceTree = "<group>"; };
@@ -704,6 +714,8 @@
 		DA6BA50F2C4931850028EDA0 /* FunctionAnalogMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FunctionAnalogMode.swift; sourceTree = "<group>"; };
 		DA6BA5112C4A9BF10028EDA0 /* ESUSpeedTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ESUSpeedTable.swift; sourceTree = "<group>"; };
 		DA6BA5132C4ADC270028EDA0 /* SpeedTablePreset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedTablePreset.swift; sourceTree = "<group>"; };
+		DA6D57092C7CCBA1009B25A5 /* DCCPacket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DCCPacket.swift; sourceTree = "<group>"; };
+		DA6D570B2C7CDE97009B25A5 /* DCCDecoderMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DCCDecoderMode.swift; sourceTree = "<group>"; };
 		DA6E28DE285F827600772641 /* SwitchboardItemType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchboardItemType.swift; sourceTree = "<group>"; };
 		DA6E28E0285F86B900772641 /* Orientation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Orientation.swift; sourceTree = "<group>"; };
 		DA6E28E2285F8F1A00772641 /* TrackElectrificationType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackElectrificationType.swift; sourceTree = "<group>"; };
@@ -1227,6 +1239,7 @@
 			isa = PBXGroup;
 			children = (
 				DA58F00F2A45AE4E00D36E90 /* _enumerations */,
+				DA6D57092C7CCBA1009B25A5 /* DCCPacket.swift */,
 			);
 			path = DCC;
 			sourceTree = "<group>";
@@ -1239,6 +1252,7 @@
 				DAD41AB92A3C9E80002EF847 /* DCCPacketType.swift */,
 				DA58F0102A45AE8400D36E90 /* DCCDecoderType.swift */,
 				DABC089C2B1B8DBF00260605 /* DCCCVAccessMode.swift */,
+				DA6D570B2C7CDE97009B25A5 /* DCCDecoderMode.swift */,
 			);
 			path = _enumerations;
 			sourceTree = "<group>";
@@ -1826,6 +1840,7 @@
 			isa = PBXGroup;
 			children = (
 				DAB448502C736F2300D1303A /* ESU LokProgrammer */,
+				DA58F00E2A45AE4400D36E90 /* DCC */,
 				DA7B2CFA2B2F391500327281 /* _app */,
 				DA7B2D112B2F4FEB00327281 /* _classes */,
 				DA7B2CFB2B2F3EC100327281 /* _custom views */,
@@ -1836,7 +1851,6 @@
 				DA3254E62A4704E2006DF357 /* _types */,
 				DAA83DEE272C37680075CBCD /* Assets.xcassets */,
 				DA434291283698CA00E8D555 /* MyTrains-Bridging-Header.h */,
-				DA58F00E2A45AE4400D36E90 /* DCC */,
 				DAA7BECA2B5072CE00508140 /* Info.plist */,
 				DA72DDE42A3C6E150027BE50 /* Interfaces */,
 				DAA7BEBA2B504EE900508140 /* Localizable.xcstrings */,
@@ -1863,6 +1877,10 @@
 			children = (
 				DAB448512C736F4D00D1303A /* LokProgrammerMonitor.storyboard */,
 				DAB448532C73715F00D1303A /* LokProgrammerVC.swift */,
+				DA50288C2C80C0EA00CCE0DA /* DecoderEditor.storyboard */,
+				DA50288E2C80C26000CCE0DA /* DecoderEditorVC.swift */,
+				DA5028902C80C71A00CCE0DA /* DecoderCVTableViewDS.swift */,
+				DA5028922C80D25400CCE0DA /* DecoderPropertyTableViewDS.swift */,
 			);
 			path = "ESU LokProgrammer";
 			sourceTree = "<group>";
@@ -2165,6 +2183,7 @@
 				DA8C2B872C386970001755AB /* LokPilot 5 Fx micro DCC [5.10.166].cvlist in Resources */,
 				DA8C2B7A2C386970001755AB /* LokPilot 5 [5.10.166].cvlist in Resources */,
 				DA8C2BA12C386970001755AB /* LokSound V3.0 M4 [0.0.6354].cvlist in Resources */,
+				DA50288D2C80C0EA00CCE0DA /* DecoderEditor.storyboard in Resources */,
 				DA8C2B7F2C386970001755AB /* LokPilot XL V4.0 [4.16.9247].cvlist in Resources */,
 				DA8C2B672C386970001755AB /* LokSound 5 micro KATO [5.10.166].cvlist in Resources */,
 				DA8C2B662C386970001755AB /* LokSound 5 DCC [5.10.166].cvlist in Resources */,
@@ -2341,6 +2360,7 @@
 				DA4342962836996800E8D555 /* MTSerialPort.swift in Sources */,
 				DA6A0ADF2753B5CF00913F2B /* UserDefaults.swift in Sources */,
 				DA0949452B81078D00545650 /* MTPipe.swift in Sources */,
+				DA5028932C80D25400CCE0DA /* DecoderPropertyTableViewDS.swift in Sources */,
 				DAEF18712A3DFDE100AC227D /* LocoNetDeviceId.swift in Sources */,
 				DA74922B2C418251002070CE /* MarklinConsecutiveAddresses.swift in Sources */,
 				DAE525002C459854000FC319 /* ESUDecoderPhysicalOutput.swift in Sources */,
@@ -2391,12 +2411,14 @@
 				DA9B87262A2B686C00E9969E /* OpenLCBNodeConfigurationOptions.swift in Sources */,
 				DAEA212E2A5186EA008545A6 /* OpenLCBDatagramTimeout.swift in Sources */,
 				DA5BC98F2A1A4C5000D67ABE /* FloatExtensions.swift in Sources */,
+				DA5028912C80C71A00CCE0DA /* DecoderCVTableViewDS.swift in Sources */,
 				DA09493E2B7F795B00545650 /* OpenLCBCANGateway - RX.swift in Sources */,
 				DAD394C12B2E238A00403040 /* OptionSwitch.swift in Sources */,
 				DAB4FF5E2854F8CF00D74920 /* LocomotiveType.swift in Sources */,
 				DA9FDD012B935908003C6672 /* MyTrainsViewController.swift in Sources */,
 				DA0F378E2C47D471002C66D8 /* SteamChuffMode.swift in Sources */,
 				DA0F37922C47EFA4002C66D8 /* TriggeredFunction.swift in Sources */,
+				DA6D570A2C7CCBA1009B25A5 /* DCCPacket.swift in Sources */,
 				DAA83DEB272C37670075CBCD /* AppDelegate.swift in Sources */,
 				DAF6778C2B432372009707A4 /* CDIStackViewManagerDelegate.swift in Sources */,
 				DAD7750A2BCFE73600D8AD55 /* SwitchboardItemPalette.swift in Sources */,
@@ -2528,6 +2550,7 @@
 				DA0B63DA2AF7C612007C7CD6 /* OpenLCBMonitorVC.swift in Sources */,
 				DA0D3E0A2A485E770042748C /* OpenLCBSearchMatchType.swift in Sources */,
 				DA1ADFF02C1F4ABD0018088F /* SpeedProfilerInspector.swift in Sources */,
+				DA50288F2C80C26000CCE0DA /* DecoderEditorVC.swift in Sources */,
 				DA9CF8FD2860978A00825FA9 /* TurnoutMotorType.swift in Sources */,
 				DA7A127829E32E99000DCE1C /* OpenLCBMessageCANFrameType.swift in Sources */,
 				DAA7BEB72B50338800508140 /* SwitchboardPanelNode.swift in Sources */,
@@ -2544,6 +2567,7 @@
 				DAD41AB82A3C9E54002EF847 /* DCCAddressPartition.swift in Sources */,
 				DA7AFCA52C4EC1B40074A45D /* ProgrammerToolSettingsPropertyExtension.swift in Sources */,
 				DA6BA5102C4931850028EDA0 /* FunctionAnalogMode.swift in Sources */,
+				DA6D570C2C7CDE97009B25A5 /* DCCDecoderMode.swift in Sources */,
 				DAB4A7392B3F0E7D00CD5256 /* CDIGroupView.swift in Sources */,
 				DA60140529F4162500AD9ACD /* ViewLCCNetworkTableViewDS.swift in Sources */,
 				DAB26FF92BD1362300AC1B29 /* SwitchboardEditorView.swift in Sources */,

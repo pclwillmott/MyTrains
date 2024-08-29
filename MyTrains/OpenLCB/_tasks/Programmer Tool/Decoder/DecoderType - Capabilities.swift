@@ -12,7 +12,10 @@ extension DecoderType {
   // MARK: Public Properties
   
   public var capabilities : Set<DecoderCapability> {
-    return DecoderType.capabilityLookup[self]!
+    if let capabilities = DecoderType.capabilityLookup[self] {
+      return capabilities
+    }
+    return []
   }
   
   // MARK: Public Class Properties

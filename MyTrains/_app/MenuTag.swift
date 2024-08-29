@@ -70,6 +70,7 @@ public enum MenuTag : Int {
   case rebootApplication        = 3043
   case panelView                = 3044
   case lokProgrammerMonitor     = 3045
+  case decoderEditor            = 3046
   
   // MARK: Public Properties
   
@@ -202,6 +203,7 @@ public enum MenuTag : Int {
     .resetToFactoryDefaults   : String(localized: "Reset Application to Factory Defaults", comment: "Used for a menu title"),
     .panelView                : String(localized: "Panel View",                            comment: "Used for a menu title"),
     .lokProgrammerMonitor     : String(localized: "LokProgrammer Monitor",                            comment: "Used for a menu title"),
+    .decoderEditor            : String(localized: "Decoder Editor",                            comment: "Used for a menu title"),
   ]
   
   private static let validStates : [MenuTag:Set<OpenLCBNetworkLayerState>] = [
@@ -259,6 +261,7 @@ public enum MenuTag : Int {
     .rebootApplication        : [.runningLocal, .runningNetwork],
     .panelView                : [.runningLocal, .runningNetwork],
     .lokProgrammerMonitor     : [.runningLocal, .runningNetwork, .uninitialized],
+    .decoderEditor            : [.runningLocal, .runningNetwork, .uninitialized],
   ]
   
 }

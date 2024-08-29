@@ -303,7 +303,7 @@ class LokProgrammerVC : MyTrainsViewController, MTSerialPortDelegate, ORSSerialP
     
     // LOKPROGRAMMER INFO
     
-   /*
+   
     "7F 7F 01 6E 00 81",
     "7F 7F 01 6F 01 81",
     "7F 7F 01 70 02 00 81",
@@ -315,11 +315,11 @@ class LokProgrammerVC : MyTrainsViewController, MTSerialPortDelegate, ORSSerialP
     "7F 7F 01 76 02 06 81",
     "7F 7F 01 77 02 07 81",
     "7F 7F 01 78 02 08 81",
-    */
+    
     
     // DECODER INFO
   
-    /*
+    
     "7F 7F 01 79 00 81",
     "7F 7F 01 7A 10 02 00 20 19 81",
     
@@ -436,7 +436,7 @@ class LokProgrammerVC : MyTrainsViewController, MTSerialPortDelegate, ORSSerialP
      
     "7F 7F 01 50 10 00 00 00 00 81",
     "7F 7F 01 51 16 00 81",
-    */
+    
     // READING CVs
     
     "7F 7F 01 52 10 02 00 20 19 81",
@@ -634,10 +634,7 @@ class LokProgrammerVC : MyTrainsViewController, MTSerialPortDelegate, ORSSerialP
       
       if let lastCommand, lastCommand.sequenceNumber == packet.sequenceNumber {
 
-        if lastCommand.packetType == .readCVBit || lastCommand.packetType == .readIndexedCVBit {
-          print(packet.payload)
-        }
-        else if packet.dword != nil {
+        if packet.dword != nil {
           
           switch lastCommand.packetType {
           case .getLokProgrammerManufacturerCode:
@@ -723,13 +720,13 @@ class LokProgrammerVC : MyTrainsViewController, MTSerialPortDelegate, ORSSerialP
         if let sequenceNumber = packet.sequenceNumberForRead, let address = packet.address, let count = packet.numberOfBytesToRead {
           dump += "Sequence number: \(sequenceNumber.toHex(numberOfDigits: 2)) Address: \(address.toHex(numberOfDigits: 4)) Number of bytes: \(count)\n"
         }
-      case .writeCV, .testCVValue, .testIndexedCVValue:
-        if let cvNumber = packet.cvNumber, let cvValue = packet.cvValue {
-          dump += "CV\(cvNumber) = \(cvValue)\n"
+      case .sendServiceModePacket:
+        if let dccPacket = packet.dccPacket(decoderMode: .serviceModeDirectAddressing) {
+          dump += "\(dccPacket.packetType)\n"
         }
-      case .readCVBit:
-        if let cvNumber = packet.cvNumber, let cvBit = packet.cvBit {
-          dump += "CV\(cvNumber) d\(cvBit)\n"
+      case .sendOperationsModePacket:
+        if let dccPacket = packet.dccPacket(decoderMode: .operationsMode) {
+          dump += "\(dccPacket.packetType)\n"
         }
       default:
         break
@@ -787,13 +784,8 @@ public enum LokPacketType : CaseIterable {
   case setSingleCVMode
   case lokProgrammerTestA
   case lokProgrammerTestB
-  case readIndexedCVBit
-  case writeIndexedCV
-  case readCVBit
-  case writeCV
-  case activateDecoder
-  case testCVValue
-  case testIndexedCVValue
+  case sendServiceModePacket
+  case sendOperationsModePacket
 }
 
 public enum LokDataType : UInt8 {
@@ -915,38 +907,13 @@ public class LokPacket {
         case 0x2b:
           _packetType = .readData
         case 0x34:
-          if packet.count == 16 {
-            if packet[5] == 0x3a && packet[6] == 0x64 && packet[7] == 0x12 && packet[8] == 0x02 && packet[9] == 0x05 && packet[10] == 0x05 {
-              // 7F 7F 01 4C 34 3A 64 12 02 05 05 75 00 00 75 81
-              if packet[11] == 0x75 {
-                _packetType = .testIndexedCVValue
-              }
-              // 7F 7F 01 5A 34 3A 64 12 02 05 05 74 00 10 64 81
-              else if packet[11] == 0x74 {
-                _packetType = .testCVValue
-              }
-              // 7F 7F 01 73 34 3A 64 12 02 05 05 78 00 E0 98 81
-              else if packet[11] == 0x78 {
-                _packetType = .readCVBit
-              }
-              // 7F 7F 01 78 34 3A 64 12 02 05 05 79 00 E0 99 81
-              else if packet[11] == 0x79 {
-                _packetType = .readIndexedCVBit
-              }
-              // 7F 7F 01 62 34 3A 64 12 02 05 05 7C 1E 10 72 81
-              else if packet[11] == 0x7c {
-                _packetType = .writeCV
-              }
-              // 7F 7F 01 76 34 3A 64 12 02 05 05 7D 00 01 7C 81
-              else if packet[11] == 0x7d {
-                _packetType = .writeIndexedCV
-              }
+          if packet.count > 8 {
+            if packet[5] == 0x3a && packet[6] == 0x64 {
+              _packetType = .sendServiceModePacket
             }
-          }
-          else if packet.count == 15 {
             // 7F 7F 01 25 34 3A 64 12 02 01 00 00 00 00 81
-            if packet[5] == 0x3a && packet[6] == 0x64 && packet[7] == 0x12 && packet[8] == 0x02 && packet[9] == 0x01 && packet[10] == 0x00 && packet[11] == 0x00 && packet[12] == 0x00 && packet[13] == 0x00 {
-              _packetType = .activateDecoder
+            else if packet[5] == 0x3a && packet[6] == 0x74 {
+              _packetType = .sendOperationsModePacket
             }
           }
         case 0x10:
@@ -1100,6 +1067,24 @@ public class LokPacket {
     // 7F 7F 01 7D 2A 14 79 0D 04 A0 09 E0 40 81
     return UInt16(packet[9]) | (UInt16(packet[10]) << 8)
   }
+  
+  public func dccPacket(decoderMode:DCCDecoderMode = .operationsMode) -> DCCPacket? {
+    
+    guard packetType == .sendServiceModePacket || packetType == .sendOperationsModePacket else {
+      return nil
+    }
+    
+    var data : [UInt8] = []
+    
+    // // 7F 7F 01 25 34 3A 64 12 02 01 00 00 00 00 81
+    
+    for index in 11 ... packet.count - 2 {
+      data.append(packet[index])
+    }
+    
+    return DCCPacket(packet: data, decoderMode: decoderMode)
+    
+  }
 
   public var numberOfBytesToRead : UInt8? {
     guard packetType == .initReadDataBlock else {
@@ -1116,7 +1101,7 @@ public class LokPacket {
     // 7F 7F 01 7D 2A 14 79 0D 04 A0 09 E0 40 81
     return packet[7]
   }
-  
+  /*
   public var cvNumber : UInt16? {
     
     let validTypes : Set<LokPacketType> = [
@@ -1140,7 +1125,8 @@ public class LokPacket {
     return offset + UInt16(packet[12]) + 1
     
   }
-  
+  */
+  /*
   public var cvValue : UInt8? {
 
     let validTypes : Set<LokPacketType> = [.writeCV, .testCVValue, .testIndexedCVValue, .writeIndexedCV]
@@ -1164,7 +1150,7 @@ public class LokPacket {
     return packet[13] & 0x0f
 
   }
-
+*/
   public var errorCode : UInt8? {
     switch packetType {
     // 7F 7F 02 XX 01 04 81

@@ -174,8 +174,8 @@
             filePath = "MyTrains/_app/AppDelegate.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "386"
-            endingLineNumber = "386"
+            startingLineNumber = "393"
+            endingLineNumber = "393"
             landmarkName = "initiateRebootApplication()"
             landmarkType = "7">
          </BreakpointContent>
@@ -254,8 +254,8 @@
             filePath = "MyTrains/_app/AppDelegate.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "353"
-            endingLineNumber = "353"
+            startingLineNumber = "360"
+            endingLineNumber = "360"
             landmarkName = "openWindows()"
             landmarkType = "7">
          </BreakpointContent>
@@ -334,8 +334,8 @@
             filePath = "MyTrains/_app/MenuTag.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "126"
-            endingLineNumber = "126"
+            startingLineNumber = "127"
+            endingLineNumber = "127"
             landmarkName = "isValid(state:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -654,9 +654,9 @@
             filePath = "MyTrains/OpenLCB/_tasks/Programmer Tool/Decoder/DecoderType - Capabilities.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "2862"
-            endingLineNumber = "2862"
-            landmarkName = "capabilityLookup"
+            startingLineNumber = "2865"
+            endingLineNumber = "2865"
+            landmarkName = "capabilities"
             landmarkType = "24">
          </BreakpointContent>
       </BreakpointProxy>
@@ -686,9 +686,9 @@
             filePath = "MyTrains/OpenLCB/_tasks/Programmer Tool/Decoder/DecoderType - Capabilities.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "2918"
-            endingLineNumber = "2918"
-            landmarkName = "capabilityLookup"
+            startingLineNumber = "2921"
+            endingLineNumber = "2921"
+            landmarkName = "capabilities"
             landmarkType = "24">
          </BreakpointContent>
       </BreakpointProxy>
@@ -702,9 +702,9 @@
             filePath = "MyTrains/OpenLCB/_tasks/Programmer Tool/Decoder/DecoderType - Capabilities.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "923"
-            endingLineNumber = "923"
-            landmarkName = "capabilityLookup"
+            startingLineNumber = "926"
+            endingLineNumber = "926"
+            landmarkName = "capabilities"
             landmarkType = "24">
          </BreakpointContent>
       </BreakpointProxy>
@@ -734,9 +734,9 @@
             filePath = "MyTrains/OpenLCB/_tasks/Programmer Tool/Decoder/DecoderType - Capabilities.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "2050"
-            endingLineNumber = "2050"
-            landmarkName = "capabilityLookup"
+            startingLineNumber = "2053"
+            endingLineNumber = "2053"
+            landmarkName = "capabilities"
             landmarkType = "24">
          </BreakpointContent>
       </BreakpointProxy>
@@ -766,8 +766,8 @@
             filePath = "MyTrains/_app/MenuTag.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "260"
-            endingLineNumber = "260"
+            startingLineNumber = "262"
+            endingLineNumber = "262"
             landmarkName = "validStates"
             landmarkType = "24">
          </BreakpointContent>

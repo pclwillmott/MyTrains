@@ -8,7 +8,7 @@
 import Foundation
 import AppKit
 
-public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
+public enum ProgrammerToolSettingsProperty : Int, CaseIterable, Codable {
 
   // MARK: Enumeration
   
