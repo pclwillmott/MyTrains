@@ -577,6 +577,62 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable, Codable {
     return ProgrammerToolSettingsProperty.minMaxProperties[self]
   }
   
+  public var info : String {
+    
+    var result = ""
+    
+    result += "Group:              \(definition.section.inspector.title)\n\n"
+    
+    result += "Section:            \(definition.section.title)\n\n"
+    
+    result += "Title:              \(definition.title)\n\n"
+    
+    result += "Control Type:       \(definition.controlType)\n\n"
+    
+    result += "Encoding:           \(definition.encoding)\n\n"
+    
+    if let minValue = definition.minValue {
+      result += "Minimum Value:      \(minValue)\n\n"
+    }
+    
+    if let maxValue = definition.maxValue {
+      result += "Maximum Value:      \(maxValue)\n\n"
+    }
+    
+    if let trueDefaultValue = definition.trueDefaultValue {
+      result += "True Default Value: \(trueDefaultValue)\n\n"
+    }
+    
+    result += "Info Type:          \(definition.infoType)\n\n"
+
+    if let infoFactor = definition.infoFactor {
+      result += "Info Factor:        \(infoFactor)\n\n"
+    }
+    
+    if let infoMaxDP = definition.infoMaxDecimalPlaces {
+      result += "Info Maximum DP:    \(infoMaxDP)\n\n"
+    }
+    
+    if let infoFormat = definition.infoFormat {
+      result += "Info Format:        \(infoFormat)\n\n"
+    }
+
+    if let cvIndexingMethod = definition.cvIndexingMethod {
+      result += "CV Indexing Method: \(cvIndexingMethod)\n\n"
+    }
+    
+    if let cvs = definition.cv, let mask = definition.mask, let shift = definition.shift {
+      var temp = cvs.count == 1 ? "CV: " : "CVs:"
+      for index in 0 ..< cvs.count {
+        result += "\(temp)                \(cvs[index])   0x\(mask[index].toHex(numberOfDigits: 2))   \(shift[index])\n"
+        temp = "    "
+      }
+    }
+    
+    return result
+    
+  }
+  
   public func cvLabel(decoder:Decoder) -> String? {
     
     guard let definition = ProgrammerToolSettingsProperty.definitions[self], let _cvs = definition.cv, let masks = definition.mask, let cvIndexingMethod = definition.cvIndexingMethod else {
@@ -644,7 +700,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable, Codable {
       
       for index in 1 ... cvs.count - 1 {
         let previous = cvs[index - 1] + offset
-        if let test = CV(cv31: previous.cv31, cv32: previous.cv32, cv: previous.cv + 1, indexMethod: previous.indexMethod, isHidden: previous.isHidden, isReadOnly: previous.isReadOnly) {
+        if let test = CV(cv31: previous.cv31, cv32: previous.cv32, cv: previous.cv + 1, indexMethod: previous.indexMethod) {
           if !(cvs[index] + offset == test && masks[index] == masks[index - 1]) {
             isContiguous = false
             break

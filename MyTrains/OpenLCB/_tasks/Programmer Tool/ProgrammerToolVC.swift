@@ -124,6 +124,8 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
   
   private var lblChangedCVs : NSTextField? = NSTextField(labelWithString: "")
   
+  private var definition : DecoderDefinition?
+  
   private var decoder : Decoder? {
     didSet {
       tableView?.reloadData()
@@ -153,6 +155,8 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
     
   }
 
+  private var decoderTypes : [DecoderType:DecoderDefinition] = [:]
+  
   override func viewWillAppear() {
     
     super.viewWillAppear()
@@ -163,7 +167,6 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
     
     decoder = Decoder(decoderType: .lokSound5)
     decoder?.delegate = self
-    
     
     observerId = appNode.addObserver(observer: self)
     
@@ -741,17 +744,17 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
       text.stringValue = "\(cv.cv)"
     case columnIds[3]:
       text.stringValue = "\(value)"
-      isEditable = !cv.isReadOnly
+      isEditable = true
       text.delegate = self
       text.tag = 100000 + row * 10 + 0
     case columnIds[4]:
       text.stringValue = "\(value.toBinary(numberOfDigits: 8))"
-      isEditable = !cv.isReadOnly
+      isEditable = true
       text.delegate = self
       text.tag = 100000 + row * 10 + 1
     case columnIds[5]:
       text.stringValue = "\(value.toHex(numberOfDigits: 2))"
-      isEditable = !cv.isReadOnly
+      isEditable = true
       text.delegate = self
       text.tag = 100000 + row * 10 + 2
     default:

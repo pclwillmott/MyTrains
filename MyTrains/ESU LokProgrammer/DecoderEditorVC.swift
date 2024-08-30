@@ -31,7 +31,9 @@
 import Foundation
 import AppKit
 
-class DecoderEditorVC : MyTrainsViewController {
+public let decoderInfoMasterFile = "/Users/paul/Documents/MyTrains/MyTrains/ESU LokProgrammer/DECODER_INFO.json"
+
+class DecoderEditorVC : MyTrainsViewController, DecoderPropertyTableViewDSDelegate, DecoderProductIdTableViewDSDelegate {
   
   // MARK: Window & View Control
   
@@ -46,41 +48,54 @@ class DecoderEditorVC : MyTrainsViewController {
     
     
   }
-
+  
   var decoderTypes : [DecoderType:DecoderDefinition] = [:]
   
-
+  
   override func viewWillAppear() {
     
     super.viewWillAppear()
+    
     
     cvsTableView.dataSource = cvDataSource
     cvsTableView.delegate = cvDataSource
     
     propertiesTableView.dataSource = propertyDataSource
     propertiesTableView.delegate = propertyDataSource
+    propertyDataSource.delegate = self
+    
+    productIdsTableView.dataSource = productIdDataSource
+    productIdsTableView.delegate = productIdDataSource
+    productIdDataSource.delegate = self
     
     DecoderType.populate(comboBox: cboDecoderType)
     
+    DecoderEditorLoadType.populate(comboBox: cboLoadType)
+    cboLoadType.selectItem(at: 0)
+    cboLoadType.isEnabled = false
+    btnLoad.isEnabled = false
+    btnSave.isEnabled = false
+    
     /*
-    for decoderType in DecoderType.allCases {
-      decoderTypes[decoderType] = decoderType.definition
-    }
+     for decoderType in DecoderType.allCases {
+     decoderTypes[decoderType] = decoderType.definition
+     }
+     
+     let jsonEncoder = JSONEncoder()
+     jsonEncoder.outputFormatting = .prettyPrinted
+     
+     do {
+     let encodePerson = try jsonEncoder.encode(decoderTypes)
+     let endcode = String(data: encodePerson, encoding: .utf8)!
+     try endcode.write(toFile: decoderInfoMasterFile, atomically: true, encoding: .utf8)
+     }
+     catch {
+     print(error.localizedDescription)
+     }
+     */
     
-    let jsonEncoder = JSONEncoder()
-    jsonEncoder.outputFormatting = .prettyPrinted
-
     do {
-      let encodePerson = try jsonEncoder.encode(decoderTypes)
-      let endcode = String(data: encodePerson, encoding: .utf8)!
-      try endcode.write(toFile: "/Users/paul/Desktop/DECODER_INFO.json", atomically: true, encoding: .utf8)
-    } catch {
-        print(error.localizedDescription)
-    }
-    */
-    
-    do {
-      let url = URL(fileURLWithPath: "/Users/paul/Desktop/DECODER_INFO.json")
+      let url = URL(fileURLWithPath: decoderInfoMasterFile)
       let json = try Data(contentsOf: url)
       
       let jsonDecoder = JSONDecoder()
@@ -95,12 +110,89 @@ class DecoderEditorVC : MyTrainsViewController {
     propertyDataSource.properties = properties
     
     userSettings?.tableView = propertiesTableView
-
+    userSettings?.tableView2 = cvsTableView
+    userSettings?.splitView = splitView
+    
+    txtInfo.font = NSFont(name: "Menlo", size: 12.0)
+    
   }
+  
+  private func cvList(filename:String) -> [(cv: CV, defaultValue:UInt8)] {
+    
+    var result : [(cv: CV, defaultValue:UInt8)] = []
+    
+    do {
+      
+      var text = try String(contentsOfFile: "\(filename)", encoding: String.Encoding.utf8)
+      
+      text = text.replacingOccurrences(of: "\r", with: "")
+      
+      let lines = text.split(separator: "\n")
+      
+      var cv31 : UInt8 = 0
+      
+      var cv32 : UInt8 = 0
+      
+      var index = 2
+      
+      while index < lines.count {
+        
+        let line = lines[index].trimmingCharacters(in: .whitespaces)
+        
+        if !line.isEmpty && line != "--------------------------------" {
+          
+          if line.prefix(7) == "Index: " {
+            
+            let parts = line.suffix(line.count - 7).split(separator: "(")
+            
+            let pageIndex = UInt32(parts[0].trimmingCharacters(in: .whitespaces))!
+            
+            cv31 = UInt8(pageIndex / 256)
+            cv32 = UInt8(pageIndex % 256)
+            
+          }
+          else {
+            
+            let parts = line.split(separator: "=")
+            
+            var cvName = String(parts[0].trimmingCharacters(in: .whitespaces).replacingOccurrences(of: " ", with: ""))
+            cvName.removeFirst(2)
+            
+            let cv = UInt16(cvName)!
+            
+            if let cvConstant = CV(cv31: cv31, cv32: cv32, cv: cv, indexMethod: .cv3132), let cvValue = UInt8(parts[1].trimmingCharacters(in: .whitespaces)) {
+              
+              
+              result.append((cvConstant, cvValue))
+              
+            }
+            else {
+              debugLog("CV Not Found: CV31:\(cv31) CV32:\(cv32) CV:\(cv) \"\(parts[1])\"")
+            }
+            
+          }
+          
+        }
+        
+        index += 1
+        
+      }
+      
+    }
+    catch {
+      debugLog("error: \(filename)")
+    }
+    
+    return result
+    
+  }
+  
   
   private let cvDataSource = DecoderCVTableViewDS()
   
   private let propertyDataSource = DecoderPropertyTableViewDS()
+  
+  private let productIdDataSource = DecoderProductIdTableViewDS()
   
   private var definition : DecoderDefinition?
   
@@ -117,13 +209,20 @@ class DecoderEditorVC : MyTrainsViewController {
       if let definition {
         cvDataSource.definition = definition
         propertyDataSource.definition = definition
+        productIdDataSource.definition = definition
       }
       else {
-        cvDataSource.definition = nil
-        propertyDataSource.definition = nil
+        definition = DecoderDefinition(decoderType: decoderType, esuProductIds: [], cvs: [], defaultValues: [], mapping: [], properties: [])
+        cvDataSource.definition = definition
+        propertyDataSource.definition = definition
+        productIdDataSource.definition = definition
       }
       cvsTableView.reloadData()
       propertiesTableView.reloadData()
+      productIdsTableView.reloadData()
+      cboLoadType.isEnabled = true
+      btnLoad.isEnabled = true
+      
     }
     
   }
@@ -135,10 +234,192 @@ class DecoderEditorVC : MyTrainsViewController {
   @IBOutlet weak var productIdsTableView: NSTableView!
   
   
+  func propertySelectionChanged(property:ProgrammerToolSettingsProperty) {
+    txtInfo.string = property.info
+  }
+  
+  func requiredPropertiesChanged(properties: Set<ProgrammerToolSettingsProperty>) {
+    
+    guard let decoderType = DecoderType(title: cboDecoderType.stringValue) else {
+      return
+    }
+    
+    definition?.properties = properties
+    
+    decoderTypes[decoderType] = self.definition!
+    
+    isModified = true
+    
+  }
+  
+  func productIdChanged(productIds: [UInt32]) {
+    
+    guard let decoderType = DecoderType(title: cboDecoderType.stringValue) else {
+      return
+    }
+    
+    var sorted = productIds
+    
+    sorted.sort {$0 < $1}
+    
+    self.definition!.esuProductIds = sorted
+    
+    decoderTypes[decoderType] = self.definition!
+    
+    isModified = true
+    
+  }
+  
+  @IBOutlet var txtInfo: NSTextView!
+  
+  @IBOutlet weak var splitView: NSSplitView!
+  
+  @IBAction func btnLoadAction(_ sender: NSButton) {
+    
+    guard let decoderType = DecoderType(title: cboDecoderType.stringValue) else {
+      return
+    }
+    
+    let dialog = NSOpenPanel();
+    
+    let fm = FileManager()
+    
+    dialog.showsResizeIndicator    = true
+    dialog.showsHiddenFiles        = false
+    dialog.canChooseDirectories    = true
+    dialog.canCreateDirectories    = true
+    dialog.allowsMultipleSelection = false
+    dialog.allowedContentTypes     = [.text, .plainText, .utf8PlainText]
+    dialog.directoryURL            = fm.homeDirectoryForCurrentUser
+    
+    if dialog.runModal() == NSApplication.ModalResponse.OK, let url = dialog.url, let loadType = DecoderEditorLoadType(title: cboLoadType.stringValue), let definition {
+      
+      switch loadType {
+      case .cvsAndDefaults:
+        
+        var cvs : [CV] = []
+        var defaultValues : [UInt8] = []
+        var mapping : [Int] = []
+        
+        for cv in cvList(filename: url.path) {
+          cvs.append(cv.cv)
+          defaultValues.append(cv.defaultValue)
+          mapping.append(-1)
+          if !definition.cvs.isEmpty {
+            for index in 0 ..< definition.cvs.count {
+              if cv.cv == definition.cvs[index] {
+                mapping[mapping.count - 1] = definition.mapping[index]
+                break
+              }
+            }
+          }
+        }
+        
+        self.definition?.cvs = cvs
+        self.definition?.defaultValues = defaultValues
+        self.definition?.mapping = mapping
+        
+      default:
+        
+        for cv in cvList(filename: url.path) {
+          
+          if cv.defaultValue != 0, !definition.cvs.isEmpty {
+            
+            for index in 0 ..< definition.cvs.count {
+              if cv.cv == definition.cvs[index], definition.mapping[index] == -1 {
+                self.definition?.mapping[index] = loadType.rawValue + Int(cv.defaultValue) - 1
+              }
+            }
+            
+          }
+          
+        }
+        
+      }
+      
+      decoderTypes[decoderType] = self.definition!
+      
+      isModified = true
+      
+      cvDataSource.definition = self.definition
+      cvsTableView.reloadData()
+      
+    }
+    
+  }
+  
+  private var isModified = false {
+    didSet {
+      btnSave.isEnabled = isModified
+    }
+  }
+  
+  @IBOutlet weak var cboLoadType: NSComboBox!
+  
+  @IBAction func cboLoadTypeAction(_ sender: NSComboBox) {
+  }
+  
+  @IBOutlet weak var btnLoad: NSButton!
   
   
+  @IBOutlet weak var btnSave: NSButton!
   
+  @IBAction func btnSaveAction(_ sender: NSButton) {
+    
+    let jsonEncoder = JSONEncoder()
+    jsonEncoder.outputFormatting = .prettyPrinted
+    
+    do {
+      let encodePerson = try jsonEncoder.encode(decoderTypes)
+      let endcode = String(data: encodePerson, encoding: .utf8)!
+      try endcode.write(toFile: decoderInfoMasterFile, atomically: true, encoding: .utf8)
+      isModified = false
+    }
+    catch {
+      print(error.localizedDescription)
+    }
+
+  }
+
+  @IBAction func btnAddAction(_ sender: NSButton) {
+    
+    guard let decoderType = DecoderType(title: cboDecoderType.stringValue), definition != nil else {
+      return
+    }
+    
+    definition?.esuProductIds.append(0)
+    
+    productIdDataSource.definition = definition
+    
+    decoderTypes[decoderType] = definition
+    
+    isModified = true
+    
+    productIdsTableView.reloadData()
+    
+  }
   
+  @IBAction func btnRemoveAction(_ sender: NSButton) {
+
+    guard let decoderType = DecoderType(title: cboDecoderType.stringValue), definition != nil else {
+      return
+    }
+    
+    if productIdsTableView.selectedRow != -1 {
+
+      definition?.esuProductIds.remove(at: productIdsTableView.selectedRow)
+      
+      productIdDataSource.definition = definition
+      
+      decoderTypes[decoderType] = definition
+      
+      isModified = true
+      
+      productIdsTableView.reloadData()
+
+    }
+
+  }
+  
+
 }
-
-

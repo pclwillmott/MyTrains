@@ -34,9 +34,7 @@ public class Decoder : NSObject {
         block += item.cv.isIndexed ? 256 : 1024
         lastIndex = index
       }
-      if !item.cv.isHidden {
-        _visibleCVs.append(item)
-      }
+      _visibleCVs.append(item)
     }
     
     savedBlocks = [UInt8](repeating: 0, count: 1024 + (_indicies.count - 1) * 256)
@@ -102,13 +100,35 @@ public class Decoder : NSObject {
     return _decoderType
   }
   
+  private var definition : DecoderDefinition?
+  
   public var propertyViews : [PTSettingsPropertyView] = [] {
     
     didSet {
       
+      do {
+        
+        let url = URL(fileURLWithPath: "\(Bundle.main.resourcePath!)/DECODER_INFO.json")
+        
+        let json = try Data(contentsOf: url)
+        
+        let jsonDecoder = JSONDecoder()
+        
+        let decoderTypes = try jsonDecoder.decode([DecoderType:DecoderDefinition].self, from: json)
+        
+        definition = decoderTypes[decoderType]
+        
+      } catch {
+        
+      }
+      
+      guard let definition else {
+        return
+      }
+      
       for view in propertyViews {
         
-        if decoderType.isSettingsPropertySupported(property: view.property) {
+        if definition.properties.contains(view.property) {
           
           propertyViewLookup[view.property] = view
           
@@ -256,7 +276,7 @@ public class Decoder : NSObject {
               if let cvConstant = CV(index: index, cv: cv, indexMethod: .cv3132) {
                 result.append((cvConstant, modifiedBlocks[ptr]))
               }
-              else if let cvConstant = CV(index: index, cv: cv, indexMethod: .cv3132, isHidden: true) {
+              else if let cvConstant = CV(index: index, cv: cv, indexMethod: .cv3132) {
                 result.append((cvConstant, modifiedBlocks[ptr]))
               }
               

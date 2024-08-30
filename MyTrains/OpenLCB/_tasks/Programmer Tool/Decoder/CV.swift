@@ -299,46 +299,46 @@ public enum CV : UInt64, CaseIterable, Codable {
   case cv_000_253_257 = 0x00FD010000000000
   case cv_000_253_258 = 0x00FD010100000000
   case cv_000_253_259 = 0x00FD010200000000
-  case cv_000_255_257 = 0x00FF010000000100 // RailCom CVs
-  case cv_000_255_258 = 0x00FF010100000100
-  case cv_000_255_259 = 0x00FF010200000100
-  case cv_000_255_260 = 0x00FF010300000100
-  case cv_000_255_261 = 0x00FF010400000100
-  case cv_000_255_262 = 0x00FF010500000100
-  case cv_000_255_263 = 0x00FF010600000100
-  case cv_000_255_264 = 0x00FF010700000100
-  case cv_000_255_265 = 0x00FF010800000100
-  case cv_000_255_266 = 0x00FF010900000100
-  case cv_000_255_267 = 0x00FF010A00000100
-  case cv_000_255_268 = 0x00FF010B00000100
-  case cv_000_255_269 = 0x00FF010C00000100
-  case cv_000_255_270 = 0x00FF010D00000100
-  case cv_000_255_271 = 0x00FF010E00000100
-  case cv_000_255_272 = 0x00FF010F00000100
-  case cv_000_255_273 = 0x00FF011000000100
-  case cv_000_255_274 = 0x00FF011100000100
-  case cv_000_255_275 = 0x00FF011200000100
-  case cv_000_255_276 = 0x00FF011300000100
-  case cv_000_255_277 = 0x00FF011400000100
-  case cv_000_255_278 = 0x00FF011500000100
-  case cv_000_255_279 = 0x00FF011600000100
-  case cv_000_255_280 = 0x00FF011700000100
-  case cv_000_255_281 = 0x00FF011800000100
-  case cv_000_255_282 = 0x00FF011900000100
-  case cv_000_255_283 = 0x00FF011A00000100
-  case cv_000_255_284 = 0x00FF011B00000100
-  case cv_000_255_285 = 0x00FF011C00000100
-  case cv_000_255_286 = 0x00FF011D00000100
-  case cv_000_255_287 = 0x00FF011E00000100
-  case cv_000_255_288 = 0x00FF011F00000100
-  case cv_000_255_289 = 0x00FF012000000100
-  case cv_000_255_290 = 0x00FF012100000100
-  case cv_000_255_291 = 0x00FF012200000100
-  case cv_000_255_292 = 0x00FF012300000100
-  case cv_000_255_293 = 0x00FF012400000100
-  case cv_000_255_294 = 0x00FF012500000100
-  case cv_000_255_295 = 0x00FF012600000100
-  case cv_000_255_296 = 0x00FF012700000100
+  case cv_000_255_257 = 0x00FF010000000000 // RailCom CVs
+  case cv_000_255_258 = 0x00FF010100000000
+  case cv_000_255_259 = 0x00FF010200000000
+  case cv_000_255_260 = 0x00FF010300000000
+  case cv_000_255_261 = 0x00FF010400000000
+  case cv_000_255_262 = 0x00FF010500000000
+  case cv_000_255_263 = 0x00FF010600000000
+  case cv_000_255_264 = 0x00FF010700000000
+  case cv_000_255_265 = 0x00FF010800000000
+  case cv_000_255_266 = 0x00FF010900000000
+  case cv_000_255_267 = 0x00FF010A00000000
+  case cv_000_255_268 = 0x00FF010B00000000
+  case cv_000_255_269 = 0x00FF010C00000000
+  case cv_000_255_270 = 0x00FF010D00000000
+  case cv_000_255_271 = 0x00FF010E00000000
+  case cv_000_255_272 = 0x00FF010F00000000
+  case cv_000_255_273 = 0x00FF011000000000
+  case cv_000_255_274 = 0x00FF011100000000
+  case cv_000_255_275 = 0x00FF011200000000
+  case cv_000_255_276 = 0x00FF011300000000
+  case cv_000_255_277 = 0x00FF011400000000
+  case cv_000_255_278 = 0x00FF011500000000
+  case cv_000_255_279 = 0x00FF011600000000
+  case cv_000_255_280 = 0x00FF011700000000
+  case cv_000_255_281 = 0x00FF011800000000
+  case cv_000_255_282 = 0x00FF011900000000
+  case cv_000_255_283 = 0x00FF011A00000000
+  case cv_000_255_284 = 0x00FF011B00000000
+  case cv_000_255_285 = 0x00FF011C00000000
+  case cv_000_255_286 = 0x00FF011D00000000
+  case cv_000_255_287 = 0x00FF011E00000000
+  case cv_000_255_288 = 0x00FF011F00000000
+  case cv_000_255_289 = 0x00FF012000000000
+  case cv_000_255_290 = 0x00FF012100000000
+  case cv_000_255_291 = 0x00FF012200000000
+  case cv_000_255_292 = 0x00FF012300000000
+  case cv_000_255_293 = 0x00FF012400000000
+  case cv_000_255_294 = 0x00FF012500000000
+  case cv_000_255_295 = 0x00FF012600000000
+  case cv_000_255_296 = 0x00FF012700000000
   case cv_001_000_257 = 0x0100010000000000
   case cv_001_000_258 = 0x0100010100000000
   case cv_001_000_259 = 0x0100010200000000
@@ -2740,15 +2740,15 @@ public enum CV : UInt64, CaseIterable, Codable {
   case cv_016_013_317 = 0x100D013C00000000
   // MARK: Constructors
   
-  init?(cv31:UInt8, cv32:UInt8, cv:UInt16, indexMethod:CVIndexMethod, isHidden : Bool = false, isReadOnly : Bool = false) {
-    guard let cv = CV(rawValue: CV.encodeRawValue(cv31: cv31, cv32: cv32, cv: cv, indexMethod: indexMethod, isHidden: isHidden, isReadOnly: isReadOnly)) else {
+  init?(cv31:UInt8, cv32:UInt8, cv:UInt16, indexMethod:CVIndexMethod) {
+    guard let cv = CV(rawValue: CV.encodeRawValue(cv31: cv31, cv32: cv32, cv: cv, indexMethod: indexMethod)) else {
       return nil
     }
     self = cv
   }
   
-  init?(index:UInt16, cv:UInt16, indexMethod:CVIndexMethod, isHidden : Bool = false, isReadOnly : Bool = false) {
-    guard let cv = CV(rawValue: CV.encodeRawValue(cv31: UInt8(index >> 8), cv32: UInt8(index & 0xff), cv: cv, indexMethod: indexMethod, isHidden: isHidden, isReadOnly: isReadOnly)) else {
+  init?(index:UInt16, cv:UInt16, indexMethod:CVIndexMethod) {
+    guard let cv = CV(rawValue: CV.encodeRawValue(cv31: UInt8(index >> 8), cv32: UInt8(index & 0xff), cv: cv, indexMethod: indexMethod)) else {
       return nil
     }
     self = cv
@@ -2789,21 +2789,11 @@ public enum CV : UInt64, CaseIterable, Codable {
     return CVIndexMethod(rawValue: self.rawValue & 0x00000000000000ff)!
   }
   
-  public var isHidden : Bool {
-    let mask = CVFlag.isHidden.rawValue
-    return (self.rawValue & mask) == mask
-  }
-  
-  public var isReadOnly : Bool {
-    let mask = CVFlag.isReadOnly.rawValue
-    return (self.rawValue & mask) == mask
-  }
-  
   // MARK: Public Class Methods
   
-  public static func encodeRawValue(cv31:UInt8, cv32:UInt8, cv:UInt16, indexMethod:CVIndexMethod, isHidden:Bool = false, isReadOnly : Bool = false) -> UInt64 {
+  public static func encodeRawValue(cv31:UInt8, cv32:UInt8, cv:UInt16, indexMethod:CVIndexMethod) -> UInt64 {
     
-    return (UInt64(cv31) << 56) | (UInt64(cv32) << 48) | (UInt64(cv - 1) << 32) | indexMethod.rawValue | (isHidden ? CVFlag.isHidden.rawValue : 0) | (isReadOnly ? CVFlag.isReadOnly.rawValue : 0)
+    return (UInt64(cv31) << 56) | (UInt64(cv32) << 48) | (UInt64(cv - 1) << 32) | indexMethod.rawValue
     
   }
   
@@ -2838,7 +2828,7 @@ public enum CV : UInt64, CaseIterable, Codable {
       newCV = UInt16(value)
     }
     
-    return CV(index: newIndex, cv: newCV, indexMethod: lhs.indexMethod, isHidden: lhs.isHidden, isReadOnly: lhs.isReadOnly)!
+    return CV(index: newIndex, cv: newCV, indexMethod: lhs.indexMethod)!
     
   }
 
@@ -2873,7 +2863,7 @@ public enum CV : UInt64, CaseIterable, Codable {
       newCV = UInt16(value)
     }
     
-    return CV(index: newIndex, cv: newCV, indexMethod: rhs.indexMethod, isHidden: rhs.isHidden, isReadOnly: rhs.isReadOnly)!
+    return CV(index: newIndex, cv: newCV, indexMethod: rhs.indexMethod)!
 
   }
 

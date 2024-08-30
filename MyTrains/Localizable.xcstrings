@@ -2293,6 +2293,42 @@
     "CV" : {
 
     },
+    "CV Mapping - 0x0000" : {
+
+    },
+    "CV Mapping - 0x00E0" : {
+
+    },
+    "CV Mapping - 0x01C0" : {
+
+    },
+    "CV Mapping - 0x02A0" : {
+
+    },
+    "CV Mapping - 0x07E0" : {
+
+    },
+    "CV Mapping - 0x08C0" : {
+
+    },
+    "CV Mapping - 0x09A0" : {
+
+    },
+    "CV Mapping - 0x0380" : {
+
+    },
+    "CV Mapping - 0x0460" : {
+
+    },
+    "CV Mapping - 0x0540" : {
+
+    },
+    "CV Mapping - 0x0620" : {
+
+    },
+    "CV Mapping - 0x0700" : {
+
+    },
     "CV7" : {
 
     },
@@ -2303,6 +2339,9 @@
 
     },
     "CV32" : {
+
+    },
+    "CVs and Default Values" : {
 
     },
     "Cyan" : {

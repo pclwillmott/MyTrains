@@ -494,10 +494,10 @@
             filePath = "MyTrains/_app/UserSettings.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "56"
-            endingLineNumber = "56"
-            landmarkName = "update()"
-            landmarkType = "7">
+            startingLineNumber = "62"
+            endingLineNumber = "62"
+            landmarkName = "UserSettings"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -656,7 +656,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "2865"
             endingLineNumber = "2865"
-            landmarkName = "capabilities"
+            landmarkName = "capabilityLookup"
             landmarkType = "24">
          </BreakpointContent>
       </BreakpointProxy>
@@ -688,7 +688,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "2921"
             endingLineNumber = "2921"
-            landmarkName = "capabilities"
+            landmarkName = "capabilityLookup"
             landmarkType = "24">
          </BreakpointContent>
       </BreakpointProxy>
@@ -704,7 +704,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "926"
             endingLineNumber = "926"
-            landmarkName = "capabilities"
+            landmarkName = "capabilityLookup"
             landmarkType = "24">
          </BreakpointContent>
       </BreakpointProxy>
@@ -736,7 +736,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "2053"
             endingLineNumber = "2053"
-            landmarkName = "capabilities"
+            landmarkName = "capabilityLookup"
             landmarkType = "24">
          </BreakpointContent>
       </BreakpointProxy>

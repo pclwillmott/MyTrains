@@ -14,7 +14,7 @@ public struct DecoderDefinition : Codable {
   var cvs : [CV]
   var defaultValues : [UInt8]
   var mapping : [Int]
-  var properties : [ProgrammerToolSettingsProperty]
+  var properties : Set<ProgrammerToolSettingsProperty>
 }
 
 public enum DecoderType : UInt64, Codable, CaseIterable {
@@ -96,7 +96,28 @@ public enum DecoderType : UInt64, Codable, CaseIterable {
   case lokPilot5MKL = 72 // "LokPilot 5 MKL" "5.10.166"
   case lokSound5LDCC = 73 // "LokSound 5 L DCC" "5.10.166"
   case lokSound5micro = 74 // "LokSound 5 micro" "5.10.166"
-  
+
+  case signalPilot = 75
+  case switchPilot3 = 76
+  case switchPilot3Plus = 77
+  case switchPilot3Servo = 78
+  case switchPilotV2_0 = 79
+  case switchPilotServoV2_0 = 80
+  case testCoachEHG388 = 81
+  case testCoachEHG388M4 = 82
+  case clubCarWgye = 83
+  case smokeUnitGauge0G = 84
+  case kM1SmokeUnit = 85
+  case esudigitalinteriorlight = 86
+  case scaleTrainsTenderLight = 87
+  case pullmanpanoramacarBEX = 88
+  case pullmanSilberling = 89
+  case pullmanBLSBt9 = 90
+  case mbwSilberling = 91
+  case bachmannMK2F = 92
+  case walthersML8 = 93
+  case zeitgeistModelszugspitzcar = 94
+
   // MARK: Constructors
   
   init?(esuProductId:UInt32) {
@@ -166,20 +187,30 @@ public enum DecoderType : UInt64, Codable, CaseIterable {
   }
   
   public var cvListPrefix : String {
-    return DecoderType.cvListPrefix[self]!
+    if let prefix = DecoderType.cvListPrefix[self] {
+      return prefix
+    }
+    return ""
   }
   
   public var definition : DecoderDefinition {
     
     var result = DecoderDefinition(decoderType: self, esuProductIds: [], cvs: [], defaultValues: [], mapping: [], properties: [])
     
-    let list = allCVlists[0]
-    let cvs = cvList(filename: list.filename)
-    
-    for cv in cvs {
-      result.cvs.append(cv.cv)
-      result.defaultValues.append(cv.defaultValue)
-      result.mapping.append(-1)
+    let lists = allCVlists
+
+    if lists.count > 0 {
+
+      let list = lists[0]
+
+      let cvs = cvList(filename: list.filename)
+      
+      for cv in cvs {
+        result.cvs.append(cv.cv)
+        result.defaultValues.append(cv.defaultValue)
+        result.mapping.append(-1)
+      }
+      
     }
     
     for (productId, decoderType) in DecoderType.esuProductIdLookup {
@@ -193,7 +224,7 @@ public enum DecoderType : UInt64, Codable, CaseIterable {
     for property in ProgrammerToolSettingsProperty.allCases {
       let requiredCapabilities = property.definition.requiredCapabilities
       if capabilities.intersection(requiredCapabilities) == requiredCapabilities {
-        result.properties.append(property)
+        result.properties.insert(property)
       }
     }
 
@@ -263,7 +294,7 @@ public enum DecoderType : UInt64, Codable, CaseIterable {
               if cvConstant.index > 255 && addESUDecoderInfoCDs {
                 
                 for cv : UInt16 in 261 ... 296 {
-                  if let cvConstant = CV(cv31: 0, cv32: 255, cv: cv, indexMethod: .cv3132, isHidden: true, isReadOnly: false) {
+                  if let cvConstant = CV(cv31: 0, cv32: 255, cv: cv, indexMethod: .cv3132) {
                     result.append((cvConstant, 0))
                   }
                   else {
@@ -460,6 +491,26 @@ public enum DecoderType : UInt64, Codable, CaseIterable {
     .lokPilot5microNext18DCC : "LokPilot 5 micro Next18 DCC",
     .lokSound5DCC : "LokSound 5 DCC",
     .lokSound5microKATO : "LokSound 5 micro KATO",
+    .signalPilot : "SignalPilot",
+    .switchPilot3 : "SwitchPilot 3",
+    .switchPilot3Plus : "SwitchPilot 3 Plus",
+    .switchPilot3Servo : "SwitchPilot 3 Servo",
+    .switchPilotV2_0 : "SwitchPilot V2.0",
+    .switchPilotServoV2_0 : "SwitchPilot Servo V2.0",
+    .testCoachEHG388 : "Test coach EGH388",
+    .testCoachEHG388M4 : "Test coach EGH388 M4",
+    .clubCarWgye : "Club car WGye",
+    .smokeUnitGauge0G : "Smoke Unit (Gauge 0, G)",
+    .kM1SmokeUnit : "KM1 Smoke Unit",
+    .esudigitalinteriorlight : "ESU digital interior light",
+    .scaleTrainsTenderLight : "Scale Trains Tender Light",
+    .pullmanpanoramacarBEX : "Pullman panorama car BEX",
+    .pullmanSilberling : "Pullman Silberling",
+    .pullmanBLSBt9 : "Pullman BLS Bt9",
+    .mbwSilberling : "MBW Silberling",
+    .bachmannMK2F : "Bachmann MK2F",
+    .walthersML8 : "Walthers ML8",
+    .zeitgeistModelszugspitzcar : "Zeitgeist Models zugspitz car",
   ]
 
   // MARK: Public Class Properties
@@ -589,33 +640,33 @@ public enum DecoderType : UInt64, Codable, CaseIterable {
     0x02000033 : lokPilotXLV3_0,
     0x0200002C : lokPilotFxV3_0,
     0x02000036 : lokPilotFxmicroV3_0,
-//    0x010000A7 : signalPilot,
-//    0x010000FE : signalPilot,
-//    0x020000C0 : switchPilot3,
-//    0x020000D4 : switchPilot3,
-//    0x020000C1 : switchPilot3Plus,
-//    0x020000D5 : switchPilot3Plus,
-//    0x020000C2 : switchPilot3Servo,
-//    0x020000D6 : switchPilot3Servo,
-//    0x02000058 : switchPilotV2_0,
-//    0x0200005A : switchPilotServoV2_0,
+    0x010000A7 : signalPilot,
+    0x010000FE : signalPilot,
+    0x020000C0 : switchPilot3,
+    0x020000D4 : switchPilot3,
+    0x020000C1 : switchPilot3Plus,
+    0x020000D5 : switchPilot3Plus,
+    0x020000C2 : switchPilot3Servo,
+    0x020000D6 : switchPilot3Servo,
+    0x02000058 : switchPilotV2_0,
+    0x0200005A : switchPilotServoV2_0,
     0x01000093 : essentialSoundUnit,
     0x010000CB : essentialSoundUnit,
     0x010000DF : essentialSoundUnit,
-//    0x02000062 : testCoachEHG388,
-//    0x02000076 : testCoachEHG388M4,
-//    0x02000083 : clubCarWgye,
-//    0x01000061 : smokeUnitGauge0G,
-//    0x02000045 : kM1SmokeUnit,
-//    0x01000064 : esudigitalinteriorlight,
-//    0x01000081 : scaleTrainsTenderLight,
-//    0x0100008F : pullmanpanoramacarBEX,
-//    0x010000A2 : pullmanSilberling,
-//    0x010000F4 : pullmanBLSBt9,
-//    0x01000090 : mbwSilberling,
-//    0x01000092 : bachmannMK2F,
-//    0x01000097 : walthersML8,
-//    0x010000A3 : zeitgeistModelszugspitzcar,
+    0x02000062 : testCoachEHG388,
+    0x02000076 : testCoachEHG388M4,
+    0x02000083 : clubCarWgye,
+    0x01000061 : smokeUnitGauge0G,
+    0x02000045 : kM1SmokeUnit,
+    0x01000064 : esudigitalinteriorlight,
+    0x01000081 : scaleTrainsTenderLight,
+    0x0100008F : pullmanpanoramacarBEX,
+    0x010000A2 : pullmanSilberling,
+    0x010000F4 : pullmanBLSBt9,
+    0x01000090 : mbwSilberling,
+    0x01000092 : bachmannMK2F,
+    0x01000097 : walthersML8,
+    0x010000A3 : zeitgeistModelszugspitzcar,
     
   ]
  

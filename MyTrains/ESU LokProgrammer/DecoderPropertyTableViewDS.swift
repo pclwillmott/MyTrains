@@ -31,36 +31,18 @@
 import Foundation
 import AppKit
 
+public protocol DecoderPropertyTableViewDSDelegate {
+  func propertySelectionChanged(property:ProgrammerToolSettingsProperty)
+  func requiredPropertiesChanged(properties:Set<ProgrammerToolSettingsProperty>)
+}
+
 public class DecoderPropertyTableViewDS : NSObject, NSTableViewDataSource, NSTableViewDelegate {
 
   // MARK: Public Properties
   
-  public var definition : DecoderDefinition? {
-    didSet {
-      supportedProperties = []
-      if let definition {
-        for property in definition.properties {
-          supportedProperties.insert(property)
-        }
-      }
-      modified = false
-    }
-  }
+  public var definition : DecoderDefinition?
   
-  public var modifiedProperties : [ProgrammerToolSettingsProperty] {
-    
-    var newProperties : [ProgrammerToolSettingsProperty] = []
-    
-    for property in properties {
-      if supportedProperties.contains(property) {
-        newProperties.append(property)
-      }
-    }
-    
-    return newProperties
-    
-  }
-  private var supportedProperties : Set<ProgrammerToolSettingsProperty> = []
+  public var delegate : DecoderPropertyTableViewDSDelegate?
   
   public var properties : [ProgrammerToolSettingsProperty] = []
   
@@ -98,7 +80,7 @@ public class DecoderPropertyTableViewDS : NSObject, NSTableViewDataSource, NSTab
     case "CheckBox":
       break
     case "Title":
-      text = "\(item.definition.title)"
+      text = "\(item.section.title)"
     case "Property":
       text = "\(item)"
     case "CV":
@@ -121,7 +103,7 @@ public class DecoderPropertyTableViewDS : NSObject, NSTableViewDataSource, NSTab
         textField.font = NSFont(name: "Menlo", size: 12)
       }
       else if let checkBox = cell.subviews[0] as? NSButton {
-        checkBox.state = supportedProperties.contains(item) ? .on : .off
+        checkBox.state = definition!.properties.contains(item) ? .on : .off
         checkBox.tag = row
         checkBox.target = self
         checkBox.action = #selector(checkBoxAction(_:))
@@ -133,28 +115,23 @@ public class DecoderPropertyTableViewDS : NSObject, NSTableViewDataSource, NSTab
     
   }
   
-  public var modified = false
-  
   @objc func checkBoxAction(_ sender:NSButton) {
+    guard definition != nil else {
+      return
+    }
     let property = properties[sender.tag]
     if sender.state == .on {
-      supportedProperties.insert(property)
+      definition!.properties.insert(property)
     }
     else {
-      supportedProperties.remove(property)
+      definition!.properties.remove(property)
     }
-    modified = true
+    delegate?.requiredPropertiesChanged(properties: definition!.properties)
   }
   
   public func tableViewSelectionDidChange(_ notification: Notification) {
-
     let tableView = notification.object as! NSTableView
-
-    if let identifier = tableView.identifier {
-      print("\(tableView.selectedRow)")
-    }
-
-
+    delegate?.propertySelectionChanged(property: properties[tableView.selectedRow])
   }
 
 }
