@@ -8057,7 +8057,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .enableSelectrixProtocol : (
-      title                : String(localized: "Selectrix"),
+      title                : String(localized: "Selectrix Protocol"),
       section              : .enabledProtocols,
       controlType          : .checkBox,
       encoding             : .boolBit,

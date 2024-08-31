@@ -192,12 +192,14 @@ public enum ESUPhysicalOutputMode : UInt8, CaseIterable {
 
     let hasESUCoupler : Set<ESUDecoderPhysicalOutput> = [
       .aux16,
+      .aux15,
       .aux7,
       .aux8,
     ]
 
     let hasExternalSmokeUnit : Set<ESUDecoderPhysicalOutput> = [
       .aux1,
+      .aux1_2,
     ]
     
     let hasPantograph : Set<ESUDecoderPhysicalOutput> = [
@@ -211,21 +213,32 @@ public enum ESUPhysicalOutputMode : UInt8, CaseIterable {
     
     let output = decoder.esuDecoderPhysicalOutput
     
+    let noESUCoupler : Set<DecoderType> = [
+      .lokSound5microDCCDirect,
+    ]
+    
+    let noServoPower : Set<DecoderType> = [
+      .lokSound5microDCCDirect,
+      .lokSound5microDCCDirectAtlasLegacy,
+      .lokSound5microDCCDirectAtlasS2,
+    ]
+    
     for item in ESUPhysicalOutputMode.allCases {
       var ok = true
       ok = ok && (item != .rocoCoupler || hasRocoCoupler.contains(output))
       ok = ok && (item != .externalControlledSmokeUnit || hasExternalControlledSmokeUnit.contains(output))
       ok = ok && (item != .servoOutput || hasServoOutput.contains(output))
-      ok = ok && (item != .servoOutputSteamEngineJohnsonBarControl || (hasServoOutputJohnson.contains(output) /* && decoder.decoderType.capabilities.contains(.broadway) */))
-      ok = ok && (item != .esuCoupler || hasESUCoupler.contains(output))
+      ok = ok && (item != .servoOutputSteamEngineJohnsonBarControl || hasServoOutputJohnson.contains(output))
+      ok = ok && (item != .esuCoupler || (hasESUCoupler.contains(output) && !noESUCoupler.contains(decoder.decoderType)))
       ok = ok && (item != .externalControlledSmokeUnit || hasExternalSmokeUnit.contains(output))
       ok = ok && (item != .pantograph || hasPantograph.contains(output))
+                  ok = ok && (item != .servoPower || !noServoPower.contains(decoder.decoderType))
       if ok {
         sorted.append(item.title(decoder: decoder))
       }
     }
     
-    sorted.sort {$0 < $1}
+//    sorted.sort {$0 < $1}
     
     comboBox.addItems(withObjectValues: sorted)
 

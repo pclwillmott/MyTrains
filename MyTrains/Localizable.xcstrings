@@ -7551,10 +7551,10 @@
     "Select the starting block for the route." : {
       "comment" : "This is used for a tooltip."
     },
-    "Selectrix" : {
+    "Selectrix Brake Sections" : {
 
     },
-    "Selectrix Brake Sections" : {
+    "Selectrix Protocol" : {
 
     },
     "Send Address via Broadcast on Channel 1" : {

@@ -68,6 +68,9 @@ class DecoderEditorVC : MyTrainsViewController, DecoderPropertyTableViewDSDelega
     productIdsTableView.delegate = productIdDataSource
     productIdDataSource.delegate = self
     
+    mappingsTableView.dataSource = mappingsDataSource
+    mappingsTableView.delegate = mappingsDataSource
+    
     DecoderType.populate(comboBox: cboDecoderType)
     
     DecoderEditorLoadType.populate(comboBox: cboLoadType)
@@ -112,6 +115,7 @@ class DecoderEditorVC : MyTrainsViewController, DecoderPropertyTableViewDSDelega
     userSettings?.tableView = propertiesTableView
     userSettings?.tableView2 = cvsTableView
     userSettings?.splitView = splitView
+    userSettings?.tableView3 = mappingsTableView
     
     txtInfo.font = NSFont(name: "Menlo", size: 12.0)
     
@@ -194,6 +198,8 @@ class DecoderEditorVC : MyTrainsViewController, DecoderPropertyTableViewDSDelega
   
   private let productIdDataSource = DecoderProductIdTableViewDS()
   
+  private let mappingsDataSource = DecoderMappingTableViewDS()
+  
   private var definition : DecoderDefinition?
   
   private var properties : [ProgrammerToolSettingsProperty] = []
@@ -210,16 +216,19 @@ class DecoderEditorVC : MyTrainsViewController, DecoderPropertyTableViewDSDelega
         cvDataSource.definition = definition
         propertyDataSource.definition = definition
         productIdDataSource.definition = definition
+        mappingsDataSource.definition = definition
       }
       else {
-        definition = DecoderDefinition(decoderType: decoderType, esuProductIds: [], cvs: [], defaultValues: [], mapping: [], properties: [])
+        definition = DecoderDefinition(decoderType: decoderType, firmwareVersion: [], esuProductIds: [], cvs: [], defaultValues: [], mapping: [:], properties: [])
         cvDataSource.definition = definition
         propertyDataSource.definition = definition
         productIdDataSource.definition = definition
+        mappingsDataSource.definition = definition
       }
       cvsTableView.reloadData()
       propertiesTableView.reloadData()
       productIdsTableView.reloadData()
+      mappingsTableView.reloadData()
       cboLoadType.isEnabled = true
       btnLoad.isEnabled = true
       
@@ -232,6 +241,7 @@ class DecoderEditorVC : MyTrainsViewController, DecoderPropertyTableViewDSDelega
   @IBOutlet weak var propertiesTableView: NSTableView!
   
   @IBOutlet weak var productIdsTableView: NSTableView!
+  
   
   
   func propertySelectionChanged(property:ProgrammerToolSettingsProperty) {
@@ -283,56 +293,45 @@ class DecoderEditorVC : MyTrainsViewController, DecoderPropertyTableViewDSDelega
     let dialog = NSOpenPanel();
     
     let fm = FileManager()
+
+    var path = userSettings?.string(forKey: "DecoderEditorLoadDirectory") ?? fm.homeDirectoryForCurrentUser.path
     
+    if !fm.fileExists(atPath: path) {
+      path = fm.homeDirectoryForCurrentUser.path
+    }
+
     dialog.showsResizeIndicator    = true
     dialog.showsHiddenFiles        = false
     dialog.canChooseDirectories    = true
     dialog.canCreateDirectories    = true
     dialog.allowsMultipleSelection = false
     dialog.allowedContentTypes     = [.text, .plainText, .utf8PlainText]
-    dialog.directoryURL            = fm.homeDirectoryForCurrentUser
+    dialog.directoryURL            = URL(string: path)
     
     if dialog.runModal() == NSApplication.ModalResponse.OK, let url = dialog.url, let loadType = DecoderEditorLoadType(title: cboLoadType.stringValue), let definition {
+      
+      userSettings?.set(dialog.directoryURL!.path, forKey: "DecoderEditorLoadDirectory")
       
       switch loadType {
       case .cvsAndDefaults:
         
         var cvs : [CV] = []
         var defaultValues : [UInt8] = []
-        var mapping : [Int] = []
         
         for cv in cvList(filename: url.path) {
           cvs.append(cv.cv)
           defaultValues.append(cv.defaultValue)
-          mapping.append(-1)
-          if !definition.cvs.isEmpty {
-            for index in 0 ..< definition.cvs.count {
-              if cv.cv == definition.cvs[index] {
-                mapping[mapping.count - 1] = definition.mapping[index]
-                break
-              }
-            }
-          }
         }
         
         self.definition?.cvs = cvs
         self.definition?.defaultValues = defaultValues
-        self.definition?.mapping = mapping
         
       default:
         
         for cv in cvList(filename: url.path) {
-          
-          if cv.defaultValue != 0, !definition.cvs.isEmpty {
-            
-            for index in 0 ..< definition.cvs.count {
-              if cv.cv == definition.cvs[index], definition.mapping[index] == -1 {
-                self.definition?.mapping[index] = loadType.rawValue + Int(cv.defaultValue) - 1
-              }
-            }
-            
+          if cv.defaultValue != 0 {
+            self.definition?.mapping[loadType.rawValue + Int(cv.defaultValue) - 1] = cv.cv
           }
-          
         }
         
       }
@@ -343,6 +342,9 @@ class DecoderEditorVC : MyTrainsViewController, DecoderPropertyTableViewDSDelega
       
       cvDataSource.definition = self.definition
       cvsTableView.reloadData()
+      
+      mappingsDataSource.definition = self.definition
+      mappingsTableView.reloadData()
       
     }
     
@@ -398,6 +400,7 @@ class DecoderEditorVC : MyTrainsViewController, DecoderPropertyTableViewDSDelega
     productIdsTableView.reloadData()
     
   }
+  @IBOutlet weak var mappingsTableView: NSTableView!
   
   @IBAction func btnRemoveAction(_ sender: NSButton) {
 

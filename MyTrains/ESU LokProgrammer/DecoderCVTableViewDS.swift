@@ -79,8 +79,6 @@ public class DecoderCVTableViewDS : NSObject, NSTableViewDataSource, NSTableView
       text = "\(item.cv)"
       case "Default":
       text = "\(definition.defaultValues[row])"
-      case "Map":
-      text = "\(definition.mapping[row] != -1 ? "\(definition.mapping[row])" : "")"
     default:
       break
     }
@@ -92,6 +90,11 @@ public class DecoderCVTableViewDS : NSObject, NSTableViewDataSource, NSTableView
           textField.stringValue = text
           textField.isEditable = isEditable
           textField.font = NSFont(name: "Menlo", size: 12)
+          textField.translatesAutoresizingMaskIntoConstraints = false
+          let constraints : [NSLayoutConstraint] = [
+            textField.centerYAnchor.constraint(equalTo: cell.centerYAnchor)
+          ]
+          NSLayoutConstraint.activate(constraints)
         }
         return cell
       }

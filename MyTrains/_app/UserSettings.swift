@@ -47,6 +47,12 @@ public class UserSettings {
     }
   }
 
+  public weak var tableView3 : NSTableView? {
+    didSet {
+      update()
+    }
+  }
+
   // MARK: Public Properties
   
   public weak var node : OpenLCBNodeVirtual? {
@@ -65,6 +71,8 @@ public class UserSettings {
     tableView?.autosaveName = key(forKey: "TABLE-VIEW7")
     tableView2?.autosaveTableColumns = true
     tableView2?.autosaveName = key(forKey: "TABLE-VIEW8")
+    tableView3?.autosaveTableColumns = true
+    tableView3?.autosaveName = key(forKey: "TABLE-VIEW9")
   }
   
   private func key(forKey:String? = nil) -> String {

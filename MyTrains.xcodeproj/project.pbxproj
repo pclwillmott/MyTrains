@@ -151,6 +151,8 @@
 		DA5714372C53AC2100FA91DA /* PTSettingsPropertyLayoutRule.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5714362C53AC2100FA91DA /* PTSettingsPropertyLayoutRule.swift */; };
 		DA5714392C54023200FA91DA /* Decoder Extension - Layout Rules.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5714382C54023200FA91DA /* Decoder Extension - Layout Rules.swift */; };
 		DA57A6E92A4496A1005C72B0 /* LocoNetLocomotiveState.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA57A6E82A4496A1005C72B0 /* LocoNetLocomotiveState.swift */; };
+		DA5874D42C83394100B9140B /* DecoderMappingTableViewDS.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5874D32C83394100B9140B /* DecoderMappingTableViewDS.swift */; };
+		DA5874D62C835B3000B9140B /* DecoderDefinition.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5874D52C835B3000B9140B /* DecoderDefinition.swift */; };
 		DA58F00D2A45AA3700D36E90 /* LocoNetFunctionConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA58F00C2A45AA3700D36E90 /* LocoNetFunctionConstants.swift */; };
 		DA58F0112A45AE8400D36E90 /* DCCDecoderType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA58F0102A45AE8400D36E90 /* DCCDecoderType.swift */; };
 		DA595E122B89084900ADF87B /* OpenLCBNodeVirtual - Messages - Simple Node Information Protocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA595E112B89084900ADF87B /* OpenLCBNodeVirtual - Messages - Simple Node Information Protocol.swift */; };
@@ -662,6 +664,8 @@
 		DA5714362C53AC2100FA91DA /* PTSettingsPropertyLayoutRule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSettingsPropertyLayoutRule.swift; sourceTree = "<group>"; };
 		DA5714382C54023200FA91DA /* Decoder Extension - Layout Rules.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Decoder Extension - Layout Rules.swift"; sourceTree = "<group>"; };
 		DA57A6E82A4496A1005C72B0 /* LocoNetLocomotiveState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocoNetLocomotiveState.swift; sourceTree = "<group>"; };
+		DA5874D32C83394100B9140B /* DecoderMappingTableViewDS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecoderMappingTableViewDS.swift; sourceTree = "<group>"; };
+		DA5874D52C835B3000B9140B /* DecoderDefinition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecoderDefinition.swift; sourceTree = "<group>"; };
 		DA58F00C2A45AA3700D36E90 /* LocoNetFunctionConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocoNetFunctionConstants.swift; sourceTree = "<group>"; };
 		DA58F0102A45AE8400D36E90 /* DCCDecoderType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DCCDecoderType.swift; sourceTree = "<group>"; };
 		DA595E112B89084900ADF87B /* OpenLCBNodeVirtual - Messages - Simple Node Information Protocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OpenLCBNodeVirtual - Messages - Simple Node Information Protocol.swift"; sourceTree = "<group>"; };
@@ -1762,6 +1766,7 @@
 				DA5714382C54023200FA91DA /* Decoder Extension - Layout Rules.swift */,
 				DA47E5402C3AB6DD00A1D803 /* DecoderDelegate.swift */,
 				DA8C2B182C385344001755AB /* DecoderType.swift */,
+				DA5874D52C835B3000B9140B /* DecoderDefinition.swift */,
 				DA73E5022C413360002AB3DF /* DecoderType - Capabilities.swift */,
 				DA73E5002C4042AA002AB3DF /* DecoderCapability.swift */,
 				DA97872B2C395D9C00765C83 /* CV.swift */,
@@ -1887,6 +1892,7 @@
 				DA5028902C80C71A00CCE0DA /* DecoderCVTableViewDS.swift */,
 				DA5028922C80D25400CCE0DA /* DecoderPropertyTableViewDS.swift */,
 				DA1320CE2C821B2100F603D6 /* DecoderProductIdTableViewDS.swift */,
+				DA5874D32C83394100B9140B /* DecoderMappingTableViewDS.swift */,
 			);
 			path = "ESU LokProgrammer";
 			sourceTree = "<group>";
@@ -2483,6 +2489,7 @@
 				DAFECB4B2C42DA3700B87CA8 /* SpeedStepMode.swift in Sources */,
 				DA5563D82B499C4600D8BF90 /* CDITextViewVC.swift in Sources */,
 				DA9C6A1E2A408F060069FED8 /* OpenLCBTractionControlInstructionType.swift in Sources */,
+				DA5874D62C835B3000B9140B /* DecoderDefinition.swift in Sources */,
 				DA595E162B891D1D00ADF87B /* OpenLCBNodeVirtual - Messages - Traction Protocol.swift in Sources */,
 				DA7A127429E2DCCD000DCE1C /* UIntExtensions.swift in Sources */,
 				DAAC7E8D2A792693001A424E /* OpenLCBProgrammerToolNode.swift in Sources */,
@@ -2617,6 +2624,7 @@
 				DA19A2642BD2D74F00296E15 /* NSTextFieldExtensions.swift in Sources */,
 				DA9CF8F9286089B000825FA9 /* NSButtonExtensions.swift in Sources */,
 				DA5BA7D92C4FEEE70051407C /* UnitTemperature.swift in Sources */,
+				DA5874D42C83394100B9140B /* DecoderMappingTableViewDS.swift in Sources */,
 				DA6BA5142C4ADC270028EDA0 /* SpeedTablePreset.swift in Sources */,
 				DA6E28DF285F827600772641 /* SwitchboardItemType.swift in Sources */,
 				DAFFB65F2B5D87C80035AC74 /* SelectLayoutVC.swift in Sources */,

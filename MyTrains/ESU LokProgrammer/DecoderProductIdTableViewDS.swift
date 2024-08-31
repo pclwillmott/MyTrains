@@ -90,6 +90,11 @@ public class DecoderProductIdTableViewDS : NSObject, NSTableViewDataSource, NSTa
         textField.isEditable = isEditable
         textField.font = NSFont(name: "Menlo", size: 12)
         textField.delegate = self
+        textField.translatesAutoresizingMaskIntoConstraints = false
+        let constraints : [NSLayoutConstraint] = [
+          textField.centerYAnchor.constraint(equalTo: cell.centerYAnchor)
+        ]
+        NSLayoutConstraint.activate(constraints)
       }
       return cell
     }

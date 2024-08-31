@@ -101,12 +101,22 @@ public class DecoderPropertyTableViewDS : NSObject, NSTableViewDataSource, NSTab
         textField.stringValue = text
         textField.isEditable = isEditable
         textField.font = NSFont(name: "Menlo", size: 12)
+        textField.translatesAutoresizingMaskIntoConstraints = false
+        let constraints : [NSLayoutConstraint] = [
+          textField.centerYAnchor.constraint(equalTo: cell.centerYAnchor)
+        ]
+        NSLayoutConstraint.activate(constraints)
       }
       else if let checkBox = cell.subviews[0] as? NSButton {
         checkBox.state = definition!.properties.contains(item) ? .on : .off
         checkBox.tag = row
         checkBox.target = self
         checkBox.action = #selector(checkBoxAction(_:))
+        checkBox.translatesAutoresizingMaskIntoConstraints = false
+        let constraints : [NSLayoutConstraint] = [
+          checkBox.centerYAnchor.constraint(equalTo: cell.centerYAnchor)
+        ]
+        NSLayoutConstraint.activate(constraints)
       }
       return cell
     }

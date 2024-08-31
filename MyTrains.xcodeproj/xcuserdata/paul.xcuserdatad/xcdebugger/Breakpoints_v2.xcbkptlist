@@ -494,10 +494,10 @@
             filePath = "MyTrains/_app/UserSettings.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "62"
-            endingLineNumber = "62"
-            landmarkName = "UserSettings"
-            landmarkType = "3">
+            startingLineNumber = "68"
+            endingLineNumber = "68"
+            landmarkName = "update()"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -786,6 +786,22 @@
             endingLineNumber = "267"
             landmarkName = "scanBuffer(port:)"
             landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "8BD73EED-6C6D-49C3-8514-A7E1F6B9E4AD"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MyTrains/OpenLCB/_tasks/Programmer Tool/Decoder/DecoderType.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "132"
+            endingLineNumber = "132"
+            landmarkName = "DecoderType"
+            landmarkType = "13">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

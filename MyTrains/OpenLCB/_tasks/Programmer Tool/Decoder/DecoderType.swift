@@ -8,115 +8,153 @@
 import Foundation
 import AppKit
 
-public struct DecoderDefinition : Codable {
-  var decoderType : DecoderType
-  var esuProductIds : [UInt32]
-  var cvs : [CV]
-  var defaultValues : [UInt8]
-  var mapping : [Int]
-  var properties : Set<ProgrammerToolSettingsProperty>
-}
-
 public enum DecoderType : UInt64, Codable, CaseIterable {
   
   // MARK: Enumeration
   
-  case nmra = 0
-  case lokSound5 = 1 // "LokSound 5" "5.10.166"
-  case lokSoundV4_0M4OEM = 2 // "LokSound V4.0 M4 OEM" "4.17.9249"
-  case lokPilotV4_0DCC = 3 // "LokPilot V4.0 DCC" "4.16.9247"
-  case lokPilotV3_0DCC = 4 // "LokPilot V3.0 DCC" "0.0.6607"
-  case lokPilot5Fx = 5 // "LokPilot 5 Fx" "5.10.166"
-  case lokSoundmicroV3_5 = 6 // "LokSound micro V3.5" "0.0.6093"
-  case lokSound5microDCC = 7 // "LokSound 5 micro DCC" "5.10.166"
-  case lokSoundXLV4_0 = 8 // "LokSound XL V4.0" "4.17.9249"
-  case lokPilot5Basic = 9 // "LokPilot 5 Basic" "5.1.6"
-  case lokPilot5MKLDCC = 10 // "LokPilot 5 MKL DCC" "5.10.166"
-  case lokPilotV4_0M4 = 11 // "LokPilot V4.0 M4" "4.16.9247"
-  case lokSound5microKATO = 12 // "LokSound 5 micro KATO" "5.10.166"
-  case lokPilotXLV4_0 = 13 // "LokPilot XL V4.0" "4.16.9247"
-  case lokSoundV4_0M4 = 14 // "LokSound V4.0 M4" "4.17.9249"
-  case lokSound5nanoDCCNext18 = 15 // "LokSound 5 nano DCC Next18" "5.10.166"
-  case lokPilotmicroV3_0DCC = 16 // "LokPilot micro V3.0 DCC" "0.0.6607"
-  case lokSound5XL = 17 // "LokSound 5 XL" "5.10.166"
-  case lokPilotmicroV4_0DCC = 18 // "LokPilot micro V4.0 DCC" "4.16.9247"
-  case lokPilot5microNext18DCC = 19 // "LokPilot 5 micro Next18 DCC" "5.10.166"
-  case lokPilot5FxmicroDCC = 20 // "LokPilot 5 Fx micro DCC" "5.10.166"
-  case lokPilotXLV3_0 = 21 // "LokPilot XL V3.0" "0.0.6607"
-  case lokPilotNanoStandardV1_0 = 22 // "LokPilot Nano Standard V1.0" "1.2.1415"
-  case lokPilot5FxmicroNext18DCC = 23 // "LokPilot 5 Fx micro Next18 DCC" "5.10.166"
-  case lokSound5Fx = 24 // "LokSound 5 Fx" "5.10.166"
-  case lokPilot5 = 25 // "LokPilot 5" "5.10.166"
-  case lokSoundSelectL = 26 // "LokSound Select L" "4.17.9249"
-  case lokPilot5FxDCC = 27 // "LokPilot 5 Fx DCC" "5.10.166"
-  case lokPilot5microDCC = 28 // "LokPilot 5 micro DCC" "5.10.166"
-  case lokPilot5L = 29 // "LokPilot 5 L" "5.10.166"
-  case lokSound5microDCCDirectAtlasLegacy = 30 // "LokSound 5 micro DCC Direct Atlas Legacy" "5.10.166"
-  case lokPilot5FxmicroNext18 = 31 // "LokPilot 5 Fx micro Next18" "5.10.166"
-  case lokPilotFxmicroV3_0 = 32 // "LokPilot Fx micro V3.0" "0.0.6607"
-  case lokSoundV3_5 = 33 // "LokSound V3.5" "0.0.6093"
-  case lokPilotBasic = 34 // "LokPilot Basic" "0.9.0"
-  case lokSoundSelectdirect_micro = 35 // "LokSound Select direct / micro" "4.17.9249"
-  case lokSound5microDCCDirect = 36 // "LokSound 5 micro DCC Direct" "5.10.166"
-  case lokSoundSelectOEM = 37 // "LokSound Select OEM" "4.17.9249"
-  case lokSoundXLV3_5 = 38 // "LokSound XL V3.5" "0.0.6093su"
-  case lokSound5MKL = 39 // "LokSound 5 MKL" "5.10.166"
-  case essentialSoundUnit = 40 // "Essential Sound Unit" "5.10.166"
-  case lokPilotFxNanoV1_0 = 41 // "LokPilot Fx Nano V1.0" "1.2.1415"
-  case lokPilotV3_0OEM = 42 // "LokPilot V3.0 OEM" "0.0.5973"
-  case lokSoundmicroV4_0 = 43 // "LokSound micro V4.0" "4.17.9249"
-  case lokSoundLV4_0 = 44 // "LokSound L V4.0" "4.17.9249"
-  case lokSound5L = 45 // "LokSound 5 L" "5.10.166"
-  case lokPilot5Fxmicro = 46 // "LokPilot 5 Fx micro" "5.10.166"
-  case lokPilot5microDCCDirect = 47 // "LokPilot 5 micro DCC Direct" "5.10.166"
-  case lokPilotFxV3_0 = 48 // "LokPilot Fx V3.0" "0.0.6442"
-  case lokSound5DCC = 49 // "LokSound 5 DCC" "5.10.166"
-  case lokPilotV4_0 = 50 // "LokPilot V4.0" "4.16.9247"
-  case lokSound5nanoDCC = 51 // "LokSound 5 nano DCC" "5.10.166"
-  case lokPilotmicroV3_0 = 52 // "LokPilot micro V3.0" "0.0.6607"
-  case lokPilotFxV4_0 = 53 // "LokPilot Fx V4.0" "4.16.9247"
-  case lokPilot5LDCC = 54 // "LokPilot 5 L DCC" "5.10.166"
-  case lokPilot5micro = 55 // "LokPilot 5 micro" "5.10.166"
-  case lokPilotV3_0 = 56 // "LokPilot V3.0" "0.0.6607"
-  case lokSound5FxDCC = 57 // "LokSound 5 Fx DCC" "5.10.166"
-  case lokPilotV4_0DCCPX = 58 // "LokPilot V4.0 DCC PX" "4.16.9247"
-  case lokSoundV3_0M4 = 59 // "LokSound V3.0 M4" "0.0.6354"
-  case lokPilotmicroV4_0 = 60 // "LokPilot micro V4.0" "4.16.9247"
-  case lokPilot5DCC = 61 // "LokPilot 5 DCC" "5.10.166"
-  case lokPilotMicroSlideInV4_0DCC = 62 // "LokPilot Micro SlideIn V4.0 DCC" "4.16.9247"
-  case lokPilot5nanoDCC = 63 // "LokPilot 5 nano DCC" "5.10.166"
-  case lokSoundV4_0 = 64 // "LokSound V4.0" "4.17.9249"
-  case lokPilotV4_0M4MKL = 65 // "LokPilot V4.0 M4 MKL" "4.16.9247"
-  case lokPilotV3_0M4 = 66 // "LokPilot V3.0 M4" "0.0.6445"
-  case lokPilotBasicLA = 67 // "LokPilot Basic" "0.9.0)"
-  case lokSound5microDCCDirectAtlasS2 = 68 // "LokSound 5 micro DCC Direct Atlas S2" "5.10.166"
-  case lokPilot5microNext18 = 69 // "LokPilot 5 micro Next18" "5.10.166"
-  case lokSoundSelect = 70 // "LokSound Select" "4.17.9249"
-  case lokPilotStandardV1_0 = 71 // "LokPilot Standard V1.0" "1.2.1415"
-  case lokPilot5MKL = 72 // "LokPilot 5 MKL" "5.10.166"
-  case lokSound5LDCC = 73 // "LokSound 5 L DCC" "5.10.166"
-  case lokSound5micro = 74 // "LokSound 5 micro" "5.10.166"
+  // ESU LokSound V5
+  
+  case lokSound5                          = 1  // "LokSound 5"
+  case lokSound5DCC                       = 49 // "LokSound 5 DCC"
+  case lokSound5micro                     = 74 // "LokSound 5 micro"
+  case lokSound5microDCC                  = 7  // "LokSound 5 micro DCC"
+  case lokSound5microDCCDirect            = 36 // "LokSound 5 micro DCC Direct"
+  case lokSound5microDCCDirectAtlasLegacy = 30 // "LokSound 5 micro DCC Direct Atlas Legacy"
+  case lokSound5microDCCDirectAtlasS2     = 68 // "LokSound 5 micro DCC Direct Atlas S2"
+  case lokSound5nanoDCC                   = 51 // "LokSound 5 nano DCC"
+  case lokSound5nanoDCCNext18             = 15 // "LokSound 5 nano DCC Next18"
+  case lokSound5L                         = 45 // "LokSound 5 L"
+  case lokSound5LDCC                      = 73 // "LokSound 5 L DCC"
+  case lokSound5XL                        = 17 // "LokSound 5 XL"
+  case lokSound5Fx                        = 24 // "LokSound 5 Fx"
+  case lokSound5FxDCC                     = 57 // "LokSound 5 Fx DCC"
+  case lokSound5MKL                       = 39 // "LokSound 5 MKL"
+  case lokSound5microKATO                 = 12 // "LokSound 5 micro KATO"
 
-  case signalPilot = 75
-  case switchPilot3 = 76
-  case switchPilot3Plus = 77
-  case switchPilot3Servo = 78
-  case switchPilotV2_0 = 79
-  case switchPilotServoV2_0 = 80
-  case testCoachEHG388 = 81
-  case testCoachEHG388M4 = 82
-  case clubCarWgye = 83
-  case smokeUnitGauge0G = 84
-  case kM1SmokeUnit = 85
-  case esudigitalinteriorlight = 86
-  case scaleTrainsTenderLight = 87
-  case pullmanpanoramacarBEX = 88
-  case pullmanSilberling = 89
-  case pullmanBLSBt9 = 90
-  case mbwSilberling = 91
-  case bachmannMK2F = 92
-  case walthersML8 = 93
-  case zeitgeistModelszugspitzcar = 94
+  // ESU LokSound V4
+
+  case lokSoundV4_0                       = 64 // "LokSound V4.0"
+  case lokSoundmicroV4_0                  = 43 // "LokSound micro V4.0"
+  case lokSoundXLV4_0                     = 8  // "LokSound XL V4.0"
+  case lokSoundV4_0M4                     = 14 // "LokSound V4.0 M4"
+  case lokSoundV4_0M4OEM                  = 2  // "LokSound V4.0 M4 OEM"
+  case lokSoundLV4_0                      = 44 // "LokSound L V4.0"
+
+  // ESU LokSound Select
+  
+  case lokSoundSelect                     = 70 // "LokSound Select"
+  case lokSoundSelectdirect_micro         = 35 // "LokSound Select direct / micro"
+  case lokSoundSelectOEM                  = 37 // "LokSound Select OEM"
+  case lokSoundSelectL                    = 26 // "LokSound Select L"
+
+  // ESU LokSound V3
+
+  case lokSoundV3_5                       = 33 // "LokSound V3.5"
+  case lokSoundXLV3_5                     = 38 // "LokSound XL V3.5"
+  case lokSoundV3_0M4                     = 59 // "LokSound V3.0 M4"
+  case lokSoundmicroV3_5                  = 6  // "LokSound micro V3.5"
+
+  // ESU LokPilot V5
+  
+  case lokPilot5                          = 25 // "LokPilot 5"
+  case lokPilot5DCC                       = 61 // "LokPilot 5 DCC"
+  case lokPilot5micro                     = 55 // "LokPilot 5 micro"
+  case lokPilot5microDCC                  = 28 // "LokPilot 5 micro DCC"
+  case lokPilot5microDCCDirect            = 47 // "LokPilot 5 micro DCC Direct"
+  case lokPilot5microNext18               = 69 // "LokPilot 5 micro Next18"
+  case lokPilot5microNext18DCC            = 19 // "LokPilot 5 micro Next18 DCC"
+  case lokPilot5nanoDCC                   = 63 // "LokPilot 5 nano DCC"
+  case lokPilot5L                         = 29 // "LokPilot 5 L"
+  case lokPilot5LDCC                      = 54 // "LokPilot 5 L DCC"
+  case lokPilot5Fx                        = 5  // "LokPilot 5 Fx"
+  case lokPilot5FxDCC                     = 27 // "LokPilot 5 Fx DCC"
+  case lokPilot5Fxmicro                   = 46 // "LokPilot 5 Fx micro"
+  case lokPilot5FxmicroDCC                = 20 // "LokPilot 5 Fx micro DCC"
+  case lokPilot5FxmicroNext18             = 31 // "LokPilot 5 Fx micro Next18"
+  case lokPilot5FxmicroNext18DCC          = 23 // "LokPilot 5 Fx micro Next18 DCC"
+  case lokPilot5MKL                       = 72 // "LokPilot 5 MKL"
+  case lokPilot5MKLDCC                    = 10 // "LokPilot 5 MKL DCC"
+  case lokPilot5Basic                     = 9  // "LokPilot 5 Basic"
+
+  // ESU LokPilot V4
+  
+  case lokPilotV4_0                       = 50 // "LokPilot V4.0"
+  case lokPilotV4_0DCC                    = 3  // "LokPilot V4.0 DCC"
+  case lokPilotV4_0DCCPX                  = 58 // "LokPilot V4.0 DCC PX"
+  case lokPilotmicroV4_0                  = 60 // "LokPilot micro V4.0"
+  case lokPilotmicroV4_0DCC               = 18 // "LokPilot micro V4.0 DCC"
+  case lokPilotV4_0M4                     = 11 // "LokPilot V4.0 M4"
+  case lokPilotXLV4_0                     = 13 // "LokPilot XL V4.0"
+  case lokPilotFxV4_0                     = 53 // "LokPilot Fx V4.0"
+  case lokPilotV4_0M4MKL                  = 65 // "LokPilot V4.0 M4 MKL"
+  case lokPilotMicroSlideInV4_0DCC        = 62 // "LokPilot Micro SlideIn V4.0 DCC"
+
+  // ESU LokPilot Standard
+  
+  case lokPilotStandardV1_0               = 71 // "LokPilot Standard V1.0"
+  case lokPilotNanoStandardV1_0           = 22 // "LokPilot Nano Standard V1.0"
+  case lokPilotFxNanoV1_0                 = 41 // "LokPilot Fx Nano V1.0"
+
+  // ESU LokPilot V3
+
+  case lokPilotV3_0                       = 56 // "LokPilot V3.0"
+  case lokPilotV3_0DCC                    = 4  // "LokPilot V3.0 DCC"
+  case lokPilotV3_0M4                     = 66 // "LokPilot V3.0 M4"
+  case lokPilotV3_0OEM                    = 42 // "LokPilot V3.0 OEM"
+  case lokPilotFxmicroV3_0                = 32 // "LokPilot Fx micro V3.0"
+  case lokPilotmicroV3_0DCC               = 16 // "LokPilot micro V3.0 DCC"
+  case lokPilotXLV3_0                     = 21 // "LokPilot XL V3.0"
+  case lokPilotFxV3_0                     = 48 // "LokPilot Fx V3.0"
+  case lokPilotmicroV3_0                  = 52 // "LokPilot micro V3.0"
+
+  // ESU LokPilot Basic
+  
+  case lokPilotBasic                      = 34 // "LokPilot Basic"
+  case lokPilotBasicLA                    = 67 // "LokPilot Basic (LA)"
+
+  // ESU SignalPilot
+
+  case signalPilot                        = 75
+
+  // ESU SwitchPilot V3.0
+
+  case switchPilot3                       = 76
+  case switchPilot3Plus                   = 77
+  case switchPilot3Servo                  = 78
+
+  // ESU SwitchPilot V2.0
+  
+  case switchPilotV2_0                    = 79
+  case switchPilotServoV2_0               = 80
+
+  // ESU SwitchPilot
+  
+  case switchPilot                        = 95
+  case switchPilotServo                   = 96
+  case switchPilotServoMA                 = 97
+  case switchPilotServo2013               = 98
+  
+  // ESU Miscellaneous
+  
+  case essentialSoundUnit                 = 40 // "Essential Sound Unit"
+  case testCoachEHG388                    = 81
+  case testCoachEHG388M4                  = 82
+  case clubCarWgye                        = 83
+  case smokeUnitGauge0G                   = 84
+  case kM1SmokeUnit                       = 85
+  case esudigitalinteriorlight            = 86
+  case scaleTrainsTenderLight             = 87
+  case pullmanpanoramacarBEX              = 88
+  case pullmanSilberling                  = 89
+  case pullmanBLSBt9                      = 90
+  case mbwSilberling                      = 91
+  case bachmannMK2F                       = 92
+  case walthersML8                        = 93
+  case zeitgeistModelszugspitzcar         = 94
+
+  // NMRA Generic
+  
+  case nmra                               = 0
 
   // MARK: Constructors
   
@@ -195,7 +233,7 @@ public enum DecoderType : UInt64, Codable, CaseIterable {
   
   public var definition : DecoderDefinition {
     
-    var result = DecoderDefinition(decoderType: self, esuProductIds: [], cvs: [], defaultValues: [], mapping: [], properties: [])
+    var result = DecoderDefinition(decoderType: self, firmwareVersion: [], esuProductIds: [], cvs: [], defaultValues: [], mapping: [:], properties: [])
     
     let lists = allCVlists
 
@@ -208,7 +246,6 @@ public enum DecoderType : UInt64, Codable, CaseIterable {
       for cv in cvs {
         result.cvs.append(cv.cv)
         result.defaultValues.append(cv.defaultValue)
-        result.mapping.append(-1)
       }
       
     }
@@ -416,6 +453,10 @@ public enum DecoderType : UInt64, Codable, CaseIterable {
   ]
 
   private static let titles : [DecoderType: String] = [
+    .switchPilot : "SwitchPilot",
+    .switchPilotServo : "SwitchPilot Servo",
+    .switchPilotServoMA : "SwitchPilot Servo (MA)",
+    .switchPilotServo2013 : "SwitchPilot Servo (2013)",
     .nmra : "NMRA Standard Decoder",
     .lokPilotV4_0DCCPX : "LokPilot V4.0 DCC PX",
     .lokPilot5L : "LokPilot 5 L",
