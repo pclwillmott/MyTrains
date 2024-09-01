@@ -128,16 +128,25 @@ class ESUSpeedTable: NSView {
   
   private func setValue(speedTableIndex:Int, value:UInt8) {
   
-    values[speedTableIndex - 1] = value
+    var newValue = value
+    
+    if speedTableIndex == 1 {
+      newValue = 1
+    }
+    else if speedTableIndex == 28 {
+      newValue = 255
+    }
+    
+    values[speedTableIndex - 1] = newValue
     
     if speedTableIndex > 2 {
       for index in 2 ... speedTableIndex - 1 {
-        values[index - 1] = min(values[index - 1], value)
+        values[index - 1] = min(values[index - 1], newValue)
       }
     }
     if speedTableIndex < 27 {
       for index in speedTableIndex + 1 ... 27 {
-        values[index - 1] = max(values[index - 1], value)
+        values[index - 1] = max(values[index - 1], newValue)
       }
     }
 

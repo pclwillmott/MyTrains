@@ -322,7 +322,7 @@ extension ProgrammerToolSettingsProperty {
     // Locomotive Address
 
     .locomotiveAddressType : (
-      title                : String(localized: "Locomotive Address Type"),
+      title                : String(localized: "Locomotive address type"),
       section              : .locomotiveAddress,
       controlType          : .comboBox,
       encoding             : .locomotiveAddressType,
@@ -341,7 +341,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .locomotiveAddressShort : (
-      title                : String(localized: "Locomotive Address"),
+      title                : String(localized: "Locomotive address"),
       section              : .locomotiveAddress,
       controlType          : .textField,
       encoding             : .byte,
@@ -360,7 +360,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .locomotiveAddressLong : (
-      title                : String(localized: "Locomotive Address"),
+      title                : String(localized: "Locomotive address"),
       section              : .locomotiveAddress,
       controlType          : .textField,
       encoding             : .extendedAddress,
@@ -379,7 +379,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .marklinConsecutiveAddresses : (
-      title                : String(localized: "Additional Addresses"),
+      title                : String(localized: "Additional addresses"),
       section              : .locomotiveAddress,
       controlType          : .comboBox,
       encoding             : .esuMarklinConsecutiveAddresses,
@@ -438,7 +438,7 @@ extension ProgrammerToolSettingsProperty {
     // DCC Consist Address
 
     .enableDCCConsistAddress : (
-      title                : String(localized: "Enable DCC Consist Address"),
+      title                : String(localized: "Enable DCC consist address"),
       section              : .dccConsistAddress,
       controlType          : .checkBox,
       encoding             : .boolNZ,
@@ -457,7 +457,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .consistAddress : (
-      title                : String(localized: "Address for Consist Operation"),
+      title                : String(localized: "Address for consist operation"),
       section              : .dccConsistAddress,
       controlType          : .textField,
       encoding             : .byte,
@@ -476,7 +476,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .consistReverseDirection : (
-      title                : String(localized: "Reverse Direction"),
+      title                : String(localized: "Reverse direction"),
       section              : .dccConsistAddress,
       controlType          : .checkBox,
       encoding             : .boolBit,
@@ -560,7 +560,7 @@ extension ProgrammerToolSettingsProperty {
     // AC Analog Mode
 
     .enableACAnalogMode : (
-      title                : String(localized: "Enable AC Analog Mode"),
+      title                : String(localized: "Enable AC analog mode"),
       section              : .acAnalogMode,
       controlType          : .checkBox,
       encoding             : .analogModeEnable,
@@ -579,7 +579,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .acAnalogModeStartVoltage : (
-      title                : String(localized: "Start Voltage (minimum speed)"),
+      title                : String(localized: "Start voltage (minimum speed)"),
       section              : .acAnalogMode,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -598,7 +598,7 @@ extension ProgrammerToolSettingsProperty {
     ),
     
     .acAnalogModeStartVoltageLok3 : (
-      title                : String(localized: "Start Voltage (minimum speed)"),
+      title                : String(localized: "Start voltage (minimum speed)"),
       section              : .acAnalogMode,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -617,7 +617,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .acAnalogModeMaximumSpeedVoltage : (
-      title                : String(localized: "Maximum Speed Voltage"),
+      title                : String(localized: "Maximum speed voltage"),
       section              : .acAnalogMode,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -636,7 +636,7 @@ extension ProgrammerToolSettingsProperty {
     ),
     
     .acAnalogModeMaximumSpeedVoltageLok3 : (
-      title                : String(localized: "Maximum Speed Voltage"),
+      title                : String(localized: "Maximum speed voltage"),
       section              : .acAnalogMode,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -657,7 +657,7 @@ extension ProgrammerToolSettingsProperty {
     // DC Analog Mode
 
     .enableDCAnalogMode : (
-      title                : String(localized: "Enable DC Analog Mode"),
+      title                : String(localized: "Enable DC analog mode"),
       section              : .dcAnalogMode,
       controlType          : .checkBox,
       encoding             : .analogModeEnable,
@@ -676,7 +676,7 @@ extension ProgrammerToolSettingsProperty {
     ),
     
     .enableDCAnalogModeSimple : (
-      title                : String(localized: "Enable DC Analog Mode"),
+      title                : String(localized: "Enable DC analog mode"),
       section              : .dcAnalogMode,
       controlType          : .checkBox,
       encoding             : .boolBit,
@@ -695,7 +695,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .dcAnalogModeStartVoltage : (
-      title                : String(localized: "Start Voltage (minimum speed)"),
+      title                : String(localized: "Start voltage (minimum speed)"),
       section              : .dcAnalogMode,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -714,7 +714,7 @@ extension ProgrammerToolSettingsProperty {
     ),
     
       .dcAnalogModeStartVoltageLok3 : (
-        title                : String(localized: "Start Voltage (minimum speed)"),
+        title                : String(localized: "Start voltage (minimum speed)"),
         section              : .dcAnalogMode,
         controlType          : .textFieldWithSlider,
         encoding             : .byte,
@@ -733,7 +733,7 @@ extension ProgrammerToolSettingsProperty {
       ),
 
     .dcAnalogModeMaximumSpeedVoltage : (
-      title                : String(localized: "Maximum Speed Voltage"),
+      title                : String(localized: "Maximum speed voltage"),
       section              : .dcAnalogMode,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -752,7 +752,7 @@ extension ProgrammerToolSettingsProperty {
     ),
     
     .dcAnalogModeMaximumSpeedVoltageLok3 : (
-      title                : String(localized: "Maximum Speed Voltage"),
+      title                : String(localized: "Maximum speed voltage"),
       section              : .dcAnalogMode,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -794,7 +794,7 @@ extension ProgrammerToolSettingsProperty {
     // Sound Control Behaviour
 
     .ignoreAccelerationDecelerationInSoundSchedule : (
-      title                : String(localized: "Ignore Acceleration and Deceleration in the Sound Schedule"),
+      title                : String(localized: "Ignore acceleration and deceleration in the sound schedule"),
       section              : .soundControlBehaviour,
       controlType          : .checkBox,
       encoding             : .boolBit,
@@ -855,7 +855,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .analogMotorHysteresisVoltage : (
-      title                : String(localized: "Motor Hysteresis Voltage"),
+      title                : String(localized: "Motor hysteresis voltage"),
       section              : .analogVoltageHysteresis,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -874,7 +874,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .analogFunctionDifferenceVoltage : (
-      title                : String(localized: "Function Difference Voltage"),
+      title                : String(localized: "Function difference voltage"),
       section              : .analogVoltageHysteresis,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -895,7 +895,7 @@ extension ProgrammerToolSettingsProperty {
     // Analog Mode PWM
     
     .disableMotorPWM : (
-      title                : String(localized: "Disable Motor PWM"),
+      title                : String(localized: "Disable motor PWM"),
       section              : .analogModePWM,
       controlType          : .checkBox,
       encoding             : .boolBit,
@@ -914,7 +914,7 @@ extension ProgrammerToolSettingsProperty {
     ),
     
     .disableFunctionOutputPWM : (
-      title                : String(localized: "Disable Function Output PWM (always maximum brightness)"),
+      title                : String(localized: "Disable function output PWM (always maximum brightness)"),
       section              : .analogModePWM,
       controlType          : .checkBox,
       encoding             : .boolBit,
@@ -1011,9 +1011,28 @@ extension ProgrammerToolSettingsProperty {
       infoFormat           : nil,
       requiredCapabilities : [.abcBrakeSections]
     ),
+    
+    .voltageDifferenceIndicatingABCBrakeSection32 : (
+      title                : String(localized: "Voltage difference indicating an ABC brake section"),
+      section              : .abcBrakeSections,
+      controlType          : .textFieldWithSlider,
+      encoding             : .byte,
+      cvIndexingMethod     : .standard,
+      cv                   : [.cv_000_000_134],
+      mask                 : [0xff],
+      shift                : [0],
+      minValue             : 4.0,
+      maxValue             : 32.0,
+      trueDefaultValue     : nil,
+      infoType             : .none,
+      infoFactor           : nil,
+      infoMaxDecimalPlaces : nil,
+      infoFormat           : nil,
+      requiredCapabilities : [.abcBrakeSections]
+    ),
 
     .abcReducedSpeed : (
-      title                : String(localized: "ABC Reduced Speed"),
+      title                : String(localized: "ABC reduced speed"),
       section              : .abcBrakeSections,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -1032,7 +1051,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .enableABCShuttleTrain : (
-      title                : String(localized: "Enable ABC Shuttle Train"),
+      title                : String(localized: "Enable ABC shuttle train"),
       section              : .abcBrakeSections,
       controlType          : .checkBox,
       encoding             : .boolNZ,
@@ -1072,7 +1091,7 @@ extension ProgrammerToolSettingsProperty {
     // HLU Sections
     
     .allowMarklinBrakeSections : (
-      title                : String(localized: "Allow Märklin Brake Sections"),
+      title                : String(localized: "Allow Märklin brake sections"),
       section              : .allowedBrakeSections,
       controlType          : .checkBox,
       encoding             : .boolBit,
@@ -1091,7 +1110,7 @@ extension ProgrammerToolSettingsProperty {
     ),
     
     .allowZIMOBrakeSections : (
-      title                : String(localized: "Allow ZIMO (HLU) Brake Sections"),
+      title                : String(localized: "Allow ZIMO (HLU) brake sections"),
       section              : .allowedBrakeSections,
       controlType          : .checkBox,
       encoding             : .boolBit,
@@ -1110,7 +1129,7 @@ extension ProgrammerToolSettingsProperty {
     ),
     
     .allowLenzBrakeSections : (
-      title                : String(localized: "Allow Lenz Brake Sections"),
+      title                : String(localized: "Allow Lenz brake sections"),
       section              : .allowedBrakeSections,
       controlType          : .checkBox,
       encoding             : .boolBit,
@@ -1129,7 +1148,7 @@ extension ProgrammerToolSettingsProperty {
     ),
     
     .allowLenzBrakeSectionsB : (
-      title                : String(localized: "Allow Lenz Brake Sections"),
+      title                : String(localized: "Allow Lenz brake sections"),
       section              : .allowedBrakeSections,
       controlType          : .checkBox,
       encoding             : .boolBit,
@@ -1148,7 +1167,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .allowTrixBrakeSections : (
-      title                : String(localized: "Allow Trix Brake Sections"),
+      title                : String(localized: "Allow Trix brake sections"),
       section              : .allowedBrakeSections,
       controlType          : .checkBox,
       encoding             : .boolBit,
@@ -1167,7 +1186,7 @@ extension ProgrammerToolSettingsProperty {
     ),
     
     .hluAllowZIMO : (
-      title                : String(localized: "Allow ZIMO (HLU) Brake Sections"),
+      title                : String(localized: "Allow ZIMO (HLU) brake sections"),
       section              : .hluSettings,
       controlType          : .checkBox,
       encoding             : .boolBit,
@@ -1186,7 +1205,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .hluSendZIMOZACKSignals : (
-      title                : String(localized: "Send ZIMO ZACK Signals"),
+      title                : String(localized: "Send ZIMO ZACK signals"),
       section              : .hluSettings,
       controlType          : .checkBox,
       encoding             : .boolBit,
@@ -1205,7 +1224,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .hluSpeedLimit1 : (
-      title                : String(localized: "HLU Speed Limit 1"),
+      title                : String(localized: "HLU speed limit 1"),
       section              : .hluSettings,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -1224,7 +1243,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .hluSpeedLimit2 : (
-      title                : String(localized: "HLU Speed Limit 2 (Ultra Low)"),
+      title                : String(localized: "HLU speed limit 2 (ultra Low)"),
       section              : .hluSettings,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -1243,7 +1262,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .hluSpeedLimit3 : (
-      title                : String(localized: "HLU Speed Limit 3"),
+      title                : String(localized: "HLU speed limit 3"),
       section              : .hluSettings,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -1262,7 +1281,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .hluSpeedLimit4 : (
-      title                : String(localized: "HLU Speed Limit 4 (Low Speed)"),
+      title                : String(localized: "HLU speed limit 4 (low speed)"),
       section              : .hluSettings,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -1281,7 +1300,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .hluSpeedLimit5 : (
-      title                : String(localized: "HLU Speed Limit 5"),
+      title                : String(localized: "HLU speed limit 5"),
       section              : .hluSettings,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -1302,7 +1321,7 @@ extension ProgrammerToolSettingsProperty {
     // Auto Stop in presence of DC Polarity
 
     .brakeOnForwardPolarity : (
-      title                : String(localized: "Brake on Forward DC Polarity"),
+      title                : String(localized: "Brake on forward DC polarity"),
       section              : .autoStopInPresenceOfDCPolarity,
       controlType          : .checkBox,
       encoding             : .boolBit,
@@ -1321,7 +1340,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .brakeOnReversePolarity : (
-      title                : String(localized: "Brake on Reverse DC Polarity"),
+      title                : String(localized: "Brake on reverse DC polarity"),
       section              : .autoStopInPresenceOfDCPolarity,
       controlType          : .checkBox,
       encoding             : .boolBit,
@@ -1342,7 +1361,7 @@ extension ProgrammerToolSettingsProperty {
     // Selectrix Brake Sections
 
     .selectrixBrakeOnForwardPolarity : (
-      title                : String(localized: "Brake on Forward Polarity of Brake Diode"),
+      title                : String(localized: "Brake on forward polarity of brake diode"),
       section              : .selectrixBrakeSections,
       controlType          : .checkBox,
       encoding             : .boolBit,
@@ -1361,7 +1380,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .selectrixBrakeOnReversePolarity : (
-      title                : String(localized: "Brake on Reverse Polarity of Brake Diode"),
+      title                : String(localized: "Brake on reverse polarity of brake diode"),
       section              : .selectrixBrakeSections,
       controlType          : .checkBox,
       encoding             : .boolBit,
@@ -1382,7 +1401,7 @@ extension ProgrammerToolSettingsProperty {
     // Constant Brake Distance
 
     .enableConstantBrakeDistance : (
-      title                : String(localized: "Enable Constant Brake Distance"),
+      title                : String(localized: "Enable constant brake distance"),
       section              : .constantBrakeDistance,
       controlType          : .checkBox,
       encoding             : .boolNZ,
@@ -1401,7 +1420,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .brakeDistanceLength : (
-      title                : String(localized: "Brake Distance Length"),
+      title                : String(localized: "Brake distance length"),
       section              : .constantBrakeDistance,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -1439,7 +1458,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .differentBrakeDistanceBackwards : (
-      title                : String(localized: "Different Brake Distance While Driving Backwards"),
+      title                : String(localized: "Different brake distance while driving backwards"),
       section              : .constantBrakeDistance,
       controlType          : .checkBox,
       encoding             : .boolNZ,
@@ -1458,7 +1477,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .brakeDistanceLengthBackwards : (
-      title                : String(localized: "Brake Distance Length"),
+      title                : String(localized: "Brake distance length"),
       section              : .constantBrakeDistance,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -1477,7 +1496,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .driveUntilLocomotiveStopsInSpecifiedPeriod : (
-      title                : String(localized: "Drive Until Locomotive Stops in Specified Period"),
+      title                : String(localized: "Drive until locomotive stops in specified period"),
       section              : .constantBrakeDistance,
       controlType          : .checkBox,
       encoding             : .boolNZ,
@@ -1496,7 +1515,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .stoppingPeriod : (
-      title                : String(localized: "Stopping Period"),
+      title                : String(localized: "Stopping period"),
       section              : .constantBrakeDistance,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -1515,7 +1534,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .constantBrakeDistanceOnSpeedStep0 : (
-      title                : String(localized: "Constant Brake Distance on Speed Step 0"),
+      title                : String(localized: "Constant brake distance on speed step 0"),
       section              : .constantBrakeDistance,
       controlType          : .checkBox,
       encoding             : .boolBit,
@@ -1536,7 +1555,7 @@ extension ProgrammerToolSettingsProperty {
     // Brake Section Settings
 
     .delayTimeBeforeExitingBrakeSection : (
-      title                : String(localized: "Delay Time Before Exiting a Brake Section"),
+      title                : String(localized: "Delay time before exiting a brake section"),
       section              : .brakeSectionSettings,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -1557,7 +1576,7 @@ extension ProgrammerToolSettingsProperty {
     // Brake Functions
 
     .brakeFunction1BrakeTimeReduction : (
-      title                : String(localized: "Brake Function 1 Reduces Brake Time by"),
+      title                : String(localized: "Brake function 1 reduces brake time by"),
       section              : .brakeFunctions,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -1576,7 +1595,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .maximumSpeedWhenBrakeFunction1Active : (
-      title                : String(localized: "Maximum Speed when Brake Function 1 is Active"),
+      title                : String(localized: "Maximum speed when brake function 1 is active"),
       section              : .brakeFunctions,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -1595,7 +1614,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .brakeFunction2BrakeTimeReduction : (
-      title                : String(localized: "Brake Function 2 Reduces Brake Time by"),
+      title                : String(localized: "Brake function 2 reduces brake time by"),
       section              : .brakeFunctions,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -1614,7 +1633,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .maximumSpeedWhenBrakeFunction2Active : (
-      title                : String(localized: "Maximum Speed when Brake Function 2 is Active"),
+      title                : String(localized: "Maximum speed when brake function 2 is active"),
       section              : .brakeFunctions,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -1633,7 +1652,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .brakeFunction3BrakeTimeReduction : (
-      title                : String(localized: "Brake Function 3 Reduces Brake Time by"),
+      title                : String(localized: "Brake function 3 reduces brake time by"),
       section              : .brakeFunctions,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -1652,7 +1671,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .maximumSpeedWhenBrakeFunction3Active : (
-      title                : String(localized: "Maximum Speed when Brake Function 3 is Active"),
+      title                : String(localized: "Maximum speed when brake function 3 is active"),
       section              : .brakeFunctions,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -1671,7 +1690,7 @@ extension ProgrammerToolSettingsProperty {
     ),
     
     .timeFromMaximumSpeedToStopWhenDynamicBrakeEnabled : (
-      title                : String(localized: "Time from Maximum Speed to Stop, when Dynamic Brake is Enabled"),
+      title                : String(localized: "Time from maximum speed to stop, when dynamic brake is enabled"),
       section              : .dynamicBrakeSettings,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -1694,7 +1713,7 @@ extension ProgrammerToolSettingsProperty {
     // RailCom Settings
 
     .enableRailComFeedback : (
-      title                : String(localized: "Enable RailCom Feedback"),
+      title                : String(localized: "Enable RailCom feedback"),
       section              : .railComSettings,
       controlType          : .checkBox,
       encoding             : .boolBit,
@@ -1713,7 +1732,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .enableRailComPlusAutomaticAnnouncement : (
-      title                : String(localized: "Enable RailComPlus Automatic Announcement"),
+      title                : String(localized: "Enable RailComPlus automatic announcement"),
       section              : .railComSettings,
       controlType          : .checkBox,
       encoding             : .boolBit,
@@ -1751,7 +1770,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .sendAddressViaBroadcastOnChannel1 : (
-      title                : String(localized: "Send Address via Broadcast on Channel 1"),
+      title                : String(localized: "Send address via broadcast on channel 1"),
       section              : .railComSettings,
       controlType          : .checkBox,
       encoding             : .boolBit,
@@ -1770,7 +1789,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .allowDataTransmissionOnChannel2 : (
-      title                : String(localized: "Allow Data Transmission on Channel 2"),
+      title                : String(localized: "Allow data transmission on channel 2"),
       section              : .railComSettings,
       controlType          : .checkBox,
       encoding             : .boolBit,
@@ -1789,7 +1808,7 @@ extension ProgrammerToolSettingsProperty {
     ),
     
     .allowCommandConfirmationOnChannel1 : (
-      title                : String(localized: "Allow Command Confirmation on Channel 1"),
+      title                : String(localized: "Allow command confirmation on channel 1"),
       section              : .railComSettings,
       controlType          : .checkBox,
       encoding             : .boolBit,
@@ -1810,7 +1829,7 @@ extension ProgrammerToolSettingsProperty {
     // Speed Step Mode
 
     .detectSpeedStepModeAutomatically : (
-      title                : String(localized: "Detect Speed Step Mode Automatically"),
+      title                : String(localized: "Detect speed step mode automatically"),
       section              : .speedStepMode,
       controlType          : .checkBox,
       encoding             : .boolBit,
@@ -1829,7 +1848,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .speedStepMode : (
-      title                : String(localized: "Speed Step Mode"),
+      title                : String(localized: "Speed step mode"),
       section              : .speedStepMode,
       controlType          : .comboBox,
       encoding             : .esuSpeedStepMode,
@@ -1852,7 +1871,7 @@ extension ProgrammerToolSettingsProperty {
     // Acceleration and Deceleration
 
     .enableAcceleration : (
-      title                : String(localized: "Enable Acceleration Time"),
+      title                : String(localized: "Enable acceleration time"),
       section              : .accelerationAndDeceleration,
       controlType          : .checkBox,
       encoding             : .boolNZ,
@@ -1871,7 +1890,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .accelerationRate : (
-      title                : String(localized: "Time from Stop to Maximum Speed"),
+      title                : String(localized: "Time from stop to maximum speed"),
       section              : .accelerationAndDeceleration,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -1890,7 +1909,7 @@ extension ProgrammerToolSettingsProperty {
     ),
     
     .accelerationRateLok3 : (
-      title                : String(localized: "Time from Stop to Maximum Speed"),
+      title                : String(localized: "Time from stop to maximum speed"),
       section              : .accelerationAndDeceleration,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -1909,7 +1928,7 @@ extension ProgrammerToolSettingsProperty {
     ),
     
     .accelerationRateBasic : (
-      title                : String(localized: "Time from Stop to Maximum Speed"),
+      title                : String(localized: "Time from stop to maximum speed"),
       section              : .accelerationAndDeceleration,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -1928,7 +1947,7 @@ extension ProgrammerToolSettingsProperty {
     ),
     
     .accelerationRateESU : (
-      title                : String(localized: "Time from Stop to Maximum Speed"),
+      title                : String(localized: "Time from stop to maximum speed"),
       section              : .accelerationAndDeceleration,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -1947,7 +1966,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .accelerationAdjustmentA : (
-      title                : String(localized: "Acceleration Adjustment"),
+      title                : String(localized: "Acceleration adjustment"),
       section              : .accelerationAndDeceleration,
       controlType          : .textFieldWithSlider,
       encoding             : .specialInt8,
@@ -1966,7 +1985,7 @@ extension ProgrammerToolSettingsProperty {
     ),
     
     .accelerationAdjustmentB : (
-      title                : String(localized: "Acceleration Adjustment"),
+      title                : String(localized: "Acceleration adjustment"),
       section              : .accelerationAndDeceleration,
       controlType          : .textFieldWithSlider,
       encoding             : .specialInt8,
@@ -1985,7 +2004,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .enableDeceleration : (
-      title                : String(localized: "Enable Deceleration Time"),
+      title                : String(localized: "Enable deceleration time"),
       section              : .accelerationAndDeceleration,
       controlType          : .checkBox,
       encoding             : .boolNZ,
@@ -2004,7 +2023,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .decelerationRate : (
-      title                : String(localized: "Time from Maximum Speed to Stop"),
+      title                : String(localized: "Time from maximum speed to stop"),
       section              : .accelerationAndDeceleration,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -2023,7 +2042,7 @@ extension ProgrammerToolSettingsProperty {
     ),
     
     .decelerationRateLok3 : (
-      title                : String(localized: "Time from Maximum Speed to Stop"),
+      title                : String(localized: "Time from maximum speed to stop"),
       section              : .accelerationAndDeceleration,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -2042,7 +2061,7 @@ extension ProgrammerToolSettingsProperty {
     ),
     
     .decelerationRateBasic : (
-      title                : String(localized: "Time from Maximum Speed to Stop"),
+      title                : String(localized: "Time from maximum speed to stop"),
       section              : .accelerationAndDeceleration,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -2061,7 +2080,7 @@ extension ProgrammerToolSettingsProperty {
     ),
     
     .decelerationRateESU : (
-      title                : String(localized: "Time from Maximum Speed to Stop"),
+      title                : String(localized: "Time from maximum speed to stop"),
       section              : .accelerationAndDeceleration,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -2080,7 +2099,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .decelerationAdjustmentA : (
-      title                : String(localized: "Deceleration Adjustment"),
+      title                : String(localized: "Deceleration adjustment"),
       section              : .accelerationAndDeceleration,
       controlType          : .textFieldWithSlider,
       encoding             : .specialInt8,
@@ -2099,7 +2118,7 @@ extension ProgrammerToolSettingsProperty {
     ),
     
     .decelerationAdjustmentB : (
-      title                : String(localized: "Deceleration Adjustment"),
+      title                : String(localized: "Deceleration adjustment"),
       section              : .accelerationAndDeceleration,
       controlType          : .textFieldWithSlider,
       encoding             : .specialInt8,
@@ -2120,7 +2139,7 @@ extension ProgrammerToolSettingsProperty {
     // Reverse Mode
 
     .reverseMode : (
-      title                : String(localized: "Reverse Direction (Forward becomes Reverse)"),
+      title                : String(localized: "Reverse direction (forward becomes reverse)"),
       section              : .reverseMode,
       controlType          : .checkBox,
       encoding             : .boolBit,
@@ -2141,7 +2160,7 @@ extension ProgrammerToolSettingsProperty {
     // Trimming
 
     .enableForwardTrim : (
-      title                : String(localized: "Enable Forward Trimming"),
+      title                : String(localized: "Enable forward trimming"),
       section              : .trimming,
       controlType          : .checkBox,
       encoding             : .boolNZ,
@@ -2160,7 +2179,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .forwardTrim : (
-      title                : String(localized: "Forward Trimming"),
+      title                : String(localized: "Forward trimming"),
       section              : .trimming,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -2179,7 +2198,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .enableReverseTrim : (
-      title                : String(localized: "Enable Reverse Trimming"),
+      title                : String(localized: "Enable reverse trimming"),
       section              : .trimming,
       controlType          : .checkBox,
       encoding             : .boolNZ,
@@ -2198,7 +2217,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .reverseTrim : (
-      title                : String(localized: "Reverse Trimming"),
+      title                : String(localized: "Reverse trimming"),
       section              : .trimming,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -2217,7 +2236,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .enableShuntingModeTrim : (
-      title                : String(localized: "Enable Shunting Mode Trimming"),
+      title                : String(localized: "Enable shunting mode trimming"),
       section              : .trimming,
       controlType          : .checkBox,
       encoding             : .boolNZ,
@@ -2236,7 +2255,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .shuntingModeTrim : (
-      title                : String(localized: "Shunting Mode Trimming"),
+      title                : String(localized: "Shunting mode trimming"),
       section              : .trimming,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -2257,7 +2276,7 @@ extension ProgrammerToolSettingsProperty {
     // Load Adjustment
 
     .loadAdjustmentOptionalLoad : (
-      title                : String(localized: "Load Adjustment when \"Optional Load\" is Enabled"),
+      title                : String(localized: "Load adjustment when \"Optional Load\" is enabled"),
       section              : .loadAdjustment,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -2276,7 +2295,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .loadAdjustmentPrimaryLoad : (
-      title                : String(localized: "Load Adjustment when \"Primary Load\" is Enabled"),
+      title                : String(localized: "Load adjustment when \"Primary Load\" is enabled"),
       section              : .loadAdjustment,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -2337,7 +2356,7 @@ extension ProgrammerToolSettingsProperty {
     // Power Pack
 
     .timeToBridgePowerInterruption : (
-      title                : String(localized: "Time to Bridge Power Interruption (PowerPack required)"),
+      title                : String(localized: "Time to bridge power interruption (PowerPack required)"),
       section              : .powerPack,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -2356,7 +2375,7 @@ extension ProgrammerToolSettingsProperty {
     ),
     
     .timeToBridgePowerInterruptionLok4 : (
-      title                : String(localized: "Time to Bridge Power Interruption (PowerPack required)"),
+      title                : String(localized: "Time to bridge power interruption (PowerPack required)"),
       section              : .powerPack,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -2396,7 +2415,7 @@ extension ProgrammerToolSettingsProperty {
     // Preserve Direction
 
     .preserveDirection : (
-      title                : String(localized: "Preserve Direction when changing from Analog to Digital"),
+      title                : String(localized: "Preserve direction when changing from analog to digital"),
       section              : .preserveDirection,
       controlType          : .checkBox,
       encoding             : .boolBit,
@@ -2417,7 +2436,7 @@ extension ProgrammerToolSettingsProperty {
     // Starting Delay
 
     .enableStartingDelay : (
-      title                : String(localized: "Delay Starting if Drive Sound is Enabled"),
+      title                : String(localized: "Delay starting if drive sound is enabled"),
       section              : .startingDelay,
       controlType          : .checkBox,
       encoding             : .boolBit,
@@ -2436,7 +2455,7 @@ extension ProgrammerToolSettingsProperty {
     ),
     
     .enableStartingDelayIfVirtualDriveSoundEnabledCV252 : (
-      title                : String(localized: "Delay Starting if Virtual Drive Sound is Enabled"),
+      title                : String(localized: "Delay starting if virtual drive sound is enabled"),
       section              : .startingDelay,
       controlType          : .checkBox,
       encoding             : .boolNZ,
@@ -2455,7 +2474,7 @@ extension ProgrammerToolSettingsProperty {
     ),
     
     .enableStartingDelayIfVirtualDriveSoundEnabledCV128 : (
-      title                : String(localized: "Delay Starting if Virtual Drive Sound is Enabled"),
+      title                : String(localized: "Delay starting if virtual drive sound is enabled"),
       section              : .startingDelay,
       controlType          : .checkBox,
       encoding             : .boolNZ,
@@ -2474,7 +2493,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .enableStartingDelayIfVirtualDriveSoundEnabledCV253 : (
-      title                : String(localized: "Delay Starting if Virtual Drive Sound is Enabled"),
+      title                : String(localized: "Delay starting if virtual drive sound is enabled"),
       section              : .startingDelay,
       controlType          : .checkBox,
       encoding             : .boolNZ,
@@ -2493,7 +2512,7 @@ extension ProgrammerToolSettingsProperty {
     ),
     
     .enableStartingDelayIfVirtualDriveSoundEnabledCV221 : (
-      title                : String(localized: "Delay Starting if Virtual Drive Sound is Enabled"),
+      title                : String(localized: "Delay starting if virtual drive sound is enabled"),
       section              : .startingDelay,
       controlType          : .checkBox,
       encoding             : .boolNZ,
@@ -2512,7 +2531,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .startingDelayIfVirtualDriveSoundEnabledCV252 : (
-      title                : String(localized: "Time to Wait before Start"),
+      title                : String(localized: "Time to wait before start"),
       section              : .startingDelay,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -2530,7 +2549,7 @@ extension ProgrammerToolSettingsProperty {
       requiredCapabilities : [.esuSpeedTable, .startingDelayIfVirtualSoundEnabledCV252]
     ),
     .startingDelayIfVirtualDriveSoundEnabledCV128 : (
-      title                : String(localized: "Time to Wait before Start"),
+      title                : String(localized: "Time to wait before start"),
       section              : .startingDelay,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -2549,7 +2568,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .startingDelayIfVirtualDriveSoundEnabledCV253 : (
-      title                : String(localized: "Time to Wait before Start"),
+      title                : String(localized: "Time to wait before start"),
       section              : .startingDelay,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -2568,7 +2587,7 @@ extension ProgrammerToolSettingsProperty {
     ),
     
     .startingDelayIfVirtualDriveSoundEnabledCV221 : (
-      title                : String(localized: "Time to Wait before Start"),
+      title                : String(localized: "Time to wait before start"),
       section              : .startingDelay,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -2589,7 +2608,7 @@ extension ProgrammerToolSettingsProperty {
     // Stop Behaviour
     
       .stopImmediatelyOnSpeedStep0 : (
-        title                : String(localized: "Stop Immediately on Speed Step 0"),
+        title                : String(localized: "Stop immediately on speed step 0"),
         section              : .stopBehaviour,
         controlType          : .checkBox,
         encoding             : .boolBit,
@@ -2612,7 +2631,7 @@ extension ProgrammerToolSettingsProperty {
     // Physical Output Configuration
 
     .physicalOutput : (
-      title                : String(localized: "Physical Output"),
+      title                : String(localized: "Physical output"),
       section              : .physicalOutputConfiguration,
       controlType          : .comboBoxDynamic,
       encoding             : .esuDecoderPhysicalOutput,
@@ -2726,7 +2745,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .physicalOutputPowerOnDelay : (
-      title                : String(localized: "Power On Delay"),
+      title                : String(localized: "Power on delay"),
       section              : .physicalOutputConfiguration,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -2745,7 +2764,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .physicalOutputPowerOffDelay : (
-      title                : String(localized: "Power Off Delay"),
+      title                : String(localized: "Power off delay"),
       section              : .physicalOutputConfiguration,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -2764,7 +2783,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .physicalOutputEnableFunctionTimeout : (
-      title                : String(localized: "Enable Function Timeout"),
+      title                : String(localized: "Enable function timeout"),
       section              : .physicalOutputConfiguration,
       controlType          : .checkBox,
       encoding             : .boolNZ,
@@ -2783,7 +2802,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .physicalOutputTimeUntilAutomaticPowerOff : (
-      title                : String(localized: "Time until Automatic Power Off"),
+      title                : String(localized: "Time until automatic power off"),
       section              : .physicalOutputConfiguration,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -2802,7 +2821,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .physicalOutputOutputMode : (
-      title                : String(localized: "Output Mode (Effect)"),
+      title                : String(localized: "Output mode (effect)"),
       section              : .physicalOutputConfiguration,
       controlType          : .comboBoxDynamic,
       encoding             : .esuPhysicalOutputMode,
@@ -2821,7 +2840,7 @@ extension ProgrammerToolSettingsProperty {
     ),
     
     .physicalOutputModeB : (
-      title                : String(localized: "Output Mode (Effect)"),
+      title                : String(localized: "Output mode (effect)"),
       section              : .physicalOutputConfiguration,
       controlType          : .comboBoxDynamic,
       encoding             : .esuPhysicalOutputModeB,
@@ -2878,7 +2897,7 @@ extension ProgrammerToolSettingsProperty {
     ),
     
     .physicalOutputPulseLengthB : (
-      title                : String(localized: "Pulse Length"),
+      title                : String(localized: "Pulse length"),
       section              : .physicalOutputConfiguration,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -2897,7 +2916,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .physicalOutputUseClassLightLogic : (
-      title                : String(localized: "Use Class Light Logic"),
+      title                : String(localized: "Use class light logic"),
       section              : .physicalOutputConfiguration,
       controlType          : .checkBox,
       encoding             : .boolNZ,
@@ -2916,7 +2935,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .physicalOutputSequencePosition : (
-      title                : String(localized: "Sequence Position"),
+      title                : String(localized: "Sequence position"),
       section              : .physicalOutputConfiguration,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -2935,7 +2954,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .physicalOutputPhaseShift : (
-      title                : String(localized: "Phase Shift"),
+      title                : String(localized: "Phase shift"),
       section              : .physicalOutputConfiguration,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -2954,7 +2973,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .physicalOutputStartupTime : (
-      title                : String(localized: "Startup Time"),
+      title                : String(localized: "Startup time"),
       section              : .physicalOutputConfiguration,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -3030,7 +3049,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .physicalOutputSmokeUnitControlMode : (
-      title                : String(localized: "Control Mode"),
+      title                : String(localized: "Control mode"),
       section              : .physicalOutputConfiguration,
       controlType          : .comboBox,
       encoding             : .esuSmokeUnitControlMode,
@@ -3068,7 +3087,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .physicalOutputAccelerationRate : (
-      title                : String(localized: "Acceleration Rate"),
+      title                : String(localized: "Acceleration rate"),
       section              : .physicalOutputConfiguration,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -3087,7 +3106,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .physicalOutputDecelerationRate : (
-      title                : String(localized: "Deceleration Rate"),
+      title                : String(localized: "Deceleration rate"),
       section              : .physicalOutputConfiguration,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -3106,7 +3125,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .physicalOutputHeatWhileLocomotiveStands : (
-      title                : String(localized: "Heat while Locomotive Stands"),
+      title                : String(localized: "Heat while locomotive stands"),
       section              : .physicalOutputConfiguration,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -3125,7 +3144,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .physicalOutputMinimumHeatWhileLocomotiveDriving : (
-      title                : String(localized: "Minimum Heat while Locomotive is Driving"),
+      title                : String(localized: "Minimum heat while locomotive is driving"),
       section              : .physicalOutputConfiguration,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -3144,7 +3163,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .physicalOutputMaximumHeatWhileLocomotiveDriving : (
-      title                : String(localized: "Maximum Heat while Locomotive is Driving"),
+      title                : String(localized: "Maximum heat while locomotive is driving"),
       section              : .physicalOutputConfiguration,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -3163,7 +3182,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .physicalOutputChuffPower : (
-      title                : String(localized: "Chuff Power"),
+      title                : String(localized: "Chuff power"),
       section              : .physicalOutputConfiguration,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -3182,7 +3201,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .physicalOutputFanPower : (
-      title                : String(localized: "Fan Power"),
+      title                : String(localized: "Fan power"),
       section              : .physicalOutputConfiguration,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -3258,7 +3277,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .physicalOutputServoPositionA : (
-      title                : String(localized: "Position A (Off)"),
+      title                : String(localized: "Position A (off)"),
       section              : .physicalOutputConfiguration,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -3277,7 +3296,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .physicalOutputServoDoNotDisableServoPulseAtPositionA : (
-      title                : String(localized: "Do Not Disable Servo Pulse at Position A"),
+      title                : String(localized: "Do not disable servo pulse at position A"),
       section              : .physicalOutputConfiguration,
       controlType          : .checkBox,
       encoding             : .boolBit,
@@ -3296,7 +3315,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .physicalOutputServoPositionB : (
-      title                : String(localized: "Position B (On)"),
+      title                : String(localized: "Position B (on)"),
       section              : .physicalOutputConfiguration,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -3315,7 +3334,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .physicalOutputServoDoNotDisableServoPulseAtPositionB : (
-      title                : String(localized: "Do Not Disable Servo Pulse at Position B"),
+      title                : String(localized: "Do not disable servo pulse at position B"),
       section              : .physicalOutputConfiguration,
       controlType          : .checkBox,
       encoding             : .boolBit,
@@ -3334,7 +3353,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .physicalOutputCouplerForce : (
-      title                : String(localized: "Coupler Force"),
+      title                : String(localized: "Coupler force"),
       section              : .physicalOutputConfiguration,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -3353,7 +3372,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .physicalOutputExternalSmokeUnitType : (
-      title                : String(localized: "External Smoke Unit Type"),
+      title                : String(localized: "External smoke unit type"),
       section              : .physicalOutputConfiguration,
       controlType          : .comboBox,
       encoding             : .esuExternalSmokeUnitType,
@@ -3372,7 +3391,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .physicalOutputPantographHeight : (
-      title                : String(localized: "Pantograph Height"),
+      title                : String(localized: "Pantograph height"),
       section              : .physicalOutputConfiguration,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -3391,7 +3410,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .physicalOutputSpecialFunctions : (
-      title                : String(localized: "Special Functions"),
+      title                : String(localized: "Special functions"),
       section              : .physicalOutputConfiguration,
       controlType          : .description,
       encoding             : .none,
@@ -3410,7 +3429,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .physicalOutputGradeCrossing : (
-      title                : String(localized: "Grade Crossing"),
+      title                : String(localized: "Grade crossing"),
       section              : .physicalOutputConfiguration,
       controlType          : .checkBox,
       encoding             : .boolBit,
@@ -3429,7 +3448,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .physicalOutputRule17Forward : (
-      title                : String(localized: "Rule 17 Forward"),
+      title                : String(localized: "Rule 17 forward"),
       section              : .physicalOutputConfiguration,
       controlType          : .checkBox,
       encoding             : .boolBit,
@@ -3448,7 +3467,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .physicalOutputRule17Reverse : (
-      title                : String(localized: "Rule 17 Reverse"),
+      title                : String(localized: "Rule 17 reverse"),
       section              : .physicalOutputConfiguration,
       controlType          : .checkBox,
       encoding             : .boolBit,
@@ -3486,7 +3505,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .physicalOutputLEDMode : (
-      title                : String(localized: "LED Mode"),
+      title                : String(localized: "LED mode"),
       section              : .physicalOutputConfiguration,
       controlType          : .checkBox,
       encoding             : .boolBit,
@@ -3505,7 +3524,7 @@ extension ProgrammerToolSettingsProperty {
     ),
     
     .brightnessOfLightAndFunctionOutputsCV54 : (
-      title                : String(localized: "Brightness of Light and Function Outputs"),
+      title                : String(localized: "Brightness of light and function outputs"),
       section              : .physicalOutputConfiguration,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -3524,7 +3543,7 @@ extension ProgrammerToolSettingsProperty {
     ),
     
     .brightnessOfLightAndFunctionOutputsCV63 : (
-      title                : String(localized: "Brightness of Light and Function Outputs"),
+      title                : String(localized: "Brightness of light and function outputs"),
       section              : .physicalOutputConfiguration,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -3547,7 +3566,7 @@ extension ProgrammerToolSettingsProperty {
     // General Physical Output Settings
 
     .frequencyForBlinkingEffects : (
-      title                : String(localized: "Frequency for Blinking Effects"),
+      title                : String(localized: "Frequency for blinking effects"),
       section              : .generalPhysicalOutputSettings,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -3585,7 +3604,7 @@ extension ProgrammerToolSettingsProperty {
     ),
     
     .frequencyForBlinkingEffectsB : (
-      title                : String(localized: "Frequency for Blinking Effects"),
+      title                : String(localized: "Frequency for blinking effects"),
       section              : .generalPhysicalOutputSettings,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -3604,7 +3623,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .gradeCrossingHoldingTime : (
-      title                : String(localized: "Grade Crossing Holding Time"),
+      title                : String(localized: "Grade crossing holding time"),
       section              : .generalPhysicalOutputSettings,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -3623,7 +3642,7 @@ extension ProgrammerToolSettingsProperty {
     ),
     
     .gradeCrossingHoldingTimeB : (
-      title                : String(localized: "Grade Crossing Holding Time"),
+      title                : String(localized: "Grade crossing holding time"),
       section              : .generalPhysicalOutputSettings,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -3642,7 +3661,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .fadeInTimeOfLightEffects : (
-      title                : String(localized: "Fade-In Time of Light Effects"),
+      title                : String(localized: "Fade-in time of light effects"),
       section              : .generalPhysicalOutputSettings,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -3661,7 +3680,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .fadeOutTimeOfLightEffects : (
-      title                : String(localized: "Fade-Out Time of Light Effects"),
+      title                : String(localized: "Fade-out time of light effects"),
       section              : .generalPhysicalOutputSettings,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -3680,7 +3699,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .logicalFunctionDimmerBrightnessReduction : (
-      title                : String(localized: "Logical Function Dimmer Brightness Reduction"),
+      title                : String(localized: "Logical function dimmer brightness reduction"),
       section              : .generalPhysicalOutputSettings,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -3699,7 +3718,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .classLightLogicSequenceLength : (
-      title                : String(localized: "Class Light Logic Sequence Length"),
+      title                : String(localized: "Class light logic sequence length"),
       section              : .generalPhysicalOutputSettings,
       controlType          : .comboBox,
       encoding             : .esuClassLightLogicLength,
@@ -3718,7 +3737,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .enforceSlaveCommunicationOnAUX3AndAUX4 : (
-      title                : String(localized: "Enforce Slave Communication on AUX3 and AUX4"),
+      title                : String(localized: "Enforce slave communication on AUX3 and AUX4"),
       section              : .generalPhysicalOutputSettings,
       controlType          : .checkBox,
       encoding             : .boolBit,
@@ -3737,7 +3756,7 @@ extension ProgrammerToolSettingsProperty {
     ),
     
     .enforceOutputDriverOnAUX3AndAUX4 : (
-      title                : String(localized: "Enable Output Driver on AUX3 and AUX4"),
+      title                : String(localized: "Enable output driver on AUX3 and AUX4"),
       section              : .generalPhysicalOutputSettings,
       controlType          : .checkBox,
       encoding             : .boolBit,
@@ -3906,7 +3925,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .automaticUncouplingSpeed : (
-      title                : String(localized: "Automatic Uncoupling Speed"),
+      title                : String(localized: "Speed"),
       section              : .automaticUncoupling,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -3925,7 +3944,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .automaticUncouplingPushTime : (
-      title                : String(localized: "Automatic Uncoupling Push Time"),
+      title                : String(localized: "Push time"),
       section              : .automaticUncoupling,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -3944,7 +3963,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .automaticUncouplingWaitTime : (
-      title                : String(localized: "Automatic Uncoupling Wait Time"),
+      title                : String(localized: "Wait time"),
       section              : .automaticUncoupling,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -3963,7 +3982,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .automaticUncouplingMoveTime : (
-      title                : String(localized: "Automatic Uncoupling Move Time"),
+      title                : String(localized: "Move time"),
       section              : .automaticUncoupling,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -7129,7 +7148,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .regulationReference : (
-      title                : String(localized: "Regulation Reference"),
+      title                : String(localized: "Regulation reference"),
       section              : .loadControlBackEMF,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -7148,7 +7167,7 @@ extension ProgrammerToolSettingsProperty {
     ),
     
     .regulationReferenceB : (
-      title                : String(localized: "Regulation Reference"),
+      title                : String(localized: "Regulation reference"),
       section              : .loadControlBackEMF,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -7167,7 +7186,7 @@ extension ProgrammerToolSettingsProperty {
     ),
     
     .regulationReferenceC : (
-      title                : String(localized: "Regulation Reference"),
+      title                : String(localized: "Regulation reference"),
       section              : .loadControlBackEMF,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -7186,7 +7205,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .regulationReferenceLok3 : (
-      title                : String(localized: "Regulation Reference"),
+      title                : String(localized: "Regulation reference"),
       section              : .loadControlBackEMF,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -7205,7 +7224,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .regulationParameterK : (
-      title                : String(localized: "Regulation Parameter \"K\""),
+      title                : String(localized: "Regulation parameter \"K\""),
       section              : .loadControlBackEMF,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -7224,7 +7243,7 @@ extension ProgrammerToolSettingsProperty {
     ),
     
     .regulationParameterKLok3 : (
-      title                : String(localized: "Regulation Parameter \"K\""),
+      title                : String(localized: "Regulation parameter \"K\""),
       section              : .loadControlBackEMF,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -7243,7 +7262,7 @@ extension ProgrammerToolSettingsProperty {
     ),
     
     .regulationParameterKB : (
-      title                : String(localized: "Regulation Parameter \"K\""),
+      title                : String(localized: "Regulation parameter \"K\""),
       section              : .loadControlBackEMF,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -7262,7 +7281,7 @@ extension ProgrammerToolSettingsProperty {
     ),
     
     .regulationParameterKC : (
-      title                : String(localized: "Regulation Parameter \"K\""),
+      title                : String(localized: "Regulation parameter \"K\""),
       section              : .loadControlBackEMF,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -7281,7 +7300,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .regulationParameterIA : (
-      title                : String(localized: "Regulation Parameter \"I\""),
+      title                : String(localized: "Regulation parameter \"I\""),
       section              : .loadControlBackEMF,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -7300,7 +7319,7 @@ extension ProgrammerToolSettingsProperty {
     ),
     
     .regulationParameterID : (
-      title                : String(localized: "Regulation Parameter \"I\""),
+      title                : String(localized: "Regulation parameter \"I\""),
       section              : .loadControlBackEMF,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -7319,7 +7338,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .regulationParameterILok3 : (
-      title                : String(localized: "Regulation Parameter \"I\""),
+      title                : String(localized: "Regulation parameter \"I\""),
       section              : .loadControlBackEMF,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -7338,7 +7357,7 @@ extension ProgrammerToolSettingsProperty {
     ),
     
     .regulationParameterIB : (
-      title                : String(localized: "Regulation Parameter \"I\""),
+      title                : String(localized: "Regulation parameter \"I\""),
       section              : .loadControlBackEMF,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -7357,7 +7376,7 @@ extension ProgrammerToolSettingsProperty {
     ),
     
     .regulationParameterIC : (
-      title                : String(localized: "Regulation Parameter \"I\""),
+      title                : String(localized: "Regulation parameter \"I\""),
       section              : .loadControlBackEMF,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -7376,7 +7395,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .emfSlowSpeedSettings : (
-      title                : String(localized: "Slow Speed Settings"),
+      title                : String(localized: "Slow Speed settings"),
       section              : .loadControlBackEMF,
       controlType          : .description,
       encoding             : .none,
@@ -7395,7 +7414,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .regulationParameterKSlow : (
-      title                : String(localized: "Regulation Parameter \"K Slow\""),
+      title                : String(localized: "Regulation parameter \"K slow\""),
       section              : .loadControlBackEMF,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -7414,7 +7433,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .largestInternalSpeedStepThatUsesKSlow : (
-      title                : String(localized: "Largest Internal Speed Step that uses \"K Slow\""),
+      title                : String(localized: "Largest internal speed step that uses \"K slow\""),
       section              : .loadControlBackEMF,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -7433,7 +7452,7 @@ extension ProgrammerToolSettingsProperty {
     ),
     
     .regulationParameterISlow : (
-      title                : String(localized: "Regulation Parameter \"I Slow\""),
+      title                : String(localized: "Regulation parameter \"I slow\""),
       section              : .loadControlBackEMF,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -7452,7 +7471,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .regulationInfluenceDuringSlowSpeed : (
-      title                : String(localized: "Regulation Influence During Slow Speed"),
+      title                : String(localized: "Regulation influence during slow speed"),
       section              : .loadControlBackEMF,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -7470,8 +7489,27 @@ extension ProgrammerToolSettingsProperty {
       requiredCapabilities : [.loadControlBackEMF, .esuSpeedTable, .loadControlBackEMFA]
     ),
     
+    .regulationInfluence : (
+      title                : String(localized: "Regulation influence"),
+      section              : .loadControlBackEMF,
+      controlType          : .textFieldWithSlider,
+      encoding             : .byte,
+      cvIndexingMethod     : .standard,
+      cv                   : [.cv_000_000_056],
+      mask                 : [0xff],
+      shift                : [0],
+      minValue             : 0.0,
+      maxValue             : 255.0,
+      trueDefaultValue     : nil,
+      infoType             : .percentage,
+      infoFactor           : 100.0 / 255.0,
+      infoMaxDecimalPlaces : 2,
+      infoFormat           : nil,
+      requiredCapabilities : [.loadControlBackEMF, .esuSpeedTable, .loadControlBackEMFA]
+    ),
+
     .regulationInfluenceLok3 : (
-      title                : String(localized: "Regulation Influence"),
+      title                : String(localized: "Regulation influence"),
       section              : .loadControlBackEMF,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -7490,7 +7528,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .emfBackEMFSettings : (
-      title                : String(localized: "Back EMF Settings"),
+      title                : String(localized: "Back EMF settings"),
       section              : .loadControlBackEMF,
       controlType          : .description,
       encoding             : .none,
@@ -7509,7 +7547,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .slowSpeedBackEMFSamplingPeriod : (
-      title                : String(localized: "Slow Speed Back EMF Sampling Period"),
+      title                : String(localized: "Slow Speed back EMF sampling period"),
       section              : .loadControlBackEMF,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -7528,7 +7566,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .fullSpeedBackEMFSamplingPeriod : (
-      title                : String(localized: "Full Speed Back EMF Sampling Period"),
+      title                : String(localized: "Full Speed back EMF sampling period"),
       section              : .loadControlBackEMF,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -7547,7 +7585,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .slowSpeedLengthOfMeasurementGap : (
-      title                : String(localized: "Slow Speed Length of Measurement Gap"),
+      title                : String(localized: "Slow Speed length of measurement gap"),
       section              : .loadControlBackEMF,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -7566,7 +7604,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .fullSpeedLengthOfMeasurementGap : (
-      title                : String(localized: "Full Speed Length of Measurement Gap"),
+      title                : String(localized: "Full Speed length of measurement gap"),
       section              : .loadControlBackEMF,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -7585,10 +7623,10 @@ extension ProgrammerToolSettingsProperty {
     ),
     
       .adaptiveRegulationFrequencyEnabled : (
-        title                : String(localized: "Adaptive Regulation Frequency"),
+        title                : String(localized: "Adaptive regulation frequency"),
         section              : .loadControlBackEMF,
         controlType          : .checkBox,
-        encoding             : .boolBit,
+        encoding             : .boolBitReversed,
         cvIndexingMethod     : .standard,
         cv                   : [.cv_000_000_124],
         mask                 : [0b00010000],
@@ -7604,7 +7642,7 @@ extension ProgrammerToolSettingsProperty {
       ),
       
       .backEMFSamplingPeriod : (
-        title                : String(localized: "Back EMF Sampling Period"),
+        title                : String(localized: "Back EMF sampling period"),
         section              : .loadControlBackEMF,
         controlType          : .textFieldWithSlider,
         encoding             : .byte,
@@ -7663,7 +7701,7 @@ extension ProgrammerToolSettingsProperty {
     // Motor Overload Protection
 
     .enableMotorOverloadProtection : (
-      title                : String(localized: "Enable Motor Overload Protection"),
+      title                : String(localized: "Enable motor overload protection"),
       section              : .motorOverloadProtection,
       controlType          : .checkBox,
       encoding             : .boolBit,
@@ -7682,7 +7720,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .enableMotorCurrentLimiter : (
-      title                : String(localized: "Enable Motor Current Limiter"),
+      title                : String(localized: "Enable motor current limiter"),
       section              : .motorOverloadProtection,
       controlType          : .checkBox,
       encoding             : .boolNZ,
@@ -7701,7 +7739,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .motorCurrentLimiterLimit : (
-      title                : String(localized: "Motor Current Limiter Limit"),
+      title                : String(localized: "Limit"),
       section              : .motorOverloadProtection,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -7722,7 +7760,7 @@ extension ProgrammerToolSettingsProperty {
     // PWM Frequency
 
     .motorPulseFrequency : (
-      title                : String(localized: "Motor Pulse Frequency"),
+      title                : String(localized: "Motor pulse frequency"),
       section              : .pwmFrequency,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -7743,7 +7781,7 @@ extension ProgrammerToolSettingsProperty {
     // Automatic Parking Brake
 
     .enableAutomaticParkingBrake : (
-      title                : String(localized: "Enable Automatic Parking Brake"),
+      title                : String(localized: "Enable automatic parking brake"),
       section              : .automaticParkingBrake,
       controlType          : .checkBox,
       encoding             : .boolBit,
@@ -7766,7 +7804,7 @@ extension ProgrammerToolSettingsProperty {
     // ESU Smoke Unit
 
     .smokeUnitTimeUntilPowerOff : (
-      title                : String(localized: "Time until Smoke Unit Automatic Power Off"),
+      title                : String(localized: "Time until smoke unit automatic power off"),
       section              : .esuSmokeUnit,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -7785,7 +7823,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .smokeUnitFanSpeedTrim : (
-      title                : String(localized: "Fan Speed Trim"),
+      title                : String(localized: "Fan speed trim"),
       section              : .esuSmokeUnit,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -7804,7 +7842,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .smokeUnitTemperatureTrim : (
-      title                : String(localized: "Temperature Trim"),
+      title                : String(localized: "Temperature trim"),
       section              : .esuSmokeUnit,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -7823,7 +7861,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .smokeUnitPreheatingTemperatureForSecondarySmokeUnits : (
-      title                : String(localized: "Preheating Temperature for Secondary Smoke Units"),
+      title                : String(localized: "Preheating temperature for secondary smoke units"),
       section              : .esuSmokeUnit,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -7880,7 +7918,7 @@ extension ProgrammerToolSettingsProperty {
     ),
     
     .esuDistanceOfSteamChuffsAtSpeedStep1 : (
-      title                : String(localized: "Distance of Steam Chuffs at Speed Step 1"),
+      title                : String(localized: "Distance of steam chuffs at speed step 1"),
       section              : .soundType,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -7899,7 +7937,7 @@ extension ProgrammerToolSettingsProperty {
     ),
     
     .esuDistanceofSteamChuffsAtSpeedStep2 : (
-      title                : String(localized: "Distance of Steam Chuffs at Speed Step 2 (steepness)"),
+      title                : String(localized: "Distance of steam chuffs at speed step 2 (steepness)"),
       section              : .soundType,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -7918,7 +7956,7 @@ extension ProgrammerToolSettingsProperty {
     ),
     
     .esuTriggerImpulses : (
-      title                : String(localized: "Trigger Impulses"),
+      title                : String(localized: "Trigger impulses"),
       section              : .soundType,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -7937,7 +7975,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .soundSelection : (
-      title                : String(localized: "Sound Configuration"),
+      title                : String(localized: "Sound configuration"),
       section              : .soundSelection,
       controlType          : .textField,
       encoding             : .byte,
@@ -7958,7 +7996,7 @@ extension ProgrammerToolSettingsProperty {
     // Smoke Chuffs
 
     .smokeChuffsDurationRelativeToTriggerDistance : (
-      title                : String(localized: "Duration of Steam Chuffs Relative to Trigger Distance"),
+      title                : String(localized: "Duration of steam chuffs relative to trigger distance"),
       section              : .smokeChuffs,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -7977,7 +8015,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .smokeChuffsMinimumDuration : (
-      title                : String(localized: "Minimum Steam Chuff Duration"),
+      title                : String(localized: "Minimum steam chuff duration"),
       section              : .smokeChuffs,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -7996,7 +8034,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .smokeChuffsMaximumDuration : (
-      title                : String(localized: "Maximum Steam Chuff Duration"),
+      title                : String(localized: "Maximum steam chuff duration"),
       section              : .smokeChuffs,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -8097,7 +8135,7 @@ extension ProgrammerToolSettingsProperty {
     // Memory Settings
 
     .memoryPersistentFunction : (
-      title                : String(localized: "Persistent Function"),
+      title                : String(localized: "Persistent function"),
       section              : .memorySettings,
       controlType          : .checkBox,
       encoding             : .boolBit,
@@ -8116,7 +8154,7 @@ extension ProgrammerToolSettingsProperty {
     ),
     
     .memoryPersistentFunctionLok3 : (
-      title                : String(localized: "Persistent Function"),
+      title                : String(localized: "Persistent function"),
       section              : .memorySettings,
       controlType          : .checkBox,
       encoding             : .boolBit,
@@ -8135,7 +8173,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .memoryPersistentSpeed : (
-      title                : String(localized: "Persistent Speed"),
+      title                : String(localized: "Persistent speed"),
       section              : .memorySettings,
       controlType          : .checkBox,
       encoding             : .boolBit,
@@ -8154,7 +8192,7 @@ extension ProgrammerToolSettingsProperty {
     ),
     
     .memoryPersistentSpeedLok3 : (
-      title                : String(localized: "Persistent Speed"),
+      title                : String(localized: "Persistent speed"),
       section              : .memorySettings,
       controlType          : .checkBox,
       encoding             : .boolBit,
@@ -8173,7 +8211,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .memoryPersistentAccelerationLok3 : (
-      title                : String(localized: "Persistent Acceleration"),
+      title                : String(localized: "Persistent acceleration"),
       section              : .memorySettings,
       controlType          : .checkBox,
       encoding             : .boolBit,
@@ -8192,7 +8230,7 @@ extension ProgrammerToolSettingsProperty {
     ),
     
     .disableMotorBrake : (
-      title                : String(localized: "Disable Motor Brake"),
+      title                : String(localized: "Disable motor brake"),
       section              : .motorBrake,
       controlType          : .checkBox,
       encoding             : .boolBit,
@@ -8274,7 +8312,7 @@ extension ProgrammerToolSettingsProperty {
     // Drive Sound Speed
         
     .esuDriveSoundSpeedMinimum : (
-      title                : String(localized: "Minimum (Lowest Speed)"),
+      title                : String(localized: "Minimum (lowest Speed)"),
       section              : .driveSoundSpeed,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -8293,7 +8331,7 @@ extension ProgrammerToolSettingsProperty {
     ),
     
     .esuDriveSoundSpeedMaximum : (
-      title                : String(localized: "Maximum (Full Speed)"),
+      title                : String(localized: "Maximum (full Speed)"),
       section              : .driveSoundSpeed,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -8333,7 +8371,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .distanceOfSteamChuffsAtSpeedStep1 : (
-      title                : String(localized: "Distance of Steam Chuffs at Speed Step 1"),
+      title                : String(localized: "Distance of steam chuffs at speed step 1"),
       section              : .steamChuffs,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -8352,7 +8390,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .triggerImpulsesPerSteamChuff : (
-      title                : String(localized: "Trigger Impulses per Steam Chuff"),
+      title                : String(localized: "Trigger impulses per steam chuff"),
       section              : .steamChuffs,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -8371,7 +8409,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .divideTriggerImpulsesInTwoIfShuntingModeEnabled : (
-      title                : String(localized: "Divide Trigger Impulses in Two if Shunting Mode Enabled"),
+      title                : String(localized: "Divide trigger impulses in two if shunting mode enabled"),
       section              : .steamChuffs,
       controlType          : .checkBox,
       encoding             : .boolBit,
@@ -8390,7 +8428,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .steamChuffAdjustmentAtHigherSpeedSteps : (
-      title                : String(localized: "Adjustment at Higher Speed Steps"),
+      title                : String(localized: "Adjustment at higher speed steps"),
       section              : .steamChuffs,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -8409,7 +8447,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .enableSecondaryTrigger : (
-      title                : String(localized: "Enable Secondary Trigger"),
+      title                : String(localized: "Enable secondary trigger"),
       section              : .steamChuffs,
       controlType          : .checkBox,
       encoding             : .boolNZ,
@@ -8428,7 +8466,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .secondaryTriggerDistanceReduction : (
-      title                : String(localized: "Reduce Secondary Trigger Distance by:"),
+      title                : String(localized: "Reduce secondary trigger distance by:"),
       section              : .steamChuffs,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -8447,7 +8485,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .enableMinimumDistanceOfSteamChuffs : (
-      title                : String(localized: "Enable Minimum Distance of Steam Chuffs"),
+      title                : String(localized: "Enable minimum distance of steam chuffs"),
       section              : .steamChuffs,
       controlType          : .checkBox,
       encoding             : .boolNZ,
@@ -8466,7 +8504,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .minimumDistanceofSteamChuffs : (
-      title                : String(localized: "Minimum Distance of Steam Chuffs"),
+      title                : String(localized: "Minimum distance of steam chuffs"),
       section              : .steamChuffs,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -8485,7 +8523,7 @@ extension ProgrammerToolSettingsProperty {
     ),
     
     .minimumDistanceofSteamChuffsLok3 : (
-      title                : String(localized: "Minimum Distance of Steam Chuffs"),
+      title                : String(localized: "Minimum distance of steam chuffs"),
       section              : .steamChuffs,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -8506,7 +8544,7 @@ extension ProgrammerToolSettingsProperty {
     // Sound Steam Shift
     
     .enableSoundSteamShift : (
-      title                : String(localized: "Enable Sound Steam Shift"),
+      title                : String(localized: "Enable sound steam shift"),
       section              : .soundSteamShift,
       controlType          : .checkBox,
       encoding             : .boolNZ,
@@ -8544,7 +8582,7 @@ extension ProgrammerToolSettingsProperty {
     ),
     
     .earliestRelativeStartPosition : (
-      title                : String(localized: "Earliest Relative Start Position"),
+      title                : String(localized: "Earliest relative start position"),
       section              : .soundSteamShift,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -8563,7 +8601,7 @@ extension ProgrammerToolSettingsProperty {
     ),
     
     .latestRelativeEndPosition : (
-      title                : String(localized: "Latest Relative End Position"),
+      title                : String(localized: "Latest relative end position"),
       section              : .soundSteamShift,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -8584,7 +8622,7 @@ extension ProgrammerToolSettingsProperty {
     // Volume
 
     .masterVolume : (
-      title                : String(localized: "Master Volume"),
+      title                : String(localized: "Master volume"),
       section              : .volume,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -8603,7 +8641,7 @@ extension ProgrammerToolSettingsProperty {
     ),
     
     .masterVolumeLok3 : (
-      title                : String(localized: "Master Volume"),
+      title                : String(localized: "Master volume"),
       section              : .volume,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -8622,7 +8660,7 @@ extension ProgrammerToolSettingsProperty {
     ),
     
     .volumeControl1 : (
-      title                : String(localized: "Volume Control 1 (horn / whistle)"),
+      title                : String(localized: "Volume control 1 (horn / whistle)"),
       section              : .volume,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -8641,7 +8679,7 @@ extension ProgrammerToolSettingsProperty {
     ),
     
     .volumeControl2 : (
-      title                : String(localized: "Volume Control 2 (bell)"),
+      title                : String(localized: "Volume control 2 (bell)"),
       section              : .volume,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -8660,7 +8698,7 @@ extension ProgrammerToolSettingsProperty {
     ),
     
     .volumeControl3 : (
-      title                : String(localized: "Volume Control 3 (auxiliary)"),
+      title                : String(localized: "Volume control 3 (auxiliary)"),
       section              : .volume,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -8679,7 +8717,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .fadeSoundVolumeReduction : (
-      title                : String(localized: "Fade Sound Volume Reduction"),
+      title                : String(localized: "Fade sound volume reduction"),
       section              : .volume,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -8698,7 +8736,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .soundFadeOutFadeInTime : (
-      title                : String(localized: "Sound Fade-In and Fade-Out Time"),
+      title                : String(localized: "Sound fade-in and fade-out time"),
       section              : .volume,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -8759,7 +8797,7 @@ extension ProgrammerToolSettingsProperty {
     // Brake Sound
 
     .brakeSoundSwitchingOnThreshold : (
-      title                : String(localized: "Switching On Threshold"),
+      title                : String(localized: "Switching on threshold"),
       section              : .brakeSound,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -8778,7 +8816,7 @@ extension ProgrammerToolSettingsProperty {
     ),
     
     .brakeSoundSwitchingOffThreshold : (
-      title                : String(localized: "Switching Off Threshold"),
+      title                : String(localized: "Switching off threshold"),
       section              : .brakeSound,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -8797,7 +8835,7 @@ extension ProgrammerToolSettingsProperty {
     ),
     
     .brakeSoundSwitchingOffThresholdLok3 : (
-      title                : String(localized: "Switching Off Threshold"),
+      title                : String(localized: "Switching off threshold"),
       section              : .brakeSound,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -9084,7 +9122,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .heavyLoadIncreaseSoundAcceleration : (
-      title                : String(localized: "Heavy Load: Increase Sound Acceleration by the following value"),
+      title                : String(localized: "Heavy Load: Increase sound acceleration by the following value"),
       section              : .heavyLoadCoastControl,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -9103,7 +9141,7 @@ extension ProgrammerToolSettingsProperty {
     ),
     
     .heavyLoadKeepConstantSpeed : (
-      title                : String(localized: "Keep Constant Speed during Heavy Load"),
+      title                : String(localized: "Keep constant speed during Heavy Load"),
       section              : .heavyLoadCoastControl,
       controlType          : .checkBox,
       encoding             : .boolBit,
@@ -9122,7 +9160,7 @@ extension ProgrammerToolSettingsProperty {
     ),
     
     .coastModeIncreaseSoundAcceleration : (
-      title                : String(localized: "Coast Mode: Increase Sound Acceleration by the following value"),
+      title                : String(localized: "Coast Mode: Decrease sound acceleration by the following value"),
       section              : .heavyLoadCoastControl,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -9141,7 +9179,7 @@ extension ProgrammerToolSettingsProperty {
     ),
     
     .coastModeKeepConstantSpeed : (
-      title                : String(localized: "Keep Constant Speed during Coast Mode"),
+      title                : String(localized: "Keep constant speed during Coast Mode"),
       section              : .heavyLoadCoastControl,
       controlType          : .checkBox,
       encoding             : .boolBit,
@@ -9235,8 +9273,27 @@ extension ProgrammerToolSettingsProperty {
       requiredCapabilities : [.sound, .soundSlot1to10]
     ),
     
+    .soundSlotVolume128 : (
+      title                : String(localized: "Volume"),
+      section              : .soundSlotConfiguration,
+      controlType          : .textFieldWithSlider,
+      encoding             : .byte,
+      cvIndexingMethod     : .esuSoundSlot,
+      cv                   : [.cv_016_001_259],
+      mask                 : [0xff],
+      shift                : [0],
+      minValue             : 0,
+      maxValue             : 128,
+      trueDefaultValue     : nil,
+      infoType             : .percentage,
+      infoFactor           : 100.0 / 128.0,
+      infoMaxDecimalPlaces : 2,
+      infoFormat           : nil,
+      requiredCapabilities : [.sound, .soundSlot1to10]
+    ),
+
     .soundSlotMinimumSoundSpeed : (
-      title                : String(localized: "Minimum Sound Speed"),
+      title                : String(localized: "Minimum sound speed"),
       section              : .soundSlotConfiguration,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -9255,7 +9312,7 @@ extension ProgrammerToolSettingsProperty {
     ),
     
     .soundSlotMaximumSoundSpeed : (
-      title                : String(localized: "Maximum Sound Speed"),
+      title                : String(localized: "Maximum sound speed"),
       section              : .soundSlotConfiguration,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -9277,7 +9334,7 @@ extension ProgrammerToolSettingsProperty {
       title                : String(localized: "Play only if drive sound is enabled"),
       section              : .soundSlotConfiguration,
       controlType          : .checkBox,
-      encoding             : .boolBit,
+      encoding             : .boolBitReversed,
       cvIndexingMethod     : .esuSoundSlot,
       cv                   : [.cv_016_001_260],
       mask                 : [0b00000001],
@@ -9293,7 +9350,7 @@ extension ProgrammerToolSettingsProperty {
     ),
     
     .soundSlotSoundConfiguration : (
-      title                : String(localized: "Sound Configuration"),
+      title                : String(localized: "Sound configuration"),
       section              : .soundSlotConfiguration,
       controlType          : .textField,
       encoding             : .byte,

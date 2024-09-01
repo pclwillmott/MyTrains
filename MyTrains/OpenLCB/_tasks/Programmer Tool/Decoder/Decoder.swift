@@ -808,6 +808,8 @@ public class Decoder : NSObject {
       return "\(values[0])"
     case .boolBit:
       return values[0] == definition.mask![0] ? "true" : "false"
+    case .boolBitReversed:
+      return values[0] == definition.mask![0] ? "false" : "true"
     case .boolNZ:
       return values[0] != 0 ? "true" : "false"
     case .boolNZReversed:
@@ -1127,6 +1129,8 @@ public class Decoder : NSObject {
       newValues.append(UInt8(string)!)
     case .boolBit:
       newValues.append(string == "true" ? definition.mask![0] : 0)
+    case .boolBitReversed:
+      newValues.append(string == "false" ? definition.mask![0] : 0)
     case .boolNZ:
       newValues.append(string == "true" ? definition.trueDefaultValue! : 0)
     case .boolNZReversed:

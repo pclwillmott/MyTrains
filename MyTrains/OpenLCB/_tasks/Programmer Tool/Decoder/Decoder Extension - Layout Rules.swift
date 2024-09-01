@@ -78,18 +78,6 @@ extension Decoder {
         capability     : []
       ),
       (
-        property1      : .brakeIfLeftRailSignalPositive,
-        testType1      : .equal,
-        testValue1     : "false",
-        operator       : .and,
-        property2      : .brakeIfRightRailSignalPositive,
-        testType2      : .equal,
-        testValue2     : "false",
-        actionProperty : [.voltageDifferenceIndicatingABCBrakeSection, .abcReducedSpeed],
-        actionType     : .setIsHiddenToTestResult,
-        capability     : []
-      ),
-      (
         property1      : .enableABCShuttleTrain,
         testType1      : .equal,
         testValue1     : "false",
@@ -344,7 +332,7 @@ extension Decoder {
       (
         property1      : .enableSimpleSUSI,
         testType1      : .equal,
-        testValue1     : "false",
+        testValue1     : "true",
         operator       : nil,
         property2      : nil,
         testType2      : nil,
@@ -649,7 +637,7 @@ extension Decoder {
         property2      : nil,
         testType2      : nil,
         testValue2     : nil,
-        actionProperty : [.slowSpeedBackEMFSamplingPeriod, .slowSpeedLengthOfMeasurementGap, .regulationParameterID, .regulationParameterID, .regulationReference, .fullSpeedBackEMFSamplingPeriod, .regulationParameterKSlow, .largestInternalSpeedStepThatUsesKSlow, .regulationParameterK, .fullSpeedLengthOfMeasurementGap, .regulationParameterISlow, .regulationInfluenceDuringSlowSpeed, .adaptiveRegulationFrequencyEnabled, .backEMFSamplingPeriod, .emfBasicSettings, .emfSlowSpeedSettings, .regulationReferenceLok3, .regulationParameterKLok3, .regulationParameterILok3, .regulationInfluenceLok3],
+        actionProperty : [.slowSpeedBackEMFSamplingPeriod, .slowSpeedLengthOfMeasurementGap, .regulationParameterID, .regulationParameterID, .regulationReference, .fullSpeedBackEMFSamplingPeriod, .regulationParameterKSlow, .largestInternalSpeedStepThatUsesKSlow, .regulationParameterK, .fullSpeedLengthOfMeasurementGap, .regulationParameterISlow, .regulationInfluenceDuringSlowSpeed, .adaptiveRegulationFrequencyEnabled, .backEMFSamplingPeriod, .emfBasicSettings, .emfSlowSpeedSettings, .regulationReferenceLok3, .regulationParameterKLok3, .regulationParameterILok3, .regulationInfluenceLok3, .emfBackEMFSettings],
         actionType     : .setIsHiddenToTestResult,
         capability     : []
       ),

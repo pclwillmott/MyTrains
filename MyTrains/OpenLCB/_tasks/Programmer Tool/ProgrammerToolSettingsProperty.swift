@@ -77,6 +77,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable, Codable {
   case brakeIfRightRailSignalPositive = 23
   case brakeIfLeftRailSignalPositive = 24
   case voltageDifferenceIndicatingABCBrakeSection = 25
+  case voltageDifferenceIndicatingABCBrakeSection32 = 516
   case abcReducedSpeed = 26
   case enableABCShuttleTrain = 27
   case waitingPeriodBeforeDirectionChange = 28
@@ -451,6 +452,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable, Codable {
   case regulationParameterISlow = 397
   case largestInternalSpeedStepThatUsesKSlow = 129
   case regulationInfluenceDuringSlowSpeed = 119
+  case regulationInfluence = 514
   case regulationInfluenceLok3 = 430
   case emfBackEMFSettings = 132
   case slowSpeedBackEMFSamplingPeriod = 120
@@ -554,6 +556,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable, Codable {
   case soundCVValue = 244
   case esuSoundSlot = 245
   case soundSlotVolume = 246
+  case soundSlotVolume128 = 515
   case soundSlotMinimumSoundSpeed = 247
   case soundSlotMaximumSoundSpeed = 248
   case soundSlotPlayOnlyIfDriveSoundEnabled = 249

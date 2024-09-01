@@ -54,6 +54,7 @@ public enum ProgrammerToolEncodingType : Int, CaseIterable {
   case word             // Word, Min, Max
   case dword            // DWord, Min, Max
   case boolBit          // Bit of Byte, Mask
+  case boolBitReversed  // Bit of Byte, Mask, 0 means true, 1 maeans false
   case boolNZ           // Byte, Non-Zero means true, 0 means false
   case boolNZReversed   // Byte, Non-Zero means false, 0 means true
   case extendedAddress  // Word DCC long address encoding

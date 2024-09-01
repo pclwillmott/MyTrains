@@ -638,8 +638,8 @@
             filePath = "MyTrains/OpenLCB/_tasks/Programmer Tool/ProgrammerToolSettingsPropertyExtension.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1289"
-            endingLineNumber = "1289"
+            startingLineNumber = "1308"
+            endingLineNumber = "1308"
             landmarkName = "definitions"
             landmarkType = "24">
          </BreakpointContent>
@@ -654,8 +654,8 @@
             filePath = "MyTrains/OpenLCB/_tasks/Programmer Tool/Decoder/DecoderType - Capabilities.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "2865"
-            endingLineNumber = "2865"
+            startingLineNumber = "2877"
+            endingLineNumber = "2877"
             landmarkName = "capabilityLookup"
             landmarkType = "24">
          </BreakpointContent>
@@ -686,8 +686,8 @@
             filePath = "MyTrains/OpenLCB/_tasks/Programmer Tool/Decoder/DecoderType - Capabilities.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "2921"
-            endingLineNumber = "2921"
+            startingLineNumber = "2933"
+            endingLineNumber = "2933"
             landmarkName = "capabilityLookup"
             landmarkType = "24">
          </BreakpointContent>
@@ -718,8 +718,8 @@
             filePath = "MyTrains/OpenLCB/_tasks/Programmer Tool/ProgrammerToolSettingsProperty.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "513"
-            endingLineNumber = "513"
+            startingLineNumber = "515"
+            endingLineNumber = "515"
             landmarkName = "ProgrammerToolSettingsProperty"
             landmarkType = "13">
          </BreakpointContent>
@@ -734,8 +734,8 @@
             filePath = "MyTrains/OpenLCB/_tasks/Programmer Tool/Decoder/DecoderType - Capabilities.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "2053"
-            endingLineNumber = "2053"
+            startingLineNumber = "2065"
+            endingLineNumber = "2065"
             landmarkName = "capabilityLookup"
             landmarkType = "24">
          </BreakpointContent>
@@ -750,8 +750,8 @@
             filePath = "MyTrains/OpenLCB/_tasks/Programmer Tool/ProgrammerToolSettingsProperty.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "138"
-            endingLineNumber = "138"
+            startingLineNumber = "139"
+            endingLineNumber = "139"
             landmarkName = "ProgrammerToolSettingsProperty"
             landmarkType = "13">
          </BreakpointContent>
