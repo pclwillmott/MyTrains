@@ -773,7 +773,7 @@ extension ProgrammerToolSettingsProperty {
     // Quantum Engineer
 
     .enableQuantumEngineer : (
-      title                : String(localized: "Enable Quantum Engineer Support"),
+      title                : String(localized: "Enable quantum engineer support"),
       section              : .quantumEngineer,
       controlType          : .checkBox,
       encoding             : .boolBit,
@@ -815,7 +815,7 @@ extension ProgrammerToolSettingsProperty {
     // Analog Mode Motor Control
 
     .useHighFrequencyPWMMotorControl : (
-      title                : String(localized: "High Frequency PWM Motor Control"),
+      title                : String(localized: "High frequency PWM motor control"),
       section              : .analogModeMotorControl,
       controlType          : .checkBox,
       encoding             : .boolBit,
@@ -2236,7 +2236,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .enableShuntingModeTrim : (
-      title                : String(localized: "Enable shunting mode trimming"),
+      title                : String(localized: "Trim when \"Switching Mode\" is enabled"),
       section              : .trimming,
       controlType          : .checkBox,
       encoding             : .boolNZ,
@@ -2255,7 +2255,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .shuntingModeTrim : (
-      title                : String(localized: "Shunting mode trimming"),
+      title                : String(localized: "\"Switching Mode\" trimming"),
       section              : .trimming,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -2316,7 +2316,7 @@ extension ProgrammerToolSettingsProperty {
     // Gearbox Backlash
 
     .enableGearboxBacklashCompensation : (
-      title                : String(localized: "Enable Gearbox Backlash Compensation"),
+      title                : String(localized: "Enable gearbox backlash compensation"),
       section              : .gearboxBacklash,
       controlType          : .checkBox,
       encoding             : .boolNZ,
@@ -2335,7 +2335,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .gearboxBacklashCompensation : (
-      title                : String(localized: "Slow motion time until Acceleration Starts"),
+      title                : String(localized: "Slow motion time until acceleration starts"),
       section              : .gearboxBacklash,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -8541,6 +8541,25 @@ extension ProgrammerToolSettingsProperty {
       requiredCapabilities : [.smokeChuffs, .lok3, .sound]
     ),
     
+    .warningDigitalWheelSensorDisabled : (
+      title                : String(localized: "The digital wheel sensor is disabled"),
+      section              : .steamChuffs,
+      controlType          : .warning,
+      encoding             : .none,
+      cvIndexingMethod     : nil,
+      cv                   : nil,
+      mask                 : nil,
+      shift                : nil,
+      minValue             : nil,
+      maxValue             : nil,
+      trueDefaultValue     : nil,
+      infoType             : .none,
+      infoFactor           : nil,
+      infoMaxDecimalPlaces : nil,
+      infoFormat           : nil,
+      requiredCapabilities : []
+    ),
+
     // Sound Steam Shift
     
     .enableSoundSteamShift : (
@@ -8875,7 +8894,7 @@ extension ProgrammerToolSettingsProperty {
     // Dynamic Sound Control
 
     .soundControlBasis : (
-      title                : String(localized: "Sound Control Basis"),
+      title                : String(localized: "Sound control basis"),
       section              : .dynamicSoundControl,
       controlType          : .comboBox,
       encoding             : .esuSoundControlBasis,
@@ -8894,7 +8913,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .trainLoadAtLowSpeed : (
-      title                : String(localized: "Train Load at Low Speed"),
+      title                : String(localized: "Train load at low speed"),
       section              : .dynamicSoundControl,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -8913,7 +8932,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .trainLoadAtHighSpeed : (
-      title                : String(localized: "Train Load at High Speed"),
+      title                : String(localized: "Train load at high speed"),
       section              : .dynamicSoundControl,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -8932,7 +8951,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .enableLoadOperationThreshold : (
-      title                : String(localized: "Enable Threshold for Load Operation"),
+      title                : String(localized: "Enable threshold for load operation"),
       section              : .dynamicSoundControl,
       controlType          : .checkBox,
       encoding             : .boolNZ,
@@ -8951,7 +8970,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .loadOperationThreshold : (
-      title                : String(localized: "Threshold for Load Operation"),
+      title                : String(localized: "Threshold for load operation"),
       section              : .dynamicSoundControl,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -8970,7 +8989,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .loadOperationTriggeredFunction : (
-      title                : String(localized: "Triggered Function"),
+      title                : String(localized: "Triggered function"),
       section              : .dynamicSoundControl,
       controlType          : .comboBox,
       encoding             : .esuTriggeredFunction,
@@ -8989,7 +9008,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .enableIdleOperationThreshold : (
-      title                : String(localized: "Enable Threshold for Idle Operation"),
+      title                : String(localized: "Enable threshold for idle operation"),
       section              : .dynamicSoundControl,
       controlType          : .checkBox,
       encoding             : .boolNZ,
@@ -9008,7 +9027,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .idleOperationThreshold : (
-      title                : String(localized: "Threshold for Idle Operation"),
+      title                : String(localized: "Threshold for idle operation"),
       section              : .dynamicSoundControl,
       controlType          : .textFieldWithSlider,
       encoding             : .byte,
@@ -9027,7 +9046,7 @@ extension ProgrammerToolSettingsProperty {
     ),
 
     .idleOperationTriggeredFunction : (
-      title                : String(localized: "Triggered Function"),
+      title                : String(localized: "Triggered function"),
       section              : .dynamicSoundControl,
       controlType          : .comboBox,
       encoding             : .esuTriggeredFunction,

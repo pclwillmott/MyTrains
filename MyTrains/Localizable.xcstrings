@@ -4,6 +4,9 @@
     "" : {
       "comment" : "This is used for a tooltip."
     },
+    "\"Switching Mode\" trimming" : {
+
+    },
     "(disabled)" : {
 
     },
@@ -3297,7 +3300,7 @@
     "Enable function timeout" : {
 
     },
-    "Enable Gearbox Backlash Compensation" : {
+    "Enable gearbox backlash compensation" : {
 
     },
     "Enable Load Control / Back EMF" : {
@@ -3318,7 +3321,7 @@
     "Enable output driver on AUX3 and AUX4" : {
 
     },
-    "Enable Quantum Engineer Support" : {
+    "Enable quantum engineer support" : {
 
     },
     "Enable RailCom feedback" : {
@@ -3345,19 +3348,16 @@
     "Enable Serial User Standard Interface (SUSI Slave)" : {
 
     },
-    "Enable shunting mode trimming" : {
-
-    },
     "Enable sound steam shift" : {
 
     },
     "Enable Support for Broadway Limited Steam Engine Control" : {
 
     },
-    "Enable Threshold for Idle Operation" : {
+    "Enable threshold for idle operation" : {
 
     },
-    "Enable Threshold for Load Operation" : {
+    "Enable threshold for load operation" : {
 
     },
     "Enable ZIMO Manual Function" : {
@@ -4652,7 +4652,7 @@
     "Hide the Panel Configuration Area" : {
 
     },
-    "High Frequency PWM Motor Control" : {
+    "High frequency PWM motor control" : {
 
     },
     "Highbeam" : {
@@ -7921,9 +7921,6 @@
         }
       }
     },
-    "Shunting mode trimming" : {
-
-    },
     "SIFA Message" : {
 
     },
@@ -8006,7 +8003,7 @@
         }
       }
     },
-    "Slow motion time until Acceleration Starts" : {
+    "Slow motion time until acceleration starts" : {
 
     },
     "Slow Speed back EMF sampling period" : {
@@ -8079,7 +8076,7 @@
     "Sound configuration" : {
 
     },
-    "Sound Control Basis" : {
+    "Sound control basis" : {
 
     },
     "Sound Control Behaviour" : {
@@ -8916,6 +8913,9 @@
     "The decoder will only respond to DCC commands!" : {
 
     },
+    "The digital wheel sensor is disabled" : {
+
+    },
     "The following options determine which windows are automatically displayed at start-up and when the application restarts after configuration changes." : {
 
     },
@@ -9100,10 +9100,10 @@
     "Threshold" : {
 
     },
-    "Threshold for Idle Operation" : {
+    "Threshold for idle operation" : {
 
     },
-    "Threshold for Load Operation" : {
+    "Threshold for load operation" : {
 
     },
     "Throttle" : {
@@ -9273,10 +9273,10 @@
     "Train direction or directions to profile." : {
       "comment" : "This is used for a tooltip."
     },
-    "Train Load at High Speed" : {
+    "Train load at high speed" : {
 
     },
-    "Train Load at Low Speed" : {
+    "Train load at low speed" : {
 
     },
     "Train Move Complete" : {
@@ -9329,7 +9329,13 @@
     "Trigger user sounds on function status change (LokSound 2 behaviour)" : {
 
     },
+    "Triggered function" : {
+
+    },
     "Triggered Function" : {
+
+    },
+    "Trim when \"Switching Mode\" is enabled" : {
 
     },
     "Trimming" : {

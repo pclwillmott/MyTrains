@@ -515,6 +515,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable, Codable {
   case enableMinimumDistanceOfSteamChuffs = 138
   case minimumDistanceofSteamChuffs = 139
   case minimumDistanceofSteamChuffsLok3 = 450
+  case warningDigitalWheelSensorDisabled = 517
   case randomSoundsMinimumDistance = 402
   case randomSoundsMaximumDistance = 403
   case randomSoundsMinimumDistanceLok3 = 444

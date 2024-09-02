@@ -78,6 +78,66 @@ extension Decoder {
         capability     : []
       ),
       (
+        property1      : .decoderSensorSettings,
+        testType1      : .equal,
+        testValue1     : DecoderSensorSettings.useDigitalWheelSensor.title,
+        operator       : nil,
+        property2      : nil,
+        testType2      : nil,
+        testValue2     : nil,
+        actionProperty : [.warningDigitalWheelSensorDisabled],
+        actionType     : .setIsHiddenToTestResult,
+        capability     : []
+      ),
+      (
+        property1      : .enableStartingDelayIfVirtualDriveSoundEnabledCV252,
+        testType1      : .equal,
+        testValue1     : "false",
+        operator       : nil,
+        property2      : nil,
+        testType2      : nil,
+        testValue2     : nil,
+        actionProperty : [.startingDelayIfVirtualDriveSoundEnabledCV252],
+        actionType     : .setIsHiddenToTestResult,
+        capability     : []
+      ),
+      (
+        property1      : .enableStartingDelayIfVirtualDriveSoundEnabledCV253,
+        testType1      : .equal,
+        testValue1     : "false",
+        operator       : nil,
+        property2      : nil,
+        testType2      : nil,
+        testValue2     : nil,
+        actionProperty : [.startingDelayIfVirtualDriveSoundEnabledCV253],
+        actionType     : .setIsHiddenToTestResult,
+        capability     : []
+      ),
+      (
+        property1      : .enableStartingDelayIfVirtualDriveSoundEnabledCV221,
+        testType1      : .equal,
+        testValue1     : "false",
+        operator       : nil,
+        property2      : nil,
+        testType2      : nil,
+        testValue2     : nil,
+        actionProperty : [.startingDelayIfVirtualDriveSoundEnabledCV221],
+        actionType     : .setIsHiddenToTestResult,
+        capability     : []
+      ),
+      (
+        property1      : .enableStartingDelayIfVirtualDriveSoundEnabledCV128,
+        testType1      : .equal,
+        testValue1     : "false",
+        operator       : nil,
+        property2      : nil,
+        testType2      : nil,
+        testValue2     : nil,
+        actionProperty : [.startingDelayIfVirtualDriveSoundEnabledCV128],
+        actionType     : .setIsHiddenToTestResult,
+        capability     : []
+      ),
+      (
         property1      : .enableABCShuttleTrain,
         testType1      : .equal,
         testValue1     : "false",
@@ -159,7 +219,7 @@ extension Decoder {
         testValue2     : nil,
         actionProperty : [.speedStepMode],
         actionType     : .setIsHiddenToTestResult,
-        capability     : [.detectSpeedStepAutomatically]
+        capability     : []
       ),
       (
         property1      : .enableAcceleration,
