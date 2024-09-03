@@ -107,6 +107,11 @@ class DecoderEditorVC : MyTrainsViewController, DecoderPropertyTableViewDSDelega
       
     }
     
+//    for var (key, definition) in decoderTypes {
+//      definition.offsetMethod = key.offsetMethod
+//      decoderTypes[key] = definition
+//    }
+
     for property in ProgrammerToolSettingsProperty.allCases {
       properties.append(property)
     }
@@ -219,7 +224,7 @@ class DecoderEditorVC : MyTrainsViewController, DecoderPropertyTableViewDSDelega
         mappingsDataSource.definition = definition
       }
       else {
-        definition = DecoderDefinition(decoderType: decoderType, firmwareVersion: [], esuProductIds: [], cvs: [], defaultValues: [], mapping: [:], properties: [])
+        definition = DecoderDefinition(decoderType: decoderType, firmwareVersion: [], esuProductIds: [], cvs: [], defaultValues: [], mapping: [:], properties: [], esuPhysicalOutputs: [], offsetMethod: .none)
         cvDataSource.definition = definition
         propertyDataSource.definition = definition
         productIdDataSource.definition = definition

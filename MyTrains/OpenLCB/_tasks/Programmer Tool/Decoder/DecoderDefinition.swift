@@ -25,19 +25,22 @@
 //
 // Revision History:
 //
-//     31/08/2024  Paul Willmott - DecoderDefinition.swift created
+//     31/08/2024  Paul Willmott - DecoderDefinition.swift created.
+//     03/09/2024  Paul Willmott - esuPhysicalOutputs, offsetMethod added.
 // -----------------------------------------------------------------------------
 
 import Foundation
 
 public struct DecoderDefinition : Codable {
   
-  var decoderType     : DecoderType
-  var firmwareVersion : [[Int]]
-  var esuProductIds   : [UInt32]
-  var cvs             : [CV]
-  var defaultValues   : [UInt8]
-  var mapping         : [Int:CV]
-  var properties      : Set<ProgrammerToolSettingsProperty>
+  var decoderType        : DecoderType
+  var firmwareVersion    : [[Int]]
+  var esuProductIds      : [UInt32]
+  var cvs                : [CV]
+  var defaultValues      : [UInt8]
+  var mapping            : [Int:CV]
+  var properties         : Set<ProgrammerToolSettingsProperty>
+  var esuPhysicalOutputs : Set<ESUDecoderPhysicalOutput>
+  var offsetMethod       : ESUPhysicalOutputCVIndexOffsetMethod
   
 }

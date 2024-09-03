@@ -165,7 +165,7 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
       return
     }
     
-    decoder = Decoder(decoderType: .lokPilot5nanoDCC)
+    decoder = Decoder(decoderType: .lokPilotStandardV1_0)
     decoder?.delegate = self
     
     observerId = appNode.addObserver(observer: self)
@@ -711,7 +711,7 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
     guard let decoder else {
       return 0
     }
-    return decoder.visibleCVs.count
+    return decoder.cvs.count
   }
   
   // Sets the data object for an item in the specified row and column.
@@ -725,7 +725,7 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
       return nil
     }
     
-    let cv = decoder.visibleCVs[row].cv
+    let cv = decoder.cvs[row].cv
     
     let value = decoder.getUInt8(cv: cv) ?? 0
     
@@ -790,7 +790,7 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
       if textField.tag >= 100000 {
         let row = (textField.tag - 100000) / 10
         let column = (textField.tag - 100000) % 10
-        let cv = decoder.visibleCVs[row].cv
+        let cv = decoder.cvs[row].cv
         switch column {
         case 0:
           if let value = UInt8(trimmed) {

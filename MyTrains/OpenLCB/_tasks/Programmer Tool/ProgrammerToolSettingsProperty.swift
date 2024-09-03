@@ -224,6 +224,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable, Codable {
   case triggerUserSoundsOnFunctionStatusChange = 422
   case frequencyForBlinkingEffects = 92
   case frequencyForBlinkingEffectsB = 421
+  case frequencyForBlinkingEffectsC = 518
   case gradeCrossingHoldingTime = 93
   case gradeCrossingHoldingTimeB = 512
   case fadeInTimeOfLightEffects = 94

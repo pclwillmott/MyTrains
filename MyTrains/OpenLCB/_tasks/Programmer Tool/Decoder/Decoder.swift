@@ -21,31 +21,46 @@ public class Decoder : NSObject {
     
     self._decoderType = decoderType
     
-    self._cvList = decoderType.allCVlists[0]
-    self._cvs = decoderType.cvList(filename: _cvList.filename)
+    definition = DecoderType.decoderDefinitions[decoderType]
     
-    var lastIndex : UInt16?
-    var block = 0
-    for item in _cvs {
-      let index = item.cv.index
-      if index != lastIndex {
-        _indicies.append(index)
-        indexLookup[index] = block
-        block += item.cv.isIndexed ? 256 : 1024
-        lastIndex = index
-      }
-      _visibleCVs.append(item)
+    if definition == nil {
+      definition = DecoderDefinition(decoderType: decoderType, firmwareVersion: [], esuProductIds: [], cvs: [], defaultValues: [], mapping: [:], properties: [], esuPhysicalOutputs: [], offsetMethod: .none)
     }
     
-    savedBlocks = [UInt8](repeating: 0, count: 1024 + (_indicies.count - 1) * 256)
-    
+    if let definition, !definition.cvs.isEmpty {
+      
+      var lastIndex : UInt16?
+      
+      var block = 0
+      
+      for cvIndex in 0 ..< definition.cvs.count {
+        
+        let item = definition.cvs[cvIndex]
+ 
+        _cvs.append((item, definition.defaultValues[cvIndex]))
+
+        let index = item.index
+        
+        if index != lastIndex {
+          _indicies.append(index)
+          indexLookup[index] = block
+          block += item.isIndexed ? 256 : 1024
+          lastIndex = index
+        }
+        
+      }
+      
+      savedBlocks = [UInt8](repeating: 0, count: 1024 + (_indicies.count - 1) * 256)
+      
+    }
+
     super.init()
     
-    for item in _cvs {
-      setSavedValue(cv: item.cv, value: item.defaultValue)
+    for (cv, defaultValue) in _cvs {
+      setSavedValue(cv: cv, value: defaultValue)
     }
-    
-    esuDecoderPhysicalOutput = decoderType.capabilities.contains(.singleFrontRearAux1Aux2) ? .frontLightOnly : .frontLight
+
+    esuDecoderPhysicalOutput = decoderType.capabilities.contains(.singleFrontRearAux1Aux2) ? .frontLight : .frontLight_1
     
     revertToSaved()
 
@@ -65,13 +80,9 @@ public class Decoder : NSObject {
   
   private var _decoderType : DecoderType
   
-  private var _cvList : CVList
+  private var _cvs : [(cv: CV, defaultValue:UInt8)] = []
   
-  private var _cvs : [(cv: CV, defaultValue:UInt8)]
-  
-  private var _visibleCVs : [(cv: CV, defaultValue:UInt8)] = []
-  
-  private var savedBlocks : [UInt8]
+  private var savedBlocks : [UInt8] = []
   
   private var modifiedBlocks : [UInt8] = [] {
     didSet {
@@ -102,10 +113,18 @@ public class Decoder : NSObject {
   
   private var definition : DecoderDefinition?
   
+  public var esuPhysicalOutputCVIndexOffsetMethod : ESUPhysicalOutputCVIndexOffsetMethod {
+    guard let definition else {
+      return .none
+    }
+    return definition.offsetMethod
+  }
+  
   public var propertyViews : [PTSettingsPropertyView] = [] {
     
     didSet {
       
+      /*
       do {
         
         let url = URL(fileURLWithPath: "\(Bundle.main.resourcePath!)/DECODER_INFO.json")
@@ -121,8 +140,13 @@ public class Decoder : NSObject {
       } catch {
         
       }
+       
+       */
       
       guard let definition else {
+        #if DEBUG
+        debugLog("Definition is still nil")
+        #endif
         return
       }
       
@@ -177,10 +201,6 @@ public class Decoder : NSObject {
     
   }
   
-  public var cvList : CVList {
-    return _cvList
-  }
-  
   public var cvs : [(cv: CV, defaultValue:UInt8)] {
     return _cvs
   }
@@ -191,10 +211,6 @@ public class Decoder : NSObject {
       result.insert(cv.cv)
     }
     return result
-  }
-  
-  public var visibleCVs : [(cv: CV, defaultValue:UInt8)] {
-    return _visibleCVs
   }
   
   public var indicies : [UInt16] {
@@ -355,7 +371,7 @@ public class Decoder : NSObject {
     }
   }
   
-  public var esuDecoderPhysicalOutput : ESUDecoderPhysicalOutput = .frontLight {
+  public var esuDecoderPhysicalOutput : ESUDecoderPhysicalOutput = .frontLight_1 {
     didSet {
       reloadIndexedViews(indexingMethod: .esuDecoderPhysicalOutput)
       _layoutRules = nil
@@ -365,14 +381,21 @@ public class Decoder : NSObject {
   
   public var esuSupportedPhysicalOutputs : Set<ESUDecoderPhysicalOutput> {
     
+    guard let definition else {
+      return []
+    }
+    
+    return definition.esuPhysicalOutputs
+    
+    /*
     let capabilities = decoderType.capabilities
     
     var result : Set<ESUDecoderPhysicalOutput> = []
     
     if capabilities.contains(.singleFrontRearAux1Aux2) {
       result = result.union([
-        .frontLightOnly,
-        .rearLightOnly,
+        .frontLight,
+        .rearLight,
       ])
       if capabilities.intersection([.aux3toAux4]) == [.aux3toAux4] {
         result = result.union([
@@ -382,31 +405,31 @@ public class Decoder : NSObject {
       }
       if capabilities.intersection([.aux1]) == [.aux1] {
         result = result.union([
-          .aux1Only,
-        ])
-      }
-      if capabilities.intersection([.aux2]) == [.aux2] {
-        result = result.union([
-          .aux2Only,
-        ])
-      }
-    }
-    else {
-      result = result.union([
-        .frontLight,
-        .frontLight_2,
-        .rearLight,
-        .rearLight_2,
-      ])
-      if capabilities.intersection([.aux1]) == [.aux1] {
-        result = result.union([
           .aux1,
-          .aux1_2,
         ])
       }
       if capabilities.intersection([.aux2]) == [.aux2] {
         result = result.union([
           .aux2,
+        ])
+      }
+    }
+    else {
+      result = result.union([
+        .frontLight_1,
+        .frontLight_2,
+        .rearLight_1,
+        .rearLight_2,
+      ])
+      if capabilities.intersection([.aux1]) == [.aux1] {
+        result = result.union([
+          .aux1_1,
+          .aux1_2,
+        ])
+      }
+      if capabilities.intersection([.aux2]) == [.aux2] {
+        result = result.union([
+          .aux2_1,
           .aux2_2,
         ])
       }
@@ -460,6 +483,7 @@ public class Decoder : NSObject {
     }
     
     return result
+    */
     
   }
   

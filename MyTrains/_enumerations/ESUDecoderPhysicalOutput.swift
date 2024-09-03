@@ -8,38 +8,38 @@
 import Foundation
 import AppKit
 
-public enum ESUDecoderPhysicalOutput : UInt8, CaseIterable {
+public enum ESUDecoderPhysicalOutput : UInt8, CaseIterable, Codable {
   
   // MARK: Enumeration
   
-  case frontLightOnly = 24
-  case rearLightOnly  = 25
-  case aux1Only       = 26
-  case aux2Only       = 27
-  case frontLight     = 0
-  case frontLight_2   = 20
-  case rearLight      = 1
-  case rearLight_2    = 21
-  case aux1           = 2
-  case aux1_2         = 22
-  case aux2           = 3
-  case aux2_2         = 23
-  case aux3           = 4
-  case aux4           = 5
-  case aux5           = 6
-  case aux6           = 7
-  case aux7           = 8
-  case aux8           = 9
-  case aux9           = 10
-  case aux10          = 11
-  case aux11          = 12
-  case aux12          = 13
-  case aux13          = 14
-  case aux14          = 15
-  case aux15          = 16
-  case aux16          = 17
-  case aux17          = 18
-  case aux18          = 19
+  case frontLight   = 24
+  case frontLight_1 = 0
+  case frontLight_2 = 20
+  case rearLight    = 25
+  case rearLight_1  = 1
+  case rearLight_2  = 21
+  case aux1         = 26
+  case aux1_1       = 2
+  case aux1_2       = 22
+  case aux2         = 27
+  case aux2_1       = 3
+  case aux2_2       = 23
+  case aux3         = 4
+  case aux4         = 5
+  case aux5         = 6
+  case aux6         = 7
+  case aux7         = 8
+  case aux8         = 9
+  case aux9         = 10
+  case aux10        = 11
+  case aux11        = 12
+  case aux12        = 13
+  case aux13        = 14
+  case aux14        = 15
+  case aux15        = 16
+  case aux16        = 17
+  case aux17        = 18
+  case aux18        = 19
 
   // MARK: Constructors
   
@@ -61,8 +61,60 @@ public enum ESUDecoderPhysicalOutput : UInt8, CaseIterable {
   
   // MARK: Public Methods
   
+  
   public func cvIndexOffset(decoder:Decoder) -> Int {
     
+    switch decoder.esuPhysicalOutputCVIndexOffsetMethod {
+      
+    case .none:
+      return 0
+      
+    case .lok5:
+      return Int(self.rawValue) * 8
+      
+    case .lok4:
+      var index : ESUDecoderPhysicalOutput
+      switch self {
+      case .frontLight_2:
+        index = .aux11
+      case .rearLight_2:
+        index = .aux12
+      case .aux1_2:
+        index = .aux13
+      case .aux2_2:
+        index = .aux14
+      default:
+        index = self
+      }
+      return Int(index.rawValue) * 8
+      
+    case .lok3:
+      switch self {
+      case .frontLight:
+        return 0
+      case .rearLight:
+        return 1
+      case .aux1:
+        return 2
+      case .aux2:
+        return 3
+      case .aux3:
+        return 4
+      case .aux4:
+        return 5
+      case .aux5:
+        return 6
+      case .aux6:
+        return 7
+      default:
+        break
+      }
+      
+    }
+    
+    return 0
+    
+    /*
     let capabilities = decoder.decoderType.capabilities
     
     if capabilities.contains(.physicalOutputsPropertiesA) {
@@ -90,13 +142,13 @@ public enum ESUDecoderPhysicalOutput : UInt8, CaseIterable {
     }
     else {
       switch self {
-      case .frontLightOnly:
+      case .frontLight:
         return 0
-      case .rearLightOnly:
+      case .rearLight:
         return 1
-      case .aux1Only:
+      case .aux1:
         return 2
-      case .aux2Only:
+      case .aux2:
         return 3
       case .aux3:
         return 4
@@ -110,23 +162,23 @@ public enum ESUDecoderPhysicalOutput : UInt8, CaseIterable {
         return 0
       }
     }
-    
+    */
   }
   
   // MARK: Public Class Properties
   
   public static let titles : [ESUDecoderPhysicalOutput:String] = [
-    .frontLightOnly : String(localized:"Front Light"),
-    .rearLightOnly  : String(localized:"Rear Light"),
-    .aux1Only       : String(localized:"AUX1"),
-    .aux2Only       : String(localized:"AUX2"),
-    .frontLight     : String(localized:"Front Light [1]"),
+    .frontLight     : String(localized:"Front Light"),
+    .frontLight_1   : String(localized:"Front Light [1]"),
     .frontLight_2   : String(localized:"Front Light [2]"),
-    .rearLight      : String(localized:"Rear Light [1]"),
+    .rearLight      : String(localized:"Rear Light"),
+    .rearLight_1    : String(localized:"Rear Light [1]"),
     .rearLight_2    : String(localized:"Rear Light [2]"),
-    .aux1           : String(localized:"AUX1 [1]"),
+    .aux1           : String(localized:"AUX1"),
+    .aux1_1         : String(localized:"AUX1 [1]"),
     .aux1_2         : String(localized:"AUX1 [2]"),
-    .aux2           : String(localized:"AUX2 [1]"),
+    .aux2           : String(localized:"AUX2"),
+    .aux2_1         : String(localized:"AUX2 [1]"),
     .aux2_2         : String(localized:"AUX2 [2]"),
     .aux3           : String(localized:"AUX3"),
     .aux4           : String(localized:"AUX4"),

@@ -670,8 +670,8 @@
             filePath = "MyTrains/_enumerations/ESUDecoderPhysicalOutput.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "71"
-            endingLineNumber = "71"
+            startingLineNumber = "123"
+            endingLineNumber = "123"
             landmarkName = "cvIndexOffset(decoder:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -718,8 +718,8 @@
             filePath = "MyTrains/OpenLCB/_tasks/Programmer Tool/ProgrammerToolSettingsProperty.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "515"
-            endingLineNumber = "515"
+            startingLineNumber = "516"
+            endingLineNumber = "516"
             landmarkName = "ProgrammerToolSettingsProperty"
             landmarkType = "13">
          </BreakpointContent>

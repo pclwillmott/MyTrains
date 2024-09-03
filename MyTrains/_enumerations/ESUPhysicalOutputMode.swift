@@ -161,14 +161,14 @@ public enum ESUPhysicalOutputMode : UInt8, CaseIterable {
     comboBox.action = nil
     
     let hasExternalControlledSmokeUnit : Set<ESUDecoderPhysicalOutput> = [
-      .aux1,
+      .aux1_1,
       .aux1_2,
     ]
     
     let hasRocoCoupler : Set<ESUDecoderPhysicalOutput> = [
-      .aux1,
+      .aux1_1,
       .aux1_2,
-      .aux2,
+      .aux2_1,
       .aux2_2,
     ]
 
@@ -198,7 +198,7 @@ public enum ESUPhysicalOutputMode : UInt8, CaseIterable {
     ]
 
     let hasExternalSmokeUnit : Set<ESUDecoderPhysicalOutput> = [
-      .aux1,
+      .aux1_1,
       .aux1_2,
     ]
     

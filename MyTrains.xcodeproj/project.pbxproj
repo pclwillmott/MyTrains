@@ -120,7 +120,6 @@
 		DA47E5412C3AB6DD00A1D803 /* DecoderDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA47E5402C3AB6DD00A1D803 /* DecoderDelegate.swift */; };
 		DA47E5432C3AE5E200A1D803 /* ProgrammerToolInspectorProperty.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA47E5422C3AE5E200A1D803 /* ProgrammerToolInspectorProperty.swift */; };
 		DA47E5452C3AEF3300A1D803 /* ManufacturerCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA47E5442C3AEF3300A1D803 /* ManufacturerCode.swift */; };
-		DA47E5472C3B0CAE00A1D803 /* NMRA Standard Decoder [0.0.0].cvlist in Resources */ = {isa = PBXBuildFile; fileRef = DA47E5462C3B0CAE00A1D803 /* NMRA Standard Decoder [0.0.0].cvlist */; };
 		DA48DA702BA1FA1C0009FEBF /* FrameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA48DA6F2BA1FA1C0009FEBF /* FrameView.swift */; };
 		DA48DA722BA201BD0009FEBF /* LEDView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA48DA712BA201BD0009FEBF /* LEDView.swift */; };
 		DA48EE29293CEF16006C26A0 /* DayOfWeek.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA48EE28293CEF16006C26A0 /* DayOfWeek.swift */; };
@@ -216,6 +215,7 @@
 		DA6E28E1285F86B900772641 /* Orientation.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA6E28E0285F86B900772641 /* Orientation.swift */; };
 		DA6E28E3285F8F1A00772641 /* TrackElectrificationType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA6E28E2285F8F1A00772641 /* TrackElectrificationType.swift */; };
 		DA6E28E5285F925C00772641 /* BlockDirection.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA6E28E4285F925C00772641 /* BlockDirection.swift */; };
+		DA705C932C877F1400368286 /* ESUPhysicalOutputCVIndexOffsetMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA705C922C877F1300368286 /* ESUPhysicalOutputCVIndexOffsetMethod.swift */; };
 		DA7195FB2A3F2D40004D2D4B /* MyTrains Train - OLD.xml in Resources */ = {isa = PBXBuildFile; fileRef = DA7195FA2A3F2D40004D2D4B /* MyTrains Train - OLD.xml */; };
 		DA7243F628A7F1E5003157CA /* RouteDirection.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA7243F528A7F1E5003157CA /* RouteDirection.swift */; };
 		DA7243F828A81165003157CA /* ThrottleMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA7243F728A81165003157CA /* ThrottleMode.swift */; };
@@ -260,80 +260,6 @@
 		DA8C29EA2C382408001755AB /* ProgrammerToolSettingsGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA8C29E92C382408001755AB /* ProgrammerToolSettingsGroup.swift */; };
 		DA8C2B172C3852DA001755AB /* Decoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA8C2B162C3852DA001755AB /* Decoder.swift */; };
 		DA8C2B192C385344001755AB /* DecoderType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA8C2B182C385344001755AB /* DecoderType.swift */; };
-		DA8C2B642C386970001755AB /* LokPilot Standard V1.0 [1.2.1415].cvlist in Resources */ = {isa = PBXBuildFile; fileRef = DA8C2B1A2C38695E001755AB /* LokPilot Standard V1.0 [1.2.1415].cvlist */; };
-		DA8C2B652C386970001755AB /* LokSound 5 nano DCC [5.10.166].cvlist in Resources */ = {isa = PBXBuildFile; fileRef = DA8C2B1B2C38695F001755AB /* LokSound 5 nano DCC [5.10.166].cvlist */; };
-		DA8C2B662C386970001755AB /* LokSound 5 DCC [5.10.166].cvlist in Resources */ = {isa = PBXBuildFile; fileRef = DA8C2B1C2C38695F001755AB /* LokSound 5 DCC [5.10.166].cvlist */; };
-		DA8C2B672C386970001755AB /* LokSound 5 micro KATO [5.10.166].cvlist in Resources */ = {isa = PBXBuildFile; fileRef = DA8C2B1D2C38695F001755AB /* LokSound 5 micro KATO [5.10.166].cvlist */; };
-		DA8C2B682C386970001755AB /* LokSound 5 L [5.10.166].cvlist in Resources */ = {isa = PBXBuildFile; fileRef = DA8C2B1E2C386960001755AB /* LokSound 5 L [5.10.166].cvlist */; };
-		DA8C2B692C386970001755AB /* LokPilot micro V4.0 [4.16.9247].cvlist in Resources */ = {isa = PBXBuildFile; fileRef = DA8C2B1F2C386960001755AB /* LokPilot micro V4.0 [4.16.9247].cvlist */; };
-		DA8C2B6A2C386970001755AB /* LokPilot Basic [0.9.0].cvlist in Resources */ = {isa = PBXBuildFile; fileRef = DA8C2B202C386960001755AB /* LokPilot Basic [0.9.0].cvlist */; };
-		DA8C2B6B2C386970001755AB /* LokPilot V3.0 [0.0.6607].cvlist in Resources */ = {isa = PBXBuildFile; fileRef = DA8C2B212C386960001755AB /* LokPilot V3.0 [0.0.6607].cvlist */; };
-		DA8C2B6C2C386970001755AB /* LokSound micro DCC Direct Atlas S2 [5.10.166].cvlist in Resources */ = {isa = PBXBuildFile; fileRef = DA8C2B222C386961001755AB /* LokSound micro DCC Direct Atlas S2 [5.10.166].cvlist */; };
-		DA8C2B6D2C386970001755AB /* LokPilot micro V3.0 DCC [0.0.6607].cvlist in Resources */ = {isa = PBXBuildFile; fileRef = DA8C2B232C386961001755AB /* LokPilot micro V3.0 DCC [0.0.6607].cvlist */; };
-		DA8C2B6E2C386970001755AB /* LokPilot 5 Fx micro Next18 [5.10.166].cvlist in Resources */ = {isa = PBXBuildFile; fileRef = DA8C2B242C386961001755AB /* LokPilot 5 Fx micro Next18 [5.10.166].cvlist */; };
-		DA8C2B6F2C386970001755AB /* LokPilot V3.0 M4 [0.0.6445].cvlist in Resources */ = {isa = PBXBuildFile; fileRef = DA8C2B252C386961001755AB /* LokPilot V3.0 M4 [0.0.6445].cvlist */; };
-		DA8C2B702C386970001755AB /* LokSound Select OEM [4.17.9249].cvlist in Resources */ = {isa = PBXBuildFile; fileRef = DA8C2B262C386962001755AB /* LokSound Select OEM [4.17.9249].cvlist */; };
-		DA8C2B712C386970001755AB /* LokSound 5 Fx [5.10.166].cvlist in Resources */ = {isa = PBXBuildFile; fileRef = DA8C2B272C386962001755AB /* LokSound 5 Fx [5.10.166].cvlist */; };
-		DA8C2B722C386970001755AB /* Essential Sound Unit [5.10.166].cvlist in Resources */ = {isa = PBXBuildFile; fileRef = DA8C2B282C386962001755AB /* Essential Sound Unit [5.10.166].cvlist */; };
-		DA8C2B732C386970001755AB /* LokSound Select L [4.17.9249].cvlist in Resources */ = {isa = PBXBuildFile; fileRef = DA8C2B292C386962001755AB /* LokSound Select L [4.17.9249].cvlist */; };
-		DA8C2B742C386970001755AB /* LokPilot 5 MKL [5.10.166].cvlist in Resources */ = {isa = PBXBuildFile; fileRef = DA8C2B2A2C386963001755AB /* LokPilot 5 MKL [5.10.166].cvlist */; };
-		DA8C2B752C386970001755AB /* LokPilot Basic (LA) [0.9.0].cvlist in Resources */ = {isa = PBXBuildFile; fileRef = DA8C2B2B2C386963001755AB /* LokPilot Basic (LA) [0.9.0].cvlist */; };
-		DA8C2B762C386970001755AB /* LokPilot V4.0 M4 MKL [4.16.9247].cvlist in Resources */ = {isa = PBXBuildFile; fileRef = DA8C2B2C2C386963001755AB /* LokPilot V4.0 M4 MKL [4.16.9247].cvlist */; };
-		DA8C2B772C386970001755AB /* LokPilot 5 micro DCC [5.10.166].cvlist in Resources */ = {isa = PBXBuildFile; fileRef = DA8C2B2D2C386963001755AB /* LokPilot 5 micro DCC [5.10.166].cvlist */; };
-		DA8C2B782C386970001755AB /* LokPilot V4.0 M4 [4.16.9247].cvlist in Resources */ = {isa = PBXBuildFile; fileRef = DA8C2B2E2C386964001755AB /* LokPilot V4.0 M4 [4.16.9247].cvlist */; };
-		DA8C2B792C386970001755AB /* LokSound 5 [5.10.166].cvlist in Resources */ = {isa = PBXBuildFile; fileRef = DA8C2B2F2C386964001755AB /* LokSound 5 [5.10.166].cvlist */; };
-		DA8C2B7A2C386970001755AB /* LokPilot 5 [5.10.166].cvlist in Resources */ = {isa = PBXBuildFile; fileRef = DA8C2B302C386964001755AB /* LokPilot 5 [5.10.166].cvlist */; };
-		DA8C2B7B2C386970001755AB /* LokPilot V4.0 [4.16.9247].cvlist in Resources */ = {isa = PBXBuildFile; fileRef = DA8C2B312C386964001755AB /* LokPilot V4.0 [4.16.9247].cvlist */; };
-		DA8C2B7C2C386970001755AB /* LokPilot 5 Basic [5.1.6].cvlist in Resources */ = {isa = PBXBuildFile; fileRef = DA8C2B322C386964001755AB /* LokPilot 5 Basic [5.1.6].cvlist */; };
-		DA8C2B7D2C386970001755AB /* LokSound Select direct - micro [4.17.9249].cvlist in Resources */ = {isa = PBXBuildFile; fileRef = DA8C2B332C386965001755AB /* LokSound Select direct - micro [4.17.9249].cvlist */; };
-		DA8C2B7E2C386970001755AB /* LokSound V4.0 [4.17.9249].cvlist in Resources */ = {isa = PBXBuildFile; fileRef = DA8C2B342C386965001755AB /* LokSound V4.0 [4.17.9249].cvlist */; };
-		DA8C2B7F2C386970001755AB /* LokPilot XL V4.0 [4.16.9247].cvlist in Resources */ = {isa = PBXBuildFile; fileRef = DA8C2B352C386965001755AB /* LokPilot XL V4.0 [4.16.9247].cvlist */; };
-		DA8C2B802C386970001755AB /* LokSound V4.0 M4 [4.17.9249].cvlist in Resources */ = {isa = PBXBuildFile; fileRef = DA8C2B362C386965001755AB /* LokSound V4.0 M4 [4.17.9249].cvlist */; };
-		DA8C2B812C386970001755AB /* LokPilot 5 micro Next18 DCC [5.10.166].cvlist in Resources */ = {isa = PBXBuildFile; fileRef = DA8C2B372C386966001755AB /* LokPilot 5 micro Next18 DCC [5.10.166].cvlist */; };
-		DA8C2B822C386970001755AB /* LokPilot 5 micro Next18 [5.10.166].cvlist in Resources */ = {isa = PBXBuildFile; fileRef = DA8C2B382C386966001755AB /* LokPilot 5 micro Next18 [5.10.166].cvlist */; };
-		DA8C2B832C386970001755AB /* LokPilot Micro SlideIn V4.0 DCC [4.16.9247].cvlist in Resources */ = {isa = PBXBuildFile; fileRef = DA8C2B392C386966001755AB /* LokPilot Micro SlideIn V4.0 DCC [4.16.9247].cvlist */; };
-		DA8C2B842C386970001755AB /* LokSound micro DCC Direct [5.10.166].cvlist in Resources */ = {isa = PBXBuildFile; fileRef = DA8C2B3A2C386966001755AB /* LokSound micro DCC Direct [5.10.166].cvlist */; };
-		DA8C2B852C386970001755AB /* LokPilot 5 MKL DCC [5.10.166].cvlist in Resources */ = {isa = PBXBuildFile; fileRef = DA8C2B3B2C386966001755AB /* LokPilot 5 MKL DCC [5.10.166].cvlist */; };
-		DA8C2B862C386970001755AB /* LokPilot 5 Fx micro Next18 DCC [5.10.166].cvlist in Resources */ = {isa = PBXBuildFile; fileRef = DA8C2B3C2C386967001755AB /* LokPilot 5 Fx micro Next18 DCC [5.10.166].cvlist */; };
-		DA8C2B872C386970001755AB /* LokPilot 5 Fx micro DCC [5.10.166].cvlist in Resources */ = {isa = PBXBuildFile; fileRef = DA8C2B3D2C386967001755AB /* LokPilot 5 Fx micro DCC [5.10.166].cvlist */; };
-		DA8C2B882C386970001755AB /* LokPilot 5 Fx [5.10.166].cvlist in Resources */ = {isa = PBXBuildFile; fileRef = DA8C2B3E2C386967001755AB /* LokPilot 5 Fx [5.10.166].cvlist */; };
-		DA8C2B892C386970001755AB /* LokPilot V4.0 DCC [4.16.9247].cvlist in Resources */ = {isa = PBXBuildFile; fileRef = DA8C2B3F2C386968001755AB /* LokPilot V4.0 DCC [4.16.9247].cvlist */; };
-		DA8C2B8A2C386970001755AB /* LokSound XL V3.5 [0.0.6093].cvlist in Resources */ = {isa = PBXBuildFile; fileRef = DA8C2B402C386968001755AB /* LokSound XL V3.5 [0.0.6093].cvlist */; };
-		DA8C2B8B2C386970001755AB /* LokPilot 5 micro DCC Direct [5.10.166].cvlist in Resources */ = {isa = PBXBuildFile; fileRef = DA8C2B412C386968001755AB /* LokPilot 5 micro DCC Direct [5.10.166].cvlist */; };
-		DA8C2B8C2C386970001755AB /* LokPilot V3.0 DCC [0.0.6607].cvlist in Resources */ = {isa = PBXBuildFile; fileRef = DA8C2B422C386968001755AB /* LokPilot V3.0 DCC [0.0.6607].cvlist */; };
-		DA8C2B8D2C386970001755AB /* LokPilot Fx V3.0 [0.0.6442].cvlist in Resources */ = {isa = PBXBuildFile; fileRef = DA8C2B432C386969001755AB /* LokPilot Fx V3.0 [0.0.6442].cvlist */; };
-		DA8C2B8E2C386970001755AB /* LokSound L V4.0 [4.17.9249].cvlist in Resources */ = {isa = PBXBuildFile; fileRef = DA8C2B442C386969001755AB /* LokSound L V4.0 [4.17.9249].cvlist */; };
-		DA8C2B8F2C386970001755AB /* LokSound 5 MKL [5.10.166].cvlist in Resources */ = {isa = PBXBuildFile; fileRef = DA8C2B452C386969001755AB /* LokSound 5 MKL [5.10.166].cvlist */; };
-		DA8C2B902C386970001755AB /* LokPilot micro V4.0 DCC [4.16.9247].cvlist in Resources */ = {isa = PBXBuildFile; fileRef = DA8C2B462C386969001755AB /* LokPilot micro V4.0 DCC [4.16.9247].cvlist */; };
-		DA8C2B912C386970001755AB /* LokPilot V4.0 DCC PX [4.16.9247].cvlist in Resources */ = {isa = PBXBuildFile; fileRef = DA8C2B472C386969001755AB /* LokPilot V4.0 DCC PX [4.16.9247].cvlist */; };
-		DA8C2B922C386970001755AB /* LokPilot 5 L DCC [5.10.166].cvlist in Resources */ = {isa = PBXBuildFile; fileRef = DA8C2B482C38696A001755AB /* LokPilot 5 L DCC [5.10.166].cvlist */; };
-		DA8C2B932C386970001755AB /* LokSound micro DCC Direct Atlas Legacy [5.10.166].cvlist in Resources */ = {isa = PBXBuildFile; fileRef = DA8C2B492C38696A001755AB /* LokSound micro DCC Direct Atlas Legacy [5.10.166].cvlist */; };
-		DA8C2B942C386970001755AB /* LokSound Select [4.17.9249].cvlist in Resources */ = {isa = PBXBuildFile; fileRef = DA8C2B4A2C38696A001755AB /* LokSound Select [4.17.9249].cvlist */; };
-		DA8C2B952C386970001755AB /* LokSound V3.5 [0.0.6093].cvlist in Resources */ = {isa = PBXBuildFile; fileRef = DA8C2B4B2C38696A001755AB /* LokSound V3.5 [0.0.6093].cvlist */; };
-		DA8C2B962C386970001755AB /* LokPilot micro V3.0 [0.0.6607].cvlist in Resources */ = {isa = PBXBuildFile; fileRef = DA8C2B4C2C38696B001755AB /* LokPilot micro V3.0 [0.0.6607].cvlist */; };
-		DA8C2B972C386970001755AB /* LokPilot 5 micro [5.10.166].cvlist in Resources */ = {isa = PBXBuildFile; fileRef = DA8C2B4D2C38696B001755AB /* LokPilot 5 micro [5.10.166].cvlist */; };
-		DA8C2B982C386970001755AB /* LokPilot 5 DCC [5.10.166].cvlist in Resources */ = {isa = PBXBuildFile; fileRef = DA8C2B4E2C38696B001755AB /* LokPilot 5 DCC [5.10.166].cvlist */; };
-		DA8C2B992C386970001755AB /* LokPilot XL V3.0 [0.0.6607].cvlist in Resources */ = {isa = PBXBuildFile; fileRef = DA8C2B4F2C38696B001755AB /* LokPilot XL V3.0 [0.0.6607].cvlist */; };
-		DA8C2B9A2C386970001755AB /* LokSound 5 micro [5.10.166].cvlist in Resources */ = {isa = PBXBuildFile; fileRef = DA8C2B502C38696B001755AB /* LokSound 5 micro [5.10.166].cvlist */; };
-		DA8C2B9B2C386970001755AB /* LokPilot V3.0 OEM [0.0.5973].cvlist in Resources */ = {isa = PBXBuildFile; fileRef = DA8C2B512C38696C001755AB /* LokPilot V3.0 OEM [0.0.5973].cvlist */; };
-		DA8C2B9C2C386970001755AB /* LokSound 5 nano DCC Next18 [5.10.166].cvlist in Resources */ = {isa = PBXBuildFile; fileRef = DA8C2B522C38696C001755AB /* LokSound 5 nano DCC Next18 [5.10.166].cvlist */; };
-		DA8C2B9D2C386970001755AB /* LokSound 5 XL [5.10.166].cvlist in Resources */ = {isa = PBXBuildFile; fileRef = DA8C2B532C38696C001755AB /* LokSound 5 XL [5.10.166].cvlist */; };
-		DA8C2B9E2C386970001755AB /* LokPilot Nano Standard V1.0 [1.2.1415].cvlist in Resources */ = {isa = PBXBuildFile; fileRef = DA8C2B542C38696C001755AB /* LokPilot Nano Standard V1.0 [1.2.1415].cvlist */; };
-		DA8C2B9F2C386970001755AB /* LokSound V4.0 M4 OEM [4.17.9249].cvlist in Resources */ = {isa = PBXBuildFile; fileRef = DA8C2B552C38696D001755AB /* LokSound V4.0 M4 OEM [4.17.9249].cvlist */; };
-		DA8C2BA02C386970001755AB /* LokSound 5 Fx DCC [5.10.166].cvlist in Resources */ = {isa = PBXBuildFile; fileRef = DA8C2B562C38696D001755AB /* LokSound 5 Fx DCC [5.10.166].cvlist */; };
-		DA8C2BA12C386970001755AB /* LokSound V3.0 M4 [0.0.6354].cvlist in Resources */ = {isa = PBXBuildFile; fileRef = DA8C2B572C38696D001755AB /* LokSound V3.0 M4 [0.0.6354].cvlist */; };
-		DA8C2BA22C386970001755AB /* LokPilot 5 Fx DCC [5.10.166].cvlist in Resources */ = {isa = PBXBuildFile; fileRef = DA8C2B582C38696E001755AB /* LokPilot 5 Fx DCC [5.10.166].cvlist */; };
-		DA8C2BA32C386970001755AB /* LokPilot 5 Fx micro [5.10.166].cvlist in Resources */ = {isa = PBXBuildFile; fileRef = DA8C2B592C38696E001755AB /* LokPilot 5 Fx micro [5.10.166].cvlist */; };
-		DA8C2BA42C386970001755AB /* LokPilot Fx micro V3.0 [0.0.6607].cvlist in Resources */ = {isa = PBXBuildFile; fileRef = DA8C2B5A2C38696E001755AB /* LokPilot Fx micro V3.0 [0.0.6607].cvlist */; };
-		DA8C2BA52C386970001755AB /* LokSound XL V4.0 [4.17.9249].cvlist in Resources */ = {isa = PBXBuildFile; fileRef = DA8C2B5B2C38696E001755AB /* LokSound XL V4.0 [4.17.9249].cvlist */; };
-		DA8C2BA62C386970001755AB /* LokSound 5 micro DCC [5.10.166].cvlist in Resources */ = {isa = PBXBuildFile; fileRef = DA8C2B5C2C38696E001755AB /* LokSound 5 micro DCC [5.10.166].cvlist */; };
-		DA8C2BA72C386970001755AB /* LokSound micro V4.0 [4.17.9249].cvlist in Resources */ = {isa = PBXBuildFile; fileRef = DA8C2B5D2C38696F001755AB /* LokSound micro V4.0 [4.17.9249].cvlist */; };
-		DA8C2BA82C386970001755AB /* LokPilot Fx V4.0 [4.16.9247].cvlist in Resources */ = {isa = PBXBuildFile; fileRef = DA8C2B5E2C38696F001755AB /* LokPilot Fx V4.0 [4.16.9247].cvlist */; };
-		DA8C2BA92C386970001755AB /* LokPilot Fx Nano V1.0 [1.2.1415].cvlist in Resources */ = {isa = PBXBuildFile; fileRef = DA8C2B5F2C38696F001755AB /* LokPilot Fx Nano V1.0 [1.2.1415].cvlist */; };
-		DA8C2BAA2C386970001755AB /* LokPilot 5 nano DCC [5.10.166].cvlist in Resources */ = {isa = PBXBuildFile; fileRef = DA8C2B602C38696F001755AB /* LokPilot 5 nano DCC [5.10.166].cvlist */; };
-		DA8C2BAB2C386970001755AB /* LokPilot 5 L [5.10.166].cvlist in Resources */ = {isa = PBXBuildFile; fileRef = DA8C2B612C386970001755AB /* LokPilot 5 L [5.10.166].cvlist */; };
-		DA8C2BAC2C386970001755AB /* LokSound 5 L DCC [5.10.166].cvlist in Resources */ = {isa = PBXBuildFile; fileRef = DA8C2B622C386970001755AB /* LokSound 5 L DCC [5.10.166].cvlist */; };
-		DA8C2BAD2C386970001755AB /* LokSound micro V3.5 [0.0.6093].cvlist in Resources */ = {isa = PBXBuildFile; fileRef = DA8C2B632C386970001755AB /* LokSound micro V3.5 [0.0.6093].cvlist */; };
 		DA8F40132A4473030037C222 /* LocoNetCommandStationType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA8F40122A4473030037C222 /* LocoNetCommandStationType.swift */; };
 		DA8F40152A4477A10037C222 /* LocoNetProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA8F40142A4477A10037C222 /* LocoNetProtocol.swift */; };
 		DA8FDB2A279C2B3600E15024 /* LocoSlotData.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA8FDB29279C2B3600E15024 /* LocoSlotData.swift */; };
@@ -634,7 +560,6 @@
 		DA47E5402C3AB6DD00A1D803 /* DecoderDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecoderDelegate.swift; sourceTree = "<group>"; };
 		DA47E5422C3AE5E200A1D803 /* ProgrammerToolInspectorProperty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgrammerToolInspectorProperty.swift; sourceTree = "<group>"; };
 		DA47E5442C3AEF3300A1D803 /* ManufacturerCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManufacturerCode.swift; sourceTree = "<group>"; };
-		DA47E5462C3B0CAE00A1D803 /* NMRA Standard Decoder [0.0.0].cvlist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "NMRA Standard Decoder [0.0.0].cvlist"; sourceTree = "<group>"; };
 		DA48DA6F2BA1FA1C0009FEBF /* FrameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameView.swift; sourceTree = "<group>"; };
 		DA48DA712BA201BD0009FEBF /* LEDView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LEDView.swift; sourceTree = "<group>"; };
 		DA48EE28293CEF16006C26A0 /* DayOfWeek.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayOfWeek.swift; sourceTree = "<group>"; };
@@ -729,6 +654,7 @@
 		DA6E28E0285F86B900772641 /* Orientation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Orientation.swift; sourceTree = "<group>"; };
 		DA6E28E2285F8F1A00772641 /* TrackElectrificationType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackElectrificationType.swift; sourceTree = "<group>"; };
 		DA6E28E4285F925C00772641 /* BlockDirection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockDirection.swift; sourceTree = "<group>"; };
+		DA705C922C877F1300368286 /* ESUPhysicalOutputCVIndexOffsetMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ESUPhysicalOutputCVIndexOffsetMethod.swift; sourceTree = "<group>"; };
 		DA7195FA2A3F2D40004D2D4B /* MyTrains Train - OLD.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "MyTrains Train - OLD.xml"; sourceTree = "<group>"; };
 		DA7243F528A7F1E5003157CA /* RouteDirection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteDirection.swift; sourceTree = "<group>"; };
 		DA7243F728A81165003157CA /* ThrottleMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThrottleMode.swift; sourceTree = "<group>"; };
@@ -774,80 +700,6 @@
 		DA8C29E92C382408001755AB /* ProgrammerToolSettingsGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgrammerToolSettingsGroup.swift; sourceTree = "<group>"; };
 		DA8C2B162C3852DA001755AB /* Decoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Decoder.swift; sourceTree = "<group>"; };
 		DA8C2B182C385344001755AB /* DecoderType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecoderType.swift; sourceTree = "<group>"; };
-		DA8C2B1A2C38695E001755AB /* LokPilot Standard V1.0 [1.2.1415].cvlist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "LokPilot Standard V1.0 [1.2.1415].cvlist"; sourceTree = "<group>"; };
-		DA8C2B1B2C38695F001755AB /* LokSound 5 nano DCC [5.10.166].cvlist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "LokSound 5 nano DCC [5.10.166].cvlist"; sourceTree = "<group>"; };
-		DA8C2B1C2C38695F001755AB /* LokSound 5 DCC [5.10.166].cvlist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "LokSound 5 DCC [5.10.166].cvlist"; sourceTree = "<group>"; };
-		DA8C2B1D2C38695F001755AB /* LokSound 5 micro KATO [5.10.166].cvlist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "LokSound 5 micro KATO [5.10.166].cvlist"; sourceTree = "<group>"; };
-		DA8C2B1E2C386960001755AB /* LokSound 5 L [5.10.166].cvlist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "LokSound 5 L [5.10.166].cvlist"; sourceTree = "<group>"; };
-		DA8C2B1F2C386960001755AB /* LokPilot micro V4.0 [4.16.9247].cvlist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "LokPilot micro V4.0 [4.16.9247].cvlist"; sourceTree = "<group>"; };
-		DA8C2B202C386960001755AB /* LokPilot Basic [0.9.0].cvlist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "LokPilot Basic [0.9.0].cvlist"; sourceTree = "<group>"; };
-		DA8C2B212C386960001755AB /* LokPilot V3.0 [0.0.6607].cvlist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "LokPilot V3.0 [0.0.6607].cvlist"; sourceTree = "<group>"; };
-		DA8C2B222C386961001755AB /* LokSound micro DCC Direct Atlas S2 [5.10.166].cvlist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "LokSound micro DCC Direct Atlas S2 [5.10.166].cvlist"; sourceTree = "<group>"; };
-		DA8C2B232C386961001755AB /* LokPilot micro V3.0 DCC [0.0.6607].cvlist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "LokPilot micro V3.0 DCC [0.0.6607].cvlist"; sourceTree = "<group>"; };
-		DA8C2B242C386961001755AB /* LokPilot 5 Fx micro Next18 [5.10.166].cvlist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "LokPilot 5 Fx micro Next18 [5.10.166].cvlist"; sourceTree = "<group>"; };
-		DA8C2B252C386961001755AB /* LokPilot V3.0 M4 [0.0.6445].cvlist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "LokPilot V3.0 M4 [0.0.6445].cvlist"; sourceTree = "<group>"; };
-		DA8C2B262C386962001755AB /* LokSound Select OEM [4.17.9249].cvlist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "LokSound Select OEM [4.17.9249].cvlist"; sourceTree = "<group>"; };
-		DA8C2B272C386962001755AB /* LokSound 5 Fx [5.10.166].cvlist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "LokSound 5 Fx [5.10.166].cvlist"; sourceTree = "<group>"; };
-		DA8C2B282C386962001755AB /* Essential Sound Unit [5.10.166].cvlist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Essential Sound Unit [5.10.166].cvlist"; sourceTree = "<group>"; };
-		DA8C2B292C386962001755AB /* LokSound Select L [4.17.9249].cvlist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "LokSound Select L [4.17.9249].cvlist"; sourceTree = "<group>"; };
-		DA8C2B2A2C386963001755AB /* LokPilot 5 MKL [5.10.166].cvlist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "LokPilot 5 MKL [5.10.166].cvlist"; sourceTree = "<group>"; };
-		DA8C2B2B2C386963001755AB /* LokPilot Basic (LA) [0.9.0].cvlist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "LokPilot Basic (LA) [0.9.0].cvlist"; sourceTree = "<group>"; };
-		DA8C2B2C2C386963001755AB /* LokPilot V4.0 M4 MKL [4.16.9247].cvlist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "LokPilot V4.0 M4 MKL [4.16.9247].cvlist"; sourceTree = "<group>"; };
-		DA8C2B2D2C386963001755AB /* LokPilot 5 micro DCC [5.10.166].cvlist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "LokPilot 5 micro DCC [5.10.166].cvlist"; sourceTree = "<group>"; };
-		DA8C2B2E2C386964001755AB /* LokPilot V4.0 M4 [4.16.9247].cvlist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "LokPilot V4.0 M4 [4.16.9247].cvlist"; sourceTree = "<group>"; };
-		DA8C2B2F2C386964001755AB /* LokSound 5 [5.10.166].cvlist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "LokSound 5 [5.10.166].cvlist"; sourceTree = "<group>"; };
-		DA8C2B302C386964001755AB /* LokPilot 5 [5.10.166].cvlist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "LokPilot 5 [5.10.166].cvlist"; sourceTree = "<group>"; };
-		DA8C2B312C386964001755AB /* LokPilot V4.0 [4.16.9247].cvlist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "LokPilot V4.0 [4.16.9247].cvlist"; sourceTree = "<group>"; };
-		DA8C2B322C386964001755AB /* LokPilot 5 Basic [5.1.6].cvlist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "LokPilot 5 Basic [5.1.6].cvlist"; sourceTree = "<group>"; };
-		DA8C2B332C386965001755AB /* LokSound Select direct - micro [4.17.9249].cvlist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "LokSound Select direct - micro [4.17.9249].cvlist"; sourceTree = "<group>"; };
-		DA8C2B342C386965001755AB /* LokSound V4.0 [4.17.9249].cvlist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "LokSound V4.0 [4.17.9249].cvlist"; sourceTree = "<group>"; };
-		DA8C2B352C386965001755AB /* LokPilot XL V4.0 [4.16.9247].cvlist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "LokPilot XL V4.0 [4.16.9247].cvlist"; sourceTree = "<group>"; };
-		DA8C2B362C386965001755AB /* LokSound V4.0 M4 [4.17.9249].cvlist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "LokSound V4.0 M4 [4.17.9249].cvlist"; sourceTree = "<group>"; };
-		DA8C2B372C386966001755AB /* LokPilot 5 micro Next18 DCC [5.10.166].cvlist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "LokPilot 5 micro Next18 DCC [5.10.166].cvlist"; sourceTree = "<group>"; };
-		DA8C2B382C386966001755AB /* LokPilot 5 micro Next18 [5.10.166].cvlist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "LokPilot 5 micro Next18 [5.10.166].cvlist"; sourceTree = "<group>"; };
-		DA8C2B392C386966001755AB /* LokPilot Micro SlideIn V4.0 DCC [4.16.9247].cvlist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "LokPilot Micro SlideIn V4.0 DCC [4.16.9247].cvlist"; sourceTree = "<group>"; };
-		DA8C2B3A2C386966001755AB /* LokSound micro DCC Direct [5.10.166].cvlist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "LokSound micro DCC Direct [5.10.166].cvlist"; sourceTree = "<group>"; };
-		DA8C2B3B2C386966001755AB /* LokPilot 5 MKL DCC [5.10.166].cvlist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "LokPilot 5 MKL DCC [5.10.166].cvlist"; sourceTree = "<group>"; };
-		DA8C2B3C2C386967001755AB /* LokPilot 5 Fx micro Next18 DCC [5.10.166].cvlist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "LokPilot 5 Fx micro Next18 DCC [5.10.166].cvlist"; sourceTree = "<group>"; };
-		DA8C2B3D2C386967001755AB /* LokPilot 5 Fx micro DCC [5.10.166].cvlist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "LokPilot 5 Fx micro DCC [5.10.166].cvlist"; sourceTree = "<group>"; };
-		DA8C2B3E2C386967001755AB /* LokPilot 5 Fx [5.10.166].cvlist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "LokPilot 5 Fx [5.10.166].cvlist"; sourceTree = "<group>"; };
-		DA8C2B3F2C386968001755AB /* LokPilot V4.0 DCC [4.16.9247].cvlist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "LokPilot V4.0 DCC [4.16.9247].cvlist"; sourceTree = "<group>"; };
-		DA8C2B402C386968001755AB /* LokSound XL V3.5 [0.0.6093].cvlist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "LokSound XL V3.5 [0.0.6093].cvlist"; sourceTree = "<group>"; };
-		DA8C2B412C386968001755AB /* LokPilot 5 micro DCC Direct [5.10.166].cvlist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "LokPilot 5 micro DCC Direct [5.10.166].cvlist"; sourceTree = "<group>"; };
-		DA8C2B422C386968001755AB /* LokPilot V3.0 DCC [0.0.6607].cvlist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "LokPilot V3.0 DCC [0.0.6607].cvlist"; sourceTree = "<group>"; };
-		DA8C2B432C386969001755AB /* LokPilot Fx V3.0 [0.0.6442].cvlist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "LokPilot Fx V3.0 [0.0.6442].cvlist"; sourceTree = "<group>"; };
-		DA8C2B442C386969001755AB /* LokSound L V4.0 [4.17.9249].cvlist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "LokSound L V4.0 [4.17.9249].cvlist"; sourceTree = "<group>"; };
-		DA8C2B452C386969001755AB /* LokSound 5 MKL [5.10.166].cvlist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "LokSound 5 MKL [5.10.166].cvlist"; sourceTree = "<group>"; };
-		DA8C2B462C386969001755AB /* LokPilot micro V4.0 DCC [4.16.9247].cvlist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "LokPilot micro V4.0 DCC [4.16.9247].cvlist"; sourceTree = "<group>"; };
-		DA8C2B472C386969001755AB /* LokPilot V4.0 DCC PX [4.16.9247].cvlist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "LokPilot V4.0 DCC PX [4.16.9247].cvlist"; sourceTree = "<group>"; };
-		DA8C2B482C38696A001755AB /* LokPilot 5 L DCC [5.10.166].cvlist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "LokPilot 5 L DCC [5.10.166].cvlist"; sourceTree = "<group>"; };
-		DA8C2B492C38696A001755AB /* LokSound micro DCC Direct Atlas Legacy [5.10.166].cvlist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "LokSound micro DCC Direct Atlas Legacy [5.10.166].cvlist"; sourceTree = "<group>"; };
-		DA8C2B4A2C38696A001755AB /* LokSound Select [4.17.9249].cvlist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "LokSound Select [4.17.9249].cvlist"; sourceTree = "<group>"; };
-		DA8C2B4B2C38696A001755AB /* LokSound V3.5 [0.0.6093].cvlist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "LokSound V3.5 [0.0.6093].cvlist"; sourceTree = "<group>"; };
-		DA8C2B4C2C38696B001755AB /* LokPilot micro V3.0 [0.0.6607].cvlist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "LokPilot micro V3.0 [0.0.6607].cvlist"; sourceTree = "<group>"; };
-		DA8C2B4D2C38696B001755AB /* LokPilot 5 micro [5.10.166].cvlist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "LokPilot 5 micro [5.10.166].cvlist"; sourceTree = "<group>"; };
-		DA8C2B4E2C38696B001755AB /* LokPilot 5 DCC [5.10.166].cvlist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "LokPilot 5 DCC [5.10.166].cvlist"; sourceTree = "<group>"; };
-		DA8C2B4F2C38696B001755AB /* LokPilot XL V3.0 [0.0.6607].cvlist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "LokPilot XL V3.0 [0.0.6607].cvlist"; sourceTree = "<group>"; };
-		DA8C2B502C38696B001755AB /* LokSound 5 micro [5.10.166].cvlist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "LokSound 5 micro [5.10.166].cvlist"; sourceTree = "<group>"; };
-		DA8C2B512C38696C001755AB /* LokPilot V3.0 OEM [0.0.5973].cvlist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "LokPilot V3.0 OEM [0.0.5973].cvlist"; sourceTree = "<group>"; };
-		DA8C2B522C38696C001755AB /* LokSound 5 nano DCC Next18 [5.10.166].cvlist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "LokSound 5 nano DCC Next18 [5.10.166].cvlist"; sourceTree = "<group>"; };
-		DA8C2B532C38696C001755AB /* LokSound 5 XL [5.10.166].cvlist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "LokSound 5 XL [5.10.166].cvlist"; sourceTree = "<group>"; };
-		DA8C2B542C38696C001755AB /* LokPilot Nano Standard V1.0 [1.2.1415].cvlist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "LokPilot Nano Standard V1.0 [1.2.1415].cvlist"; sourceTree = "<group>"; };
-		DA8C2B552C38696D001755AB /* LokSound V4.0 M4 OEM [4.17.9249].cvlist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "LokSound V4.0 M4 OEM [4.17.9249].cvlist"; sourceTree = "<group>"; };
-		DA8C2B562C38696D001755AB /* LokSound 5 Fx DCC [5.10.166].cvlist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "LokSound 5 Fx DCC [5.10.166].cvlist"; sourceTree = "<group>"; };
-		DA8C2B572C38696D001755AB /* LokSound V3.0 M4 [0.0.6354].cvlist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "LokSound V3.0 M4 [0.0.6354].cvlist"; sourceTree = "<group>"; };
-		DA8C2B582C38696E001755AB /* LokPilot 5 Fx DCC [5.10.166].cvlist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "LokPilot 5 Fx DCC [5.10.166].cvlist"; sourceTree = "<group>"; };
-		DA8C2B592C38696E001755AB /* LokPilot 5 Fx micro [5.10.166].cvlist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "LokPilot 5 Fx micro [5.10.166].cvlist"; sourceTree = "<group>"; };
-		DA8C2B5A2C38696E001755AB /* LokPilot Fx micro V3.0 [0.0.6607].cvlist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "LokPilot Fx micro V3.0 [0.0.6607].cvlist"; sourceTree = "<group>"; };
-		DA8C2B5B2C38696E001755AB /* LokSound XL V4.0 [4.17.9249].cvlist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "LokSound XL V4.0 [4.17.9249].cvlist"; sourceTree = "<group>"; };
-		DA8C2B5C2C38696E001755AB /* LokSound 5 micro DCC [5.10.166].cvlist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "LokSound 5 micro DCC [5.10.166].cvlist"; sourceTree = "<group>"; };
-		DA8C2B5D2C38696F001755AB /* LokSound micro V4.0 [4.17.9249].cvlist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "LokSound micro V4.0 [4.17.9249].cvlist"; sourceTree = "<group>"; };
-		DA8C2B5E2C38696F001755AB /* LokPilot Fx V4.0 [4.16.9247].cvlist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "LokPilot Fx V4.0 [4.16.9247].cvlist"; sourceTree = "<group>"; };
-		DA8C2B5F2C38696F001755AB /* LokPilot Fx Nano V1.0 [1.2.1415].cvlist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "LokPilot Fx Nano V1.0 [1.2.1415].cvlist"; sourceTree = "<group>"; };
-		DA8C2B602C38696F001755AB /* LokPilot 5 nano DCC [5.10.166].cvlist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "LokPilot 5 nano DCC [5.10.166].cvlist"; sourceTree = "<group>"; };
-		DA8C2B612C386970001755AB /* LokPilot 5 L [5.10.166].cvlist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "LokPilot 5 L [5.10.166].cvlist"; sourceTree = "<group>"; };
-		DA8C2B622C386970001755AB /* LokSound 5 L DCC [5.10.166].cvlist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "LokSound 5 L DCC [5.10.166].cvlist"; sourceTree = "<group>"; };
-		DA8C2B632C386970001755AB /* LokSound micro V3.5 [0.0.6093].cvlist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "LokSound micro V3.5 [0.0.6093].cvlist"; sourceTree = "<group>"; };
 		DA8F40122A4473030037C222 /* LocoNetCommandStationType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocoNetCommandStationType.swift; sourceTree = "<group>"; };
 		DA8F40142A4477A10037C222 /* LocoNetProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocoNetProtocol.swift; sourceTree = "<group>"; };
 		DA8FDB29279C2B3600E15024 /* LocoSlotData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocoSlotData.swift; sourceTree = "<group>"; };
@@ -1151,6 +1003,7 @@
 				DAE524FB2C454B66000FC319 /* ClassLightLogicSequenceLength.swift */,
 				DAE524FD2C454D60000FC319 /* DecoderSensorSettings.swift */,
 				DAE524FF2C459854000FC319 /* ESUDecoderPhysicalOutput.swift */,
+				DA705C922C877F1300368286 /* ESUPhysicalOutputCVIndexOffsetMethod.swift */,
 				DA01CF182C81EE9200C9881D /* DecoderEditorLoadType.swift */,
 				DAEC69492C4BEEFD008F1CFF /* ESUPhysicalOutputMode.swift */,
 				DA59FFAF2C6651E90089FFEF /* ESUPhysicalOutputModeB.swift */,
@@ -1420,7 +1273,6 @@
 			children = (
 				DA52B60C2C5261B800A46549 /* Property Views */,
 				DA8C2B152C3852C3001755AB /* Decoder */,
-				DA8C2A802C3850C8001755AB /* CV EXPORTS */,
 				DAAC7E942A7966EE001A424E /* ProgrammerTool.storyboard */,
 				DAAC7E962A796705001A424E /* ProgrammerToolVC.swift */,
 				DA8C29E72C3811D8001755AB /* ProgrammerToolInspector.swift */,
@@ -1675,88 +1527,6 @@
 				DA31688C2BCACC2B00059B6C /* SWBRoutePart.swift */,
 			);
 			path = _types;
-			sourceTree = "<group>";
-		};
-		DA8C2A802C3850C8001755AB /* CV EXPORTS */ = {
-			isa = PBXGroup;
-			children = (
-				DA8C2B282C386962001755AB /* Essential Sound Unit [5.10.166].cvlist */,
-				DA8C2B302C386964001755AB /* LokPilot 5 [5.10.166].cvlist */,
-				DA8C2B322C386964001755AB /* LokPilot 5 Basic [5.1.6].cvlist */,
-				DA47E5462C3B0CAE00A1D803 /* NMRA Standard Decoder [0.0.0].cvlist */,
-				DA8C2B4E2C38696B001755AB /* LokPilot 5 DCC [5.10.166].cvlist */,
-				DA8C2B3E2C386967001755AB /* LokPilot 5 Fx [5.10.166].cvlist */,
-				DA8C2B582C38696E001755AB /* LokPilot 5 Fx DCC [5.10.166].cvlist */,
-				DA8C2B592C38696E001755AB /* LokPilot 5 Fx micro [5.10.166].cvlist */,
-				DA8C2B3D2C386967001755AB /* LokPilot 5 Fx micro DCC [5.10.166].cvlist */,
-				DA8C2B242C386961001755AB /* LokPilot 5 Fx micro Next18 [5.10.166].cvlist */,
-				DA8C2B3C2C386967001755AB /* LokPilot 5 Fx micro Next18 DCC [5.10.166].cvlist */,
-				DA8C2B612C386970001755AB /* LokPilot 5 L [5.10.166].cvlist */,
-				DA8C2B482C38696A001755AB /* LokPilot 5 L DCC [5.10.166].cvlist */,
-				DA8C2B4D2C38696B001755AB /* LokPilot 5 micro [5.10.166].cvlist */,
-				DA8C2B2D2C386963001755AB /* LokPilot 5 micro DCC [5.10.166].cvlist */,
-				DA8C2B412C386968001755AB /* LokPilot 5 micro DCC Direct [5.10.166].cvlist */,
-				DA8C2B382C386966001755AB /* LokPilot 5 micro Next18 [5.10.166].cvlist */,
-				DA8C2B372C386966001755AB /* LokPilot 5 micro Next18 DCC [5.10.166].cvlist */,
-				DA8C2B2A2C386963001755AB /* LokPilot 5 MKL [5.10.166].cvlist */,
-				DA8C2B3B2C386966001755AB /* LokPilot 5 MKL DCC [5.10.166].cvlist */,
-				DA8C2B602C38696F001755AB /* LokPilot 5 nano DCC [5.10.166].cvlist */,
-				DA8C2B2B2C386963001755AB /* LokPilot Basic (LA) [0.9.0].cvlist */,
-				DA8C2B202C386960001755AB /* LokPilot Basic [0.9.0].cvlist */,
-				DA8C2B5A2C38696E001755AB /* LokPilot Fx micro V3.0 [0.0.6607].cvlist */,
-				DA8C2B5F2C38696F001755AB /* LokPilot Fx Nano V1.0 [1.2.1415].cvlist */,
-				DA8C2B432C386969001755AB /* LokPilot Fx V3.0 [0.0.6442].cvlist */,
-				DA8C2B5E2C38696F001755AB /* LokPilot Fx V4.0 [4.16.9247].cvlist */,
-				DA8C2B392C386966001755AB /* LokPilot Micro SlideIn V4.0 DCC [4.16.9247].cvlist */,
-				DA8C2B4C2C38696B001755AB /* LokPilot micro V3.0 [0.0.6607].cvlist */,
-				DA8C2B232C386961001755AB /* LokPilot micro V3.0 DCC [0.0.6607].cvlist */,
-				DA8C2B1F2C386960001755AB /* LokPilot micro V4.0 [4.16.9247].cvlist */,
-				DA8C2B462C386969001755AB /* LokPilot micro V4.0 DCC [4.16.9247].cvlist */,
-				DA8C2B542C38696C001755AB /* LokPilot Nano Standard V1.0 [1.2.1415].cvlist */,
-				DA8C2B1A2C38695E001755AB /* LokPilot Standard V1.0 [1.2.1415].cvlist */,
-				DA8C2B212C386960001755AB /* LokPilot V3.0 [0.0.6607].cvlist */,
-				DA8C2B422C386968001755AB /* LokPilot V3.0 DCC [0.0.6607].cvlist */,
-				DA8C2B252C386961001755AB /* LokPilot V3.0 M4 [0.0.6445].cvlist */,
-				DA8C2B512C38696C001755AB /* LokPilot V3.0 OEM [0.0.5973].cvlist */,
-				DA8C2B312C386964001755AB /* LokPilot V4.0 [4.16.9247].cvlist */,
-				DA8C2B3F2C386968001755AB /* LokPilot V4.0 DCC [4.16.9247].cvlist */,
-				DA8C2B472C386969001755AB /* LokPilot V4.0 DCC PX [4.16.9247].cvlist */,
-				DA8C2B2E2C386964001755AB /* LokPilot V4.0 M4 [4.16.9247].cvlist */,
-				DA8C2B2C2C386963001755AB /* LokPilot V4.0 M4 MKL [4.16.9247].cvlist */,
-				DA8C2B4F2C38696B001755AB /* LokPilot XL V3.0 [0.0.6607].cvlist */,
-				DA8C2B352C386965001755AB /* LokPilot XL V4.0 [4.16.9247].cvlist */,
-				DA8C2B2F2C386964001755AB /* LokSound 5 [5.10.166].cvlist */,
-				DA8C2B1C2C38695F001755AB /* LokSound 5 DCC [5.10.166].cvlist */,
-				DA8C2B272C386962001755AB /* LokSound 5 Fx [5.10.166].cvlist */,
-				DA8C2B562C38696D001755AB /* LokSound 5 Fx DCC [5.10.166].cvlist */,
-				DA8C2B1E2C386960001755AB /* LokSound 5 L [5.10.166].cvlist */,
-				DA8C2B622C386970001755AB /* LokSound 5 L DCC [5.10.166].cvlist */,
-				DA8C2B502C38696B001755AB /* LokSound 5 micro [5.10.166].cvlist */,
-				DA8C2B5C2C38696E001755AB /* LokSound 5 micro DCC [5.10.166].cvlist */,
-				DA8C2B1D2C38695F001755AB /* LokSound 5 micro KATO [5.10.166].cvlist */,
-				DA8C2B452C386969001755AB /* LokSound 5 MKL [5.10.166].cvlist */,
-				DA8C2B1B2C38695F001755AB /* LokSound 5 nano DCC [5.10.166].cvlist */,
-				DA8C2B522C38696C001755AB /* LokSound 5 nano DCC Next18 [5.10.166].cvlist */,
-				DA8C2B532C38696C001755AB /* LokSound 5 XL [5.10.166].cvlist */,
-				DA8C2B442C386969001755AB /* LokSound L V4.0 [4.17.9249].cvlist */,
-				DA8C2B3A2C386966001755AB /* LokSound micro DCC Direct [5.10.166].cvlist */,
-				DA8C2B492C38696A001755AB /* LokSound micro DCC Direct Atlas Legacy [5.10.166].cvlist */,
-				DA8C2B222C386961001755AB /* LokSound micro DCC Direct Atlas S2 [5.10.166].cvlist */,
-				DA8C2B632C386970001755AB /* LokSound micro V3.5 [0.0.6093].cvlist */,
-				DA8C2B5D2C38696F001755AB /* LokSound micro V4.0 [4.17.9249].cvlist */,
-				DA8C2B4A2C38696A001755AB /* LokSound Select [4.17.9249].cvlist */,
-				DA8C2B332C386965001755AB /* LokSound Select direct - micro [4.17.9249].cvlist */,
-				DA8C2B292C386962001755AB /* LokSound Select L [4.17.9249].cvlist */,
-				DA8C2B262C386962001755AB /* LokSound Select OEM [4.17.9249].cvlist */,
-				DA8C2B572C38696D001755AB /* LokSound V3.0 M4 [0.0.6354].cvlist */,
-				DA8C2B4B2C38696A001755AB /* LokSound V3.5 [0.0.6093].cvlist */,
-				DA8C2B342C386965001755AB /* LokSound V4.0 [4.17.9249].cvlist */,
-				DA8C2B362C386965001755AB /* LokSound V4.0 M4 [4.17.9249].cvlist */,
-				DA8C2B552C38696D001755AB /* LokSound V4.0 M4 OEM [4.17.9249].cvlist */,
-				DA8C2B402C386968001755AB /* LokSound XL V3.5 [0.0.6093].cvlist */,
-				DA8C2B5B2C38696E001755AB /* LokSound XL V4.0 [4.17.9249].cvlist */,
-			);
-			path = "CV EXPORTS";
 			sourceTree = "<group>";
 		};
 		DA8C2B152C3852C3001755AB /* Decoder */ = {
@@ -2152,126 +1922,51 @@
 			buildActionMask = 2147483647;
 			files = (
 				DAA83DEF272C37680075CBCD /* Assets.xcassets in Resources */,
-				DA8C2B642C386970001755AB /* LokPilot Standard V1.0 [1.2.1415].cvlist in Resources */,
-				DA8C2B6B2C386970001755AB /* LokPilot V3.0 [0.0.6607].cvlist in Resources */,
-				DA8C2B842C386970001755AB /* LokSound micro DCC Direct [5.10.166].cvlist in Resources */,
-				DA8C2B752C386970001755AB /* LokPilot Basic (LA) [0.9.0].cvlist in Resources */,
-				DA8C2B8D2C386970001755AB /* LokPilot Fx V3.0 [0.0.6442].cvlist in Resources */,
 				DA60140129F408D800AD9ACD /* ViewLCCNetwork.storyboard in Resources */,
 				DA497BC52B9E0B6600D96ACA /* InitApp.storyboard in Resources */,
-				DA8C2B722C386970001755AB /* Essential Sound Unit [5.10.166].cvlist in Resources */,
-				DA8C2B652C386970001755AB /* LokSound 5 nano DCC [5.10.166].cvlist in Resources */,
 				DA1ECC9328439D4600C4F963 /* UpdateFirmware.storyboard in Resources */,
 				DAAC7E912A79308B001A424E /* MyTrains DCC Programming Track.xml in Resources */,
 				DA408A5C2B582DB6005EBBDE /* SelectMasterNode.storyboard in Resources */,
 				DA063397293CE8F400CEAFD1 /* SetFastClock.storyboard in Resources */,
-				DA8C2BAC2C386970001755AB /* LokSound 5 L DCC [5.10.166].cvlist in Resources */,
-				DA8C2B9A2C386970001755AB /* LokSound 5 micro [5.10.166].cvlist in Resources */,
-				DA8C2B972C386970001755AB /* LokPilot 5 micro [5.10.166].cvlist in Resources */,
 				DA1272C32A7569AF00AB42F6 /* FDI Generic.xml in Resources */,
-				DA8C2B792C386970001755AB /* LokSound 5 [5.10.166].cvlist in Resources */,
 				DAF059B32B5AE3A200CA9622 /* MyTrains Application.xml in Resources */,
 				DA5F7A1C2A3F1A36004D7EBB /* MyTrains Blank.xml in Resources */,
 				DAFFB6592B5D49040035AC74 /* CreateVirtualNode.storyboard in Resources */,
-				DA8C2B692C386970001755AB /* LokPilot micro V4.0 [4.16.9247].cvlist in Resources */,
-				DA8C2B902C386970001755AB /* LokPilot micro V4.0 DCC [4.16.9247].cvlist in Resources */,
 				DA8AE0ED279B2CCB001E9311 /* SlotView.storyboard in Resources */,
 				DA5BD1E92B65434200CEA5BA /* License.txt in Resources */,
-				DA8C2B992C386970001755AB /* LokPilot XL V3.0 [0.0.6607].cvlist in Resources */,
-				DA8C2BA62C386970001755AB /* LokSound 5 micro DCC [5.10.166].cvlist in Resources */,
-				DA8C2B9E2C386970001755AB /* LokPilot Nano Standard V1.0 [1.2.1415].cvlist in Resources */,
 				DA5BD1EF2B65720F00CEA5BA /* About.storyboard in Resources */,
-				DA8C2B6C2C386970001755AB /* LokSound micro DCC Direct Atlas S2 [5.10.166].cvlist in Resources */,
-				DA8C2BAA2C386970001755AB /* LokPilot 5 nano DCC [5.10.166].cvlist in Resources */,
 				DA28C2BA2801CC0300857471 /* DashBoard.storyboard in Resources */,
-				DA8C2B762C386970001755AB /* LokPilot V4.0 M4 MKL [4.16.9247].cvlist in Resources */,
-				DA8C2BA42C386970001755AB /* LokPilot Fx micro V3.0 [0.0.6607].cvlist in Resources */,
-				DA8C2B822C386970001755AB /* LokPilot 5 micro Next18 [5.10.166].cvlist in Resources */,
-				DA8C2B882C386970001755AB /* LokPilot 5 Fx [5.10.166].cvlist in Resources */,
 				DA0883FF2A768F2400C2CFBD /* MyTrains Train.xml in Resources */,
 				DA6A0AD8275295BF00913F2B /* Monitor.storyboard in Resources */,
-				DA8C2B9F2C386970001755AB /* LokSound V4.0 M4 OEM [4.17.9249].cvlist in Resources */,
 				DA5BD1F52B6588FA00CEA5BA /* TextView.storyboard in Resources */,
-				DA8C2B872C386970001755AB /* LokPilot 5 Fx micro DCC [5.10.166].cvlist in Resources */,
-				DA8C2B7A2C386970001755AB /* LokPilot 5 [5.10.166].cvlist in Resources */,
-				DA8C2BA12C386970001755AB /* LokSound V3.0 M4 [0.0.6354].cvlist in Resources */,
 				DA50288D2C80C0EA00CCE0DA /* DecoderEditor.storyboard in Resources */,
-				DA8C2B7F2C386970001755AB /* LokPilot XL V4.0 [4.16.9247].cvlist in Resources */,
-				DA8C2B672C386970001755AB /* LokSound 5 micro KATO [5.10.166].cvlist in Resources */,
-				DA8C2B662C386970001755AB /* LokSound 5 DCC [5.10.166].cvlist in Resources */,
 				DAAC7E952A7966EE001A424E /* ProgrammerTool.storyboard in Resources */,
 				DA5BD1F32B65870900CEA5BA /* Acknowledgements.txt in Resources */,
-				DA8C2BA72C386970001755AB /* LokSound micro V4.0 [4.17.9249].cvlist in Resources */,
-				DA8C2B852C386970001755AB /* LokPilot 5 MKL DCC [5.10.166].cvlist in Resources */,
-				DA8C2B9D2C386970001755AB /* LokSound 5 XL [5.10.166].cvlist in Resources */,
-				DA8C2B682C386970001755AB /* LokSound 5 L [5.10.166].cvlist in Resources */,
-				DA8C2B9C2C386970001755AB /* LokSound 5 nano DCC Next18 [5.10.166].cvlist in Resources */,
-				DA8C2B892C386970001755AB /* LokPilot V4.0 DCC [4.16.9247].cvlist in Resources */,
-				DA8C2B962C386970001755AB /* LokPilot micro V3.0 [0.0.6607].cvlist in Resources */,
-				DA8C2B8C2C386970001755AB /* LokPilot V3.0 DCC [0.0.6607].cvlist in Resources */,
 				DAE4285E2BCC07E60016571B /* LayoutBuilder.storyboard in Resources */,
-				DA8C2B982C386970001755AB /* LokPilot 5 DCC [5.10.166].cvlist in Resources */,
-				DA8C2B742C386970001755AB /* LokPilot 5 MKL [5.10.166].cvlist in Resources */,
-				DA8C2B732C386970001755AB /* LokSound Select L [4.17.9249].cvlist in Resources */,
-				DA8C2B8B2C386970001755AB /* LokPilot 5 micro DCC Direct [5.10.166].cvlist in Resources */,
-				DA8C2B952C386970001755AB /* LokSound V3.5 [0.0.6093].cvlist in Resources */,
 				DAA7BEC22B50664B00508140 /* CDITextView.storyboard in Resources */,
 				DA92E0742B667AF200762058 /* MyTrains Switchboard Item.xml in Resources */,
-				DA8C2B7E2C386970001755AB /* LokSound V4.0 [4.17.9249].cvlist in Resources */,
-				DA8C2B6D2C386970001755AB /* LokPilot micro V3.0 DCC [0.0.6607].cvlist in Resources */,
 				DA7195FB2A3F2D40004D2D4B /* MyTrains Train - OLD.xml in Resources */,
-				DA8C2B812C386970001755AB /* LokPilot 5 micro Next18 DCC [5.10.166].cvlist in Resources */,
-				DA8C2B6E2C386970001755AB /* LokPilot 5 Fx micro Next18 [5.10.166].cvlist in Resources */,
 				DA0B63D82AF7BB8B007C7CD6 /* OpenLCBMonitor.storyboard in Resources */,
 				DA8A05652B53FE1A003A39D7 /* MyTrains Layout.xml in Resources */,
 				DAAA9C232A0FDD8600A5B9D6 /* ViewNodeInfo.storyboard in Resources */,
-				DA8C2B802C386970001755AB /* LokSound V4.0 M4 [4.17.9249].cvlist in Resources */,
-				DA8C2B8A2C386970001755AB /* LokSound XL V3.5 [0.0.6093].cvlist in Resources */,
 				DAFACF592A26C5E0007C10F0 /* MyTrains Clock.xml in Resources */,
 				DA95D6BF28083E9800D9F1B6 /* GroupSetup.storyboard in Resources */,
-				DA8C2B6A2C386970001755AB /* LokPilot Basic [0.9.0].cvlist in Resources */,
-				DA8C2B7C2C386970001755AB /* LokPilot 5 Basic [5.1.6].cvlist in Resources */,
-				DA8C2BA02C386970001755AB /* LokSound 5 Fx DCC [5.10.166].cvlist in Resources */,
 				DAA7BEC62B5067AE00508140 /* ConfigurationTool.storyboard in Resources */,
-				DA8C2BA52C386970001755AB /* LokSound XL V4.0 [4.17.9249].cvlist in Resources */,
-				DA8C2B832C386970001755AB /* LokPilot Micro SlideIn V4.0 DCC [4.16.9247].cvlist in Resources */,
 				DAF442E72AA5FA9700654A51 /* Digitrax DS64.xml in Resources */,
 				DAFFB65D2B5D877F0035AC74 /* SelectLayout.storyboard in Resources */,
 				DA568FC82B94DDAD0008086E /* Main.storyboard in Resources */,
-				DA8C2BA92C386970001755AB /* LokPilot Fx Nano V1.0 [1.2.1415].cvlist in Resources */,
 				DAB448522C736F4D00D1303A /* LokProgrammerMonitor.storyboard in Resources */,
 				DAA7BEBB2B504EE900508140 /* Localizable.xcstrings in Resources */,
-				DA8C2B782C386970001755AB /* LokPilot V4.0 M4 [4.16.9247].cvlist in Resources */,
-				DA8C2B772C386970001755AB /* LokPilot 5 micro DCC [5.10.166].cvlist in Resources */,
-				DA47E5472C3B0CAE00A1D803 /* NMRA Standard Decoder [0.0.0].cvlist in Resources */,
-				DA8C2BA82C386970001755AB /* LokPilot Fx V4.0 [4.16.9247].cvlist in Resources */,
 				DAED17222A5ABF4A0051C9AF /* MyTrains CAN Gateway.xml in Resources */,
-				DA8C2B9B2C386970001755AB /* LokPilot V3.0 OEM [0.0.5973].cvlist in Resources */,
-				DA8C2B932C386970001755AB /* LokSound micro DCC Direct Atlas Legacy [5.10.166].cvlist in Resources */,
 				DA5CCB4C2897F58D00F99AE6 /* SpeedProfiler.storyboard in Resources */,
-				DA8C2B8E2C386970001755AB /* LokSound L V4.0 [4.17.9249].cvlist in Resources */,
-				DA8C2B862C386970001755AB /* LokPilot 5 Fx micro Next18 DCC [5.10.166].cvlist in Resources */,
 				DAD73C1C2A9A298E002E7618 /* Digitrax BXP88.xml in Resources */,
 				DA412E122780948900748CCD /* Throttle.storyboard in Resources */,
-				DA8C2BA32C386970001755AB /* LokPilot 5 Fx micro [5.10.166].cvlist in Resources */,
-				DA8C2B702C386970001755AB /* LokSound Select OEM [4.17.9249].cvlist in Resources */,
-				DA8C2B7D2C386970001755AB /* LokSound Select direct - micro [4.17.9249].cvlist in Resources */,
-				DA8C2B942C386970001755AB /* LokSound Select [4.17.9249].cvlist in Resources */,
-				DA8C2BA22C386970001755AB /* LokPilot 5 Fx DCC [5.10.166].cvlist in Resources */,
 				DA3A2C9E2C822F2900181FDA /* DECODER_INFO.json in Resources */,
-				DA8C2B7B2C386970001755AB /* LokPilot V4.0 [4.16.9247].cvlist in Resources */,
-				DA8C2BAB2C386970001755AB /* LokPilot 5 L [5.10.166].cvlist in Resources */,
 				DA123A532A5044C2000E63E2 /* MyTrains LocoNet Gateway.xml in Resources */,
-				DA8C2B912C386970001755AB /* LokPilot V4.0 DCC PX [4.16.9247].cvlist in Resources */,
 				DAA030922AEE87B100BC5659 /* OpenLCBFirmwareUpdate.storyboard in Resources */,
-				DA8C2B712C386970001755AB /* LokSound 5 Fx [5.10.166].cvlist in Resources */,
 				DA29E9482BC8042300E6A757 /* PanelView.storyboard in Resources */,
-				DA8C2B6F2C386970001755AB /* LokPilot V3.0 M4 [0.0.6445].cvlist in Resources */,
 				DA073F072B5FEBB20040067A /* MyTrains Switchboard Panel.xml in Resources */,
-				DA8C2B922C386970001755AB /* LokPilot 5 L DCC [5.10.166].cvlist in Resources */,
-				DA8C2B8F2C386970001755AB /* LokSound 5 MKL [5.10.166].cvlist in Resources */,
 				DAC8FB2F2AED5F5E00456C40 /* StaRFIshrail Hub.xml in Resources */,
-				DA8C2BAD2C386970001755AB /* LokSound micro V3.5 [0.0.6093].cvlist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2650,6 +2345,7 @@
 				DA6E28E1285F86B900772641 /* Orientation.swift in Sources */,
 				DA95D6C52809C00600D9F1B6 /* SignalStrengthView.swift in Sources */,
 				DA5CCB4E2897F6B200F99AE6 /* SpeedProfilerVC.swift in Sources */,
+				DA705C932C877F1400368286 /* ESUPhysicalOutputCVIndexOffsetMethod.swift in Sources */,
 				DA60140329F408F100AD9ACD /* ViewLCCNetworkVC.swift in Sources */,
 				DA73E5032C413360002AB3DF /* DecoderType - Capabilities.swift in Sources */,
 				DA48EE2B293CEFEA006C26A0 /* LocoNetFastClockScaleFactor.swift in Sources */,

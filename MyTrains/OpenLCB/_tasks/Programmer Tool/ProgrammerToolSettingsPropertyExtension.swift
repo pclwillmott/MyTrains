@@ -3584,6 +3584,25 @@ extension ProgrammerToolSettingsProperty {
       requiredCapabilities : [.frequencyForBlinkingEffectsA]
     ),
     
+    .frequencyForBlinkingEffectsC : (
+      title                : String(localized: "Frequency for blinking effects"),
+      section              : .generalPhysicalOutputSettings,
+      controlType          : .textFieldWithSlider,
+      encoding             : .byte,
+      cvIndexingMethod     : .standard,
+      cv                   : [.cv_000_000_112],
+      mask                 : [0xff],
+      shift                : [0],
+      minValue             : 1.0,
+      maxValue             : 255.0,
+      trueDefaultValue     : nil,
+      infoType             : .time,
+      infoFactor           : 0.0655294,
+      infoMaxDecimalPlaces : 2,
+      infoFormat           : nil,
+      requiredCapabilities : [.frequencyForBlinkingEffectsA]
+    ),
+
     .triggerUserSoundsOnFunctionStatusChange : (
       title                : String(localized: "Trigger user sounds on function status change (LokSound 2 behaviour)"),
       section              : .soundFunctionBehaviour,
