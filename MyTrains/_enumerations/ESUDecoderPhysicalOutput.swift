@@ -61,113 +61,21 @@ public enum ESUDecoderPhysicalOutput : UInt8, CaseIterable, Codable {
   
   // MARK: Public Methods
   
-  
   public func cvIndexOffset(decoder:Decoder) -> Int {
     
-    switch decoder.esuPhysicalOutputCVIndexOffsetMethod {
-      
-    case .none:
-      return 0
-      
-    case .lok5:
-      return Int(self.rawValue) * 8
-      
-    case .lok4:
-      var index : ESUDecoderPhysicalOutput
-      switch self {
-      case .frontLight_2:
-        index = .aux11
-      case .rearLight_2:
-        index = .aux12
-      case .aux1_2:
-        index = .aux13
-      case .aux2_2:
-        index = .aux14
-      default:
-        index = self
-      }
-      return Int(index.rawValue) * 8
-      
-    case .lok3:
-      switch self {
-      case .frontLight:
-        return 0
-      case .rearLight:
-        return 1
-      case .aux1:
-        return 2
-      case .aux2:
-        return 3
-      case .aux3:
-        return 4
-      case .aux4:
-        return 5
-      case .aux5:
-        return 6
-      case .aux6:
-        return 7
-      default:
-        break
-      }
-      
+    let method = decoder.esuPhysicalOutputCVIndexOffsetMethod
+    
+    if let lookup = ESUDecoderPhysicalOutput.indexLookup[method], let index = lookup[self] {
+      return index * (method == .lok3 ? 1 : 8)
     }
     
     return 0
     
-    /*
-    let capabilities = decoder.decoderType.capabilities
-    
-    if capabilities.contains(.physicalOutputsPropertiesA) {
-      
-      if capabilities.contains(.lok5) {
-        return Int(self.rawValue) * 8
-      }
-      else {
-        var index : ESUDecoderPhysicalOutput
-        switch self {
-        case .frontLight_2:
-          index = .aux11
-        case .rearLight_2:
-          index = .aux12
-        case .aux1_2:
-          index = .aux13
-        case .aux2_2:
-          index = .aux14
-        default:
-          index = self
-        }
-        return Int(index.rawValue) * 8
-      }
-      
-    }
-    else {
-      switch self {
-      case .frontLight:
-        return 0
-      case .rearLight:
-        return 1
-      case .aux1:
-        return 2
-      case .aux2:
-        return 3
-      case .aux3:
-        return 4
-      case .aux4:
-        return 5
-      case .aux5:
-        return 6
-      case .aux6:
-        return 7
-      default:
-        return 0
-      }
-    }
-    */
   }
   
-  // MARK: Public Class Properties
+  // MARK: Private Class Properties
   
-  public static let titles : [ESUDecoderPhysicalOutput:String] = [
+  private static let titles : [ESUDecoderPhysicalOutput:String] = [
     .frontLight     : String(localized:"Front Light"),
     .frontLight_1   : String(localized:"Front Light [1]"),
     .frontLight_2   : String(localized:"Front Light [2]"),
@@ -197,8 +105,89 @@ public enum ESUDecoderPhysicalOutput : UInt8, CaseIterable, Codable {
     .aux17          : String(localized:"AUX17"),
     .aux18          : String(localized:"AUX18"),
   ]
+  
+  private static let indexLookup : [ESUPhysicalOutputCVIndexOffsetMethod:[ESUDecoderPhysicalOutput:Int]] = [
+    
+    .none : [:],
+    
+    .lok5 : [
+      .frontLight_1 : 0,
+      .rearLight_1  : 1,
+      .aux1_1       : 2,
+      .aux2_1       : 3,
+      .aux3         : 4,
+      .aux4         : 5,
+      .aux5         : 6,
+      .aux6         : 7,
+      .aux7         : 8,
+      .aux8         : 9,
+      .aux9         : 10,
+      .aux10        : 11,
+      .aux11        : 12,
+      .aux12        : 13,
+      .aux13        : 14,
+      .aux14        : 15,
+      .aux15        : 16,
+      .aux16        : 17,
+      .aux17        : 18,
+      .aux18        : 19,
+      .frontLight_2 : 20,
+      .rearLight_2  : 21,
+      .aux1_2       : 22,
+      .aux2_2       : 23,
+    ],
+    
+    .lok4 : [
+      .frontLight_1 : 0,
+      .rearLight_1  : 1,
+      .aux1_1       : 2,
+      .aux2_1       : 3,
+      .aux3         : 4,
+      .aux4         : 5,
+      .aux5         : 6,
+      .aux6         : 7,
+      .aux7         : 8,
+      .aux8         : 9,
+      .aux9         : 10,
+      .aux10        : 11,
+      .frontLight_2 : 12,
+      .rearLight_2  : 13,
+      .aux1_2       : 14,
+      .aux2_2       : 15,
+    ],
+    
+    .lok3 : [
+      .frontLight : 0,
+      .rearLight  : 1,
+      .aux1       : 2,
+      .aux2       : 3,
+      .aux3       : 4,
+      .aux4       : 5,
+      .aux5       : 6,
+      .aux6       : 7,
+    ],
+    
+  ]
 
   // MARK: Public Class Methods
+  
+  public static func applicableOutputs(method:ESUPhysicalOutputCVIndexOffsetMethod) -> [ESUDecoderPhysicalOutput] {
+    
+    var result : [ESUDecoderPhysicalOutput] = []
+    
+    guard let lookup = indexLookup[method] else {
+      return result
+    }
+    
+    for output in ESUDecoderPhysicalOutput.allCases {
+      if lookup.keys.contains(output) {
+        result.append(output)
+      }
+    }
+    
+    return result
+    
+  }
   
   public static func populate(comboBox:NSComboBox, decoder:Decoder) {
     

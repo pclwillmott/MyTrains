@@ -33,7 +33,7 @@ import AppKit
 
 public let decoderInfoMasterFile = "/Users/paul/Documents/MyTrains/MyTrains/ESU LokProgrammer/DECODER_INFO.json"
 
-class DecoderEditorVC : MyTrainsViewController, DecoderPropertyTableViewDSDelegate, DecoderProductIdTableViewDSDelegate {
+class DecoderEditorVC : MyTrainsViewController, DecoderPropertyTableViewDSDelegate, DecoderProductIdTableViewDSDelegate, DecoderPhysicalOutputTableViewDSDelegate, OutputModeTableViewDSDelegate {
   
   // MARK: Window & View Control
   
@@ -71,7 +71,17 @@ class DecoderEditorVC : MyTrainsViewController, DecoderPropertyTableViewDSDelega
     mappingsTableView.dataSource = mappingsDataSource
     mappingsTableView.delegate = mappingsDataSource
     
+    physicalOutputsTableView.dataSource = physicalOutputsDataSource
+    physicalOutputsTableView.delegate = physicalOutputsDataSource
+    physicalOutputsDataSource.delegate = self
+    
+    outputModeTableView.dataSource = outputModesDataSource
+    outputModeTableView.delegate = outputModesDataSource
+    outputModesDataSource.delegate = self
+    
     DecoderType.populate(comboBox: cboDecoderType)
+    
+    ESUPhysicalOutputCVIndexOffsetMethod.populate(comboBox: cboOffsetMethod)
     
     DecoderEditorLoadType.populate(comboBox: cboLoadType)
     cboLoadType.selectItem(at: 0)
@@ -106,21 +116,38 @@ class DecoderEditorVC : MyTrainsViewController, DecoderPropertyTableViewDSDelega
     } catch {
       
     }
-    
-//    for var (key, definition) in decoderTypes {
-//      definition.offsetMethod = key.offsetMethod
-//      decoderTypes[key] = definition
-//    }
-
+    /*
+    for var (key, definition) in decoderTypes {
+      
+      let decoder = Decoder(decoderType: key)
+      
+      var outputModes : [ESUDecoderPhysicalOutput:Set<ESUPhysicalOutputMode>] = [:]
+      
+      for output in definition.esuPhysicalOutputs {
+        
+        outputModes[output] = ESUPhysicalOutputMode.applicableOutputModes(output: output, decoder: decoder)
+        
+      }
+      
+      definition.esuOutputModes = outputModes
+      
+      decoderTypes[key] = definition
+      
+    }
+    */
     for property in ProgrammerToolSettingsProperty.allCases {
       properties.append(property)
     }
+    
     propertyDataSource.properties = properties
     
     userSettings?.tableView = propertiesTableView
     userSettings?.tableView2 = cvsTableView
     userSettings?.splitView = splitView
+    userSettings?.splitView2 = physicalOutputSplitView
     userSettings?.tableView3 = mappingsTableView
+    userSettings?.tableView4 = physicalOutputsTableView
+    userSettings?.tableView5 = outputModeTableView
     
     txtInfo.font = NSFont(name: "Menlo", size: 12.0)
     
@@ -205,6 +232,10 @@ class DecoderEditorVC : MyTrainsViewController, DecoderPropertyTableViewDSDelega
   
   private let mappingsDataSource = DecoderMappingTableViewDS()
   
+  private let physicalOutputsDataSource = PhysicalOutputTableViewDS()
+  
+  private let outputModesDataSource = OutputModeTableViewDS()
+  
   private var definition : DecoderDefinition?
   
   private var properties : [ProgrammerToolSettingsProperty] = []
@@ -216,29 +247,39 @@ class DecoderEditorVC : MyTrainsViewController, DecoderPropertyTableViewDSDelega
   @IBAction func cboDecoderTypeAction(_ sender: NSComboBox) {
     
     if let decoderType = DecoderType(title: sender.stringValue) {
+      
       definition = decoderTypes[decoderType]
-      if let definition {
-        cvDataSource.definition = definition
-        propertyDataSource.definition = definition
-        productIdDataSource.definition = definition
-        mappingsDataSource.definition = definition
+      
+      if definition == nil {
+        definition = DecoderDefinition(decoderType: decoderType, firmwareVersion: [], esuProductIds: [], cvs: [], defaultValues: [], mapping: [:], properties: [], esuPhysicalOutputs: [], offsetMethod: .none, esuOutputModes: [:])
       }
-      else {
-        definition = DecoderDefinition(decoderType: decoderType, firmwareVersion: [], esuProductIds: [], cvs: [], defaultValues: [], mapping: [:], properties: [], esuPhysicalOutputs: [], offsetMethod: .none)
-        cvDataSource.definition = definition
-        propertyDataSource.definition = definition
-        productIdDataSource.definition = definition
-        mappingsDataSource.definition = definition
-      }
+      
+      cvDataSource.definition = definition
+      propertyDataSource.definition = definition
+      productIdDataSource.definition = definition
+      mappingsDataSource.definition = definition
+      physicalOutputsDataSource.definition = definition
+      outputModesDataSource.definition = definition
+      
+      cboOffsetMethod.selectItem(withObjectValue: definition!.offsetMethod.title)
+
       cvsTableView.reloadData()
       propertiesTableView.reloadData()
       productIdsTableView.reloadData()
       mappingsTableView.reloadData()
+      physicalOutputsTableView.reloadData()
       cboLoadType.isEnabled = true
       btnLoad.isEnabled = true
       
     }
     
+  }
+  
+  public var physicalOutput : ESUDecoderPhysicalOutput? {
+    didSet {
+      outputModesDataSource.physicalOutput = physicalOutput
+      outputModeTableView.reloadData()
+    }
   }
   
   @IBOutlet weak var cvsTableView: NSTableView!
@@ -261,12 +302,40 @@ class DecoderEditorVC : MyTrainsViewController, DecoderPropertyTableViewDSDelega
     
     definition?.properties = properties
     
-    decoderTypes[decoderType] = self.definition!
+    decoderTypes[decoderType] = definition!
     
     isModified = true
     
   }
   
+  func outputSelectionChanged(output: ESUDecoderPhysicalOutput) {
+    physicalOutput = output
+  }
+  
+  func supportedPhysicalOutputsChanged(outputs: Set<ESUDecoderPhysicalOutput>) {
+    
+    guard let decoderType = DecoderType(title: cboDecoderType.stringValue) else {
+      return
+    }
+    
+    definition?.esuPhysicalOutputs = outputs
+    
+    for output in outputs {
+      if !definition!.esuOutputModes.keys.contains(output) {
+        definition?.esuOutputModes[output] = []
+      }
+    }
+    
+    decoderTypes[decoderType] = definition!
+    
+    outputModesDataSource.definition = definition
+    outputModesDataSource.physicalOutput = physicalOutput
+    outputModeTableView.reloadData()
+    
+    isModified = true
+
+  }
+
   func productIdChanged(productIds: [UInt32]) {
     
     guard let decoderType = DecoderType(title: cboDecoderType.stringValue) else {
@@ -427,6 +496,60 @@ class DecoderEditorVC : MyTrainsViewController, DecoderPropertyTableViewDSDelega
 
     }
 
+  }
+  
+  @IBOutlet weak var physicalOutputsTableView: NSTableView!
+  
+  @IBAction func physicalOutputsTableViewAction(_ sender: NSTableView) {
+  }
+  
+  @IBOutlet weak var outputModeTableView: NSTableView!
+  
+  @IBAction func outputModeTableViewAction(_ sender: NSTableView) {
+  }
+  
+  @IBOutlet weak var physicalOutputSplitView: NSSplitView!
+  
+  @IBOutlet weak var cboOffsetMethod: NSComboBox!
+  
+  @IBAction func cboOffsetMethodAction(_ sender: NSComboBox) {
+    
+    guard definition != nil else {
+      return
+    }
+    
+    if let decoderType = DecoderType(title: cboDecoderType.stringValue) {
+      
+      if let offsetMethod = ESUPhysicalOutputCVIndexOffsetMethod(title: sender.stringValue) {
+        
+        definition?.offsetMethod = offsetMethod
+        
+        decoderTypes[decoderType] = definition!
+        
+        physicalOutputsDataSource.definition = definition
+        
+        physicalOutputsTableView.reloadData()
+        
+        isModified = true
+        
+      }
+      
+      
+    }
+    
+  }
+  
+  func supportedOutputModesChanged(outputs: [ESUDecoderPhysicalOutput : Set<ESUPhysicalOutputMode>]) {
+ 
+    if let decoderType = DecoderType(title: cboDecoderType.stringValue) {
+      
+      definition?.esuOutputModes = outputs
+      
+      decoderTypes[decoderType] = definition
+      
+      isModified = true
+      
+    }
   }
   
 

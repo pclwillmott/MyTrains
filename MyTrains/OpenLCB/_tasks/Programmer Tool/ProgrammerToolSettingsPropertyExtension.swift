@@ -2843,7 +2843,7 @@ extension ProgrammerToolSettingsProperty {
       title                : String(localized: "Output mode (effect)"),
       section              : .physicalOutputConfiguration,
       controlType          : .comboBoxDynamic,
-      encoding             : .esuPhysicalOutputModeB,
+      encoding             : .esuPhysicalOutputMode,
       cvIndexingMethod     : .esuDecoderPhysicalOutput,
       cv                   : [.cv_000_000_113],
       mask                 : [0b11110000],

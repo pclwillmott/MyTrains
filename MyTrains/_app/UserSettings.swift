@@ -34,7 +34,13 @@ public class UserSettings {
       update()
     }
   }
-  
+
+  public weak var splitView3 : NSSplitView? {
+    didSet {
+      update()
+    }
+  }
+
   public weak var tableView : NSTableView? {
     didSet {
       update()
@@ -53,6 +59,18 @@ public class UserSettings {
     }
   }
 
+  public weak var tableView4 : NSTableView? {
+    didSet {
+      update()
+    }
+  }
+
+  public weak var tableView5 : NSTableView? {
+    didSet {
+      update()
+    }
+  }
+
   // MARK: Public Properties
   
   public weak var node : OpenLCBNodeVirtual? {
@@ -64,15 +82,24 @@ public class UserSettings {
   // MARK: Private Methods
   
   private func update() {
+    
     window?.setFrameAutosaveName(key())
-    splitView?.autosaveName = key(forKey: "SPLIT-VIEW")
+    
+    splitView?.autosaveName  = key(forKey: "SPLIT-VIEW")
     splitView2?.autosaveName = key(forKey: "SPLIT-VIEW2")
+    splitView3?.autosaveName = key(forKey: "SPLIT-VIEW3")
+
     tableView?.autosaveTableColumns = true
     tableView?.autosaveName = key(forKey: "TABLE-VIEW7")
     tableView2?.autosaveTableColumns = true
     tableView2?.autosaveName = key(forKey: "TABLE-VIEW8")
     tableView3?.autosaveTableColumns = true
     tableView3?.autosaveName = key(forKey: "TABLE-VIEW9")
+    tableView4?.autosaveTableColumns = true
+    tableView4?.autosaveName = key(forKey: "TABLE-VIEW10")
+    tableView5?.autosaveTableColumns = true
+    tableView5?.autosaveName = key(forKey: "TABLE-VIEW11")
+    
   }
   
   private func key(forKey:String? = nil) -> String {

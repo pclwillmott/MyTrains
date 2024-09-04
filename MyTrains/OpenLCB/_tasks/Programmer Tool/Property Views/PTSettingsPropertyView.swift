@@ -789,10 +789,8 @@ public class PTSettingsPropertyView : NSView, NSTextFieldDelegate {
     switch property {
     case .physicalOutput:
       ESUDecoderPhysicalOutput.populate(comboBox: comboBox, decoder: decoder)
-    case .physicalOutputOutputMode:
+    case .physicalOutputOutputMode, .physicalOutputModeB:
       ESUPhysicalOutputMode.populate(comboBox: comboBox, decoder: decoder)
-    case .physicalOutputModeB:
-      ESUPhysicalOutputModeB.populate(comboBox: comboBox, decoder: decoder)
     case .esuSoundSlot:
       ESUSoundSlot.populate(comboBox: comboBox, decoder: decoder)
     case .esuFunctionMapping:

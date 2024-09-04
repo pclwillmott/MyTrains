@@ -24,7 +24,7 @@ public class Decoder : NSObject {
     definition = DecoderType.decoderDefinitions[decoderType]
     
     if definition == nil {
-      definition = DecoderDefinition(decoderType: decoderType, firmwareVersion: [], esuProductIds: [], cvs: [], defaultValues: [], mapping: [:], properties: [], esuPhysicalOutputs: [], offsetMethod: .none)
+      definition = DecoderDefinition(decoderType: decoderType, firmwareVersion: [], esuProductIds: [], cvs: [], defaultValues: [], mapping: [:], properties: [], esuPhysicalOutputs: [], offsetMethod: .none, esuOutputModes: [:])
     }
     
     if let definition, !definition.cvs.isEmpty {
@@ -118,6 +118,13 @@ public class Decoder : NSObject {
       return .none
     }
     return definition.offsetMethod
+  }
+  
+  public var applicableOutputModes : [ESUDecoderPhysicalOutput:Set<ESUPhysicalOutputMode>] {
+    guard let definition else {
+      return [:]
+    }
+    return definition.esuOutputModes
   }
   
   public var propertyViews : [PTSettingsPropertyView] = [] {
@@ -386,104 +393,6 @@ public class Decoder : NSObject {
     }
     
     return definition.esuPhysicalOutputs
-    
-    /*
-    let capabilities = decoderType.capabilities
-    
-    var result : Set<ESUDecoderPhysicalOutput> = []
-    
-    if capabilities.contains(.singleFrontRearAux1Aux2) {
-      result = result.union([
-        .frontLight,
-        .rearLight,
-      ])
-      if capabilities.intersection([.aux3toAux4]) == [.aux3toAux4] {
-        result = result.union([
-          .aux3,
-          .aux4,
-        ])
-      }
-      if capabilities.intersection([.aux1]) == [.aux1] {
-        result = result.union([
-          .aux1,
-        ])
-      }
-      if capabilities.intersection([.aux2]) == [.aux2] {
-        result = result.union([
-          .aux2,
-        ])
-      }
-    }
-    else {
-      result = result.union([
-        .frontLight_1,
-        .frontLight_2,
-        .rearLight_1,
-        .rearLight_2,
-      ])
-      if capabilities.intersection([.aux1]) == [.aux1] {
-        result = result.union([
-          .aux1_1,
-          .aux1_2,
-        ])
-      }
-      if capabilities.intersection([.aux2]) == [.aux2] {
-        result = result.union([
-          .aux2_1,
-          .aux2_2,
-        ])
-      }
-      if capabilities.intersection([.aux3toAux4]) == [.aux3toAux4] {
-        result = result.union([
-          .aux3,
-          .aux4,
-        ])
-      }
-    }
-    
-    if capabilities.intersection([.aux5toAux6]) == [.aux5toAux6] {
-      result = result.union([
-        .aux5,
-        .aux6,
-      ])
-    }
-
-    if capabilities.intersection([.aux7toAux8]) == [.aux7toAux8] {
-      result = result.union([
-        .aux7,
-        .aux8,
-      ])
-    }
-
-    if capabilities.intersection([.aux9toAux10]) == [.aux9toAux10] {
-      result = result.union([
-        .aux9,
-        .aux10,
-      ])
-    }
-
-    if capabilities.intersection([.aux11toAux12]) == [.aux11toAux12] {
-      result = result.union([
-        .aux11,
-        .aux12,
-      ])
-    }
-
-    if capabilities.intersection([.aux13toAux18]) == [.aux13toAux18] {
-      
-      result = result.union([
-        .aux13,
-        .aux14,
-        .aux15,
-        .aux16,
-        .aux17,
-        .aux18,
-      ])
-      
-    }
-    
-    return result
-    */
     
   }
   
@@ -913,11 +822,7 @@ public class Decoder : NSObject {
         return item.title
       }
     case .esuPhysicalOutputMode:
-      if let item = ESUPhysicalOutputMode(rawValue: values[0]) {
-        return item.title(decoder: self)
-      }
-    case .esuPhysicalOutputModeB:
-      if let item = ESUPhysicalOutputModeB(rawValue: values[0]) {
+      if let item = ESUPhysicalOutputMode(value: values[0], decoder: self) {
         return item.title(decoder: self)
       }
     case .esuClassLightLogicLength:
@@ -1073,8 +978,6 @@ public class Decoder : NSObject {
       return ESUPhysicalOutputMode(title: string, decoder: self) != nil
     case .esuSoundType:
       return ESUSoundType(title:string) != nil
-    case .esuPhysicalOutputModeB:
-      return ESUPhysicalOutputModeB(title: string, decoder: self) != nil
     case .esuSteamChuffMode:
       return SteamChuffMode(title: string) != nil
     case .esuSmokeUnitControlMode:
@@ -1274,9 +1177,7 @@ public class Decoder : NSObject {
     case .esuBrakingMode:
       newValues.append(ESUBrakingMode(title: string)!.rawValue)
     case .esuPhysicalOutputMode:
-      newValues.append(ESUPhysicalOutputMode(title: string, decoder: self)!.rawValue)
-    case .esuPhysicalOutputModeB:
-      newValues.append(ESUPhysicalOutputModeB(title: string, decoder: self)!.rawValue)
+      newValues.append(ESUPhysicalOutputMode(title: string, decoder: self)!.cvValue(decoder: self)!)
     case .esuClassLightLogicLength:
       newValues.append(ClassLightLogicSequenceLength(title: string)!.rawValue)
     case .speedTableIndex:

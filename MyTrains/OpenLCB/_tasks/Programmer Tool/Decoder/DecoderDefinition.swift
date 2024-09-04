@@ -27,6 +27,7 @@
 //
 //     31/08/2024  Paul Willmott - DecoderDefinition.swift created.
 //     03/09/2024  Paul Willmott - esuPhysicalOutputs, offsetMethod added.
+//     04/09/2024  Paul Willmott - esuOutputModes added.
 // -----------------------------------------------------------------------------
 
 import Foundation
@@ -42,5 +43,6 @@ public struct DecoderDefinition : Codable {
   var properties         : Set<ProgrammerToolSettingsProperty>
   var esuPhysicalOutputs : Set<ESUDecoderPhysicalOutput>
   var offsetMethod       : ESUPhysicalOutputCVIndexOffsetMethod
+  var esuOutputModes     : [ESUDecoderPhysicalOutput:Set<ESUPhysicalOutputMode>]
   
 }

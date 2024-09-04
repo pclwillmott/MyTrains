@@ -70,7 +70,6 @@ public enum ProgrammerToolEncodingType : Int, CaseIterable {
   
   case esuDecoderPhysicalOutput
   case esuPhysicalOutputMode
-  case esuPhysicalOutputModeB
   case esuSteamChuffMode
   case esuSmokeUnitControlMode
   case esuExternalSmokeUnitType

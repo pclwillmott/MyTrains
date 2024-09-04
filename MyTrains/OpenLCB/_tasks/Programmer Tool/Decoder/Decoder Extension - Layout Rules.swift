@@ -828,7 +828,7 @@ extension Decoder {
       (
         property1      : .physicalOutputModeB,
         testType1      : .equal,
-        testValue1     : ESUPhysicalOutputModeB.dimmableHeadlight.title,
+        testValue1     : ESUPhysicalOutputMode.dimmableHeadlightLok3.title,
         operator       : nil,
         property2      : nil,
         testType2      : nil,
@@ -840,7 +840,7 @@ extension Decoder {
       (
         property1      : .physicalOutputModeB,
         testType1      : .equal,
-        testValue1     : ESUPhysicalOutputModeB.flashLightPhase1.title,
+        testValue1     : ESUPhysicalOutputMode.flashLightPhase1Lok3.title,
         operator       : nil,
         property2      : nil,
         testType2      : nil,
@@ -852,7 +852,7 @@ extension Decoder {
       (
         property1      : .physicalOutputModeB,
         testType1      : .equal,
-        testValue1     : ESUPhysicalOutputModeB.flashLightPhase2.title,
+        testValue1     : ESUPhysicalOutputMode.flashLightPhase2Lok3.title,
         operator       : nil,
         property2      : nil,
         testType2      : nil,
@@ -864,7 +864,7 @@ extension Decoder {
       (
         property1      : .physicalOutputModeB,
         testType1      : .equal,
-        testValue1     : ESUPhysicalOutputModeB.singleStrobe.title,
+        testValue1     : ESUPhysicalOutputMode.singleStrobeLok3.title,
         operator       : nil,
         property2      : nil,
         testType2      : nil,
@@ -876,7 +876,7 @@ extension Decoder {
       (
         property1      : .physicalOutputModeB,
         testType1      : .equal,
-        testValue1     : ESUPhysicalOutputModeB.doubleStrobe.title,
+        testValue1     : ESUPhysicalOutputMode.doubleStrobeLok3.title,
         operator       : nil,
         property2      : nil,
         testType2      : nil,
@@ -888,7 +888,7 @@ extension Decoder {
       (
         property1      : .physicalOutputModeB,
         testType1      : .equal,
-        testValue1     : ESUPhysicalOutputModeB.firebox.title,
+        testValue1     : ESUPhysicalOutputMode.fireboxLok3.title,
         operator       : nil,
         property2      : nil,
         testType2      : nil,
@@ -900,7 +900,7 @@ extension Decoder {
       (
         property1      : .physicalOutputModeB,
         testType1      : .equal,
-        testValue1     : ESUPhysicalOutputModeB.seutheSmokeUnit.title,
+        testValue1     : ESUPhysicalOutputMode.seutheSmokeUnitLok3.title,
         operator       : nil,
         property2      : nil,
         testType2      : nil,
@@ -912,7 +912,7 @@ extension Decoder {
       (
         property1      : .physicalOutputModeB,
         testType1      : .equal,
-        testValue1     : ESUPhysicalOutputModeB.dimmableHeadlightFadeInFadeOut.title,
+        testValue1     : ESUPhysicalOutputMode.dimmableHeadlightFadeInFadeOutLok3.title,
         operator       : nil,
         property2      : nil,
         testType2      : nil,
@@ -924,7 +924,7 @@ extension Decoder {
       (
         property1      : .physicalOutputModeB,
         testType1      : .equal,
-        testValue1     : ESUPhysicalOutputModeB.marsLight.title,
+        testValue1     : ESUPhysicalOutputMode.marsLightLok3.title,
         operator       : nil,
         property2      : nil,
         testType2      : nil,
@@ -936,7 +936,7 @@ extension Decoder {
       (
         property1      : .physicalOutputModeB,
         testType1      : .equal,
-        testValue1     : ESUPhysicalOutputModeB.gyraLight.title,
+        testValue1     : ESUPhysicalOutputMode.gyraLightLok3.title,
         operator       : nil,
         property2      : nil,
         testType2      : nil,
@@ -948,7 +948,7 @@ extension Decoder {
       (
         property1      : .physicalOutputModeB,
         testType1      : .equal,
-        testValue1     : ESUPhysicalOutputModeB.rule17Forward.title,
+        testValue1     : ESUPhysicalOutputMode.rule17ForwardLok3.title,
         operator       : nil,
         property2      : nil,
         testType2      : nil,
@@ -960,7 +960,7 @@ extension Decoder {
       (
         property1      : .physicalOutputModeB,
         testType1      : .equal,
-        testValue1     : ESUPhysicalOutputModeB.rule17Reverse.title,
+        testValue1     : ESUPhysicalOutputMode.rule17ReverseLok3.title,
         operator       : nil,
         property2      : nil,
         testType2      : nil,
@@ -972,7 +972,7 @@ extension Decoder {
       (
         property1      : .physicalOutputModeB,
         testType1      : .equal,
-        testValue1     : ESUPhysicalOutputModeB.pulse.title,
+        testValue1     : ESUPhysicalOutputMode.pulseLok3.title,
         operator       : nil,
         property2      : nil,
         testType2      : nil,
@@ -984,7 +984,7 @@ extension Decoder {
       (
         property1      : .physicalOutputModeB,
         testType1      : .equal,
-        testValue1     : ESUPhysicalOutputModeB.ditchLightPhase1.title,
+        testValue1     : ESUPhysicalOutputMode.ditchLightPhase1Lok3.title,
         operator       : nil,
         property2      : nil,
         testType2      : nil,
@@ -996,7 +996,7 @@ extension Decoder {
       (
         property1      : .physicalOutputModeB,
         testType1      : .equal,
-        testValue1     : ESUPhysicalOutputModeB.ditchLightPhase2.title,
+        testValue1     : ESUPhysicalOutputMode.ditchLightPhase2Lok3.title,
         operator       : nil,
         property2      : nil,
         testType2      : nil,

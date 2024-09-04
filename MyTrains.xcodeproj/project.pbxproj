@@ -83,6 +83,8 @@
 		DA29E94E2BC85C8900E6A757 /* SwitchboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA29E94D2BC85C8900E6A757 /* SwitchboardView.swift */; };
 		DA2AB2862C67D35700DF4BF6 /* ESUBrakingMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA2AB2852C67D35700DF4BF6 /* ESUBrakingMode.swift */; };
 		DA2B5FD22C2863B000A15FAA /* SpeedProfilerEventType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA2B5FD12C2863B000A15FAA /* SpeedProfilerEventType.swift */; };
+		DA2FB71E2C8878F4004C3637 /* PhysicalOutputTableViewDS.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA2FB71D2C8878F4004C3637 /* PhysicalOutputTableViewDS.swift */; };
+		DA2FB7202C88B8C7004C3637 /* OutputModeTableViewDS.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA2FB71F2C88B8C7004C3637 /* OutputModeTableViewDS.swift */; };
 		DA311BAC2A7BB8CC0019FDCE /* OpenLCBValidity.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA311BAB2A7BB8CC0019FDCE /* OpenLCBValidity.swift */; };
 		DA3168892BCAC84300059B6C /* SwitchboardOperationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA3168882BCAC84300059B6C /* SwitchboardOperationsView.swift */; };
 		DA31688B2BCACBD000059B6C /* SWBNodeLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA31688A2BCACBD000059B6C /* SWBNodeLink.swift */; };
@@ -160,7 +162,6 @@
 		DA595E182B8924E600ADF87B /* OpenLCBNodeVirtual - Messages - Datagram Transport.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA595E172B8924E600ADF87B /* OpenLCBNodeVirtual - Messages - Datagram Transport.swift */; };
 		DA595E1A2B89270B00ADF87B /* OpenLCBNodeVirtual - Messages - Event Transport.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA595E192B89270B00ADF87B /* OpenLCBNodeVirtual - Messages - Event Transport.swift */; };
 		DA595E1C2B892C5D00ADF87B /* OpenLCBNodeVirtual - Messages - Message Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA595E1B2B892C5D00ADF87B /* OpenLCBNodeVirtual - Messages - Message Network.swift */; };
-		DA59FFB02C6651E90089FFEF /* ESUPhysicalOutputModeB.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA59FFAF2C6651E90089FFEF /* ESUPhysicalOutputModeB.swift */; };
 		DA59FFB22C6686BF0089FFEF /* NMRASpeedTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA59FFB12C6686BF0089FFEF /* NMRASpeedTable.swift */; };
 		DA5A9F90295C89FC00950479 /* NumberBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5A9F8F295C89FC00950479 /* NumberBase.swift */; };
 		DA5B4601276F4E38005CA03C /* DatabaseConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5B4600276F4E38005CA03C /* DatabaseConstants.swift */; };
@@ -521,6 +522,8 @@
 		DA29E94D2BC85C8900E6A757 /* SwitchboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchboardView.swift; sourceTree = "<group>"; };
 		DA2AB2852C67D35700DF4BF6 /* ESUBrakingMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ESUBrakingMode.swift; sourceTree = "<group>"; };
 		DA2B5FD12C2863B000A15FAA /* SpeedProfilerEventType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedProfilerEventType.swift; sourceTree = "<group>"; };
+		DA2FB71D2C8878F4004C3637 /* PhysicalOutputTableViewDS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhysicalOutputTableViewDS.swift; sourceTree = "<group>"; };
+		DA2FB71F2C88B8C7004C3637 /* OutputModeTableViewDS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutputModeTableViewDS.swift; sourceTree = "<group>"; };
 		DA311BAB2A7BB8CC0019FDCE /* OpenLCBValidity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBValidity.swift; sourceTree = "<group>"; };
 		DA3168882BCAC84300059B6C /* SwitchboardOperationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchboardOperationsView.swift; sourceTree = "<group>"; };
 		DA31688A2BCACBD000059B6C /* SWBNodeLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SWBNodeLink.swift; sourceTree = "<group>"; };
@@ -599,7 +602,6 @@
 		DA595E172B8924E600ADF87B /* OpenLCBNodeVirtual - Messages - Datagram Transport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OpenLCBNodeVirtual - Messages - Datagram Transport.swift"; sourceTree = "<group>"; };
 		DA595E192B89270B00ADF87B /* OpenLCBNodeVirtual - Messages - Event Transport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OpenLCBNodeVirtual - Messages - Event Transport.swift"; sourceTree = "<group>"; };
 		DA595E1B2B892C5D00ADF87B /* OpenLCBNodeVirtual - Messages - Message Network.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OpenLCBNodeVirtual - Messages - Message Network.swift"; sourceTree = "<group>"; };
-		DA59FFAF2C6651E90089FFEF /* ESUPhysicalOutputModeB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ESUPhysicalOutputModeB.swift; sourceTree = "<group>"; };
 		DA59FFB12C6686BF0089FFEF /* NMRASpeedTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NMRASpeedTable.swift; sourceTree = "<group>"; };
 		DA5A9F8F295C89FC00950479 /* NumberBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberBase.swift; sourceTree = "<group>"; };
 		DA5B4600276F4E38005CA03C /* DatabaseConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseConstants.swift; sourceTree = "<group>"; };
@@ -1004,9 +1006,9 @@
 				DAE524FD2C454D60000FC319 /* DecoderSensorSettings.swift */,
 				DAE524FF2C459854000FC319 /* ESUDecoderPhysicalOutput.swift */,
 				DA705C922C877F1300368286 /* ESUPhysicalOutputCVIndexOffsetMethod.swift */,
+				DA0F37912C47EFA4002C66D8 /* TriggeredFunction.swift */,
 				DA01CF182C81EE9200C9881D /* DecoderEditorLoadType.swift */,
 				DAEC69492C4BEEFD008F1CFF /* ESUPhysicalOutputMode.swift */,
-				DA59FFAF2C6651E90089FFEF /* ESUPhysicalOutputModeB.swift */,
 				DA9CBFB72C5696CE00CC54B7 /* ESURandomFunction.swift */,
 				DA188A9A2C5A93F100A50EFB /* ESUCondition.swift */,
 				DA188A9C2C5A951200A50EFB /* ESUConditionDriving.swift */,
@@ -1020,7 +1022,6 @@
 				DAAE3E3E2C4D2B8A00F129B7 /* ExternalSmokeUnitType.swift */,
 				DA0F378F2C47E9D8002C66D8 /* SoundControlBasis.swift */,
 				DAA5E7692C59036900EC43F0 /* ESUSoundSlot.swift */,
-				DA0F37912C47EFA4002C66D8 /* TriggeredFunction.swift */,
 				DA00D94F2C57EFDA00B26A83 /* SoundCV.swift */,
 				DAA5E76B2C5925DF00EC43F0 /* ESUFunctionIcon.swift */,
 				DA188A982C5A6D1800A50EFB /* ESUFunctionMapping.swift */,
@@ -1663,6 +1664,8 @@
 				DA5028922C80D25400CCE0DA /* DecoderPropertyTableViewDS.swift */,
 				DA1320CE2C821B2100F603D6 /* DecoderProductIdTableViewDS.swift */,
 				DA5874D32C83394100B9140B /* DecoderMappingTableViewDS.swift */,
+				DA2FB71D2C8878F4004C3637 /* PhysicalOutputTableViewDS.swift */,
+				DA2FB71F2C88B8C7004C3637 /* OutputModeTableViewDS.swift */,
 			);
 			path = "ESU LokProgrammer";
 			sourceTree = "<group>";
@@ -2177,7 +2180,6 @@
 				DAA54F7F2A217CDA005CED7E /* OpenLCBNodeConfigurationTool.swift in Sources */,
 				DAB93F262C04D306006C0580 /* LayoutBuilderGeneralArea.swift in Sources */,
 				DABC089B2B1B895B00260605 /* LocoNetIMMPacketRepeat.swift in Sources */,
-				DA59FFB02C6651E90089FFEF /* ESUPhysicalOutputModeB.swift in Sources */,
 				DA5BA7DD2C4FF6DD0051407C /* UnitCurrent.swift in Sources */,
 				DAB4A73F2B40483700CD5256 /* CDIMapView.swift in Sources */,
 				DAA777CC2A20C861008EAF02 /* OpenLCBClockType.swift in Sources */,
@@ -2196,6 +2198,7 @@
 				DA04B8DA28F1AED70062D944 /* ConsistState.swift in Sources */,
 				DA631E2A2A52D263001AD638 /* MyTrainsVirtualNodeType.swift in Sources */,
 				DAE8DD5728675B040097C2D1 /* FrogType.swift in Sources */,
+				DA2FB7202C88B8C7004C3637 /* OutputModeTableViewDS.swift in Sources */,
 				DA5BD1F72B65893600CEA5BA /* TextViewVC.swift in Sources */,
 				DA20941E2BC3012B00737A12 /* OpenLCBLocoNetCommandStation.swift in Sources */,
 				DA063399293CEB8700CEAFD1 /* SetFastClockVC.swift in Sources */,
@@ -2284,6 +2287,7 @@
 				DAB26FF92BD1362300AC1B29 /* SwitchboardEditorView.swift in Sources */,
 				DAAC7E8F2A7926D2001A424E /* OpenLCBProgrammingTrackNode.swift in Sources */,
 				DA595E1C2B892C5D00ADF87B /* OpenLCBNodeVirtual - Messages - Message Network.swift in Sources */,
+				DA2FB71E2C8878F4004C3637 /* PhysicalOutputTableViewDS.swift in Sources */,
 				DA97872E2C396B7300765C83 /* CVIndexMethod.swift in Sources */,
 				DA5BA7D72C4FEBD50051407C /* UnitFrequency.swift in Sources */,
 				DA123A552A505102000E63E2 /* Parity.swift in Sources */,

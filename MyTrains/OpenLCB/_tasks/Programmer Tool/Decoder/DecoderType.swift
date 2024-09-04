@@ -195,6 +195,7 @@ public enum DecoderType : UInt64, Codable, CaseIterable {
     return requiredCapabilities.intersection(self.capabilities) == requiredCapabilities
   }
 
+  /*
   public var offsetMethod : ESUPhysicalOutputCVIndexOffsetMethod {
     
     if capabilities.contains(.physicalOutputsPropertiesA) {
@@ -214,7 +215,8 @@ public enum DecoderType : UInt64, Codable, CaseIterable {
     return .none
     
   }
-
+*/
+  
   // MARK: Private Class Properties
   
   private static let titles : [DecoderType: String] = [
