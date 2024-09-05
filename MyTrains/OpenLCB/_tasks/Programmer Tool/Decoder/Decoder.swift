@@ -660,6 +660,10 @@ public class Decoder : NSObject {
     
   }
 
+  public func getUInt8(index:Int) -> UInt8 {
+    return modifiedBlocks[index]
+  }
+
   public func cvTextList(list:[(cv:CV, value:UInt8)]) -> String {
     
     var result = ""

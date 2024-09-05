@@ -35,6 +35,10 @@ class LokProgrammerVC : MyTrainsViewController, MTSerialPortDelegate, ORSSerialP
     
   }
   
+  var cvbuffer : [UInt8] = [UInt8](repeating: 0, count: 2688)
+  
+  let decoder = Decoder(decoderType: .lokSound5)
+  
   override func viewWillAppear() {
     
     super.viewWillAppear()
@@ -73,8 +77,11 @@ class LokProgrammerVC : MyTrainsViewController, MTSerialPortDelegate, ORSSerialP
       debugLog("RX Port failed to Open")
     }
     
-    commandPort = ORSSerialPort(path: "/dev/cu.usbserial-A9BCNNZI")
-    
+    //
+
+//    commandPort = ORSSerialPort(path: "/dev/cu.usbserial-A9BCNNZI") // LokProgrammer
+    commandPort = ORSSerialPort(path: "/dev/cu.usbserial-A506ARJW") // USB Adaptee
+
     if let commandPort {
       
       commandPort.baudRate = 115200
@@ -90,6 +97,7 @@ class LokProgrammerVC : MyTrainsViewController, MTSerialPortDelegate, ORSSerialP
     else {
       debugLog("Command Port failed to Open")
     }
+    
     
     txtView.font = NSFont(name: "Menlo", size: 12)
     
@@ -151,6 +159,18 @@ class LokProgrammerVC : MyTrainsViewController, MTSerialPortDelegate, ORSSerialP
       
       print("\(decoderType.title) Common: \(common.count) Unique: \(unique.count) \(unique)")
     }
+    
+    
+    // *************************************
+    
+    for index in 0 ... 255 {
+//      cvbuffer[index] = decoder.getUInt8(index:index)
+    }
+    
+    for index in 1 ... 224 {
+      cvbuffer[0x000 + index - 1] = UInt8(index)
+    }
+    
   }
   
   // MARK: Private Properties
@@ -740,9 +760,225 @@ class LokProgrammerVC : MyTrainsViewController, MTSerialPortDelegate, ORSSerialP
       sendNextStep()
     }
     
+    // ****** THIS IS THE LokProgrammer EMULATOR ******
+    
+    if packet.isTX {
+      
+      switch packet.packetType {
+      case .lokProgrammerTestA:
+        sendResponse(original: packet, response: "7F 7F 02 00 01 00 81")
+      case .lokProgrammerTestB:
+        sendResponse(original: packet, response: "7F 7F 02 00 01 00 81")
+      case .getLokProgrammerManufacturerCode:
+        sendResponse(original: packet, response: "7F 7F 02 03 01 00 97 00 00 00 81")
+      case .getLokProgrammerProductId:
+        sendResponse(original: packet, response: "7F 7F 02 04 01 00 57 00 00 01 81")
+      case .getLokProgrammerInfoA:
+        sendResponse(original: packet, response: "7F 7F 02 05 01 00 FF FF FF FF 81")
+      case .getLokProgrammerInfoB:
+        sendResponse(original: packet, response: "7F 7F 02 06 01 00 FF FF FF FF 81")
+      case .getLokProgrammerBootCodeVersion:
+        sendResponse(original: packet, response: "7F 7F 02 07 01 00 5C 00 01 00 81")
+      case .getLokProgrammerBootCodeDate:
+        sendResponse(original: packet, response: "7F 7F 02 08 01 00 9B 3A E7 18 81")
+      case .getLokProgrammerACodeVersion:
+        sendResponse(original: packet, response: "7F 7F 02 09 01 00 86 00 01 00 81")
+      case .getLokProgrammerACodeDate:
+        sendResponse(original: packet, response: "7F 7F 02 0A 01 00 F8 0C 48 20 81")
+      case .getLokProgrammerInfoC:
+        sendResponse(original: packet, response: "7F 7F 02 0B 01 00 00 00 00 00 81")
+      case .setLokProgrammerMode:
+        sendResponse(original: packet, response: "7F 7F 02 0D 01 00 81")
+      case .unknownTX34_A:
+        sendResponse(original: packet, response: "7F 7F 02 0E 01 00 81")
+      case .unknownTX34_B:
+        sendResponse(original: packet, response: "7F 7F 02 10 07 00 81")
+      case .unknownTX34_C:
+        sendResponse(original: packet, response: "7F 7F 02 10 07 00 81")
+      case .unknownTX34_D:
+        sendResponse(original: packet, response: "7F 7F 02 10 07 00 81")
+      case .unknownTX34_E:
+        sendResponse(original: packet, response: "7F 7F 02 10 07 00 81")
+      case .unknownTX16_A:
+        switch count16A {
+        case 0:
+          sendResponse(original: packet, response: "7F 7F 02 0F 03 00 81")
+        default:
+          sendResponse(original: packet, response: "7F 7F 02 11 07 00 81")
+        }
+        count16A += 1
+      case .unknownTX16_B:
+        sendResponse(original: packet, response: "7F 7F 02 11 07 00 81")
+      case .unknownTX19_A:
+        sendResponse(original: packet, response: "7F 7F 02 18 07 00 81")
+      case .lokProgrammerTidyUp:
+        sendResponse(original: packet, response: "7F 7F 02 6F 01 00 81")
+      case .bufferDataBlock, .bufferDataDWord, .unknownTX18_A:
+        sendResponse(original: packet, response: "7F 7F 02 1A 07 00 81")
+      case .initReadForDecoderManufacturerCode:
+        switch countReadData {
+        case 0, 2:
+          nextDataRead = "7F 7F 02 1D 07 00 00 7F 81"
+        case 1:
+          nextDataRead = "7F 7F 02 25 07 00 00 00 97 00 7F 81"
+        case 5:
+          nextDataRead = "7F 7F 02 45 07 00 7F 81"
+        case 7:
+          nextDataRead = "7F 7F 02 50 07 00 01 00 97 00 00 00 96 81"
+        default:
+          nextDataRead = "7F 7F 02 35 07 00 00 00 97 00 00 00 97 81"
+        }
+        sendResponse(original: packet, response: "7F 7F 02 1A 07 00 81")
+        countReadData += 1
+      case .initReadForDecoderProductId:
+        nextDataRead = "7F 7F 02 53 07 00 02 00 96 00 00 02 96 81"
+        sendResponse(original: packet, response: "7F 7F 02 1A 07 00 81")
+      case .initReadForDecoderSerialNumber:
+        nextDataRead = "7F 7F 02 56 07 00 03 00 87 29 F8 F9 AC 81"
+        sendResponse(original: packet, response: "7F 7F 02 1A 07 00 81")
+      case .initReadForDecoderProductionDate:
+        nextDataRead = "7F 7F 02 59 07 00 04 00 D5 2C E7 27 3D 81"
+        sendResponse(original: packet, response: "7F 7F 02 1A 07 00 81")
+      case .initReadForDecoderProductionInfo:
+        nextDataRead = "7F 7F 02 5C 07 00 05 00 FF FF FF FF 05 81"
+        sendResponse(original: packet, response: "7F 7F 02 1A 07 00 81")
+      case .initReadForDecoderBootcodeVersion:
+        nextDataRead = "7F 7F 02 5F 07 00 06 00 05 00 00 05 06 81"
+        sendResponse(original: packet, response: "7F 7F 02 1A 07 00 81")
+      case .initReadForDecoderBootcodeDate:
+        nextDataRead = "7F 7F 02 62 07 00 07 00 BA 4D 03 22 D1 81"
+        sendResponse(original: packet, response: "7F 7F 02 1A 07 00 81")
+      case .initReadForDecoderFirmwareVersion:
+        nextDataRead = "7F 7F 02 65 07 00 08 00 A6 00 0A 05 A1 81"
+        sendResponse(original: packet, response: "7F 7F 02 1A 07 00 81")
+      case .initReadForDecoderFirmwareDate:
+        nextDataRead = "7F 7F 02 68 07 00 09 00 23 7B C2 2D BE 81"
+        sendResponse(original: packet, response: "7F 7F 02 1A 07 00 81")
+      case .initReadForDecoderFirmwareType:
+        nextDataRead = "7F 7F 02 6B 07 00 0A 00 3F 00 00 00 35 81"
+        sendResponse(original: packet, response: "7F 7F 02 1A 07 00 81")
+      case .initRead:
+        nextDataRead = "7F 7F 02 6E 07 00 01 00 EF 40 18 B6 81"
+        sendResponse(original: packet, response: "7F 7F 02 1A 07 00 81")
+      case .readData:
+        sendResponse(original: packet, response: nextDataRead)
+      case .initReadDataBlock:
+        switch packet.address {
+        case 0x0000:
+          nextDataRead = "7F 7F 02 51 07 00 01 00 0E 07 00 00 96 00 FF 97 28 00 00 00 01 01 00 00 D3 A1 00 00 00 00 00 00 00 00 00 83 1A 00 00 FC 00 00 00 00 00 00 00 00 00 00 00 00 00 00 07 00 01 02 0A 0A 8C 30 0A FF 1E 14 00 00 00 00 60 0C 06 00 01 09 12 1C 25 2F 38 42 4B 56 5E 67 71 7A 84 8D 97 A0 AB B3 BC C6 CF D9 E2 EC F5 FF 00 00 00 00 00 00 40 0C 60 FF 00 00 00 00 00 00 00 2B 28 5C 5C 32 96 0F 14 00 00 00 64 34 55 82 5A 82 0F 05 40 4F 00 1E 03 00 00 80 80 00 00 00 00 96 00 00 00 00 00 2A 55 7F AA D4 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 40 28 28 00 7E 7E 00 00 00 00 00 00 00 00 00 00 00 10 10 00 02 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 71 81"
+          nextDataRead = dataBlockResponse(initPacket: packet)
+        case 0x00e0:
+          nextDataRead = "7F 7F 02 54 07 00 02 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 01 F4 7A 00 00 00 00 00 00 00 00 14 00 00 00 00 00 00 00 00 00 01 00 00 00 00 00 00 00 00 00 18 00 00 00 00 00 00 00 00 00 02 00 00 00 00 00 00 00 00 00 40 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 01 00 00 00 00 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 04 00 00 00 00 04 00 00 00 00 00 00 00 00 00 00 00 00 00 00 08 00 00 00 00 10 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 80 00 40 40 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 10 00 00 00 01 00 00 00 00 00 00 00 00 00 00 00 00 00 80 00 00 00 00 00 04 00 00 00 00 00 00 00 00 00 00 00 00 00 40 00 00 00 00 00 10 00 00 00 00 00 00 00 00 00 9F 81"
+          nextDataRead = dataBlockResponse(initPacket: packet)
+        case 0x01c0:
+          nextDataRead = "7F 7F 02 57 07 00 03 00 00 04 00 00 00 04 00 00 40 00 40 00 00 00 00 00 00 00 00 00 00 00 00 00 00 40 00 00 40 00 00 01 00 00 00 00 00 00 00 00 00 00 00 00 02 00 00 00 00 00 00 04 00 00 00 00 00 00 00 00 00 00 00 00 00 02 00 00 00 00 00 10 00 00 00 00 00 00 00 00 00 00 00 01 00 00 00 00 00 00 00 40 00 00 00 00 00 00 04 00 00 00 00 00 00 00 00 00 00 00 00 00 01 00 00 00 00 00 08 00 00 00 00 00 00 00 00 00 00 00 00 00 04 00 00 00 00 00 00 00 00 40 00 00 00 00 00 00 06 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 0A 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 05 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 09 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 1E 81"
+          nextDataRead = dataBlockResponse(initPacket: packet)
+        case 0x02a0:
+          nextDataRead = "7F 7F 02 5A 07 00 04 00 00 00 00 00 00 00 00 00 00 00 00 00 40 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 10 00 00 00 00 00 00 00 00 00 80 00 00 00 00 00 00 00 00 00 40 00 00 00 00 00 10 00 00 00 00 00 00 00 00 00 00 00 00 00 00 01 00 00 00 00 20 00 00 00 00 00 00 00 00 00 00 00 00 00 00 04 00 00 00 00 40 00 00 00 00 00 00 00 00 00 00 00 00 00 00 10 00 00 00 00 80 00 00 00 00 00 00 00 00 00 00 00 00 00 00 40 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 04 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 10 00 00 00 00 00 00 00 00 00 00 00 00 00 25 81"
+          nextDataRead = dataBlockResponse(initPacket: packet)
+        case 0x0380:
+          nextDataRead = "7F 7F 02 5D 07 00 05 00 00 00 00 00 00 00 40 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 04 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 01 00 00 00 00 00 00 00 00 00 00 80 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 44 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 40 00 48 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 40 00 40 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 10 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 9D 81"
+          nextDataRead = dataBlockResponse(initPacket: packet)
+        case 0x0460:
+          nextDataRead = "7F 7F 02 60 07 00 06 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 06 81"
+          nextDataRead = dataBlockResponse(initPacket: packet)
+        case 0x0540:
+          nextDataRead = "7F 7F 02 63 07 00 07 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 07 81"
+          nextDataRead = dataBlockResponse(initPacket: packet)
+        case 0x0620:
+          nextDataRead = "7F 7F 02 66 07 00 08 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 01 00 00 0F 00 00 00 01 00 00 0F 00 00 00 01 00 00 0F 00 00 00 01 00 00 0F 00 00 00 01 00 00 0F 00 00 00 01 00 00 0F 00 00 00 01 00 00 0F 00 00 00 01 00 00 0F 00 00 00 01 00 00 0F 00 00 00 01 00 00 1F 00 00 00 1F 00 00 1F 00 00 00 01 00 00 1F 00 00 00 01 00 00 1F 00 00 1F 01 00 00 1F 00 19 81"
+        case 0x0700:
+          nextDataRead = "7F 7F 02 69 07 00 09 00 00 1F 01 00 00 1F 00 00 00 01 00 00 1F 00 00 00 01 00 00 1F 00 00 1F 01 00 00 1F 00 00 1F 01 00 00 1F 00 00 1F 01 00 00 1F 00 00 1F 00 00 00 1F 00 00 00 00 00 00 1F 00 00 00 00 00 00 1F 00 00 00 00 00 00 1F 00 00 00 80 00 80 E0 00 60 00 10 CD 00 80 01 80 80 00 80 01 80 80 00 80 01 80 80 00 80 01 80 80 00 80 01 80 80 00 80 01 80 80 00 80 01 80 80 00 60 01 80 80 00 40 01 80 80 00 80 00 80 80 00 50 01 80 80 00 80 00 80 80 00 60 01 80 80 00 80 00 80 80 00 80 00 80 80 00 60 00 80 80 00 60 01 80 80 00 80 01 80 80 00 80 01 80 80 00 80 00 40 FF 00 40 00 80 80 00 40 00 80 80 00 80 00 80 80 00 80 00 80 80 00 80 00 80 80 00 80 00 80 80 00 80 00 80 80 00 80 00 80 80 00 80 00 64 81"
+          nextDataRead = dataBlockResponse(initPacket: packet)
+        case 0x07e0:
+          nextDataRead = "7F 7F 02 6C 07 00 0A 00 80 80 00 80 00 80 80 00 20 00 80 80 00 80 00 80 80 00 FE 28 3C 01 02 00 28 3C 01 02 00 28 3C 01 02 00 28 3C 01 02 00 28 3C 01 02 00 28 3C 01 02 00 28 3C 01 02 00 28 3C 01 02 00 00 01 00 02 00 04 00 08 00 10 00 20 00 40 00 80 00 00 01 00 02 00 04 00 08 00 10 00 20 00 40 00 80 41 00 00 01 53 57 44 20 43 6C 61 73 73 20 31 32 31 20 42 55 54 20 4C 65 79 6C 61 6E 64 00 00 00 00 00 03 40 06 C0 10 C0 10 40 46 40 07 40 1E 40 1E 40 17 40 26 40 1F 40 22 60 4D 20 02 20 02 20 0B C0 06 20 02 20 02 20 01 20 01 20 01 20 01 20 01 20 01 20 01 20 01 20 01 20 01 00 01 20 01 00 01 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 54 81"
+          nextDataRead = dataBlockResponse(initPacket: packet)
+        case 0x08c0:
+          nextDataRead = "7F 7F 02 6F 07 00 0B 00 00 03 03 00 07 07 00 87 25 00 87 25 00 07 07 00 08 08 00 07 07 05 07 07 05 07 07 01 07 07 2B 07 07 06 07 07 08 02 02 00 06 06 00 06 06 00 06 20 00 87 07 00 06 06 00 06 06 00 01 01 00 01 01 00 01 01 00 01 01 00 01 01 00 01 01 00 01 01 00 01 01 00 01 01 00 01 01 00 00 00 00 01 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 89 81"
+        case 0x09a0:
+          nextDataRead = "7F 7F 02 72 07 00 0C 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 01 00 00 00 00 00 00 00 00 00 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 0C 81"
+          nextDataRead = dataBlockResponse(initPacket: packet)
+        default:
+          nextDataRead = ""
+        }
+        sendResponse(original: packet, response: "7F 7F 02 1A 07 00 81")
+      default:
+        print("UNKNOWN: \(packet.packet)")
+      }
+      
+    }
+    
   }
   
+  private func dataBlockResponse(initPacket:LokPacket) -> String {
+    
+    guard let sequenceNumberForRead = initPacket.sequenceNumberForRead else {
+      return ""
+    }
+    
+    var packet : [UInt8] = [0x7f, 0x7f, 0x02, initPacket.sequenceNumber, 0x07, 0x00, sequenceNumberForRead, 0x00]
+    
+    for address in Int(initPacket.address!) ... Int(initPacket.address!) + Int(initPacket.numberOfBytesToRead!) - 1 {
+      packet.append(cvbuffer[address])
+    }
+    
+    var checksum = packet[6]
+    
+    for index in 7 ..< packet.count {
+      checksum ^= packet[index]
+    }
+    
+    packet.append(checksum)
+    
+    packet.append(0x81)
+    
+    var result = ""
+    
+    for byte in packet {
+      result += byte.toHex(numberOfDigits: 2) + " "
+    }
+    
+    return result.trimmingCharacters(in: .whitespaces)
+    
+  }
+  
+  private var count16A = 0
+  private var countReadData = 0
+  
+  private var nextDataRead : String = ""
+  
+  private func sendResponse(original:LokPacket, response:String) {
+
+    let bits = response.split(separator: " ")
+    
+    var command : [UInt8] = []
+    
+    for bit in bits {
+      if let byte = UInt8(hex: bit) {
+        command.append(byte)
+      }
+    }
+    
+    if command.count != bits.count {
+      print("error")
+      return
+    }
+    
+    command[3] = original.sequenceNumber
+    
+    lastCommand = LokPacket(packet: command)
+    
+    if let commandPort, let lastCommand {
+      
+      commandPort.send(Data(lastCommand.packetToSend))
+      
+    }
+
+  }
+
+  
 }
+
 
 private var cvs : [UInt8] = [UInt8](repeating: 0x00, count: 2688)
 
@@ -786,6 +1022,16 @@ public enum LokPacketType : CaseIterable {
   case lokProgrammerTestB
   case sendServiceModePacket
   case sendOperationsModePacket
+  case unknownTX34_A
+  case unknownTX34_B
+  case unknownTX34_C
+  case unknownTX34_D
+  case unknownTX34_E
+  case unknownTX16_A
+  case unknownTX16_B
+  case unknownTX18_A
+  case unknownTX18_B
+  case unknownTX19_A
 }
 
 public enum LokDataType : UInt8 {
@@ -854,6 +1100,13 @@ public class LokPacket {
           default:
             break
           }
+        case 0x16:
+          if packet[5] == 0x02 {
+            _packetType = .unknownTX16_A
+          }
+          else if packet[5] == 0x00 {
+            _packetType = .unknownTX16_B
+          }
         case 0x18:
           if packet.count == 7 {
             // 7F 7F 01 XX 18 4B 81
@@ -863,7 +1116,12 @@ public class LokPacket {
             else if packet[5] == 0x01 {
               _packetType = .bufferDataDWord
             }
+            else if packet[5] == 0x05 {
+              _packetType = .unknownTX18_A
+            }
           }
+        case 0x19:
+          _packetType = .unknownTX19_A
         case 0x2a:
           
           _packetType = .initRead
@@ -914,6 +1172,21 @@ public class LokPacket {
             // 7F 7F 01 25 34 3A 64 12 02 01 00 00 00 00 81
             else if packet[5] == 0x3a && packet[6] == 0x74 {
               _packetType = .sendOperationsModePacket
+            }
+            else if packet[5] == 0x0c && packet[6] == 0x0c && packet[7] == 0x64 && packet[8] == 0x64 && packet[9] == 0x00 && packet[10] == 0x00 {
+              _packetType = .unknownTX34_A
+            }
+            else if packet[5] == 0x0c && packet[6] == 0x0c && packet[7] == 0x64 && packet[8] == 0x64 && packet[9] == 0x64 && packet[10] == 0x00 {
+              _packetType = .unknownTX34_B
+            }
+            else if packet[5] == 0x14 && packet[6] == 0x14 && packet[7] == 0x14 && packet[8] == 0x0a && packet[9] == 0x00 && packet[10] == 0x00 {
+              _packetType = .unknownTX34_C
+            }
+            else if packet[5] == 0x14 && packet[6] == 0x14 && packet[7] == 0x14 && packet[8] == 0x0a && packet[9] == 0x04 && packet[10] == 0x00 {
+              _packetType = .unknownTX34_D
+            }
+            else if packet[5] == 0x64 && packet[6] == 0x64 && packet[7] == 0x04 && packet[8] == 0x02 && packet[9] == 0x00 && packet[10] == 0x00 {
+              _packetType = .unknownTX34_E
             }
           }
         case 0x10:
@@ -1190,12 +1463,10 @@ public class LokPacket {
       for byte in packet {
         temp += byte.toHex(numberOfDigits: 2) + " "
       }
-      print(temp)
       temp = ""
       for byte in result {
         temp += byte.toHex(numberOfDigits: 2) + " "
       }
-      print(temp)
     }
     
     return result

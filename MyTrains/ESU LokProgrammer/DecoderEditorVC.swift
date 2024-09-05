@@ -404,7 +404,13 @@ class DecoderEditorVC : MyTrainsViewController, DecoderPropertyTableViewDSDelega
         
         for cv in cvList(filename: url.path) {
           if cv.defaultValue != 0 {
-            self.definition?.mapping[loadType.rawValue + Int(cv.defaultValue) - 1] = cv.cv
+            let address = loadType.rawValue + Int(cv.defaultValue) - 1
+            if self.definition?.mapping[address] == nil {
+              self.definition?.mapping[address] = cv.cv
+            }
+            else {
+              print("Address: \(UInt64(address).toHex(numberOfDigits: 8)) already assigned to \(self.definition!.mapping[address]) not \(cv.cv)")
+            }
           }
         }
         
