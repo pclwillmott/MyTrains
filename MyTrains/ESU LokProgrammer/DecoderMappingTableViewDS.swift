@@ -52,11 +52,31 @@ public class DecoderMappingTableViewDS : NSObject, NSTableViewDataSource, NSTabl
           maxAddress = max(maxAddress, address)
         }
         
-        mappings = [CV?](repeating: nil, count: maxAddress + 1)
+        mappings = [Set<CV>?](repeating: nil, count: maxAddress + 1)
         
         for (address, cv) in definition.mapping {
           mappings[address] = cv
         }
+        
+        var count = 0
+        
+        for cv in definition.cvs {
+          var found = false
+          for (key, mapping) in definition.mapping {
+            if mapping.contains(cv) {
+              found = true
+              break
+            }
+          }
+          if !found {
+            if cv.isIndexed {
+              print("not found: \(cv.title)")
+              count += 1
+            }
+          }
+        }
+        
+        print("count: \(count)")
         
       }
       
@@ -68,7 +88,7 @@ public class DecoderMappingTableViewDS : NSObject, NSTableViewDataSource, NSTabl
   
   // MARK: NSTableViewDelegate Methods
   
-  private var mappings : [CV?] = []
+  private var mappings : [Set<CV>?] = []
   
   // Returns the number of records managed for aTableView by the data source object.
   public func numberOfRows(in tableView: NSTableView) -> Int {
@@ -90,23 +110,21 @@ public class DecoderMappingTableViewDS : NSObject, NSTableViewDataSource, NSTabl
     
     var text: String = ""
     
-    let isEditable = true
+    let isEditable = false
     
     switch columnName {
     case "Address":
       let address = UInt32(row)
       text = "\(address.toHex(numberOfDigits: 8))"
-    case "CV31":
-      if let item {
-        text = "\(item.cv31)"
-      }
-    case "CV32":
-      if let item {
-        text = "\(item.cv32)"
-      }
     case "CV":
       if let item {
-        text = "\(item.cv)"
+        text = ""
+        for cv in item {
+          if !text.isEmpty {
+            text += ", "
+          }
+          text += "\(cv.title)"
+        }
       }
     default:
       break
@@ -120,7 +138,8 @@ public class DecoderMappingTableViewDS : NSObject, NSTableViewDataSource, NSTabl
         textField.font = NSFont(name: "Menlo", size: 12)
         textField.translatesAutoresizingMaskIntoConstraints = false
         let constraints : [NSLayoutConstraint] = [
-          textField.centerYAnchor.constraint(equalTo: cell.centerYAnchor)
+          textField.centerYAnchor.constraint(equalTo: cell.centerYAnchor),
+          textField.widthAnchor.constraint(equalTo: cell.widthAnchor)
         ]
         NSLayoutConstraint.activate(constraints)
       }

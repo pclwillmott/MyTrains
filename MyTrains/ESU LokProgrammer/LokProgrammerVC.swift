@@ -35,9 +35,7 @@ class LokProgrammerVC : MyTrainsViewController, MTSerialPortDelegate, ORSSerialP
     
   }
   
-  var cvbuffer : [UInt8] = [UInt8](repeating: 0, count: 2688)
-  
-  let decoder = Decoder(decoderType: .lokSound5)
+  var decoder : Decoder?
   
   override func viewWillAppear() {
     
@@ -118,59 +116,13 @@ class LokProgrammerVC : MyTrainsViewController, MTSerialPortDelegate, ORSSerialP
     print(result)
 */
     
-    let decoders : [DecoderType] = [
- /*     .lokPilot5,
-      .lokPilot5Basic,
-      .lokPilot5micro,
-      .lokSound5micro,
-      .lokPilot5L,
-      .lokSound5L,
-      .lokPilot5Fx,
-      .lokSound5Fx,
-      .lokSound5XL,
-      .lokPilot5DCC,
-      .lokPilot5MKL,
-      .lokSound5DCC,
-      .lokSound5MKL,
-      .lokPilot5LDCC,
-      .lokSound5LDCC,
-      .lokPilot5MKLDCC,
-      .lokPilot5Fxmicro,
-      .lokPilot5nanoDCC,
-      .lokSound5nanoDCC,
-      .lokPilot5microDCC,
-      .lokSound5microDCC,
-      .lokSound5microKATO,
-      .lokPilot5microNext18,
-      .lokPilot5FxDCC,
-      .lokSound5FxDCC, */
-      .lokSound5,
-    ]
     
-    let decoder1 = Decoder(decoderType: .lokSound5DCC)
+    DecoderType.populate(comboBox: cboDecoder)
     
-    for decoderType in decoders {
-      
-      let decoder2 = Decoder(decoderType: decoderType)
-      
-      let common = decoder2.cvSet.intersection(decoder1.cvSet)
-      
-      let unique = decoder2.cvSet.subtracting(decoder1.cvSet)
-      
-      print("\(decoderType.title) Common: \(common.count) Unique: \(unique.count) \(unique)")
-    }
-    
-    
-    // *************************************
-    
-    for index in 0 ... 255 {
-//      cvbuffer[index] = decoder.getUInt8(index:index)
-    }
-    
-    for index in 1 ... 224 {
-      cvbuffer[0x000 + index - 1] = UInt8(index)
-    }
-    
+    DecoderEditorLoadType.populate(comboBox: cboBlock)
+    cboBlock.removeItem(at: 0)
+    cboBlock.selectItem(at: 0)
+
   }
   
   // MARK: Private Properties
@@ -768,6 +720,8 @@ class LokProgrammerVC : MyTrainsViewController, MTSerialPortDelegate, ORSSerialP
       case .lokProgrammerTestA:
         sendResponse(original: packet, response: "7F 7F 02 00 01 00 81")
       case .lokProgrammerTestB:
+        count16A = 0
+        countReadData = 0
         sendResponse(original: packet, response: "7F 7F 02 00 01 00 81")
       case .getLokProgrammerManufacturerCode:
         sendResponse(original: packet, response: "7F 7F 02 03 01 00 97 00 00 00 81")
@@ -832,6 +786,7 @@ class LokProgrammerVC : MyTrainsViewController, MTSerialPortDelegate, ORSSerialP
         countReadData += 1
       case .initReadForDecoderProductId:
         nextDataRead = "7F 7F 02 53 07 00 02 00 96 00 00 02 96 81"
+        nextDataRead = readDecoderInfoResponse(initPacket: packet)
         sendResponse(original: packet, response: "7F 7F 02 1A 07 00 81")
       case .initReadForDecoderSerialNumber:
         nextDataRead = "7F 7F 02 56 07 00 03 00 87 29 F8 F9 AC 81"
@@ -841,6 +796,7 @@ class LokProgrammerVC : MyTrainsViewController, MTSerialPortDelegate, ORSSerialP
         sendResponse(original: packet, response: "7F 7F 02 1A 07 00 81")
       case .initReadForDecoderProductionInfo:
         nextDataRead = "7F 7F 02 5C 07 00 05 00 FF FF FF FF 05 81"
+        nextDataRead = readDecoderInfoResponse(initPacket: packet)
         sendResponse(original: packet, response: "7F 7F 02 1A 07 00 81")
       case .initReadForDecoderBootcodeVersion:
         nextDataRead = "7F 7F 02 5F 07 00 06 00 05 00 00 05 06 81"
@@ -887,6 +843,7 @@ class LokProgrammerVC : MyTrainsViewController, MTSerialPortDelegate, ORSSerialP
           nextDataRead = dataBlockResponse(initPacket: packet)
         case 0x0620:
           nextDataRead = "7F 7F 02 66 07 00 08 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 01 00 00 0F 00 00 00 01 00 00 0F 00 00 00 01 00 00 0F 00 00 00 01 00 00 0F 00 00 00 01 00 00 0F 00 00 00 01 00 00 0F 00 00 00 01 00 00 0F 00 00 00 01 00 00 0F 00 00 00 01 00 00 0F 00 00 00 01 00 00 1F 00 00 00 1F 00 00 1F 00 00 00 01 00 00 1F 00 00 00 01 00 00 1F 00 00 1F 01 00 00 1F 00 19 81"
+          nextDataRead = dataBlockResponse(initPacket: packet)
         case 0x0700:
           nextDataRead = "7F 7F 02 69 07 00 09 00 00 1F 01 00 00 1F 00 00 00 01 00 00 1F 00 00 00 01 00 00 1F 00 00 1F 01 00 00 1F 00 00 1F 01 00 00 1F 00 00 1F 01 00 00 1F 00 00 1F 00 00 00 1F 00 00 00 00 00 00 1F 00 00 00 00 00 00 1F 00 00 00 00 00 00 1F 00 00 00 80 00 80 E0 00 60 00 10 CD 00 80 01 80 80 00 80 01 80 80 00 80 01 80 80 00 80 01 80 80 00 80 01 80 80 00 80 01 80 80 00 80 01 80 80 00 60 01 80 80 00 40 01 80 80 00 80 00 80 80 00 50 01 80 80 00 80 00 80 80 00 60 01 80 80 00 80 00 80 80 00 80 00 80 80 00 60 00 80 80 00 60 01 80 80 00 80 01 80 80 00 80 01 80 80 00 80 00 40 FF 00 40 00 80 80 00 40 00 80 80 00 80 00 80 80 00 80 00 80 80 00 80 00 80 80 00 80 00 80 80 00 80 00 80 80 00 80 00 80 80 00 80 00 64 81"
           nextDataRead = dataBlockResponse(initPacket: packet)
@@ -895,6 +852,7 @@ class LokProgrammerVC : MyTrainsViewController, MTSerialPortDelegate, ORSSerialP
           nextDataRead = dataBlockResponse(initPacket: packet)
         case 0x08c0:
           nextDataRead = "7F 7F 02 6F 07 00 0B 00 00 03 03 00 07 07 00 87 25 00 87 25 00 07 07 00 08 08 00 07 07 05 07 07 05 07 07 01 07 07 2B 07 07 06 07 07 08 02 02 00 06 06 00 06 06 00 06 20 00 87 07 00 06 06 00 06 06 00 01 01 00 01 01 00 01 01 00 01 01 00 01 01 00 01 01 00 01 01 00 01 01 00 01 01 00 01 01 00 00 00 00 01 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 89 81"
+          nextDataRead = dataBlockResponse(initPacket: packet)
         case 0x09a0:
           nextDataRead = "7F 7F 02 72 07 00 0C 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 01 00 00 00 00 00 00 00 00 00 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 0C 81"
           nextDataRead = dataBlockResponse(initPacket: packet)
@@ -910,14 +868,76 @@ class LokProgrammerVC : MyTrainsViewController, MTSerialPortDelegate, ORSSerialP
     
   }
   
+  private func readDecoderInfoResponse(initPacket:LokPacket) -> String {
+
+    guard let sequenceNumberForRead = initPacket.sequenceNumberForRead, let decoder else {
+      return ""
+    }
+    
+    var packet : [UInt8] = [0x7f, 0x7f, 0x02, initPacket.sequenceNumber, 0x07, 0x00, sequenceNumberForRead, 0x00]
+
+    var data : [UInt8] = []
+    
+    switch initPacket.packetType {
+    case .initReadForDecoderProductId:
+      data = decoder.esuProductIds[0].bigEndianData.reversed()
+//    case .initReadForDecoderBootcodeDate:
+//    case .initReadForDecoderFirmwareDate:
+//    case .initReadForDecoderFirmwareType:
+//    case .initReadForDecoderSerialNumber:
+//    case .initReadForDecoderProductionDate:
+    case .initReadForDecoderProductionInfo:
+      data = [0xff, 0xff, 0xff, 0xff]
+//    case .initReadForDecoderBootcodeVersion:
+//    case .initReadForDecoderFirmwareVersion:
+    case .initReadForDecoderManufacturerCode:
+      data = UInt32(0x97).bigEndianData.reversed()
+    default:
+      break
+    }
+    
+    for byte in data {
+      packet.append(byte)
+    }
+
+    var checksum = packet[6]
+    
+    for index in 7 ..< packet.count {
+      checksum ^= packet[index]
+    }
+    
+    packet.append(checksum)
+    
+    packet.append(0x81)
+    
+    var result = ""
+    
+    for byte in packet {
+      result += byte.toHex(numberOfDigits: 2) + " "
+    }
+    
+    return result.trimmingCharacters(in: .whitespaces)
+
+  }
+  
   private func dataBlockResponse(initPacket:LokPacket) -> String {
     
-    guard let sequenceNumberForRead = initPacket.sequenceNumberForRead else {
+    guard let sequenceNumberForRead = initPacket.sequenceNumberForRead, let decoder, let block = DecoderEditorLoadType(title: cboBlock.stringValue) else {
       return ""
     }
     
     var packet : [UInt8] = [0x7f, 0x7f, 0x02, initPacket.sequenceNumber, 0x07, 0x00, sequenceNumberForRead, 0x00]
     
+    var cvbuffer : [UInt8] = [UInt8](repeating: 0x0, count: 2688)
+    
+    for index in 0 ... 255 {
+      cvbuffer[index] = decoder.getUInt8(index:index)
+    }
+    
+    for index in 1 ... 224 {
+      cvbuffer[block.rawValue + index - 1] = UInt8(index)
+    }
+
     for address in Int(initPacket.address!) ... Int(initPacket.address!) + Int(initPacket.numberOfBytesToRead!) - 1 {
       packet.append(cvbuffer[address])
     }
@@ -976,6 +996,22 @@ class LokProgrammerVC : MyTrainsViewController, MTSerialPortDelegate, ORSSerialP
 
   }
 
+  @IBOutlet weak var cboDecoder: NSComboBox!
+  
+  @IBAction func cboDecoderAction(_ sender: NSComboBox) {
+    
+    guard let decoderType = DecoderType(title: sender.stringValue) else {
+      return
+    }
+    
+    decoder = Decoder(decoderType: decoderType)
+    
+  }
+  
+  @IBOutlet weak var cboBlock: NSComboBox!
+  
+  @IBAction func cboBlockAction(_ sender: NSComboBox) {
+  }
   
 }
 
@@ -1368,11 +1404,15 @@ public class LokPacket {
   }
 
   public var sequenceNumberForRead : UInt8? {
-    guard packetType == .initReadDataBlock else {
+    switch packetType {
+    case .initReadDataBlock:
+      // 7F 7F 01 7D 2A 14 79 0D 04 A0 09 E0 40 81
+      return packet[7]
+    case .initReadForDecoderProductId, .initReadForDecoderBootcodeDate, .initReadForDecoderFirmwareDate, .initReadForDecoderFirmwareType, .initReadForDecoderSerialNumber, .initReadForDecoderProductionDate, .initReadForDecoderProductionInfo, .initReadForDecoderBootcodeVersion, .initReadForDecoderFirmwareVersion, .initReadForDecoderManufacturerCode:
+      return packet[7]
+    default:
       return nil
     }
-    // 7F 7F 01 7D 2A 14 79 0D 04 A0 09 E0 40 81
-    return packet[7]
   }
   /*
   public var cvNumber : UInt16? {
@@ -1528,5 +1568,6 @@ public class LokPacket {
     return dateFormatter.string(from: date)
 
   }
+  
   
 }

@@ -30,11 +30,13 @@ public enum CV : UInt64, CaseIterable, Codable {
   case cv_000_000_017 = 0x0000001000000000
   case cv_000_000_018 = 0x0000001100000000
   case cv_000_000_019 = 0x0000001200000000
+  case cv_000_000_020 = 0x0000001300000000
   case cv_000_000_021 = 0x0000001400000000
   case cv_000_000_022 = 0x0000001500000000
   case cv_000_000_023 = 0x0000001600000000
   case cv_000_000_024 = 0x0000001700000000
   case cv_000_000_025 = 0x0000001800000000
+  case cv_000_000_026 = 0x0000001900000000
   case cv_000_000_027 = 0x0000001A00000000
   case cv_000_000_028 = 0x0000001B00000000
   case cv_000_000_029 = 0x0000001C00000000
@@ -104,6 +106,10 @@ public enum CV : UInt64, CaseIterable, Codable {
   case cv_000_000_093 = 0x0000005C00000000
   case cv_000_000_094 = 0x0000005D00000000
   case cv_000_000_095 = 0x0000005E00000000
+  case cv_000_000_096 = 0x0000005F00000000
+  case cv_000_000_097 = 0x0000006000000000
+  case cv_000_000_098 = 0x0000006100000000
+  case cv_000_000_099 = 0x0000006200000000
   case cv_000_000_100 = 0x0000006300000000
   case cv_000_000_101 = 0x0000006400000000
   case cv_000_000_102 = 0x0000006500000000
@@ -111,6 +117,8 @@ public enum CV : UInt64, CaseIterable, Codable {
   case cv_000_000_104 = 0x0000006700000000
   case cv_000_000_105 = 0x0000006800000000
   case cv_000_000_106 = 0x0000006900000000
+  case cv_000_000_107 = 0x0000006A00000000
+  case cv_000_000_108 = 0x0000006B00000000
   case cv_000_000_109 = 0x0000006C00000000
   case cv_000_000_110 = 0x0000006D00000000
   case cv_000_000_111 = 0x0000006E00000000
@@ -258,6 +266,7 @@ public enum CV : UInt64, CaseIterable, Codable {
   case cv_000_000_253 = 0x000000FC00000000
   case cv_000_000_254 = 0x000000FD00000000
   case cv_000_000_255 = 0x000000FE00000000
+  case cv_000_000_256 = 0x000000FF00000000
 
   case cv_000_000_892 = 0x0000037B00000000
   case cv_000_000_893 = 0x0000037C00000000
@@ -2768,6 +2777,15 @@ public enum CV : UInt64, CaseIterable, Codable {
     return UInt16((self.rawValue & 0x0000ffff00000000) >> 32) + 1
   }
   
+  public var title : String {
+    if cv31 == 0 && cv32 == 0 {
+      return "CV\(cv)"
+    }
+    else {
+      return "CV\(cv31).\(cv32).\(cv)"
+    }
+  }
+
   public var cvLabel : String {
     if cv31 == 0 && cv32 == 0 {
       return "CV\(cv)%%BITS%%"
@@ -2869,6 +2887,42 @@ public enum CV : UInt64, CaseIterable, Codable {
 
   public static func - (lhs:CV, rhs:Int) -> CV {
     return lhs + -rhs
+  }
+  
+  public static func > (lhs:CV, rhs:CV) -> Bool {
+    
+    if lhs.index == rhs.index {
+      return lhs.cv > rhs.cv
+    }
+    return lhs.index > rhs.index
+    
+  }
+
+  public static func < (lhs:CV, rhs:CV) -> Bool {
+    
+    if lhs.index == rhs.index {
+      return lhs.cv < rhs.cv
+    }
+    return lhs.index < rhs.index
+    
+  }
+
+  public static func == (lhs:CV, rhs:CV) -> Bool {
+    
+    return lhs.index == rhs.index && lhs.cv == rhs.cv
+    
+  }
+
+  public static func >= (lhs:CV, rhs:CV) -> Bool {
+    
+    return lhs > rhs || lhs == rhs
+    
+  }
+
+  public static func <= (lhs:CV, rhs:CV) -> Bool {
+    
+    return lhs < rhs || lhs == rhs
+    
   }
 
   public static func consecutiveCVs(startCV:CV, numberOfCVs:Int) -> [CV] {

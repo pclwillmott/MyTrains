@@ -94,7 +94,7 @@ public class UserSettings {
     tableView2?.autosaveTableColumns = true
     tableView2?.autosaveName = key(forKey: "TABLE-VIEW8")
     tableView3?.autosaveTableColumns = true
-    tableView3?.autosaveName = key(forKey: "TABLE-VIEW9")
+    tableView3?.autosaveName = key(forKey: "TABLE-VIEW12")
     tableView4?.autosaveTableColumns = true
     tableView4?.autosaveName = key(forKey: "TABLE-VIEW10")
     tableView5?.autosaveTableColumns = true

@@ -396,6 +396,16 @@ public class Decoder : NSObject {
     
   }
   
+  public var esuProductIds : [UInt32] {
+
+    guard let definition else {
+      return []
+    }
+    
+    return definition.esuProductIds
+
+  }
+  
   public var soundCV : SoundCV = .soundCV1 {
     didSet {
       reloadIndexedViews(indexingMethod: .soundCV)

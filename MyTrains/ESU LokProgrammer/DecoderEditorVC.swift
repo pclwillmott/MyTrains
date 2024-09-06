@@ -118,6 +118,12 @@ class DecoderEditorVC : MyTrainsViewController, DecoderPropertyTableViewDSDelega
     }
     /*
     for var (key, definition) in decoderTypes {
+      definition.mapping = [:]
+      decoderTypes[key] = definition
+    }
+    */
+    /*
+    for var (key, definition) in decoderTypes {
       
       let decoder = Decoder(decoderType: key)
       
@@ -403,15 +409,34 @@ class DecoderEditorVC : MyTrainsViewController, DecoderPropertyTableViewDSDelega
       default:
         
         for cv in cvList(filename: url.path) {
-          if cv.defaultValue != 0 {
-            let address = loadType.rawValue + Int(cv.defaultValue) - 1
-            if self.definition?.mapping[address] == nil {
-              self.definition?.mapping[address] = cv.cv
-            }
-            else {
-              print("Address: \(UInt64(address).toHex(numberOfDigits: 8)) already assigned to \(self.definition!.mapping[address]) not \(cv.cv)")
-            }
+          
+          var ok = true
+          
+          switch loadType {
+          case .cvMapping0000:
+            ok = cv.cv <= .cv_000_000_224 || cv.cv > .cv_000_000_256
+          case .cvMapping00E0:
+            ok = cv.cv > .cv_000_000_224
+          default:
+            ok = cv.cv > .cv_000_000_256
           }
+          
+          if ok && cv.defaultValue != 0 {
+            
+            let address = loadType.rawValue + Int(cv.defaultValue) - 1
+            
+            var mapping : Set<CV> = []
+            
+            if var temp = self.definition?.mapping[address] {
+              mapping = temp
+            }
+            
+            mapping.insert(cv.cv)
+            
+            self.definition?.mapping[address] = mapping
+             
+          }
+          
         }
         
       }

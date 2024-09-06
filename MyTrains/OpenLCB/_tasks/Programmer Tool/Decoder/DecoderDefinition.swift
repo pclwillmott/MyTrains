@@ -39,7 +39,7 @@ public struct DecoderDefinition : Codable {
   var esuProductIds      : [UInt32]
   var cvs                : [CV]
   var defaultValues      : [UInt8]
-  var mapping            : [Int:CV]
+  var mapping            : [Int:Set<CV>]
   var properties         : Set<ProgrammerToolSettingsProperty>
   var esuPhysicalOutputs : Set<ESUDecoderPhysicalOutput>
   var offsetMethod       : ESUPhysicalOutputCVIndexOffsetMethod
