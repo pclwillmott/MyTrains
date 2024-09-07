@@ -33,7 +33,8 @@ import AppKit
 
 public let decoderInfoMasterFile = "/Users/paul/Documents/MyTrains/MyTrains/ESU LokProgrammer/DECODER_INFO.json"
 
-class DecoderEditorVC : MyTrainsViewController, DecoderPropertyTableViewDSDelegate, DecoderProductIdTableViewDSDelegate, DecoderPhysicalOutputTableViewDSDelegate, OutputModeTableViewDSDelegate {
+class DecoderEditorVC : MyTrainsViewController, DecoderPropertyTableViewDSDelegate, DecoderProductIdTableViewDSDelegate, DecoderPhysicalOutputTableViewDSDelegate, OutputModeTableViewDSDelegate, DecoderVersionTableViewDSDelegate {
+  
   
   // MARK: Window & View Control
   
@@ -67,6 +68,10 @@ class DecoderEditorVC : MyTrainsViewController, DecoderPropertyTableViewDSDelega
     productIdsTableView.dataSource = productIdDataSource
     productIdsTableView.delegate = productIdDataSource
     productIdDataSource.delegate = self
+    
+    versionsTableView.dataSource = versionDataSource
+    versionsTableView.delegate = versionDataSource
+    versionDataSource.delegate = self
     
     mappingsTableView.dataSource = mappingsDataSource
     mappingsTableView.delegate = mappingsDataSource
@@ -236,6 +241,8 @@ class DecoderEditorVC : MyTrainsViewController, DecoderPropertyTableViewDSDelega
   
   private let productIdDataSource = DecoderProductIdTableViewDS()
   
+  private let versionDataSource = DecoderVersionTableViewDS()
+  
   private let mappingsDataSource = DecoderMappingTableViewDS()
   
   private let physicalOutputsDataSource = PhysicalOutputTableViewDS()
@@ -266,6 +273,7 @@ class DecoderEditorVC : MyTrainsViewController, DecoderPropertyTableViewDSDelega
       mappingsDataSource.definition = definition
       physicalOutputsDataSource.definition = definition
       outputModesDataSource.definition = definition
+      versionDataSource.definition = definition
       
       cboOffsetMethod.selectItem(withObjectValue: definition!.offsetMethod.title)
 
@@ -274,6 +282,7 @@ class DecoderEditorVC : MyTrainsViewController, DecoderPropertyTableViewDSDelega
       productIdsTableView.reloadData()
       mappingsTableView.reloadData()
       physicalOutputsTableView.reloadData()
+      versionsTableView.reloadData()
       cboLoadType.isEnabled = true
       btnLoad.isEnabled = true
       
@@ -294,7 +303,25 @@ class DecoderEditorVC : MyTrainsViewController, DecoderPropertyTableViewDSDelega
   
   @IBOutlet weak var productIdsTableView: NSTableView!
   
+  @IBOutlet weak var btnClearMappings: NSButton!
   
+  @IBAction func btnClearMappingsAction(_ sender: NSButton) {
+    
+    guard let decoderType = DecoderType(title: cboDecoderType.stringValue) else {
+      return
+    }
+    
+    self.definition!.mapping = [:]
+    
+    decoderTypes[decoderType] = self.definition!
+    
+    mappingsDataSource.definition = self.definition
+    
+    mappingsTableView.reloadData()
+    
+    isModified = true
+
+  }
   
   func propertySelectionChanged(property:ProgrammerToolSettingsProperty) {
     txtInfo.string = property.info
@@ -314,6 +341,20 @@ class DecoderEditorVC : MyTrainsViewController, DecoderPropertyTableViewDSDelega
     
   }
   
+  func firmwareVersionChanged(firmwareVersion: [[Int]]) {
+    
+    guard let decoderType = DecoderType(title: cboDecoderType.stringValue) else {
+      return
+    }
+    
+    definition?.firmwareVersion = firmwareVersion
+    
+    decoderTypes[decoderType] = definition!
+    
+    isModified = true
+    
+  }
+
   func outputSelectionChanged(output: ESUDecoderPhysicalOutput) {
     physicalOutput = output
   }
@@ -488,6 +529,53 @@ class DecoderEditorVC : MyTrainsViewController, DecoderPropertyTableViewDSDelega
 
   }
 
+  @IBOutlet weak var versionsTableView: NSTableView!
+  
+  
+  @IBOutlet weak var btnAddVersion: NSButton!
+  
+  @IBAction func btnAddVersionAction(_ sender: NSButton) {
+    
+    guard let decoderType = DecoderType(title: cboDecoderType.stringValue), definition != nil else {
+      return
+    }
+    
+    definition?.firmwareVersion.append([0,0,0])
+    
+    versionDataSource.definition = definition
+    
+    decoderTypes[decoderType] = definition
+    
+    isModified = true
+    
+    versionsTableView.reloadData()
+
+  }
+  
+  @IBOutlet weak var btnRemoveVersion: NSButton!
+  
+  @IBAction func btnRemoveVersionAction(_ sender: NSButton) {
+    
+    guard let decoderType = DecoderType(title: cboDecoderType.stringValue), definition != nil else {
+      return
+    }
+    
+    if versionsTableView.selectedRow != -1 {
+
+      definition?.firmwareVersion.remove(at: versionsTableView.selectedRow)
+      
+      versionDataSource.definition = definition
+      
+      decoderTypes[decoderType] = definition
+      
+      isModified = true
+      
+      versionsTableView.reloadData()
+
+    }
+
+  }
+  
   @IBAction func btnAddAction(_ sender: NSButton) {
     
     guard let decoderType = DecoderType(title: cboDecoderType.stringValue), definition != nil else {

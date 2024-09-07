@@ -712,6 +712,8 @@ class LokProgrammerVC : MyTrainsViewController, MTSerialPortDelegate, ORSSerialP
       sendNextStep()
     }
     
+    print(dump)
+    
     // ****** THIS IS THE LokProgrammer EMULATOR ******
     
     if packet.isTX {
@@ -806,12 +808,14 @@ class LokProgrammerVC : MyTrainsViewController, MTSerialPortDelegate, ORSSerialP
         sendResponse(original: packet, response: "7F 7F 02 1A 07 00 81")
       case .initReadForDecoderFirmwareVersion:
         nextDataRead = "7F 7F 02 65 07 00 08 00 A6 00 0A 05 A1 81"
+        nextDataRead = readDecoderInfoResponse(initPacket: packet)
         sendResponse(original: packet, response: "7F 7F 02 1A 07 00 81")
       case .initReadForDecoderFirmwareDate:
         nextDataRead = "7F 7F 02 68 07 00 09 00 23 7B C2 2D BE 81"
         sendResponse(original: packet, response: "7F 7F 02 1A 07 00 81")
       case .initReadForDecoderFirmwareType:
         nextDataRead = "7F 7F 02 6B 07 00 0A 00 3F 00 00 00 35 81"
+        nextDataRead = readDecoderInfoResponse(initPacket: packet)
         sendResponse(original: packet, response: "7F 7F 02 1A 07 00 81")
       case .initRead:
         nextDataRead = "7F 7F 02 6E 07 00 01 00 EF 40 18 B6 81"
@@ -819,6 +823,8 @@ class LokProgrammerVC : MyTrainsViewController, MTSerialPortDelegate, ORSSerialP
       case .readData:
         sendResponse(original: packet, response: nextDataRead)
       case .initReadDataBlock:
+        nextDataRead = dataBlockResponse(initPacket: packet)
+/*
         switch packet.address {
         case 0x0000:
           nextDataRead = "7F 7F 02 51 07 00 01 00 0E 07 00 00 96 00 FF 97 28 00 00 00 01 01 00 00 D3 A1 00 00 00 00 00 00 00 00 00 83 1A 00 00 FC 00 00 00 00 00 00 00 00 00 00 00 00 00 00 07 00 01 02 0A 0A 8C 30 0A FF 1E 14 00 00 00 00 60 0C 06 00 01 09 12 1C 25 2F 38 42 4B 56 5E 67 71 7A 84 8D 97 A0 AB B3 BC C6 CF D9 E2 EC F5 FF 00 00 00 00 00 00 40 0C 60 FF 00 00 00 00 00 00 00 2B 28 5C 5C 32 96 0F 14 00 00 00 64 34 55 82 5A 82 0F 05 40 4F 00 1E 03 00 00 80 80 00 00 00 00 96 00 00 00 00 00 2A 55 7F AA D4 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 40 28 28 00 7E 7E 00 00 00 00 00 00 00 00 00 00 00 10 10 00 02 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 71 81"
@@ -859,6 +865,7 @@ class LokProgrammerVC : MyTrainsViewController, MTSerialPortDelegate, ORSSerialP
         default:
           nextDataRead = ""
         }
+ */
         sendResponse(original: packet, response: "7F 7F 02 1A 07 00 81")
       default:
         print("UNKNOWN: \(packet.packet)")
@@ -883,13 +890,21 @@ class LokProgrammerVC : MyTrainsViewController, MTSerialPortDelegate, ORSSerialP
       data = decoder.esuProductIds[0].bigEndianData.reversed()
 //    case .initReadForDecoderBootcodeDate:
 //    case .initReadForDecoderFirmwareDate:
-//    case .initReadForDecoderFirmwareType:
+    case .initReadForDecoderFirmwareType:
+      let value = UInt8(txtSequence.stringValue)! // 0x3F
+      data = [0x3f, 0, 0, 0] // 0 for LokSound3.5
 //    case .initReadForDecoderSerialNumber:
 //    case .initReadForDecoderProductionDate:
     case .initReadForDecoderProductionInfo:
       data = [0xff, 0xff, 0xff, 0xff]
 //    case .initReadForDecoderBootcodeVersion:
-//    case .initReadForDecoderFirmwareVersion:
+    case .initReadForDecoderFirmwareVersion:
+      if decoder.firmwareVersions.count > 0 {
+        let item = decoder.firmwareVersions[0]
+        data.append(contentsOf: UInt16(item[2]).bigEndianData.reversed())
+        data.append(UInt8(item[1]))
+        data.append(UInt8(item[0]))
+      }
     case .initReadForDecoderManufacturerCode:
       data = UInt32(0x97).bigEndianData.reversed()
     default:
@@ -930,9 +945,9 @@ class LokProgrammerVC : MyTrainsViewController, MTSerialPortDelegate, ORSSerialP
     
     var cvbuffer : [UInt8] = [UInt8](repeating: 0x0, count: 2688)
     
-    for index in 0 ... 255 {
-      cvbuffer[index] = decoder.getUInt8(index:index)
-    }
+//    for index in 0 ... 255 {
+//      cvbuffer[index] = decoder.getUInt8(index:index)
+//    }
     
     for index in 1 ... 224 {
       cvbuffer[block.rawValue + index - 1] = UInt8(index)

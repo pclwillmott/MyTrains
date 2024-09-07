@@ -254,6 +254,7 @@
 		DA8A05692B544087003A39D7 /* EnableState.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA8A05682B544087003A39D7 /* EnableState.swift */; };
 		DA8A056B2B544290003A39D7 /* ClockCustomIdType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA8A056A2B544290003A39D7 /* ClockCustomIdType.swift */; };
 		DA8A28662A34F0E8006AE024 /* OpenLCBEnabledDisabledState.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA8A28652A34F0E8006AE024 /* OpenLCBEnabledDisabledState.swift */; };
+		DA8ACB5F2C8C60B7004A8EB9 /* DecoderVersionTableViewDS.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA8ACB5E2C8C60B7004A8EB9 /* DecoderVersionTableViewDS.swift */; };
 		DA8AE0ED279B2CCB001E9311 /* SlotView.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA8AE0EC279B2CCB001E9311 /* SlotView.storyboard */; };
 		DA8AE0F0279B3074001E9311 /* SlotViewVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA8AE0EF279B3074001E9311 /* SlotViewVC.swift */; };
 		DA8B5D19282FDE1800D39F07 /* ProgrammerMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA8B5D18282FDE1800D39F07 /* ProgrammerMode.swift */; };
@@ -695,6 +696,7 @@
 		DA8A05682B544087003A39D7 /* EnableState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnableState.swift; sourceTree = "<group>"; };
 		DA8A056A2B544290003A39D7 /* ClockCustomIdType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClockCustomIdType.swift; sourceTree = "<group>"; };
 		DA8A28652A34F0E8006AE024 /* OpenLCBEnabledDisabledState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBEnabledDisabledState.swift; sourceTree = "<group>"; };
+		DA8ACB5E2C8C60B7004A8EB9 /* DecoderVersionTableViewDS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecoderVersionTableViewDS.swift; sourceTree = "<group>"; };
 		DA8AE0EC279B2CCB001E9311 /* SlotView.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = SlotView.storyboard; sourceTree = "<group>"; };
 		DA8AE0EF279B3074001E9311 /* SlotViewVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlotViewVC.swift; sourceTree = "<group>"; };
 		DA8B5D18282FDE1800D39F07 /* ProgrammerMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgrammerMode.swift; sourceTree = "<group>"; };
@@ -1663,6 +1665,7 @@
 				DA5028902C80C71A00CCE0DA /* DecoderCVTableViewDS.swift */,
 				DA5028922C80D25400CCE0DA /* DecoderPropertyTableViewDS.swift */,
 				DA1320CE2C821B2100F603D6 /* DecoderProductIdTableViewDS.swift */,
+				DA8ACB5E2C8C60B7004A8EB9 /* DecoderVersionTableViewDS.swift */,
 				DA5874D32C83394100B9140B /* DecoderMappingTableViewDS.swift */,
 				DA2FB71D2C8878F4004C3637 /* PhysicalOutputTableViewDS.swift */,
 				DA2FB71F2C88B8C7004C3637 /* OutputModeTableViewDS.swift */,
@@ -2033,6 +2036,7 @@
 				DAB163F12C3EE25500D7F23E /* ProgrammerToolSettingsProperty.swift in Sources */,
 				DA73E5072C415CD6002AB3DF /* Masks.swift in Sources */,
 				DA441D302C1C988200AF0165 /* ActionColor.swift in Sources */,
+				DA8ACB5F2C8C60B7004A8EB9 /* DecoderVersionTableViewDS.swift in Sources */,
 				DA29E94A2BC8043500E6A757 /* PanelViewVC.swift in Sources */,
 				DA8A05692B544087003A39D7 /* EnableState.swift in Sources */,
 				DAF5B4FD28A91A830015E758 /* SpeedSteps.swift in Sources */,

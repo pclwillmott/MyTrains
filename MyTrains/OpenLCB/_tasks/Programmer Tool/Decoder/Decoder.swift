@@ -406,6 +406,16 @@ public class Decoder : NSObject {
 
   }
   
+  public var firmwareVersions : [[Int]] {
+ 
+    guard let definition else {
+      return []
+    }
+    
+    return definition.firmwareVersion
+
+  }
+  
   public var soundCV : SoundCV = .soundCV1 {
     didSet {
       reloadIndexedViews(indexingMethod: .soundCV)
