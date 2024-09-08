@@ -111,7 +111,7 @@ public class Decoder : NSObject {
     return _decoderType
   }
   
-  private var definition : DecoderDefinition?
+  public var definition : DecoderDefinition?
   
   public var esuPhysicalOutputCVIndexOffsetMethod : ESUPhysicalOutputCVIndexOffsetMethod {
     guard let definition else {

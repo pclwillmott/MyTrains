@@ -36,6 +36,7 @@ public enum DecoderEditorLoadType : Int, CaseIterable {
   // MARK: Enumeration
   
   case cvsAndDefaults = 0xffffffff
+  case lastWrite      = 0xfffffffe
   case cvMapping0000  = 0x00000000
   case cvMapping00E0  = 0x000000e0
   case cvMapping01C0  = 0x000001c0
@@ -71,6 +72,7 @@ public enum DecoderEditorLoadType : Int, CaseIterable {
   
   public static let titles : [DecoderEditorLoadType:String] = [
     .cvsAndDefaults : String(localized:"CVs and Default Values"),
+    .lastWrite      : String(localized:"Last Write"),
     .cvMapping0000  : String(localized:"CV Mapping - 0x0000"),
     .cvMapping00E0  : String(localized:"CV Mapping - 0x00E0"),
     .cvMapping01C0  : String(localized:"CV Mapping - 0x01C0"),

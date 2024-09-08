@@ -692,6 +692,10 @@ class LokProgrammerVC : MyTrainsViewController, MTSerialPortDelegate, ORSSerialP
         if let sequenceNumber = packet.sequenceNumberForRead, let address = packet.address, let count = packet.numberOfBytesToRead {
           dump += "Sequence number: \(sequenceNumber.toHex(numberOfDigits: 2)) Address: \(address.toHex(numberOfDigits: 4)) Number of bytes: \(count)\n"
         }
+      case .initWriteDataBlock:
+        if let address = packet.address {
+          dump += "Address: \(address.toHex(numberOfDigits: 4)) Number of bytes: \(packet.payload.count)\n"
+        }
       case .sendServiceModePacket:
         if let dccPacket = packet.dccPacket(decoderMode: .serviceModeDirectAddressing) {
           dump += "\(dccPacket.packetType)\n"
@@ -724,6 +728,7 @@ class LokProgrammerVC : MyTrainsViewController, MTSerialPortDelegate, ORSSerialP
       case .lokProgrammerTestB:
         count16A = 0
         countReadData = 0
+        cvbufferThisWrite = [UInt8](repeating: 0x0, count: 2688)
         sendResponse(original: packet, response: "7F 7F 02 00 01 00 81")
       case .getLokProgrammerManufacturerCode:
         sendResponse(original: packet, response: "7F 7F 02 03 01 00 97 00 00 00 81")
@@ -769,7 +774,24 @@ class LokProgrammerVC : MyTrainsViewController, MTSerialPortDelegate, ORSSerialP
         sendResponse(original: packet, response: "7F 7F 02 18 07 00 81")
       case .lokProgrammerTidyUp:
         sendResponse(original: packet, response: "7F 7F 02 6F 01 00 81")
+        
+        for index in 0 ..< cvbufferThisWrite.count {
+          if cvbufferLastWrite[index] != cvbufferThisWrite[index] {
+            print("address: \(UInt64(index).toHexDotFormat(numberOfBytes: 4)) \(cvbufferLastWrite[index].toHex(numberOfDigits: 2)) to  \(cvbufferThisWrite[index].toHex(numberOfDigits: 2))")
+          }
+        }
+        
+        cvbufferLastWrite = cvbufferThisWrite
+        
       case .bufferDataBlock, .bufferDataDWord, .unknownTX18_A:
+        sendResponse(original: packet, response: "7F 7F 02 1A 07 00 81")
+      case .initWriteDataBlock:         
+        nextDataRead = "7F 7F 02 3A 07 00 01 00 01 81"
+        if let address = packet.address {
+          for index in 0 ..< packet.payload.count {
+            cvbufferThisWrite[Int(address) + index] = packet.payload[index]
+          }
+        }
         sendResponse(original: packet, response: "7F 7F 02 1A 07 00 81")
       case .initReadForDecoderManufacturerCode:
         switch countReadData {
@@ -934,7 +956,10 @@ class LokProgrammerVC : MyTrainsViewController, MTSerialPortDelegate, ORSSerialP
     return result.trimmingCharacters(in: .whitespaces)
 
   }
-  
+
+  var cvbufferLastWrite : [UInt8] = [UInt8](repeating: 0x0, count: 2688)
+  var cvbufferThisWrite : [UInt8] = [UInt8](repeating: 0x0, count: 2688)
+
   private func dataBlockResponse(initPacket:LokPacket) -> String {
     
     guard let sequenceNumberForRead = initPacket.sequenceNumberForRead, let decoder, let block = DecoderEditorLoadType(title: cboBlock.stringValue) else {
@@ -949,12 +974,19 @@ class LokProgrammerVC : MyTrainsViewController, MTSerialPortDelegate, ORSSerialP
 //      cvbuffer[index] = decoder.getUInt8(index:index)
 //    }
     
-    for index in 1 ... 224 {
-      cvbuffer[block.rawValue + index - 1] = UInt8(index)
+    if block != .lastWrite {
+      for index in 1 ... 224 {
+        cvbuffer[block.rawValue + index - 1] = UInt8(index)
+      }
     }
 
     for address in Int(initPacket.address!) ... Int(initPacket.address!) + Int(initPacket.numberOfBytesToRead!) - 1 {
-      packet.append(cvbuffer[address])
+      if block == .lastWrite {
+        packet.append(cvbufferLastWrite[address])
+      }
+      else {
+        packet.append(cvbuffer[address])
+      }
     }
     
     var checksum = packet[6]
@@ -1050,6 +1082,7 @@ public enum LokPacketType : CaseIterable {
   case initReadForDecoderBootcodeDate
   case initReadForDecoderProductionInfo
   case initReadForDecoderProductionDate
+  case initWriteDataBlock
   case bufferDataBlock
   case bufferDataDWord
   case readData
@@ -1212,6 +1245,9 @@ public class LokPacket {
           else if packet.count == 14 && packet[5] == 0x14 && packet[6] == 0x79 && packet[8] == 0x04 {
             _packetType = .initReadDataBlock
           }
+          else if packet.count > 12 && packet[5] == 0x14 && packet[6] == 0x79 && packet[8] == 0x05 {
+            _packetType = .initWriteDataBlock
+          }
           
         case 0x2b:
           _packetType = .readData
@@ -1325,10 +1361,21 @@ public class LokPacket {
       
       var result : [UInt8] = []
       
-      if packetType == .data && packet.count > 9 {
-        for index in 6 ... packet.count - 3 {
-          result.append(packet[index])
+      switch packetType {
+      case .initWriteDataBlock:
+        if packet.count > 12 {
+          for index in 11 ... packet.count - 3 {
+            result.append(packet[index])
+          }
         }
+      case .data:
+        if packet.count > 9 {
+          for index in 6 ... packet.count - 3 {
+            result.append(packet[index])
+          }
+        }
+      default:
+        break
       }
       
       _payload = result
@@ -1385,11 +1432,13 @@ public class LokPacket {
   }
   
   public var address : UInt16? {
-    guard packetType == .initReadDataBlock else {
+    switch packetType {
+    case .initReadDataBlock, .initWriteDataBlock:
+      // 7F 7F 01 7D 2A 14 79 0D 04 A0 09 E0 40 81
+      return UInt16(packet[9]) | (UInt16(packet[10]) << 8)
+    default:
       return nil
     }
-    // 7F 7F 01 7D 2A 14 79 0D 04 A0 09 E0 40 81
-    return UInt16(packet[9]) | (UInt16(packet[10]) << 8)
   }
   
   public func dccPacket(decoderMode:DCCDecoderMode = .operationsMode) -> DCCPacket? {
@@ -1543,11 +1592,27 @@ public class LokPacket {
     guard isCarryingPayload else {
       return nil
     }
-    
-    var checkSum = payload[0]
-    
-    for index in 1 ... payload.count - 1 {
-      checkSum ^= payload[index]
+
+    var checkSum : UInt8
+
+    switch packetType {
+      
+    case .initWriteDataBlock:
+      
+      checkSum = packet[7]
+      
+      for index in 8 ... packet.count - 3 {
+        checkSum ^= packet[index]
+      }
+
+    default:
+
+      checkSum = payload[0]
+      
+      for index in 1 ... payload.count - 1 {
+        checkSum ^= payload[index]
+      }
+
     }
     
     return checkSum

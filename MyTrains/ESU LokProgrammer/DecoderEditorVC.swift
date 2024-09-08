@@ -161,6 +161,35 @@ class DecoderEditorVC : MyTrainsViewController, DecoderPropertyTableViewDSDelega
     userSettings?.tableView5 = outputModeTableView
     
     txtInfo.font = NSFont(name: "Menlo", size: 12.0)
+    /*
+    let lokSound5 = Decoder(decoderType: .lokSound5)
+    
+    for decoderType in DecoderType.lokSeries5 {
+      
+      if decoderType != .lokSound5, var definition = decoderTypes[decoderType] {
+        
+        let testDecoder = Decoder(decoderType: decoderType)
+        
+        let testCVSet = testDecoder.cvSet
+        
+        let intersection = testCVSet.subtracting(lokSound5.cvSet)
+        
+        for cv in intersection {
+          definition.mapping[Int(cv.cv) - 1] = [cv]
+        }
+        
+        for (key, cvSet) in lokSound5.definition!.mapping {
+          if !testCVSet.intersection(cvSet).isEmpty {
+            definition.mapping[key] = cvSet
+          }
+        }
+
+        decoderTypes[decoderType] = definition
+        
+      }
+            
+    }
+  */
     
   }
   

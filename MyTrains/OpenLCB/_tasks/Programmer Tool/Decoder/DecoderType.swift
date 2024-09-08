@@ -384,5 +384,47 @@ public enum DecoderType : UInt64, Codable, CaseIterable {
       comboBox.addItem(withObjectValue: item.title)
     }
   }
+  
+  private static let _lokSeries5 : Set<DecoderType> = [
+    .lokSound5                          ,
+    .lokSound5DCC                       ,
+    .lokSound5micro                     ,
+    .lokSound5microDCC                  ,
+    .lokSound5microDCCDirect            ,
+    .lokSound5microDCCDirectAtlasLegacy ,
+    .lokSound5microDCCDirectAtlasS2     ,
+    .lokSound5nanoDCC                   ,
+    .lokSound5nanoDCCNext18             ,
+    .lokSound5L                         ,
+    .lokSound5LDCC                      ,
+    .lokSound5XL                        ,
+    .lokSound5Fx                        ,
+    .lokSound5FxDCC                     ,
+    .lokSound5MKL                       ,
+    .lokSound5microKATO                 ,
+    .lokPilot5                          ,
+    .lokPilot5DCC                       ,
+    .lokPilot5micro                     ,
+    .lokPilot5microDCC                  ,
+    .lokPilot5microDCCDirect            ,
+    .lokPilot5microNext18               ,
+    .lokPilot5microNext18DCC            ,
+    .lokPilot5nanoDCC                   ,
+    .lokPilot5L                         ,
+    .lokPilot5LDCC                      ,
+    .lokPilot5Fx                        ,
+    .lokPilot5FxDCC                     ,
+    .lokPilot5Fxmicro                   ,
+    .lokPilot5FxmicroDCC                ,
+    .lokPilot5FxmicroNext18             ,
+    .lokPilot5FxmicroNext18DCC          ,
+    .lokPilot5MKL                       ,
+    .lokPilot5MKLDCC                    ,
+    .lokPilot5Basic                     ,
+  ]
+
+  public static var lokSeries5 : Set<DecoderType> {
+    return _lokSeries5
+  }
 
 }
