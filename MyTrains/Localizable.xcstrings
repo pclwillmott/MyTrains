@@ -547,6 +547,9 @@
         }
       }
     },
+    "Ack" : {
+
+    },
     "Acknowledgements" : {
 
     },
@@ -610,6 +613,12 @@
 
     },
     "Address for consist operation" : {
+
+    },
+    "Address Only Verify Address" : {
+
+    },
+    "Address Only Write Address" : {
 
     },
     "Adjustment at higher speed steps" : {
@@ -757,6 +766,9 @@
       }
     },
     "Ampere" : {
+
+    },
+    "Analog Function Group" : {
 
     },
     "Analog Mode Motor Control" : {
@@ -1144,6 +1156,12 @@
         }
       }
     },
+    "Binary State Control Long Form" : {
+
+    },
+    "Binary State Control Short Form" : {
+
+    },
     "Bit [7..0]" : {
 
     },
@@ -1333,6 +1351,12 @@
     },
     "Brown" : {
       "comment" : "The name of a color."
+    },
+    "Buffer Data Block" : {
+
+    },
+    "Buffer Data DWord" : {
+
     },
     "Buffer Sound" : {
 
@@ -1848,6 +1872,12 @@
     "Colour-light 4 aspect" : {
 
     },
+    "Command Accepted" : {
+
+    },
+    "Command Error" : {
+
+    },
     "Commanded (%%SCALE_SPEED_UNITS%%)" : {
 
     },
@@ -2284,6 +2314,30 @@
     "CV" : {
 
     },
+    "CV Access Acceleration Adjustment" : {
+
+    },
+    "CV Access Decleration Adjustment" : {
+
+    },
+    "CV Access Indexed CVs" : {
+
+    },
+    "CV Access Long Address" : {
+
+    },
+    "CV Access Verify Bit" : {
+
+    },
+    "CV Access Verify Byte" : {
+
+    },
+    "CV Access Write Bit" : {
+
+    },
+    "CV Access Write Byte" : {
+
+    },
     "CV Mapping - 0x0000" : {
 
     },
@@ -2340,6 +2394,9 @@
     },
     "Dark Gray" : {
       "comment" : "The name of a color."
+    },
+    "Data" : {
+
     },
     "Datagram" : {
 
@@ -2786,6 +2843,12 @@
     "Different brake distance while driving backwards" : {
 
     },
+    "Digital Decoder Idle Packet" : {
+
+    },
+    "Digital Decoder Reset Packet" : {
+
+    },
     "Digitrax BXP88" : {
       "comment" : "Used for a menu title\nUsed to create a default OpenLCB virtual name",
       "localizations" : {
@@ -2878,6 +2941,18 @@
           }
         }
       }
+    },
+    "Direct Mode Verify Bit" : {
+
+    },
+    "Direct Mode Verify Byte" : {
+
+    },
+    "Direct Mode Write Bit" : {
+
+    },
+    "Direct Mode Write Byte" : {
+
     },
     "Direction" : {
 
@@ -3106,6 +3181,9 @@
 
     },
     "Duration of steam chuffs relative to trigger distance" : {
+
+    },
+    "DWord" : {
 
     },
     "Dynamic Brake" : {
@@ -4357,6 +4435,36 @@
     "Function Settings" : {
 
     },
+    "Functions F5 to F8" : {
+
+    },
+    "Functions F9 to F12" : {
+
+    },
+    "Functions F13 to F20" : {
+
+    },
+    "Functions F21 to F28" : {
+
+    },
+    "Functions F29 to F36" : {
+
+    },
+    "Functions F37 to F44" : {
+
+    },
+    "Functions F45 to F52" : {
+
+    },
+    "Functions F53 to F60" : {
+
+    },
+    "Functions F61 to F68" : {
+
+    },
+    "Functions FL, F1 to F4" : {
+
+    },
     "Gear Shift Sound" : {
 
     },
@@ -4428,6 +4536,33 @@
 
     },
     "Get Configuration Options Reply" : {
+
+    },
+    "Get LokProgrammer ACode Date" : {
+
+    },
+    "Get LokProgrammer ACode Version" : {
+
+    },
+    "Get LokProgrammer Boot Code Date" : {
+
+    },
+    "Get LokProgrammer Boot Code Version" : {
+
+    },
+    "Get LokProgrammer Info A" : {
+
+    },
+    "Get LokProgrammer Info B" : {
+
+    },
+    "Get LokProgrammer Info C" : {
+
+    },
+    "Get LokProgrammer Manufacturer Code" : {
+
+    },
+    "Get LokProgrammer Product Id" : {
 
     },
     "Get Unique Event ID Command" : {
@@ -4842,6 +4977,51 @@
       "comment" : "The name of a color."
     },
     "Info" : {
+
+    },
+    "Init Read" : {
+
+    },
+    "Init Read Data Block" : {
+
+    },
+    "Init Read Data DWord" : {
+
+    },
+    "Init Read For Decoder Boot Code Date" : {
+
+    },
+    "Init Read For Decoder Boot Code Version" : {
+
+    },
+    "Init Read For Decoder Firmware Date" : {
+
+    },
+    "Init Read For Decoder Firmware Type" : {
+
+    },
+    "Init Read For Decoder Firmware Version" : {
+
+    },
+    "Init Read For Decoder Manufactuer Code" : {
+
+    },
+    "Init Read For Decoder Product Id" : {
+
+    },
+    "Init Read For Decoder Production Date" : {
+
+    },
+    "Init Read For Decoder Production Info" : {
+
+    },
+    "Init Read For Decoder Serial Number" : {
+
+    },
+    "Init Write Data Block" : {
+
+    },
+    "Init Write Decoder Firmware Update" : {
 
     },
     "Initialization Complete Full Protocol Required" : {
@@ -5491,8 +5671,14 @@
     "Lok 5" : {
 
     },
+    "LokProgrammer Driver's Cab Mode" : {
+
+    },
     "LokProgrammer Monitor" : {
       "comment" : "Used for a menu title"
+    },
+    "LokProgrammer Tidy Up" : {
+
     },
     "LokSound 4 3 Point" : {
 
@@ -6474,6 +6660,15 @@
         }
       }
     },
+    "Page Preset Instruction" : {
+
+    },
+    "Paged Mode Verify Byte" : {
+
+    },
+    "Paged Mode Write Byte" : {
+
+    },
     "Panel Description" : {
 
     },
@@ -6662,6 +6857,12 @@
 
     },
     "Physical Outputs" : {
+
+    },
+    "Physical Register Verify Byte" : {
+
+    },
+    "Physical Register Write Byte" : {
 
     },
     "Pink" : {
@@ -6928,6 +7129,9 @@
     "Read Command (Configuration Space)" : {
 
     },
+    "Read Error" : {
+
+    },
     "Read Reply" : {
 
     },
@@ -6986,6 +7190,9 @@
 
     },
     "Read Stream Reply Failure (Configuration Space)" : {
+
+    },
+    "Read/Write Data" : {
 
     },
     "Reading Configuration Description Information - %lld bytes" : {
@@ -7406,6 +7613,9 @@
     "RX" : {
       "comment" : "This is an abbreviation of Receive used for an LED label"
     },
+    "RX03_A" : {
+
+    },
     "s" : {
       "comment" : "Used for the abbreviation of seconds",
       "localizations" : {
@@ -7579,6 +7789,15 @@
 
     },
     "Send following information to the command station:" : {
+
+    },
+    "Send Motorola Packet" : {
+
+    },
+    "Send Operations Mode Packet" : {
+
+    },
+    "Send Service Mode Packet" : {
 
     },
     "Send ZIMO ZACK signals" : {
@@ -7771,6 +7990,12 @@
       "comment" : "This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."
     },
     "Set Brake (Automatic Release)" : {
+
+    },
+    "Set LokProgrammer Mode" : {
+
+    },
+    "Set LokProgrammer Single CV Mode" : {
 
     },
     "Settings for certain Command Stations" : {
@@ -8332,10 +8557,16 @@
     "Speed" : {
 
     },
+    "Speed and Direction Packet" : {
+
+    },
     "Speed Constraints" : {
 
     },
     "Speed Profiler" : {
+
+    },
+    "Speed Step Control 128" : {
 
     },
     "Speed step mode" : {
@@ -8794,6 +9025,9 @@
     "Switching on threshold" : {
 
     },
+    "System Time" : {
+
+    },
     "t" : {
       "comment" : "Used for the Throttle menu key equivalent",
       "extractionState" : "stale",
@@ -8905,6 +9139,12 @@
 
     },
     "Terminate Due To Error" : {
+
+    },
+    "Test A" : {
+
+    },
+    "Test B" : {
 
     },
     "The applicable speed for this constraint." : {
@@ -9171,6 +9411,9 @@
     "Thunderer Whistle" : {
 
     },
+    "Time and Date Command" : {
+
+    },
     "Time between the sensor no longer being triggered and the sensor reporting such non-triggering." : {
       "comment" : "This is used for a tooltip."
     },
@@ -9409,6 +9652,45 @@
     },
     "TX" : {
       "comment" : "This is an abbreviation of Transmit used for an LED label"
+    },
+    "TX12_A" : {
+
+    },
+    "TX14_A" : {
+
+    },
+    "TX16_A" : {
+
+    },
+    "TX16_B" : {
+
+    },
+    "TX16_C" : {
+
+    },
+    "TX18_A" : {
+
+    },
+    "TX18_B" : {
+
+    },
+    "TX19_A" : {
+
+    },
+    "TX34_A" : {
+
+    },
+    "TX34_B" : {
+
+    },
+    "TX34_C" : {
+
+    },
+    "TX34_D" : {
+
+    },
+    "TX34_E" : {
+
     },
     "Type" : {
       "comment" : "This is used for the title of a combo box that the user selects the type of sensor."

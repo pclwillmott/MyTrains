@@ -886,7 +886,7 @@
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <clipView key="contentView" id="Cgs-Of-Eh2">
                                                         <rect key="frame" x="1" y="1" width="483" height="451"/>
-                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                        <autoresizingMask key="autoresizingMask"/>
                                                         <subviews>
                                                             <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="24" rowSizeStyle="automatic" headerView="8bG-yq-Byf" viewBased="YES" id="aCH-2A-ONk">
                                                                 <rect key="frame" x="0.0" y="0.0" width="483" height="423"/>
@@ -908,7 +908,7 @@
                                                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                         <prototypeCellViews>
                                                                             <tableCellView identifier="VersionCellID" id="ja3-yQ-eWX">
-                                                                                <rect key="frame" x="8" y="0.0" width="111" height="24"/>
+                                                                                <rect key="frame" x="18" y="0.0" width="111" height="24"/>
                                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                 <subviews>
                                                                                     <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Qw4-SX-ty0">

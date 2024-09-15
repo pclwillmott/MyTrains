@@ -591,13 +591,29 @@ class LokProgrammerVC : MyTrainsViewController, MTSerialPortDelegate, ORSSerialP
   }
   
   private func packetReceived(packet:LokPacket) {
+    // \(packet.isRX ? "RX: " : "TX: ")
     
-    var dump = "\(packet.isRX ? "RX: " : "TX: ") \(packet.hex)\n"
-
-    dump += "\(packet.packetType)\n"
+    var dump = ""
+    
+    if prettyPrint {
+      let bits = packet.hex.split(separator: " ")
+      var count = 0
+      for bit in bits {
+        if count == 16 {
+          dump += "\n"
+          count = 0
+        }
+        dump += "\(bit) "
+        count += 1
+      }
+      dump += "(\(packet.packetType.title))\n"
+    }
+    else {
+      dump = "\(packet.hex) (\(packet.packetType.title))\n"
+    }
     
     if packet.isCarryingPayload, let isCheckSumOK = packet.isCheckSumOK {
-      dump += "CheckSum: \(isCheckSumOK) Count: \(packet.payload.count)\n"
+      dump += "CheckSum: \(isCheckSumOK ? "OK" : "Fail") Count: \(packet.payload.count)\n"
     }
 
     // The following only works if this app sent the command
@@ -698,7 +714,20 @@ class LokProgrammerVC : MyTrainsViewController, MTSerialPortDelegate, ORSSerialP
         }
       case .sendServiceModePacket:
         if let dccPacket = packet.dccPacket(decoderMode: .serviceModeDirectAddressing) {
-          dump += "\(dccPacket.packetType)\n"
+          var extra = ""
+          if let cvNumber = dccPacket.cvNumber {
+            extra = "CV\(cvNumber)"
+            if let bitNumber = dccPacket.cvBitNumber {
+              extra += " d\(bitNumber)"
+              if let cvBitValue = dccPacket.cvBitValue {
+                extra += " value: \(cvBitValue)"
+              }
+            }
+            else if let cvValue = dccPacket.cvValue {
+              extra += " value: \(cvValue)"
+            }
+          }
+          dump += "\(dccPacket.packetType.title) \(extra)\n"
         }
       case .sendOperationsModePacket:
         if let dccPacket = packet.dccPacket(decoderMode: .operationsMode) {
@@ -710,17 +739,17 @@ class LokProgrammerVC : MyTrainsViewController, MTSerialPortDelegate, ORSSerialP
       
     }
     
-    txtView.string += dump
+    txtView.string += dump + "\n"
  
     if isSendingPreamble && packet.isRX  {
       sendNextStep()
     }
     
-    print(dump)
+//    print(dump)
     
     // ****** THIS IS THE LokProgrammer EMULATOR ******
     
-    if packet.isTX {
+    if !prettyPrint && packet.isTX {
       
       switch packet.packetType {
       case .lokProgrammerTestA:
@@ -750,17 +779,17 @@ class LokProgrammerVC : MyTrainsViewController, MTSerialPortDelegate, ORSSerialP
         sendResponse(original: packet, response: "7F 7F 02 0B 01 00 00 00 00 00 81")
       case .setLokProgrammerMode:
         sendResponse(original: packet, response: "7F 7F 02 0D 01 00 81")
-      case .unknownTX34_A:
+      case .TX34_A:
         sendResponse(original: packet, response: "7F 7F 02 0E 01 00 81")
-      case .unknownTX34_B:
+      case .TX34_B:
         sendResponse(original: packet, response: "7F 7F 02 10 07 00 81")
-      case .unknownTX34_C:
+      case .TX34_C:
         sendResponse(original: packet, response: "7F 7F 02 10 07 00 81")
-      case .unknownTX34_D:
+      case .TX34_D:
         sendResponse(original: packet, response: "7F 7F 02 10 07 00 81")
-      case .unknownTX34_E:
+      case .TX34_E:
         sendResponse(original: packet, response: "7F 7F 02 10 07 00 81")
-      case .unknownTX16_A:
+      case .TX16_A:
         switch count16A {
         case 0:
           sendResponse(original: packet, response: "7F 7F 02 0F 03 00 81")
@@ -768,9 +797,9 @@ class LokProgrammerVC : MyTrainsViewController, MTSerialPortDelegate, ORSSerialP
           sendResponse(original: packet, response: "7F 7F 02 11 07 00 81")
         }
         count16A += 1
-      case .unknownTX16_B:
+      case .TX16_B:
         sendResponse(original: packet, response: "7F 7F 02 11 07 00 81")
-      case .unknownTX19_A:
+      case .TX19_A:
         sendResponse(original: packet, response: "7F 7F 02 18 07 00 81")
       case .lokProgrammerTidyUp:
         sendResponse(original: packet, response: "7F 7F 02 6F 01 00 81")
@@ -783,7 +812,7 @@ class LokProgrammerVC : MyTrainsViewController, MTSerialPortDelegate, ORSSerialP
         
         cvbufferLastWrite = cvbufferThisWrite
         
-      case .bufferDataBlock, .bufferDataDWord, .unknownTX18_A:
+      case .bufferDataBlock, .bufferDataDWord, .TX18_A:
         sendResponse(original: packet, response: "7F 7F 02 1A 07 00 81")
       case .initWriteDataBlock:         
         nextDataRead = "7F 7F 02 3A 07 00 01 00 01 81"
@@ -890,12 +919,15 @@ class LokProgrammerVC : MyTrainsViewController, MTSerialPortDelegate, ORSSerialP
  */
         sendResponse(original: packet, response: "7F 7F 02 1A 07 00 81")
       default:
-        print("UNKNOWN: \(packet.packet)")
+      //  print("UNKNOWN: \(packet.packet)")
+        break
       }
       
     }
     
   }
+  
+  private var prettyPrint = false
   
   private func readDecoderInfoResponse(initPacket:LokPacket) -> String {
 
@@ -1060,13 +1092,188 @@ class LokProgrammerVC : MyTrainsViewController, MTSerialPortDelegate, ORSSerialP
   @IBAction func cboBlockAction(_ sender: NSComboBox) {
   }
   
+  
+  struct SortItem {
+    
+    var command : LokPacket?
+    
+    var response : LokPacket?
+    
+    var pageNumber : Int?
+    
+    var sequenceNumber : UInt8? {
+      if let command {
+        return command.sequenceNumber
+      }
+      if let response {
+        return response.sequenceNumber
+      }
+      return nil
+    }
+    
+    var isMatched : Bool {
+      return command != nil && response != nil
+    }
+    
+    var sortPageNumber : String {
+      guard let pageNumber else {
+        return "00000000"
+      }
+      return String(("00000000\(pageNumber)").suffix(8))
+    }
+    
+    var sortCode : String {
+      guard isMatched, let command else {
+        return ""
+      }
+      return "\(sortPageNumber) \(command.packet[3].toHex(numberOfDigits: 2)) \(command.packet[2].toHex(numberOfDigits: 2))"
+    }
+    
+  }
+  
+  @IBAction func btnSortAction(_ sender: NSButton) {
+    
+    var sort : [SortItem] = []
+    
+    var firmware : [UInt8] = []
+    
+    let lines = txtView.string.split(separator: "\n")
+    
+    var pageNumber = 0
+    var inTransition = false
+    
+    for line in lines {
+      
+      // 7F 7F 01 0D
+      if line.prefix(5) == "7F 7F" {
+        
+        let bits = line.split(separator: "(")
+        
+        let packetString = bits[0].trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        if let packet = LokPacket(packet: packetString) {
+          /*
+          if packet.packetType == .writeDecoderFirmwareUpdate {
+            if let isCheckSumOK = packet.isCheckSumOK, isCheckSumOK {
+              var bytes = packet.payload
+              bytes.removeFirst(2)
+              firmware.append(contentsOf: bytes)
+            }
+            else {
+              print("Checksum failure")
+            }
+          }
+          */
+          var found = false
+          
+          if !sort.isEmpty {
+            for index in (0 ..< sort.count).reversed() {
+              var sortItem = sort[index]
+              if !sortItem.isMatched, let sequenceNumber = sortItem.sequenceNumber, packet.sequenceNumber == sequenceNumber {
+                found = true
+                if packet.isTX {
+                  sortItem.command = packet
+                }
+                else if packet.isRX {
+                  sortItem.response = packet
+                }
+                if !inTransition && sequenceNumber == 0 {
+                  inTransition = true
+                  pageNumber += 1
+                  sortItem.pageNumber = pageNumber
+                }
+                else if inTransition {
+                  if sequenceNumber == 0x3F {
+                    inTransition = false
+                    sortItem.pageNumber = pageNumber
+                  }
+                  else if sequenceNumber > 0x3F {
+                    sortItem.pageNumber = pageNumber - 1
+                  }
+                  else {
+                    sortItem.pageNumber = pageNumber
+                  }
+                }
+                else {
+                  sortItem.pageNumber = pageNumber
+                }
+                sort[index] = sortItem
+                break
+              }
+            }
+          }
+          
+          if !found {
+            var sortItem = SortItem()
+            if packet.isTX {
+              sortItem.command = packet
+            }
+            else if packet.isRX {
+              sortItem.response = packet
+            }
+            if !inTransition && packet.sequenceNumber == 0 {
+              inTransition = true
+              pageNumber += 1
+              sortItem.pageNumber = pageNumber
+            }
+            else if inTransition {
+              if packet.sequenceNumber == 0x3F {
+                inTransition = false
+                sortItem.pageNumber = pageNumber
+              }
+              else if packet.sequenceNumber > 0x3F {
+                sortItem.pageNumber = pageNumber - 1
+              }
+              else {
+                sortItem.pageNumber = pageNumber
+              }
+            }
+            else {
+              sortItem.pageNumber = pageNumber
+            }
+            sort.append(sortItem)
+          }
+          
+        }
+        
+      }
+      
+    }
+    
+    sort.sort {$0.sortCode < $1.sortCode}
+    
+    txtView.string = ""
+    
+    prettyPrint = true
+    
+    for sortItem in sort {
+      if let command = sortItem.command, let response = sortItem.response {
+        packetReceived(packet: command)
+        packetReceived(packet: response)
+      }
+      else {
+        print("error")
+      }
+    }
+    
+    prettyPrint = false
+    /*
+    do {
+      let data = Data(firmware)
+      let url = URL(fileURLWithPath: "/Users/paul/Desktop/FIRMWARE.txt")
+      try data.write(to: url)
+    } catch {
+    }
+     */
+  }
+  
 }
 
 
 private var cvs : [UInt8] = [UInt8](repeating: 0x00, count: 2688)
 
 public enum LokPacketType : CaseIterable {
-
+  
   case unknown
   case ack
   case initRead
@@ -1087,6 +1294,7 @@ public enum LokPacketType : CaseIterable {
   case bufferDataDWord
   case readData
   case data
+  case readError
   case getLokProgrammerManufacturerCode
   case getLokProgrammerProductId
   case getLokProgrammerInfoA
@@ -1102,20 +1310,93 @@ public enum LokPacketType : CaseIterable {
   case lokProgrammerTidyUp
   case setLokProgrammerMode
   case setSingleCVMode
+  case setDriversCabMode
   case lokProgrammerTestA
   case lokProgrammerTestB
   case sendServiceModePacket
   case sendOperationsModePacket
-  case unknownTX34_A
-  case unknownTX34_B
-  case unknownTX34_C
-  case unknownTX34_D
-  case unknownTX34_E
-  case unknownTX16_A
-  case unknownTX16_B
-  case unknownTX18_A
-  case unknownTX18_B
-  case unknownTX19_A
+  case sendMotorolaPacket
+  case writeDecoderFirmwareUpdate
+  case TX34_A
+  case TX34_B
+  case TX34_C
+  case TX34_D
+  case TX34_E
+  case TX16_A
+  case TX16_B
+  case TX16_C
+  case TX18_A
+  case TX18_B
+  case TX19_A
+  case RX03_A
+  case TX12_A
+  case TX14_A
+  
+  public var title : String {
+    return LokPacketType.titles[self] ?? LokPacketType.unknown.title
+  }
+  
+  private static let titles : [LokPacketType:String] = [
+    .unknown : String(localized: "Unknown"),
+    .readError : String(localized: "Read Error"),
+    .RX03_A : String(localized: "RX03_A"),
+    .TX12_A : String(localized: "TX12_A"),
+    .TX14_A : String(localized: "TX14_A"),
+    .ack  : String(localized: "Ack"),
+    .writeDecoderFirmwareUpdate  : String(localized: "Init Write Decoder Firmware Update"),
+    .sendMotorolaPacket  : String(localized: "Send Motorola Packet"),
+    .setDriversCabMode : String(localized: "LokProgrammer Driver's Cab Mode"),
+    .initRead  : String(localized: "Init Read"),
+    .initReadDataBlock  : String(localized: "Init Read Data Block"),
+    .initReadDataDWord  : String(localized: "Init Read Data DWord"),
+    .initReadForDecoderManufacturerCode : String(localized: "Init Read For Decoder Manufactuer Code"),
+    .initReadForDecoderProductId  : String(localized: "Init Read For Decoder Product Id"),
+    .initReadForDecoderSerialNumber  : String(localized: "Init Read For Decoder Serial Number"),
+    .initReadForDecoderFirmwareVersion  : String(localized: "Init Read For Decoder Firmware Version"),
+    .initReadForDecoderFirmwareDate  : String(localized: "Init Read For Decoder Firmware Date"),
+    .initReadForDecoderFirmwareType  : String(localized: "Init Read For Decoder Firmware Type"),
+    .initReadForDecoderBootcodeVersion  : String(localized: "Init Read For Decoder Boot Code Version"),
+    .initReadForDecoderBootcodeDate : String(localized: "Init Read For Decoder Boot Code Date"),
+    .initReadForDecoderProductionInfo : String(localized: "Init Read For Decoder Production Info"),
+    .initReadForDecoderProductionDate  : String(localized: "Init Read For Decoder Production Date"),
+    .initWriteDataBlock  : String(localized: "Init Write Data Block"),
+    .bufferDataBlock  : String(localized: "Buffer Data Block"),
+    .bufferDataDWord : String(localized: "Buffer Data DWord"),
+    .readData : String(localized: "Read/Write Data"),
+    .data : String(localized: "Data"),
+    .getLokProgrammerManufacturerCode : String(localized: "Get LokProgrammer Manufacturer Code"),
+    .getLokProgrammerProductId : String(localized: "Get LokProgrammer Product Id"),
+    .getLokProgrammerInfoA : String(localized: "Get LokProgrammer Info A"),
+    .getLokProgrammerInfoB : String(localized: "Get LokProgrammer Info B"),
+    .getLokProgrammerBootCodeVersion : String(localized: "Get LokProgrammer Boot Code Version"),
+    .getLokProgrammerBootCodeDate : String(localized: "Get LokProgrammer Boot Code Date"),
+    .getLokProgrammerACodeVersion : String(localized: "Get LokProgrammer ACode Version"),
+    .getLokProgrammerACodeDate : String(localized: "Get LokProgrammer ACode Date"),
+    .getLokProgrammerInfoC : String(localized: "Get LokProgrammer Info C"),
+    .dword : String(localized: "DWord"),
+    .lokProgrammerCommandAccepted : String(localized: "Command Accepted"),
+    .lokProgrammerCommandError : String(localized: "Command Error"),
+    .lokProgrammerTidyUp : String(localized: "LokProgrammer Tidy Up"),
+    .setLokProgrammerMode : String(localized: "Set LokProgrammer Mode"),
+    .setSingleCVMode : String(localized: "Set LokProgrammer Single CV Mode"),
+    .lokProgrammerTestA : String(localized: "Test A"),
+    .lokProgrammerTestB : String(localized: "Test B"),
+    .sendServiceModePacket : String(localized: "Send Service Mode Packet"),
+    .sendOperationsModePacket : String(localized: "Send Operations Mode Packet"),
+    .TX34_A : String(localized: "TX34_A"),
+    .TX34_B : String(localized: "TX34_B"),
+    .TX34_C : String(localized: "TX34_C"),
+    .TX34_D : String(localized: "TX34_D"),
+    .TX34_E : String(localized: "TX34_E"),
+    .TX16_A : String(localized: "TX16_A"),
+    .TX16_B : String(localized: "TX16_B"),
+    .TX16_C : String(localized: "TX16_C"),
+    .TX18_A : String(localized: "TX18_A"),
+    .TX18_B : String(localized: "TX18_B"),
+    .TX19_A : String(localized: "TX19_A"),
+  ]
+  
+  
 }
 
 public enum LokDataType : UInt8 {
@@ -1137,6 +1418,19 @@ public class LokPacket {
   
   init(packet:[UInt8]) {
     self.packet = packet
+  }
+  
+  init?(packet:String) {
+    self.packet = []
+    let bits = packet.split(separator: " ")
+    for bit in bits {
+      if let byte = UInt8(bit, radix: 16) {
+        self.packet.append(byte)
+      }
+      else {
+        return nil
+      }
+    }
   }
   
   var packet : [UInt8]
@@ -1186,10 +1480,13 @@ public class LokPacket {
           }
         case 0x16:
           if packet[5] == 0x02 {
-            _packetType = .unknownTX16_A
+            _packetType = .TX16_A
+          }
+          else if packet[5] == 0x01 {
+            _packetType = .TX16_C
           }
           else if packet[5] == 0x00 {
-            _packetType = .unknownTX16_B
+            _packetType = .TX16_B
           }
         case 0x18:
           if packet.count == 7 {
@@ -1201,11 +1498,11 @@ public class LokPacket {
               _packetType = .bufferDataDWord
             }
             else if packet[5] == 0x05 {
-              _packetType = .unknownTX18_A
+              _packetType = .TX18_A
             }
           }
         case 0x19:
-          _packetType = .unknownTX19_A
+          _packetType = .TX19_A
         case 0x2a:
           
           _packetType = .initRead
@@ -1248,9 +1545,18 @@ public class LokPacket {
           else if packet.count > 12 && packet[5] == 0x14 && packet[6] == 0x79 && packet[8] == 0x05 {
             _packetType = .initWriteDataBlock
           }
-          
+          else if packet.count > 12 && packet[5] == 0x14 && packet[6] == 0x79 && packet[8] == 0x07 {
+            _packetType = .writeDecoderFirmwareUpdate
+          }
+
         case 0x2b:
           _packetType = .readData
+        case 0x30:
+          // 7F 7F 01 XX 30 1A B6 14 0A 02 12 2C 04 40 81 (Unknown)
+          if packet[5] == 0x1a && packet[6] == 0xb6 && packet[7] == 0x14 && packet[8] == 0x0a && packet[9] == 0x02 && packet[10] == 0x12 {
+            _packetType = .sendMotorolaPacket
+          }
+
         case 0x34:
           if packet.count > 8 {
             if packet[5] == 0x3a && packet[6] == 0x64 {
@@ -1261,19 +1567,19 @@ public class LokPacket {
               _packetType = .sendOperationsModePacket
             }
             else if packet[5] == 0x0c && packet[6] == 0x0c && packet[7] == 0x64 && packet[8] == 0x64 && packet[9] == 0x00 && packet[10] == 0x00 {
-              _packetType = .unknownTX34_A
+              _packetType = .TX34_A
             }
             else if packet[5] == 0x0c && packet[6] == 0x0c && packet[7] == 0x64 && packet[8] == 0x64 && packet[9] == 0x64 && packet[10] == 0x00 {
-              _packetType = .unknownTX34_B
+              _packetType = .TX34_B
             }
             else if packet[5] == 0x14 && packet[6] == 0x14 && packet[7] == 0x14 && packet[8] == 0x0a && packet[9] == 0x00 && packet[10] == 0x00 {
-              _packetType = .unknownTX34_C
+              _packetType = .TX34_C
             }
             else if packet[5] == 0x14 && packet[6] == 0x14 && packet[7] == 0x14 && packet[8] == 0x0a && packet[9] == 0x04 && packet[10] == 0x00 {
-              _packetType = .unknownTX34_D
+              _packetType = .TX34_D
             }
             else if packet[5] == 0x64 && packet[6] == 0x64 && packet[7] == 0x04 && packet[8] == 0x02 && packet[9] == 0x00 && packet[10] == 0x00 {
-              _packetType = .unknownTX34_E
+              _packetType = .TX34_E
             }
           }
         case 0x10:
@@ -1291,8 +1597,17 @@ public class LokPacket {
             else if packet[5] == 0x02 && packet[6] == 0x00 && packet[7] == 0x28 && packet[8] == 0x19 {
               _packetType = .setSingleCVMode
             }
+            // 7F 7F 01 02 10 01 00 2D 19 81 (Set LokProgrammer Driver's Cab Mode)
+            else if packet[5] == 0x01 && packet[6] == 0x00 && packet[7] == 0x2D && packet[8] == 0x19 {
+              _packetType = .setDriversCabMode
+            }
+
           }
-          
+        case 0x12:
+          _packetType = .TX12_A
+        case 0x14:
+          _packetType = .TX14_A
+
         default:
           break
         }
@@ -1315,9 +1630,16 @@ public class LokPacket {
               _packetType = .lokProgrammerCommandError
             }
           }
+        case 0x03:
+          _packetType = .RX03_A
         case 0x07:
           if packet.count == 7 {
             _packetType = .ack
+          }
+          // 7F 7F 02 XX 07 00 7F 81
+          // 7F 7F 02 6F 07 00 7F 81
+          else if packet.count == 8 && packet[6] == 0x7f {
+            _packetType = .readError
           }
           else if packet.count > 7 {
             _packetType = .data
@@ -1374,6 +1696,14 @@ public class LokPacket {
             result.append(packet[index])
           }
         }
+      case .writeDecoderFirmwareUpdate:
+        if packet.count > 9 {
+          for index in 7 ... packet.count - 3 {
+            result.append(packet[index])
+          }
+        }
+        // 7F 7F 01 42 2A 14 79 02 07 6E 91 F8 BA 9D 3F 77 61 79 37 70 49 B5 90 53 C9 86 8C 06 45 AF 24 79 42 8D C0 AD 65 2A 10 B0 68 B7 62 95 1C D1 C8 B0 8B 9E 89 85 09 49 D5 A4 8E FD D8 C6 55 A9 53 A9 C2 85 33 60 43 E0 E6 B6 E7 68 9F 45 52 5D 02 EB B2 00 99 8F C8 7B 8C F5 73 E7 06 5B A7 D3 C7 4D 8B 3B 54 E9 AE 0D 07 8B 01 4C 3B 43 D8 B5 D3 03 D1 71 6B 6C B8 52 62 35 90 3A 7D C0 F8 39 45 EE 17 B4 4D 3F 11 F0 C4 54 D0 77 83 80 DB AE 51 D9 D9 51 A3 A1 91 8C C4 E0 78 FF E3 26 09 67 BC A6 9E E8 22 7D FB 55 66 90 2E B9 37 DF B6 03 18 D2 7B 67 C4 3F B6 BA 19 3F F1 7F 2A 93 A6 DF EB 7D 70 BD C3 B9 81 2D 13 B3 B0 AE BA 25 55 5D A2 AB 32 9E 69 87 4B 74 B9 85 AA 7D 01 EB 5F 39 D7 28 32 F7 A5 5F 8C AB 67 EF 70 F8 25 A4 71 4F 03 40 21 B8 52 B7 38 99 35 FB 0C 92 C3 F7 58 C0 AC E8 88 07 9B B6 0B 7C 82 E0 DB 84 B9 6A 1A BD 9D 45 C7 5D 5E F4 73 CC 32 87 FD E8 81 (Init Read)
+
       default:
         break
       }
@@ -1604,6 +1934,9 @@ public class LokPacket {
       for index in 8 ... packet.count - 3 {
         checkSum ^= packet[index]
       }
+
+//    case .writeDecoderFirmwareUpdate:
+      // 7F 7F 01 42 2A 14 79 02 07 6E 91 F8 BA 9D 3F 77 61 79 37 70 49 B5 90 53 C9 86 8C 06 45 AF 24 79 42 8D C0 AD 65 2A 10 B0 68 B7 62 95 1C D1 C8 B0 8B 9E 89 85 09 49 D5 A4 8E FD D8 C6 55 A9 53 A9 C2 85 33 60 43 E0 E6 B6 E7 68 9F 45 52 5D 02 EB B2 00 99 8F C8 7B 8C F5 73 E7 06 5B A7 D3 C7 4D 8B 3B 54 E9 AE 0D 07 8B 01 4C 3B 43 D8 B5 D3 03 D1 71 6B 6C B8 52 62 35 90 3A 7D C0 F8 39 45 EE 17 B4 4D 3F 11 F0 C4 54 D0 77 83 80 DB AE 51 D9 D9 51 A3 A1 91 8C C4 E0 78 FF E3 26 09 67 BC A6 9E E8 22 7D FB 55 66 90 2E B9 37 DF B6 03 18 D2 7B 67 C4 3F B6 BA 19 3F F1 7F 2A 93 A6 DF EB 7D 70 BD C3 B9 81 2D 13 B3 B0 AE BA 25 55 5D A2 AB 32 9E 69 87 4B 74 B9 85 AA 7D 01 EB 5F 39 D7 28 32 F7 A5 5F 8C AB 67 EF 70 F8 25 A4 71 4F 03 40 21 B8 52 B7 38 99 35 FB 0C 92 C3 F7 58 C0 AC E8 88 07 9B B6 0B 7C 82 E0 DB 84 B9 6A 1A BD 9D 45 C7 5D 5E F4 73 CC 32 87 FD E8 81 (Init Read)
 
     default:
 

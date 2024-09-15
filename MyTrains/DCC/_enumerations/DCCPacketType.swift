@@ -51,6 +51,55 @@ public enum DCCPacketTypeNew : CaseIterable {
   case cvAccessWriteBit
   case unknown
   
+  // MARK: Public Properties
+  
+  public var title : String {
+    return DCCPacketTypeNew.titles[self] ?? DCCPacketTypeNew.unknown.title
+  }
+  
+  // MARK: Private Class Properties
+  
+  private static let titles : [DCCPacketTypeNew:String] = [
+    .directModeWriteBit : String(localized: "Direct Mode Write Bit"),
+    .directModeVerifyBit : String(localized: "Direct Mode Verify Bit"),
+    .directModeWriteByte : String(localized: "Direct Mode Write Byte"),
+    .directModeVerifyByte : String(localized: "Direct Mode Verify Byte"),
+    .addressOnlyVerifyAddress : String(localized: "Address Only Verify Address"),
+    .addressOnlyWriteAddress : String(localized: "Address Only Write Address"),
+    .physicalRegisterVerifyByte : String(localized: "Physical Register Verify Byte"),
+    .physicalRegisterWriteByte : String(localized: "Physical Register Write Byte"),
+    .pagedModeVerifyByte : String(localized: "Paged Mode Verify Byte"),
+    .pagedModeWriteByte : String(localized: "Paged Mode Write Byte"),
+    .pagePresetInstruction : String(localized: "Page Preset Instruction"),
+    .digitalDecoderResetPacket : String(localized: "Digital Decoder Reset Packet"),
+    .digitalDecoderIdlePacket : String(localized: "Digital Decoder Idle Packet"),
+    .speedAndDirectionPacket : String(localized: "Speed and Direction Packet"),
+    .speedStepControl128 : String(localized: "Speed Step Control 128"),
+    .analogFunctionGroup : String(localized: "Analog Function Group"),
+    .functionFLF1F4 : String(localized: "Functions FL, F1 to F4"),
+    .functionF5F8 : String(localized: "Functions F5 to F8"),
+    .functionF9F12 : String(localized: "Functions F9 to F12"),
+    .binaryStateControlLongForm : String(localized: "Binary State Control Long Form"),
+    .timeAndDateCommand : String(localized: "Time and Date Command"),
+    .systemTime : String(localized: "System Time"),
+    .binaryStateControlShortForm : String(localized: "Binary State Control Short Form"),
+    .functionF13F20 : String(localized: "Functions F13 to F20"),
+    .functionF21F28 : String(localized: "Functions F21 to F28"),
+    .functionF29F36 : String(localized: "Functions F29 to F36"),
+    .functionF37F44 : String(localized: "Functions F37 to F44"),
+    .functionF45F52 : String(localized: "Functions F45 to F52"),
+    .functionF53F60 : String(localized: "Functions F53 to F60"),
+    .functionF61F68 : String(localized: "Functions F61 to F68"),
+    .cvAccessAccelerationAdjustment : String(localized: "CV Access Acceleration Adjustment"),
+    .cvAccessDeclerationAdjustment : String(localized: "CV Access Decleration Adjustment"),
+    .cvAccessLongAddress : String(localized: "CV Access Long Address"),
+    .cvAccessIndexedCVs : String(localized: "CV Access Indexed CVs"),
+    .cvAccessVerifyByte : String(localized: "CV Access Verify Byte"),
+    .cvAccessWriteByte : String(localized: "CV Access Write Byte"),
+    .cvAccessVerifyBit : String(localized: "CV Access Verify Bit"),
+    .cvAccessWriteBit : String(localized: "CV Access Write Bit"),
+    .unknown : String(localized: "Unknown"),
+]
 }
 
 public enum DCCPacketType : UInt8 {

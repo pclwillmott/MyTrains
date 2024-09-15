@@ -43,6 +43,53 @@ public class DCCPacket : NSObject {
     return checksum == 0
   }
   
+  private let validDirectModeCVPackets : Set<DCCPacketTypeNew> = [
+    .directModeWriteBit,
+    .directModeVerifyBit,
+    .directModeWriteByte,
+    .directModeVerifyByte,
+  ]
+  
+  public var cvNumber : UInt16? {
+    
+    guard validDirectModeCVPackets.contains(packetType) else {
+      return nil
+    }
+    
+    return ((UInt16(packet[0] & 0b00000011) << 8) | UInt16(packet[1])) + 1
+    
+  }
+  
+  public var cvBitNumber : Int? {
+    
+    guard validDirectModeCVPackets.contains(packetType) && (packet[0] & 0b00001100) == 0b00001000 else {
+      return nil
+    }
+    
+    return Int(packet[2] & 0b000000111)
+    
+  }
+
+  public var cvBitValue : Int? {
+    
+    guard validDirectModeCVPackets.contains(packetType) && (packet[0] & 0b00001100) == 0b00001000 else {
+      return nil
+    }
+    
+    return Int(packet[2] & 0b000001000) >> 3
+    
+  }
+
+  public var cvValue : UInt8? {
+    
+    guard packetType == .directModeWriteByte || packetType == .directModeVerifyByte else {
+      return nil
+    }
+    
+    return packet[2]
+    
+  }
+  
   public var packetType : DCCPacketTypeNew {
     
     if _packetType == nil {
