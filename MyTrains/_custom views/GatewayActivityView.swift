@@ -7,6 +7,7 @@
 
 import Foundation
 import AppKit
+import SGInteger
 
 class GatewayActivityView : NSView {
 
@@ -70,7 +71,7 @@ class GatewayActivityView : NSView {
       return UInt64(dotHex: gatewayNodeId.stringValue)!
     }
     set(value) {
-      gatewayNodeId.stringValue = value.toHexDotFormat(numberOfBytes: 6)
+      gatewayNodeId.stringValue = value.dotHex(numberOfBytes: 6)!
     }
   }
   

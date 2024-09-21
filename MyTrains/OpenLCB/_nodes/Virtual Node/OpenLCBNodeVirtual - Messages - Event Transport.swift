@@ -30,7 +30,7 @@ extension OpenLCBNodeVirtual {
         let alert = NSAlert()
         
         alert.messageText = String(localized: "Sending unadvertised event")
-        alert.informativeText = String(localized: "The node \"\(userNodeName)\" (\(nodeId.toHexDotFormat(numberOfBytes: 6))) is attempting to send the unadvertised event: \(eventId.toHexDotFormat(numberOfBytes: 8))")
+        alert.informativeText = String(localized: "The node \"\(userNodeName)\" (\(nodeId.dotHex(numberOfBytes: 6)!)) is attempting to send the unadvertised event: \(eventId.dotHex(numberOfBytes: 8)!)")
         alert.addButton(withTitle: "OK")
         alert.alertStyle = .informational
         

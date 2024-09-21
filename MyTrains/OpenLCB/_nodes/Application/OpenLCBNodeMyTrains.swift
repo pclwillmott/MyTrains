@@ -7,6 +7,7 @@
 
 import Foundation
 import AppKit
+import SGUnitConversion
 
 public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
   
@@ -228,82 +229,82 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
 
   public var viewOptions : OpenLCBMemorySpace?
   
-  public var unitsActualLength : UnitLength {
+  public var unitsActualLength : SGUnitLength {
     get {
-      return UnitLength(rawValue: configuration!.getUInt8(address: addressUnitsActualLength)!)!
+      return SGUnitLength(rawValue: configuration!.getUInt8(address: addressUnitsActualLength)!)!
     }
     set(value) {
       configuration!.setUInt(address: addressUnitsActualLength, value: value.rawValue)
     }
   }
 
-  public var unitsScaleLength : UnitLength {
+  public var unitsScaleLength : SGUnitLength {
     get {
-      return UnitLength(rawValue: configuration!.getUInt8(address: addressUnitsScaleLength)!)!
+      return SGUnitLength(rawValue: configuration!.getUInt8(address: addressUnitsScaleLength)!)!
     }
     set(value) {
       configuration!.setUInt(address: addressUnitsScaleLength, value: value.rawValue)
     }
   }
 
-  public var unitsActualDistance : UnitLength {
+  public var unitsActualDistance : SGUnitLength {
     get {
-      return UnitLength(rawValue: configuration!.getUInt8(address: addressUnitsActualDistance)!)!
+      return SGUnitLength(rawValue: configuration!.getUInt8(address: addressUnitsActualDistance)!)!
     }
     set(value) {
       configuration!.setUInt(address: addressUnitsActualDistance, value: value.rawValue)
     }
   }
 
-  public var unitsScaleDistance : UnitLength {
+  public var unitsScaleDistance : SGUnitLength {
     get {
-      return UnitLength(rawValue: configuration!.getUInt8(address: addressUnitsScaleDistance)!)!
+      return SGUnitLength(rawValue: configuration!.getUInt8(address: addressUnitsScaleDistance)!)!
     }
     set(value) {
       configuration!.setUInt(address: addressUnitsScaleDistance, value: value.rawValue)
     }
   }
 
-  public var unitsActualSpeed : UnitSpeed {
+  public var unitsActualSpeed : SGUnitSpeed {
     get {
-      return UnitSpeed(rawValue: configuration!.getUInt8(address: addressUnitsActualSpeed)!)!
+      return SGUnitSpeed(rawValue: configuration!.getUInt8(address: addressUnitsActualSpeed)!)!
     }
     set(value) {
       configuration!.setUInt(address: addressUnitsActualSpeed, value: value.rawValue)
     }
   }
 
-  public var unitsScaleSpeed : UnitSpeed {
+  public var unitsScaleSpeed : SGUnitSpeed {
     get {
-      return UnitSpeed(rawValue: configuration!.getUInt8(address: addressUnitsScaleSpeed)!)!
+      return SGUnitSpeed(rawValue: configuration!.getUInt8(address: addressUnitsScaleSpeed)!)!
     }
     set(value) {
       configuration!.setUInt(address: addressUnitsScaleSpeed, value: value.rawValue)
     }
   }
   
-  public var unitsTime : UnitTime {
+  public var unitsTime : SGUnitTime {
     get {
-      return UnitTime(rawValue: configuration!.getUInt8(address: addressUnitsTime)!)!
+      return SGUnitTime(rawValue: configuration!.getUInt8(address: addressUnitsTime)!)!
     }
     set(value) {
       configuration!.setUInt(address: addressUnitsTime, value: value.rawValue)
     }
   }
   
-  public var unitsFrequency : UnitFrequency {
+  public var unitsFrequency : SGUnitFrequency {
     return .hertz
   }
   
-  public var unitsTemperature : UnitTemperature {
+  public var unitsTemperature : SGUnitTemperature {
     return .celsius
   }
   
-  public var unitsVoltage : UnitVoltage {
+  public var unitsVoltage : SGUnitVoltage {
     return .volts
   }
   
-  public var unitsCurrent : UnitCurrent {
+  public var unitsCurrent : SGUnitCurrent {
     return .amps
   }
   
@@ -366,13 +367,13 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
     
     configuration?.zeroMemory()
     
-    unitsActualLength   = UnitLength.defaultValueActualLength
-    unitsScaleLength    = UnitLength.defaultValueScaleLength
-    unitsActualDistance = UnitLength.defaultValueActualDistance
-    unitsScaleDistance  = UnitLength.defaultValueScaleDistance
-    unitsActualSpeed    = UnitSpeed.defaultValueActualSpeed
-    unitsScaleSpeed     = UnitSpeed.defaultValueScaleSpeed
-    unitsTime           = UnitTime.defaultValue
+    unitsActualLength   = .centimeters
+    unitsScaleLength    = .meters
+    unitsActualDistance = .centimeters
+    unitsScaleDistance  = .kilometers
+    unitsActualSpeed    = defaultValueActualSpeed
+    unitsScaleSpeed     = defaultValueScaleSpeed
+    unitsTime           = defaultValueTime
     
     maximumNumberOfGateways = 1
     
@@ -388,9 +389,9 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
   
   internal override func customizeDynamicCDI(cdi:String) -> String {
     
-    var result = UnitLength.insertMap(cdi: cdi)
-    result = UnitSpeed.insertMap(cdi: result)
-    result = UnitTime.insertMap(cdi: result)
+    var result = SGUnitLength.insertMap(cdi: cdi)
+    result = SGUnitSpeed.insertMap(cdi: result)
+    result = SGUnitTime.insertMap(cdi: result)
     result = MyTrainsViewType.insertMap(cdi: result)
     
     let maxPossibleGatewayNodes = 256 - (nodeId & 0xff) - 2

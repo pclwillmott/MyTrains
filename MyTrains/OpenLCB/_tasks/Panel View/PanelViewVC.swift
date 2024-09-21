@@ -145,7 +145,7 @@ class PanelViewVC: MyTrainsViewController, MyTrainsAppDelegate {
     userSettings?.node = panels[sender.indexOfSelectedItem]
     scrollView.magnification = switchboardMagnification
     switchboardView.switchboardPanel = panels[sender.indexOfSelectedItem]
-    view.window?.title = "\(switchboardView.switchboardPanel!.userNodeName) (\(switchboardView.switchboardPanel!.nodeId.toHexDotFormat(numberOfBytes: 6)))"
+    view.window?.title = "\(switchboardView.switchboardPanel!.userNodeName) (\(switchboardView.switchboardPanel!.nodeId.dotHex(numberOfBytes: 6)))"
     switchboardView.switchboardPanel?.panelIsVisible = false
   }
   

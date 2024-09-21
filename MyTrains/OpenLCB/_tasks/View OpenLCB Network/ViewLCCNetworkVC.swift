@@ -193,7 +193,7 @@ class ViewLCCNetworkVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate
     let alert = NSAlert()
     
     alert.messageText = String(localized: "Are You Sure?")
-    alert.informativeText = String(localized: "Are you sure that you want to delete the node \"\(node.userNodeName)\" (\(node.nodeId.toHexDotFormat(numberOfBytes: 6)))? This action cannot be undone!")
+    alert.informativeText = String(localized: "Are you sure that you want to delete the node \"\(node.userNodeName)\" (\(node.nodeId.dotHex(numberOfBytes: 6)!))? This action cannot be undone!")
     alert.addButton(withTitle: String(localized: "Yes"))
     alert.addButton(withTitle: String(localized: "No"))
     alert.alertStyle = .informational

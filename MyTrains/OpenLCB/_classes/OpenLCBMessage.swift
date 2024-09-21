@@ -340,7 +340,7 @@ public class OpenLCBMessage : NSObject {
     get {
       var result = ""
       for byte in payload {
-        result += byte.toHex(numberOfDigits: 2)
+        result += byte.hex()
       }
       return result
     }
@@ -353,10 +353,10 @@ public class OpenLCBMessage : NSObject {
     var text = ""
     
     if let sourceNodeId {
-      text += "\(sourceNodeId.toHexDotFormat(numberOfBytes: 6))"
+      text += "\(sourceNodeId.dotHex(numberOfBytes: 6))"
     }
     if let destinationNodeId {
-      text += " → \(destinationNodeId.toHexDotFormat(numberOfBytes: 6)) "
+      text += " → \(destinationNodeId.dotHex(numberOfBytes: 6)) "
     }
     
     text += String(repeating: " ", count: 39 - text.count)
@@ -368,7 +368,7 @@ public class OpenLCBMessage : NSObject {
         text += "\"\(event.title)\" "
       }
       else {
-        text += "\(eventId.toHexDotFormat(numberOfBytes: 8)) "
+        text += "\(eventId.dotHex(numberOfBytes: 8)) "
       }
     }
     
@@ -442,7 +442,7 @@ public class OpenLCBMessage : NSObject {
           
           let startAddress = UInt32(bigEndianData: [payload[2], payload[3], payload[4], payload[5]])!
                                                     
-          text += "\(space.toHex(numberOfDigits: 2)) \(startAddress.toHex(numberOfDigits: 8))"
+          text += "\(space.hex()) \(startAddress.hex(numberOfBytes: 4)!)"
           
         case .readCommand0xFD, .readCommand0xFE, .readCommand0xFF, .readCommandGeneric:
           
@@ -463,7 +463,7 @@ public class OpenLCBMessage : NSObject {
                                                     
           let count = payload[datagramType == .readCommandGeneric ? 7 : 6]
           
-          text += "\(space.toHex(numberOfDigits: 2)) \(startAddress.toHex(numberOfDigits: 8)) \(count)"
+          text += "\(space.hex()) \(startAddress.hex(numberOfBytes: 4)!) \(count)"
           
         case .readReply0xFD, .readReply0xFE, .readReply0xFF, .readReplyGeneric, .writeCommandGeneric, .writeCommand0xFD, .writeCommand0xFE, .writeCommand0xFF:
 
@@ -509,14 +509,14 @@ public class OpenLCBMessage : NSObject {
           
           let index = space < 0xfd ? 7 : 6
           
-          text += "\(space.toHex(numberOfDigits: 2)) \(startAddress.toHex(numberOfDigits: 8)) "
+          text += "\(space.hex()) \(startAddress.hex(numberOfBytes: 4)!) "
           
           if let errorCode = UInt16(bigEndianData: [UInt8]([payload[index], payload[index + 1]])) {
             if let error = OpenLCBErrorCode(rawValue: errorCode) {
               text += "\"\(error.title)\""
             }
             else {
-              text += "0x\(errorCode.toHex(numberOfDigits: 4))"
+              text += "0x\(errorCode.hex(numberOfBytes: 2)!)"
             }
           }
 
@@ -549,7 +549,7 @@ public class OpenLCBMessage : NSObject {
         case .getConfigurationOptionsReply:
           break
         case .getAddressSpaceInformationCommand:
-          text += "\(payload[2].toHex(numberOfDigits: 2))"
+          text += "\(payload[2].hex())"
           
         case .getAddressSpaceInformationReply, .getAddressSpaceInformationReplyLowAddressPresent:
  
@@ -567,7 +567,7 @@ public class OpenLCBMessage : NSObject {
             lowestAddress = UInt32(bigEndianData: [payload[8], payload[9], payload[10], payload[11]])!
           }
           
-          text += "\(space.toHex(numberOfDigits: 2)) \(lowestAddress.toHex(numberOfDigits: 8)) \(highestAddress.toHex(numberOfDigits: 8)) \(flags.toHex(numberOfDigits: 2)) "
+          text += "\(space.hex()) \(lowestAddress.hex(numberOfBytes: 4)!) \(highestAddress.hex(numberOfBytes: 4)!) \(flags.hex()) "
           
         case .lockReserveCommand, .lockReserveReply:
           
@@ -576,7 +576,7 @@ public class OpenLCBMessage : NSObject {
           
           let nodeId = UInt64(bigEndianData: [UInt8](data.prefix(6)))!
           
-          text += "\(nodeId.toHexDotFormat(numberOfBytes: 6)) "
+          text += "\(nodeId.dotHex(numberOfBytes: 6)) "
           
         case .getUniqueEventIDCommand:
           
@@ -595,7 +595,7 @@ public class OpenLCBMessage : NSObject {
             
             for _ in 1 ... number {
               let eventId = UInt64(bigEndianData: [UInt8](data.prefix(8)))!
-              text += "\n\(padding) \(eventId.toHexDotFormat(numberOfBytes: 8))"
+              text += "\n\(padding) \(eventId.dotHex(numberOfBytes: 8))"
               data.removeFirst(8)
             }
             
@@ -603,7 +603,7 @@ public class OpenLCBMessage : NSObject {
           
         case .unfreezeCommand, .freezeCommand:
           
-          text += "\(payload[2].toHex(numberOfDigits: 2))"
+          text += "\(payload[2].hex())"
           
         case .updateCompleteCommand:
           break
@@ -613,11 +613,11 @@ public class OpenLCBMessage : NSObject {
           var data = payload
           data.removeFirst(2)
           let nodeId = UInt64(bigEndianData: [UInt8](data.prefix(6)))!
-          text += "\(nodeId.toHexDotFormat(numberOfBytes: 6))"
+          text += "\(nodeId.dotHex(numberOfBytes: 6))"
         }
       }
       else {
-        text += String(localized: "Datagram Type Unknown: \(UInt16(bigEndianData: [UInt8](payload.prefix(2)))!.toHex(numberOfDigits: 4)) ")
+        text += String(localized: "Datagram Type Unknown: \(UInt16(bigEndianData: [UInt8](payload.prefix(2)))!.hex(numberOfBytes: 2)!) ")
       }
     case .datagramRejected:
       var temp = payload
@@ -627,18 +627,18 @@ public class OpenLCBMessage : NSObject {
           text += "\"\(error.title)\""
         }
         else {
-          text += "\(errorCode.toHex(numberOfDigits: 4))"
+          text += "\(errorCode.hex(numberOfBytes: 2)!)"
         }
       }
       
     case .initializationCompleteSimpleSetSufficient, .initializationCompleteFullProtocolRequired, .verifiedNodeIDSimpleSetSufficient, .verifiedNodeIDFullProtocolRequired:
-      text += "\(UInt64(bigEndianData: payload)!.toHexDotFormat(numberOfBytes: 6))"
+      text += "\(UInt64(bigEndianData: payload)!.dotHex(numberOfBytes: 6))"
     
     case .verifyNodeIDGlobal, .verifyNodeIDAddressed:
       
       if !payload.isEmpty {
         let nodeId = UInt64(bigEndianData: payload)!
-        text += "\(nodeId.toHexDotFormat(numberOfBytes: 6)) "
+        text += "\(nodeId.dotHex(numberOfBytes: 6)) "
       }
       
     case .optionalInteractionRejected, .terminateDueToError:
@@ -650,7 +650,7 @@ public class OpenLCBMessage : NSObject {
           text += "\"\(error.title)\" "
         }
         else {
-          text += "\(errorCode.toHex(numberOfDigits: 4)) "
+          text += "\(errorCode.hex(numberOfBytes: 2)!) "
         }
       }
       
@@ -658,12 +658,12 @@ public class OpenLCBMessage : NSObject {
       
       let mti = UInt16(bigEndianData: [UInt8](data.prefix(2)))!
       
-      text += "\(mti.toHex(numberOfDigits: 4)) "
+      text += "\(mti.hex(numberOfBytes: 2)!) "
       
       data.removeFirst(2)
       
       for byte in data {
-        text += "\(byte.toHex(numberOfDigits: 2)) "
+        text += "\(byte.hex()) "
       }
       
     case .simpleNodeIdentInfoReply:
@@ -675,13 +675,13 @@ public class OpenLCBMessage : NSObject {
     case .protocolSupportReply:
       
       for byte in payload {
-        text += "\(byte.toHex(numberOfDigits: 2)) "
+        text += "\(byte.hex()) "
       }
 
     case .identifyEventsAddressed:
       
       if let nodeId = UInt64(bigEndianData: payload) {
-        text += "\(nodeId.toHexDotFormat(numberOfBytes: 6)) "
+        text += "\(nodeId.dotHex(numberOfBytes: 6)) "
       }
       else {
         text += payloadAsHex + " "
@@ -711,14 +711,14 @@ public class OpenLCBMessage : NSObject {
     for byte in data {
       
       if bytesSoFar == bytesPerRow {
-        dump += "\(padding)\(space.toHex(numberOfDigits: 2)) \(address.toHex(numberOfDigits: 8)): \(bytes) \(chars)\n"
+        dump += "\(padding)\(space.hex()) \(address.hex(numberOfBytes: 4)!): \(bytes) \(chars)\n"
         address += bytesPerRow
         bytesSoFar = 0
         bytes = ""
         chars = ""
       }
 
-      bytes += "\(byte.toHex(numberOfDigits: 2)) "
+      bytes += "\(byte.hex()) "
 
       let char = Character(UnicodeScalar(byte))
       let isPrintable = char.isLetter || char.isNumber || char.isSymbol || char.isPunctuation || char == " "
@@ -734,7 +734,7 @@ public class OpenLCBMessage : NSObject {
         bytes += "   "
         bytesSoFar += 1
       }
-      dump += "\(padding)\(space.toHex(numberOfDigits: 2)) \(address.toHex(numberOfDigits: 8)): \(bytes) \(chars)"
+      dump += "\(padding)\(space.hex()) \(address.hex(numberOfBytes: 4)!): \(bytes) \(chars)"
     }
     
     return dump

@@ -52,7 +52,7 @@ class MonitorVC: MyTrainsViewController, OpenLCBLocoNetMonitorDelegate, MyTrains
     self.view.window?.title = "LocoNet Monitor"
     
     if let monitorNode {
-      self.view.window?.title = "\(monitorNode.userNodeName) (\(monitorNode.nodeId.toHexDotFormat(numberOfBytes: 6)))"
+      self.view.window?.title = "\(monitorNode.userNodeName) (\(monitorNode.nodeId.dotHex(numberOfBytes: 6)))"
     }
     
     monitorNode?.delegate = self
@@ -282,13 +282,13 @@ class MonitorVC: MyTrainsViewController, OpenLCBLocoNetMonitorDelegate, MyTrains
       case .setSw:
         item += "switchAddress: \(message.switchAddress!)\n"
       case .s7Info, .setS7BaseAddr:
-        item += "productCode: \(message.productCode!) serialNumber: \(UInt16(message.serialNumber!).toHex(numberOfDigits: 4)) baseAddress: \(message.baseAddress!)\n"
+        item += "productCode: \(message.productCode!) serialNumber: \(UInt16(message.serialNumber!).hex(numberOfBytes: 2)!) baseAddress: \(message.baseAddress!)\n"
       case .s7CVState:
         item += "cvValue: \(message.cvValue!)\n"
       case .immPacket, .s7CVRW:
         var result = ""
         for byte in message.dccPacket! {
-          result += "\(byte.toHex(numberOfDigits: 2)) "
+          result += "\(byte.hex()) "
         }
         item += "repeat: \(message.immPacketRepeatCount!) dccPacket: \(result) partition: \(message.dccAddressPartition!)"
         

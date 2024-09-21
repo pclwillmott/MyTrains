@@ -74,7 +74,7 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
   // MARK: Private Properties
   
   public var pipeName : String {
-    return "MyTrains_Node_\(nodeId.toHex(numberOfDigits: 12))"
+    return "MyTrains_Node_\(nodeId.hex(numberOfBytes: 6)!)"
   }
   
   private var lockedNodeId : UInt64 = 0

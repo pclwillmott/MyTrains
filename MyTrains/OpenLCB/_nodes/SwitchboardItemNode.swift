@@ -6,6 +6,8 @@
 //
 
 import Foundation
+import SGUnitConversion
+import SGInteger
 
 public func initSpaceAddress(_ address: inout Int, _ size:Int, _ nextAddress: inout Int) {
   address = nextAddress
@@ -1130,14 +1132,14 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
     
     switch property {
     case .panelId:
-      return panelId.toHexDotFormat(numberOfBytes: 6)
+      return panelId.dotHex(numberOfBytes: 6)!
     case .panelName:
       let panel = appDelegate.networkLayer!.virtualNodeLookup[panelId]!
       return panel.userNodeName
     case .itemType:
       return itemType.title
     case .itemId:
-      return nodeId.toHexDotFormat(numberOfBytes: 6)
+      return nodeId.dotHex(numberOfBytes: 6)!
     case .name:
       return userNodeName
     case .description:
@@ -1170,21 +1172,21 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
     case .trackGauge:
       return trackGauge.title
     case .lengthRoute1, .leftDivergingRoute, .rightThroughRoute, .yLeftDivergingRoute, .way3LeftDivergingRoute, .leftCurvedSmallerRadiusRoute, .rightCurvedLargerRadiusRoute:
-      return "\(UnitLength.convert(fromValue: getDimension(routeNumber: 1)!, fromUnits: UnitLength.defaultValueActualLength, toUnits: appNode!.unitsActualLength))"
+      return "\(SGUnitLength.convert(fromValue: getDimension(routeNumber: 1)!, fromUnits: .centimeters, toUnits: appNode!.unitsActualLength))"
     case .lengthRoute2, .leftThroughRoute, .rightDivergingRoute, .yRightDivergingRoute, .way3ThroughRoute, .leftCurvedLargerRadiusRoute, .rightCurvedSmallerRadiusRoute:
-      return "\(UnitLength.convert(fromValue: getDimension(routeNumber: 2)!, fromUnits: UnitLength.defaultValueActualLength, toUnits: appNode!.unitsActualLength))"
+      return "\(SGUnitLength.convert(fromValue: getDimension(routeNumber: 2)!, fromUnits: .centimeters, toUnits: appNode!.unitsActualLength))"
     case .lengthRoute3, .way3RightDivergingRoute:
-      return "\(UnitLength.convert(fromValue: getDimension(routeNumber: 3)!, fromUnits: UnitLength.defaultValueActualLength, toUnits: appNode!.unitsActualLength))"
+      return "\(SGUnitLength.convert(fromValue: getDimension(routeNumber: 3)!, fromUnits: .centimeters, toUnits: appNode!.unitsActualLength))"
     case .lengthRoute4:
-      return "\(UnitLength.convert(fromValue: getDimension(routeNumber: 4)!, fromUnits: UnitLength.defaultValueActualLength, toUnits: appNode!.unitsActualLength))"
+      return "\(SGUnitLength.convert(fromValue: getDimension(routeNumber: 4)!, fromUnits: .centimeters, toUnits: appNode!.unitsActualLength))"
     case .lengthRoute5:
-      return "\(UnitLength.convert(fromValue: getDimension(routeNumber: 5)!, fromUnits: UnitLength.defaultValueActualLength, toUnits: appNode!.unitsActualLength))"
+      return "\(SGUnitLength.convert(fromValue: getDimension(routeNumber: 5)!, fromUnits: .centimeters, toUnits: appNode!.unitsActualLength))"
     case .lengthRoute6:
-      return "\(UnitLength.convert(fromValue: getDimension(routeNumber: 6)!, fromUnits: UnitLength.defaultValueActualLength, toUnits: appNode!.unitsActualLength))"
+      return "\(SGUnitLength.convert(fromValue: getDimension(routeNumber: 6)!, fromUnits: .centimeters, toUnits: appNode!.unitsActualLength))"
     case .lengthRoute7:
-      return "\(UnitLength.convert(fromValue: getDimension(routeNumber: 7)!, fromUnits: UnitLength.defaultValueActualLength, toUnits: appNode!.unitsActualLength))"
+      return "\(SGUnitLength.convert(fromValue: getDimension(routeNumber: 7)!, fromUnits: .centimeters, toUnits: appNode!.unitsActualLength))"
     case .lengthRoute8:
-      return "\(UnitLength.convert(fromValue: getDimension(routeNumber: 8)!, fromUnits: UnitLength.defaultValueActualLength, toUnits: appNode!.unitsActualLength))"
+      return "\(SGUnitLength.convert(fromValue: getDimension(routeNumber: 8)!, fromUnits: .centimeters, toUnits: appNode!.unitsActualLength))"
     case .link:
       if let link = appDelegate.networkLayer?.virtualNodeLookup[linkId] {
         return link.userNodeName
@@ -1201,130 +1203,130 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
     case .sensorType:
       return sensorType.title
     case .sensorPosition:
-      return "\(UnitLength.convert(fromValue: sensorPosition, fromUnits: UnitLength.defaultValueActualDistance, toUnits: appNode!.unitsActualDistance))"
+      return "\(SGUnitLength.convert(fromValue: sensorPosition, fromUnits: .centimeters, toUnits: appNode!.unitsActualDistance))"
     case .sensorActivateLatency:
-      return "\(UnitTime.convert(fromValue: sensorActivateLatency, fromUnits: UnitTime.defaultValue, toUnits: appNode!.unitsTime))"
+      return "\(SGUnitTime.convert(fromValue: sensorActivateLatency, fromUnits: defaultValueTime, toUnits: appNode!.unitsTime))"
     case .sensorDeactivateLatency:
-      return "\(UnitTime.convert(fromValue: sensorDeactivateLatency, fromUnits: UnitTime.defaultValue, toUnits: appNode!.unitsTime))"
+      return "\(SGUnitTime.convert(fromValue: sensorDeactivateLatency, fromUnits: defaultValueTime, toUnits: appNode!.unitsTime))"
     case .signalType:
       return signalType.title
     case .signalRouteDirection:
       return signalRouteDirection.title
     case .signalPosition:
-      return "\(UnitLength.convert(fromValue: signalPosition, fromUnits: UnitLength.defaultValueActualDistance, toUnits: appNode!.unitsActualDistance))"
+      return "\(SGUnitLength.convert(fromValue: signalPosition, fromUnits: .centimeters, toUnits: appNode!.unitsActualDistance))"
     case .enterDetectionZoneEventId:
       let id = enterDetectionZoneEventId
-      return id == 0 ? "" : id.toHexDotFormat(numberOfBytes: 8)
+      return id == 0 ? "" : id.dotHex(numberOfBytes: 8)!
     case .exitDetectionZoneEventId:
       let id = exitDetectionZoneEventId
-      return id == 0 ? "" : id.toHexDotFormat(numberOfBytes: 8)
+      return id == 0 ? "" : id.dotHex(numberOfBytes: 8)!
     case .enterTranspondingZoneEventId:
       let id = enterTranspondingZoneEventId
-      return id == 0 ? "" : id.toHexDotFormat(numberOfBytes: 8)
+      return id == 0 ? "" : id.dotHex(numberOfBytes: 8)!
     case .exitTranspondingZoneEventId:
       let id = exitTranspondingZoneEventId
-      return id == 0 ? "" : id.toHexDotFormat(numberOfBytes: 8)
+      return id == 0 ? "" : id.dotHex(numberOfBytes: 8)!
     case .trackFaultEventId:
       let id = trackFaultEventId
-      return id == 0 ? "" : id.toHexDotFormat(numberOfBytes: 8)
+      return id == 0 ? "" : id.dotHex(numberOfBytes: 8)!
     case .trackFaultClearedEventId:
       let id = trackFaultClearedEventId
-      return id == 0 ? "" : id.toHexDotFormat(numberOfBytes: 8)
+      return id == 0 ? "" : id.dotHex(numberOfBytes: 8)!
     case .locationServicesEventId:
       let id = locationServicesEventId
-      return id == 0 ? "" : id.toHexDotFormat(numberOfBytes: 8)
+      return id == 0 ? "" : id.dotHex(numberOfBytes: 8)!
     case .sw1ThrowEventId:
       let id = getTurnoutThrowEventId(turnoutNumber: 1)!
-      return id == 0 ? "" : id.toHexDotFormat(numberOfBytes: 8)
+      return id == 0 ? "" : id.dotHex(numberOfBytes: 8)!
     case .sw1CloseEventId:
       let id = getTurnoutCloseEventId(turnoutNumber: 1)!
-      return id == 0 ? "" : id.toHexDotFormat(numberOfBytes: 8)
+      return id == 0 ? "" : id.dotHex(numberOfBytes: 8)!
     case .sw1ThrownEventId:
       let id = getTurnoutThrownEventId(turnoutNumber: 1)!
-      return id == 0 ? "" : id.toHexDotFormat(numberOfBytes: 8)
+      return id == 0 ? "" : id.dotHex(numberOfBytes: 8)!
     case .sw1ClosedEventId:
       let id = getTurnoutClosedEventId(turnoutNumber: 1)!
-      return id == 0 ? "" : id.toHexDotFormat(numberOfBytes: 8)
+      return id == 0 ? "" : id.dotHex(numberOfBytes: 8)!
     case .sw1NotThrownEventId:
       let id = getNotThrownEventId(turnoutNumber: 1) ?? 0
-      return id == 0 ? "" : id.toHexDotFormat(numberOfBytes: 8)
+      return id == 0 ? "" : id.dotHex(numberOfBytes: 8)!
     case .sw1NotClosedEventId:
       let id = getTurnoutClosedEventId(turnoutNumber: 1) ?? 0
-      return id == 0 ? "" : id.toHexDotFormat(numberOfBytes: 8)
+      return id == 0 ? "" : id.dotHex(numberOfBytes: 8)!
     case .sw2ThrowEventId:
       let id = getTurnoutThrowEventId(turnoutNumber: 2)!
-      return id == 0 ? "" : id.toHexDotFormat(numberOfBytes: 8)
+      return id == 0 ? "" : id.dotHex(numberOfBytes: 8)!
     case .sw2CloseEventId:
       let id = getTurnoutCloseEventId(turnoutNumber: 2)!
-      return id == 0 ? "" : id.toHexDotFormat(numberOfBytes: 8)
+      return id == 0 ? "" : id.dotHex(numberOfBytes: 8)!
     case .sw2ThrownEventId:
       let id = getTurnoutThrownEventId(turnoutNumber: 2)!
-      return id == 0 ? "" : id.toHexDotFormat(numberOfBytes: 8)
+      return id == 0 ? "" : id.dotHex(numberOfBytes: 8)!
     case .sw2ClosedEventId:
       let id = getTurnoutClosedEventId(turnoutNumber: 2)!
-      return id == 0 ? "" : id.toHexDotFormat(numberOfBytes: 8)
+      return id == 0 ? "" : id.dotHex(numberOfBytes: 8)!
     case .sw2NotThrownEventId:
       let id = getNotThrownEventId(turnoutNumber: 2) ?? 0
-      return id == 0 ? "" : id.toHexDotFormat(numberOfBytes: 8)
+      return id == 0 ? "" : id.dotHex(numberOfBytes: 8)!
     case .sw2NotClosedEventId:
       let id = getTurnoutClosedEventId(turnoutNumber: 2) ?? 0
-      return id == 0 ? "" : id.toHexDotFormat(numberOfBytes: 8)
+      return id == 0 ? "" : id.dotHex(numberOfBytes: 8)!
     case .sw3ThrowEventId:
       let id = getTurnoutThrowEventId(turnoutNumber: 3)!
-      return id == 0 ? "" : id.toHexDotFormat(numberOfBytes: 8)
+      return id == 0 ? "" : id.dotHex(numberOfBytes: 8)!
     case .sw3CloseEventId:
       let id = getTurnoutCloseEventId(turnoutNumber: 3)!
-      return id == 0 ? "" : id.toHexDotFormat(numberOfBytes: 8)
+      return id == 0 ? "" : id.dotHex(numberOfBytes: 8)!
     case .sw3ThrownEventId:
       let id = getTurnoutThrownEventId(turnoutNumber: 3)!
-      return id == 0 ? "" : id.toHexDotFormat(numberOfBytes: 8)
+      return id == 0 ? "" : id.dotHex(numberOfBytes: 8)!
     case .sw3ClosedEventId:
       let id = getTurnoutClosedEventId(turnoutNumber: 3)!
-      return id == 0 ? "" : id.toHexDotFormat(numberOfBytes: 8)
+      return id == 0 ? "" : id.dotHex(numberOfBytes: 8)!
     case .sw3NotThrownEventId:
       let id = getNotThrownEventId(turnoutNumber: 3) ?? 0
-      return id == 0 ? "" : id.toHexDotFormat(numberOfBytes: 8)
+      return id == 0 ? "" : id.dotHex(numberOfBytes: 8)!
     case .sw3NotClosedEventId:
       let id = getTurnoutClosedEventId(turnoutNumber: 3) ?? 0
-      return id == 0 ? "" : id.toHexDotFormat(numberOfBytes: 8)
+      return id == 0 ? "" : id.dotHex(numberOfBytes: 8)!
     case .sw4ThrowEventId:
       let id = getTurnoutThrowEventId(turnoutNumber: 4)!
-      return id == 0 ? "" : id.toHexDotFormat(numberOfBytes: 8)
+      return id == 0 ? "" : id.dotHex(numberOfBytes: 8)!
     case .sw4CloseEventId:
       let id = getTurnoutCloseEventId(turnoutNumber: 4)!
-      return id == 0 ? "" : id.toHexDotFormat(numberOfBytes: 8)
+      return id == 0 ? "" : id.dotHex(numberOfBytes: 8)!
     case .sw4ThrownEventId:
       let id = getTurnoutThrownEventId(turnoutNumber: 4)!
-      return id == 0 ? "" : id.toHexDotFormat(numberOfBytes: 8)
+      return id == 0 ? "" : id.dotHex(numberOfBytes: 8)!
     case .sw4ClosedEventId:
       let id = getTurnoutClosedEventId(turnoutNumber: 4)!
-      return id == 0 ? "" : id.toHexDotFormat(numberOfBytes: 8)
+      return id == 0 ? "" : id.dotHex(numberOfBytes: 8)!
     case .sw4NotThrownEventId:
       let id = getNotThrownEventId(turnoutNumber: 4) ?? 0
-      return id == 0 ? "" : id.toHexDotFormat(numberOfBytes: 8)
+      return id == 0 ? "" : id.dotHex(numberOfBytes: 8)!
     case .sw4NotClosedEventId:
       let id = getTurnoutClosedEventId(turnoutNumber: 4) ?? 0
-      return id == 0 ? "" : id.toHexDotFormat(numberOfBytes: 8)
+      return id == 0 ? "" : id.dotHex(numberOfBytes: 8)!
     case .sensorActivatedEventId:
       let id = sensorActivatedEventId
-      return id == 0 ? "" : id.toHexDotFormat(numberOfBytes: 8)
+      return id == 0 ? "" : id.dotHex(numberOfBytes: 8)!
     case .sensorDeactivatedEventId:
       let id = sensorDeactivatedEventId
-      return id == 0 ? "" : id.toHexDotFormat(numberOfBytes: 8)
+      return id == 0 ? "" : id.dotHex(numberOfBytes: 8)!
     case .sensorLocationServicesEventId:
       let id = sensorLocationServicesEventId
-      return id == 0 ? "" : id.toHexDotFormat(numberOfBytes: 8)
+      return id == 0 ? "" : id.dotHex(numberOfBytes: 8)!
     case .signalSetState0EventId, .signalSetState1EventId, .signalSetState2EventId, .signalSetState3EventId, .signalSetState4EventId, .signalSetState5EventId, .signalSetState6EventId, .signalSetState7EventId, .signalSetState8EventId, .signalSetState9EventId, .signalSetState10EventId, .signalSetState11EventId, .signalSetState12EventId, .signalSetState13EventId, .signalSetState14EventId, .signalSetState15EventId, .signalSetState16EventId, .signalSetState17EventId, .signalSetState18EventId, .signalSetState19EventId, .signalSetState20EventId, .signalSetState21EventId, .signalSetState22EventId, .signalSetState23EventId, .signalSetState24EventId, .signalSetState25EventId, .signalSetState26EventId, .signalSetState27EventId, .signalSetState28EventId, .signalSetState29EventId, .signalSetState30EventId, .signalSetState31EventId:
       let index = property.rawValue - LayoutInspectorProperty.signalSetState0EventId.rawValue + 1
       let id = getSetSignalAspectEventId(number: index) ?? 0
-      return id == 0 ? "" : id.toHexDotFormat(numberOfBytes: 8)
+      return id == 0 ? "" : id.dotHex(numberOfBytes: 8)!
     case .speedConstraintDPType0, .speedConstraintDPType1, .speedConstraintDPType2, .speedConstraintDPType3, .speedConstraintDPType4, .speedConstraintDPType5, .speedConstraintDPType6, .speedConstraintDPType7, .speedConstraintDPType8, .speedConstraintDPType9, .speedConstraintDPType10, .speedConstraintDPType11, .speedConstraintDPType12, .speedConstraintDPType13, .speedConstraintDPType14, .speedConstraintDPType15:
       let index = (property.rawValue - LayoutInspectorProperty.speedConstraintDPType0.rawValue) / 2 + 1
       return getSpeedConstraintDPType(number: index)!.title
     case .speedConstraintDPValue0, .speedConstraintDPValue1, .speedConstraintDPValue2, .speedConstraintDPValue3, .speedConstraintDPValue4, .speedConstraintDPValue5, .speedConstraintDPValue6, .speedConstraintDPValue7, .speedConstraintDPValue8, .speedConstraintDPValue9, .speedConstraintDPValue10, .speedConstraintDPValue11, .speedConstraintDPValue12, .speedConstraintDPValue13, .speedConstraintDPValue14, .speedConstraintDPValue15:
       let index = (property.rawValue - LayoutInspectorProperty.speedConstraintDPValue0.rawValue) / 2 + 1
       let value = Double(float16: getSpeedConstraintDPValue(number: index)!)
-      return "\(UnitSpeed.convert(fromValue: value, fromUnits: UnitSpeed.defaultValueScaleSpeed, toUnits: appNode!.unitsScaleSpeed))"
+      return "\(SGUnitSpeed.convert(fromValue: value, fromUnits: defaultValueScaleSpeed, toUnits: appNode!.unitsScaleSpeed))"
 
     case .speedConstraintDNType0, .speedConstraintDNType1, .speedConstraintDNType2, .speedConstraintDNType3, .speedConstraintDNType4, .speedConstraintDNType5, .speedConstraintDNType6, .speedConstraintDNType7, .speedConstraintDNType8, .speedConstraintDNType9, .speedConstraintDNType10, .speedConstraintDNType11, .speedConstraintDNType12, .speedConstraintDNType13, .speedConstraintDNType14, .speedConstraintDNType15:
       let index = (property.rawValue - LayoutInspectorProperty.speedConstraintDNType0.rawValue) / 2 + 1
@@ -1332,15 +1334,15 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
     case .speedConstraintDNValue0, .speedConstraintDNValue1, .speedConstraintDNValue2, .speedConstraintDNValue3, .speedConstraintDNValue4, .speedConstraintDNValue5, .speedConstraintDNValue6, .speedConstraintDNValue7, .speedConstraintDNValue8, .speedConstraintDNValue9, .speedConstraintDNValue10, .speedConstraintDNValue11, .speedConstraintDNValue12, .speedConstraintDNValue13, .speedConstraintDNValue14, .speedConstraintDNValue15:
       let index = (property.rawValue - LayoutInspectorProperty.speedConstraintDNValue0.rawValue) / 2 + 1
       let value = Double(float16: getSpeedConstraintDNValue(number: index)!)
-      return "\(UnitSpeed.convert(fromValue: value, fromUnits: UnitSpeed.defaultValueScaleSpeed, toUnits: appNode!.unitsScaleSpeed))"
+      return "\(SGUnitSpeed.convert(fromValue: value, fromUnits: defaultValueScaleSpeed, toUnits: appNode!.unitsScaleSpeed))"
     case .sw1CommandedThrownEventId, .sw2CommandedThrownEventId, .sw3CommandedThrownEventId, .sw4CommandedThrownEventId:
       let index = 1 + property.rawValue - LayoutInspectorProperty.sw1CommandedThrownEventId.rawValue
       let id = getCommandedThrownEventId(turnoutNumber: index) ?? 0
-      return id == 0 ? "" : id.toHexDotFormat(numberOfBytes: 8)
+      return id == 0 ? "" : id.dotHex(numberOfBytes: 8)!
     case .sw1CommandedClosedEventId, .sw2CommandedClosedEventId, .sw3CommandedClosedEventId, .sw4CommandedClosedEventId:
       let index = 1 + property.rawValue - LayoutInspectorProperty.sw1CommandedThrownEventId.rawValue
       let id = getCommandedClosedEventId(turnoutNumber: index) ?? 0
-      return id == 0 ? "" : id.toHexDotFormat(numberOfBytes: 8)
+      return id == 0 ? "" : id.dotHex(numberOfBytes: 8)!
     }
     
   }
@@ -1380,21 +1382,21 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
     case .trackGauge:
       trackGauge = TrackGauge(title: string)!
     case .lengthRoute1, .leftDivergingRoute, .rightThroughRoute, .yLeftDivergingRoute, .leftCurvedSmallerRadiusRoute, .rightCurvedLargerRadiusRoute, .way3LeftDivergingRoute:
-      setDimension(routeNumber: 1, value: UnitLength.convert(fromValue: Double(string)!, fromUnits: appNode!.unitsActualLength, toUnits: UnitLength.defaultValueActualLength))
+      setDimension(routeNumber: 1, value: SGUnitLength.convert(fromValue: Double(string)!, fromUnits: appNode!.unitsActualLength, toUnits: .centimeters))
     case .lengthRoute2, .leftThroughRoute, .rightDivergingRoute, .yRightDivergingRoute, .way3ThroughRoute, .leftCurvedLargerRadiusRoute, .rightCurvedSmallerRadiusRoute:
-      setDimension(routeNumber: 2, value: UnitLength.convert(fromValue: Double(string)!, fromUnits: appNode!.unitsActualLength, toUnits: UnitLength.defaultValueActualLength))
+      setDimension(routeNumber: 2, value: SGUnitLength.convert(fromValue: Double(string)!, fromUnits: appNode!.unitsActualLength, toUnits: .centimeters))
     case .lengthRoute3, .way3RightDivergingRoute:
-      setDimension(routeNumber: 3, value: UnitLength.convert(fromValue: Double(string)!, fromUnits: appNode!.unitsActualLength, toUnits: UnitLength.defaultValueActualLength))
+      setDimension(routeNumber: 3, value: SGUnitLength.convert(fromValue: Double(string)!, fromUnits: appNode!.unitsActualLength, toUnits: .centimeters))
     case .lengthRoute4:
-      setDimension(routeNumber: 4, value: UnitLength.convert(fromValue: Double(string)!, fromUnits: appNode!.unitsActualLength, toUnits: UnitLength.defaultValueActualLength))
+      setDimension(routeNumber: 4, value: SGUnitLength.convert(fromValue: Double(string)!, fromUnits: appNode!.unitsActualLength, toUnits: .centimeters))
     case .lengthRoute5:
-      setDimension(routeNumber: 5, value: UnitLength.convert(fromValue: Double(string)!, fromUnits: appNode!.unitsActualLength, toUnits: UnitLength.defaultValueActualLength))
+      setDimension(routeNumber: 5, value: SGUnitLength.convert(fromValue: Double(string)!, fromUnits: appNode!.unitsActualLength, toUnits: .centimeters))
     case .lengthRoute6:
-      setDimension(routeNumber: 6, value: UnitLength.convert(fromValue: Double(string)!, fromUnits: appNode!.unitsActualLength, toUnits: UnitLength.defaultValueActualLength))
+      setDimension(routeNumber: 6, value: SGUnitLength.convert(fromValue: Double(string)!, fromUnits: appNode!.unitsActualLength, toUnits: .centimeters))
     case .lengthRoute7:
-      setDimension(routeNumber: 7, value: UnitLength.convert(fromValue: Double(string)!, fromUnits: appNode!.unitsActualLength, toUnits: UnitLength.defaultValueActualLength))
+      setDimension(routeNumber: 7, value: SGUnitLength.convert(fromValue: Double(string)!, fromUnits: appNode!.unitsActualLength, toUnits: .centimeters))
     case .lengthRoute8:
-      setDimension(routeNumber: 8, value: UnitLength.convert(fromValue: Double(string)!, fromUnits: appNode!.unitsActualLength, toUnits: UnitLength.defaultValueActualLength))
+      setDimension(routeNumber: 8, value: SGUnitLength.convert(fromValue: Double(string)!, fromUnits: appNode!.unitsActualLength, toUnits: .centimeters))
     case .link:
       if let link = appNode?.getLink(name: string) {
         linkId = link.nodeId
@@ -1413,11 +1415,11 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
     case .sensorType:
       sensorType = SensorType(title: string)!
     case .sensorPosition:
-      sensorPosition = UnitLength.convert(fromValue: Double(string)!, fromUnits: appNode!.unitsActualDistance, toUnits: UnitLength.defaultValueActualDistance)
+      sensorPosition = SGUnitLength.convert(fromValue: Double(string)!, fromUnits: appNode!.unitsActualDistance, toUnits: .centimeters)
     case .sensorActivateLatency:
-      sensorActivateLatency = UnitTime.convert(fromValue: Double(string)!, fromUnits: appNode!.unitsTime, toUnits: UnitTime.defaultValue)
+      sensorActivateLatency = SGUnitTime.convert(fromValue: Double(string)!, fromUnits: appNode!.unitsTime, toUnits: defaultValueTime)
     case .sensorDeactivateLatency:
-      sensorDeactivateLatency = UnitTime.convert(fromValue: Double(string)!, fromUnits: appNode!.unitsTime, toUnits: UnitTime.defaultValue)
+      sensorDeactivateLatency = SGUnitTime.convert(fromValue: Double(string)!, fromUnits: appNode!.unitsTime, toUnits: defaultValueTime)
     case .blockDoNotUseForSpeedProfile, .sensorDoNotUseForSpeedProfile:
       doNotUseForSpeedProfiling = string == "true"
     case .signalType:
@@ -1425,7 +1427,7 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
     case .signalRouteDirection:
       signalRouteDirection = RouteDirection(title: string)!
     case .signalPosition:
-      signalPosition = UnitLength.convert(fromValue: Double(string)!, fromUnits: appNode!.unitsActualDistance, toUnits: UnitLength.defaultValueActualDistance)
+      signalPosition = SGUnitLength.convert(fromValue: Double(string)!, fromUnits: appNode!.unitsActualDistance, toUnits: .centimeters)
     case .enterDetectionZoneEventId:
       enterDetectionZoneEventId = UInt64(dotHex: string, numberOfBytes: 8) ?? 0
       eventChanged = true
@@ -1445,6 +1447,7 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
       trackFaultClearedEventId = UInt64(dotHex: string, numberOfBytes: 8) ?? 0
       eventChanged = true
     case .locationServicesEventId:
+      let x = UInt64(dotHex: string, numberOfBytes: 8)
       locationServicesEventId = UInt64(dotHex: string, numberOfBytes: 8) ?? 0
       eventChanged = true
     case .sw1ThrowEventId:
@@ -1537,14 +1540,14 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
       setSpeedConstraintDPType(number: index, constraintType: SpeedConstraintType(title: string)!)
     case .speedConstraintDPValue0, .speedConstraintDPValue1, .speedConstraintDPValue2, .speedConstraintDPValue3, .speedConstraintDPValue4, .speedConstraintDPValue5, .speedConstraintDPValue6, .speedConstraintDPValue7, .speedConstraintDPValue8, .speedConstraintDPValue9, .speedConstraintDPValue10, .speedConstraintDPValue11, .speedConstraintDPValue12, .speedConstraintDPValue13, .speedConstraintDPValue14, .speedConstraintDPValue15:
       let index = (property.rawValue - LayoutInspectorProperty.speedConstraintDPValue0.rawValue) / 2 + 1
-      let value = UnitSpeed.convert(fromValue: Double(string)!, fromUnits: appNode!.unitsScaleSpeed, toUnits: UnitSpeed.defaultValueScaleSpeed)
+      let value = SGUnitSpeed.convert(fromValue: Double(string)!, fromUnits: appNode!.unitsScaleSpeed, toUnits: defaultValueScaleSpeed)
       setSpeedConstraintDPValue(number: index, constraint: value.float16)
     case .speedConstraintDNType0, .speedConstraintDNType1, .speedConstraintDNType2, .speedConstraintDNType3, .speedConstraintDNType4, .speedConstraintDNType5, .speedConstraintDNType6, .speedConstraintDNType7, .speedConstraintDNType8, .speedConstraintDNType9, .speedConstraintDNType10, .speedConstraintDNType11, .speedConstraintDNType12, .speedConstraintDNType13, .speedConstraintDNType14, .speedConstraintDNType15:
       let index = (property.rawValue - LayoutInspectorProperty.speedConstraintDNType0.rawValue) / 2 + 1
       setSpeedConstraintDNType(number: index, constraintType: SpeedConstraintType(title: string)!)
     case .speedConstraintDNValue0, .speedConstraintDNValue1, .speedConstraintDNValue2, .speedConstraintDNValue3, .speedConstraintDNValue4, .speedConstraintDNValue5, .speedConstraintDNValue6, .speedConstraintDNValue7, .speedConstraintDNValue8, .speedConstraintDNValue9, .speedConstraintDNValue10, .speedConstraintDNValue11, .speedConstraintDNValue12, .speedConstraintDNValue13, .speedConstraintDNValue14, .speedConstraintDNValue15:
       let index = (property.rawValue - LayoutInspectorProperty.speedConstraintDNValue0.rawValue) / 2 + 1
-      let value = UnitSpeed.convert(fromValue: Double(string)!, fromUnits: appNode!.unitsScaleSpeed, toUnits: UnitSpeed.defaultValueScaleSpeed)
+      let value = SGUnitSpeed.convert(fromValue: Double(string)!, fromUnits: appNode!.unitsScaleSpeed, toUnits: defaultValueScaleSpeed)
       setSpeedConstraintDNValue(number: index, constraint: value.float16)
     case .sw1CommandedClosedEventId, .sw2CommandedClosedEventId, .sw3CommandedClosedEventId, .sw4CommandedClosedEventId:
       let index = 1 + property.rawValue - LayoutInspectorProperty.sw1CommandedClosedEventId.rawValue

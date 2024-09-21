@@ -1,18 +1,7 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
-    "Brz-U7-dY1.title" : {
-      "comment" : "Class = \"NSWindow\"; title = \"Window\"; ObjectID = \"Brz-U7-dY1\";",
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Window"
-          }
-        }
-      }
-    }
+
   },
   "version" : "1.0"
 }

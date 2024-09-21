@@ -6,6 +6,8 @@
 //
 
 import Foundation
+import SGUnitConversion
+import SGInteger
 
 private enum IdentifyDecoderState {
   case idle
@@ -860,7 +862,7 @@ public class Decoder : NSObject {
         return item.title
       }
     case .dWordHex:
-      return UInt32(bigEndianData: values.reversed())!.toHex(numberOfDigits: 8)
+      return UInt32(bigEndianData: values.reversed())!.hex(numberOfBytes: 4)!
     case .analogModeEnable:
       return values[1] == definition.mask![1] ? "true" : "false"
     case .manufacturerName:
@@ -923,18 +925,18 @@ public class Decoder : NSObject {
       doubleValue = (Double(values[0]) - 16.0) * infoFactor
       symbol = String(localized:"dB")
     case .frequency:
-      doubleValue = UnitFrequency.convert(fromValue: doubleValue, fromUnits: .hertz, toUnits: appNode.unitsFrequency)
+      doubleValue = SGUnitFrequency.convert(fromValue: doubleValue, fromUnits: .hertz, toUnits: appNode.unitsFrequency)
       symbol = appNode.unitsFrequency.symbol
     case .percentage:
       symbol = String(localized:"%")
     case .temperature:
-      doubleValue = UnitTemperature.convert(fromValue: doubleValue, fromUnits: .celsius, toUnits: appNode.unitsTemperature)
+      doubleValue = SGUnitTemperature.convert(fromValue: doubleValue, fromUnits: .celsius, toUnits: appNode.unitsTemperature)
       symbol = appNode.unitsTemperature.symbol
     case .time:
-      doubleValue = UnitTime.convert(fromValue: doubleValue, fromUnits: .seconds, toUnits: appNode.unitsTime)
+      doubleValue = SGUnitTime.convert(fromValue: doubleValue, fromUnits: .seconds, toUnits: appNode.unitsTime)
       symbol = appNode.unitsTime.symbol
     case .voltage:
-      doubleValue = UnitVoltage.convert(fromValue: doubleValue, fromUnits: .volts, toUnits: appNode.unitsVoltage)
+      doubleValue = SGUnitVoltage.convert(fromValue: doubleValue, fromUnits: .volts, toUnits: appNode.unitsVoltage)
       symbol = appNode.unitsVoltage.symbol
     case .esuFunctionCategory:
       return ESUFunctionIconCategory(rawValue: values[0])!.title

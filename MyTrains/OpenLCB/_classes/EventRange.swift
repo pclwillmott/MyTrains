@@ -37,7 +37,7 @@ public class EventRange {
     // The rather complicated math is to check that the mask is an integer power of 2 minus 1
     guard mask != 0 && (log10(Double(mask + 1)) / log10(2.0)).truncatingRemainder(dividingBy: 1) == 0.0 else {
       #if DEBUG
-      debugLog("EventRange.init: mask - 0x\(mask.toHex(numberOfDigits: 16)) remainder - \((log10(Double(mask + 1)) / log10(2.0)).truncatingRemainder(dividingBy: 1))")
+      debugLog("EventRange.init: mask - 0x\(mask.hex(numberOfBytes: 8)!) remainder - \((log10(Double(mask + 1)) / log10(2.0)).truncatingRemainder(dividingBy: 1))")
       #endif
       return nil
     }

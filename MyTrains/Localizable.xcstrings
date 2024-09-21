@@ -59,12 +59,6 @@
         }
       }
     },
-    "°C" : {
-      "comment" : "Used for the abbreviation of Degrees Celsius"
-    },
-    "°F" : {
-      "comment" : "Used for the abbreviation of Degrees Fahrenheit"
-    },
     "0°" : {
       "comment" : "Used to indicate a rotation angle in degrees",
       "localizations" : {
@@ -450,9 +444,6 @@
         }
       }
     },
-    "A" : {
-      "comment" : "Used for the abbreviation of Ampere"
-    },
     "A 3-way turnout is controlled with two switches. Switch #1 is the switch nearest the toe of the turnout. Select the applicable turnout control methods - manual, solenoid, or slow motion. The application requires this information for timing purposes. If the turnout is to be controlled by the application then the enter the applicable event ids for the throw and close actions. These events will be sent to the node controlling the switch when the application needs to change the selected route throgh the turnout. The thrown and closed events are sent by a node monitoring the current state of the turnout to tell the application that a throw or close action was successful. If no node is monitoring the state of the turnout then leave these events blank and the application will assume that all throw and close actions are always successful. " : {
 
     },
@@ -764,9 +755,6 @@
           }
         }
       }
-    },
-    "Ampere" : {
-
     },
     "Analog Function Group" : {
 
@@ -1478,10 +1466,8 @@
         }
       }
     },
-    "Celsius" : {
-
-    },
     "Centimeters" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -1492,6 +1478,7 @@
       }
     },
     "Centimeters/Second" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -1640,12 +1627,6 @@
           }
         }
       }
-    },
-    "cm" : {
-      "comment" : "Used for the abbreviation of centimeters"
-    },
-    "cm/s" : {
-      "comment" : "Used for the abbreviation of centimeters per second"
     },
     "Coast Mode: Decrease sound acceleration by the following value" : {
 
@@ -3965,9 +3946,6 @@
     "Fade-out time of light effects" : {
 
     },
-    "Fahrenheit" : {
-
-    },
     "Fan" : {
 
     },
@@ -4032,6 +4010,7 @@
       }
     },
     "Feet" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -4048,6 +4027,7 @@
       }
     },
     "Feet/Second" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -4182,12 +4162,6 @@
     },
     "Front Light [2]" : {
 
-    },
-    "ft." : {
-      "comment" : "Used for the abbreviation of feet (length)"
-    },
-    "ft/s" : {
-      "comment" : "Used for the abbreviation of feet (length) per second"
     },
     "Full Speed back EMF sampling period" : {
 
@@ -4685,9 +4659,6 @@
     "Gyra light" : {
 
     },
-    "h" : {
-      "comment" : "Used for the abbreviation of hours"
-    },
     "Handbrake" : {
 
     },
@@ -4741,9 +4712,6 @@
 
     },
     "Heavy Load: Increase sound acceleration by the following value" : {
-
-    },
-    "Hertz" : {
 
     },
     "Hex" : {
@@ -4833,12 +4801,6 @@
           }
         }
       }
-    },
-    "Hours" : {
-
-    },
-    "Hz" : {
-      "comment" : "Used for the abbreviation of Hertz"
     },
     "ICE" : {
 
@@ -4935,10 +4897,8 @@
         }
       }
     },
-    "in." : {
-      "comment" : "Used for the abbreviation of inches"
-    },
     "Inches" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -4955,6 +4915,7 @@
       }
     },
     "Inches/Second" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -5104,9 +5065,6 @@
     "Inverted" : {
 
     },
-    "ips" : {
-      "comment" : "Used for the abbreviation of inches per second"
-    },
     "Iran" : {
       "comment" : "This is the name of a country."
     },
@@ -5122,25 +5080,14 @@
     "Japan" : {
       "comment" : "This is the name of a country."
     },
-    "K" : {
-      "comment" : "Used for the abbreviation of Kelvin"
-    },
     "Keep constant speed during Coast Mode" : {
 
     },
     "Keep constant speed during Heavy Load" : {
 
     },
-    "Kelvin" : {
-
-    },
-    "kHz" : {
-      "comment" : "Used for the abbreviation of Kilohertz"
-    },
-    "Kilohertz" : {
-
-    },
     "Kilometers" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -5157,6 +5104,7 @@
       }
     },
     "Kilometers/Hour" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -5174,12 +5122,6 @@
     },
     "KISS" : {
 
-    },
-    "km" : {
-      "comment" : "Used for the abbreviation of kilometers"
-    },
-    "km/h" : {
-      "comment" : "Used for the abbreviation of kilometers per hour"
     },
     "KM1 (other)" : {
 
@@ -5709,17 +5651,8 @@
     "Low energy light" : {
 
     },
-    "m" : {
-      "comment" : "Used for the abbreviation of meters"
-    },
-    "m/s" : {
-      "comment" : "Used for the abbreviation of meters per second"
-    },
     "M4 Protocol" : {
 
-    },
-    "mA" : {
-      "comment" : "Used for the abbreviation of milliampere"
     },
     "Machine Room Lights" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
@@ -5906,7 +5839,7 @@
 
     },
     "Maximum Speed (%%UNITS_SCALE_SPEED%%)" : {
-      "comment" : "This is used for the title of a text field."
+      "comment" : "This is used for the title of a label.\nThis is used for the title of a text field."
     },
     "Maximum speed at any time" : {
 
@@ -5935,9 +5868,6 @@
     "Maximum steam chuff duration" : {
 
     },
-    "Megahertz" : {
-
-    },
     "Memory Configuration Protocol" : {
 
     },
@@ -5945,6 +5875,7 @@
 
     },
     "Meters" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -5955,6 +5886,7 @@
       }
     },
     "Meters/Second" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -5970,19 +5902,11 @@
     "MFX/M4 Track Protocol" : {
 
     },
-    "MHz" : {
-      "comment" : "Used for the abbreviation of Megahertz"
-    },
-    "mi." : {
-      "comment" : "Used for the abbreviation of miles"
-    },
-    "mi.ch" : {
-      "comment" : "Used for the abbreviation of miles.chains"
-    },
     "Middle Frame" : {
 
     },
     "Miles" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -5999,6 +5923,7 @@
       }
     },
     "Miles.Chains" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -6015,6 +5940,7 @@
       }
     },
     "Miles/Hour" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -6030,10 +5956,8 @@
         }
       }
     },
-    "Milliampere" : {
-
-    },
     "Millimeters" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -6048,12 +5972,6 @@
           }
         }
       }
-    },
-    "Milliseconds" : {
-
-    },
-    "Millivolts" : {
-
     },
     "Minimize" : {
       "comment" : "Used for a menu title"
@@ -6087,9 +6005,6 @@
     },
     "Mint" : {
       "comment" : "The name of a color."
-    },
-    "mm" : {
-      "comment" : "Used for the abbreviation of millimeters"
     },
     "Model" : {
 
@@ -6169,12 +6084,6 @@
         }
       }
     },
-    "mph" : {
-      "comment" : "Used for the abbreviation of miles per hour"
-    },
-    "ms" : {
-      "comment" : "Used for the abbreviation of milliseconds"
-    },
     "Mute" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
       "localizations" : {
@@ -6191,9 +6100,6 @@
           }
         }
       }
-    },
-    "mV" : {
-      "comment" : "Used for the abbreviation of millivolt"
     },
     "MyTrains" : {
       "comment" : "Used for a menu title"
@@ -6411,7 +6317,7 @@
 
     },
     "Number of Samples" : {
-      "comment" : "This is used for the title of text field."
+      "comment" : "This is used for the title of a label.\nThis is used for the title of text field."
     },
     "Number of sampling points." : {
       "comment" : "This is used for a tooltip."
@@ -7618,6 +7524,7 @@
     },
     "s" : {
       "comment" : "Used for the abbreviation of seconds",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -7724,9 +7631,6 @@
     "Second Address for Motorola and Selectrix" : {
 
     },
-    "Seconds" : {
-
-    },
     "Select" : {
       "comment" : "Used for the Select Layout button title",
       "localizations" : {
@@ -7748,7 +7652,7 @@
       "comment" : "Used for a menu title"
     },
     "Select Layout" : {
-      "comment" : "Used for a menu title\nUsed for the title of the Select Layout window",
+      "comment" : "Used for a menu title\nUsed for the title of the Select Layout box\nUsed for the title of the Select Layout window",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -9692,8 +9596,11 @@
     "TX34_E" : {
 
     },
+    "TX34_F" : {
+
+    },
     "Type" : {
-      "comment" : "This is used for the title of a combo box that the user selects the type of sensor."
+      "comment" : "This is used for the title of a combo box that the user selects the signal type.\nThis is used for the title of a combo box that the user selects the type of sensor."
     },
     "Type of sensor." : {
       "comment" : "This is used for a tooltip."
@@ -9965,9 +9872,6 @@
         }
       }
     },
-    "V" : {
-      "comment" : "Used for the abbreviation of volt"
-    },
     "Value" : {
 
     },
@@ -10150,9 +10054,6 @@
 
     },
     "Voltage difference indicating an ABC brake section" : {
-
-    },
-    "Volts" : {
 
     },
     "Volume" : {

@@ -50,10 +50,10 @@ class ViewNodeInfoVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate {
     nodeId = configurationTool.nodeId
     
     if node.userNodeName != "" {
-      self.view.window?.title = "\(node.userNodeName) (\(node.nodeId.toHexDotFormat(numberOfBytes: 6)))"
+      self.view.window?.title = "\(node.userNodeName) (\(node.nodeId.dotHex(numberOfBytes: 6)))"
     }
     else {
-      self.view.window?.title = "\(node.manufacturerName) - \(node.nodeModelName) (\(node.nodeId.toHexDotFormat(numberOfBytes: 6)))"
+      self.view.window?.title = "\(node.manufacturerName) - \(node.nodeModelName) (\(node.nodeId.dotHex(numberOfBytes: 6)))"
     }
     
     tableView.dataSource = tableViewDS
@@ -97,9 +97,9 @@ class ViewNodeInfoVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate {
     
     txtWriteLengths.string = node!.configurationOptions!.writeLengthsAsString
     
-    lblLowestAddressSpace.stringValue = "0x\(node!.configurationOptions!.lowestAddressSpace.toHex(numberOfDigits: 2))"
+    lblLowestAddressSpace.stringValue = "0x\(node!.configurationOptions!.lowestAddressSpace.hex())"
     
-    lblHighestAddressSpace.stringValue = "0x\(node!.configurationOptions!.highestAddressSpace.toHex(numberOfDigits: 2))"
+    lblHighestAddressSpace.stringValue = "0x\(node!.configurationOptions!.highestAddressSpace.hex())"
     
     lblName.stringValue = node!.configurationOptions!.name
     

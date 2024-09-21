@@ -7,6 +7,7 @@
 
 import Foundation
 import AppKit
+import SGInteger
 
 class SlotViewVC : MyTrainsViewController, OpenLCBLocoNetMonitorDelegate {
   
@@ -36,7 +37,7 @@ class SlotViewVC : MyTrainsViewController, OpenLCBLocoNetMonitorDelegate {
     self.view.window?.title = "LocoNet Slot Monitor"
     
     if let monitorNode {
-      self.view.window?.title = "\(self.view.window!.title) (\(monitorNode.nodeId.toHexDotFormat(numberOfBytes: 6)))"
+      self.view.window?.title = "\(self.view.window!.title) (\(monitorNode.nodeId.dotHex(numberOfBytes: 6)))"
     }
     
     monitorNode?.delegate = self

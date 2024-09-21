@@ -7,6 +7,7 @@
 
 import Foundation
 import AppKit
+import SGUnitConversion
 
 private enum SpeedProfilerState {
 
@@ -989,7 +990,7 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBThrottleDelegate, NSTableV
       
       lblStatus?.stringValue = "Sample #\(nextSampleNumber): getting up to speed"
       
-      let speed = Float(UnitSpeed.convert(fromValue: sampleTable[Int(nextSampleNumber)][0], fromUnits: .defaultValueScaleSpeed, toUnits: .metersPerSecond) * (isForward ? 1.0 : -1.0))
+      let speed = Float(SGUnitSpeed.convert(fromValue: sampleTable[Int(nextSampleNumber)][0], fromUnits: defaultValueScaleSpeed, toUnits: .metersPerSecond) * (isForward ? 1.0 : -1.0))
       
       throttle.speed = speed
     }
@@ -999,7 +1000,7 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBThrottleDelegate, NSTableV
       
       lblStatus?.stringValue = "Sample #\(nextSampleNumber): getting up to speed"
       
-      throttle.speed = Float(UnitSpeed.convert(fromValue: sampleTable[Int(nextSampleNumber)][0], fromUnits: .defaultValueScaleSpeed, toUnits: .metersPerSecond) * (isForward ? 1.0 : -1.0))
+      throttle.speed = Float(SGUnitSpeed.convert(fromValue: sampleTable[Int(nextSampleNumber)][0], fromUnits: defaultValueScaleSpeed, toUnits: .metersPerSecond) * (isForward ? 1.0 : -1.0))
       
     }
     
@@ -1223,25 +1224,25 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBThrottleDelegate, NSTableV
     case columnIds[0]:
       text.stringValue = "\(row)"
     case columnIds[1]:
-      let value = UnitSpeed.convert(fromValue: item[0], fromUnits: .defaultValueScaleSpeed, toUnits: appNode!.unitsScaleSpeed)
+      let value = SGUnitSpeed.convert(fromValue: item[0], fromUnits: defaultValueScaleSpeed, toUnits: appNode!.unitsScaleSpeed)
       text.stringValue = formatter.string(from: NSNumber(value: value)) ?? ""
     case columnIds[2]:
-      let value = UnitSpeed.convert(fromValue: item[1], fromUnits: .defaultValueScaleSpeed, toUnits: appNode!.unitsScaleSpeed)
+      let value = SGUnitSpeed.convert(fromValue: item[1], fromUnits: defaultValueScaleSpeed, toUnits: appNode!.unitsScaleSpeed)
       text.stringValue = (item[1] == 0.0 && row > 0) ? "?" : formatter.string(from: NSNumber(value: value)) ?? ""
       isEditable = true
       text.delegate = self
       text.tag = 1000 + row
     case columnIds[3]:
-      let value = UnitSpeed.convert(fromValue: item[1] - item[0], fromUnits: .defaultValueScaleSpeed, toUnits: appNode!.unitsScaleSpeed)
+      let value = SGUnitSpeed.convert(fromValue: item[1] - item[0], fromUnits: defaultValueScaleSpeed, toUnits: appNode!.unitsScaleSpeed)
       text.stringValue = (item[1] == 0.0 && row > 0) ? "?" :  formatter.string(from: NSNumber(value: value)) ?? ""
     case columnIds[4]:
-      let value = UnitSpeed.convert(fromValue: item[2], fromUnits: .defaultValueScaleSpeed, toUnits: appNode!.unitsScaleSpeed)
+      let value = SGUnitSpeed.convert(fromValue: item[2], fromUnits: defaultValueScaleSpeed, toUnits: appNode!.unitsScaleSpeed)
       text.stringValue = (item[2] == 0.0 && row > 0) ? "?" :  formatter.string(from: NSNumber(value: value)) ?? ""
       isEditable = true
       text.delegate = self
       text.tag = 2000 + row
     case columnIds[5]:
-      let value = UnitSpeed.convert(fromValue: item[2] - item[0], fromUnits: .defaultValueScaleSpeed, toUnits: appNode!.unitsScaleSpeed)
+      let value = SGUnitSpeed.convert(fromValue: item[2] - item[0], fromUnits: defaultValueScaleSpeed, toUnits: appNode!.unitsScaleSpeed)
       text.stringValue = (item[2] == 0.0 && row > 0) ? "?" :  formatter.string(from: NSNumber(value: value)) ?? ""
     default:
       break
@@ -1288,7 +1289,7 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBThrottleDelegate, NSTableV
         }
         else {
           if let value = Double(trimmed), value >= 0.0 {
-            sampleTable[row][column] = UnitSpeed.convert(fromValue: value, fromUnits: appNode!.unitsScaleSpeed, toUnits: .defaultValueScaleSpeed)
+            sampleTable[row][column] = SGUnitSpeed.convert(fromValue: value, fromUnits: appNode!.unitsScaleSpeed, toUnits: defaultValueScaleSpeed)
           }
           else {
             isValid = false
@@ -1386,7 +1387,7 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBThrottleDelegate, NSTableV
         currentDirection = profile.locomotiveFacingDirection == .next ? .next : .previous
       }
       let sample = profile.speedProfilerMode == .sampleAllSpeeds ? profile.startSampleNumber : profile.commandedSampleNumber
-      throttle.speed = Float(UnitSpeed.convert(fromValue: sampleTable[Int(sample)][0] * (isForward ? 1.0 : -1.0), fromUnits: .defaultValueScaleSpeed, toUnits: .metersPerSecond))
+      throttle.speed = Float(SGUnitSpeed.convert(fromValue: sampleTable[Int(sample)][0] * (isForward ? 1.0 : -1.0), fromUnits: defaultValueScaleSpeed, toUnits: .metersPerSecond))
 
     }
     
@@ -1462,7 +1463,7 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBThrottleDelegate, NSTableV
         else if state == .sampling && takeSampleNow {
           let distance = distanceCompleted - sampleStartPosition
           let time = message.timeStamp - sampleStartTime
-          let speed = UnitSpeed.convert(fromValue: distance / time, fromUnits: .centimetersPerSecond, toUnits: .defaultValueScaleSpeed) * layout.scale.ratio
+          let speed = SGUnitSpeed.convert(fromValue: distance / time, fromUnits: .centimetersPerSecond, toUnits: defaultValueScaleSpeed) * layout.scale.ratio
           sampleTable[Int(nextSampleNumber)][isForward ? 1 : 2] = speed
           tblValuesTableView?.reloadData()
           nextSampleNumber += 1
@@ -1485,7 +1486,7 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBThrottleDelegate, NSTableV
           takeSampleNow = false
           let distance = distanceCompleted - sampleStartPosition
           let time = message.timeStamp - sampleStartTime
-          let speed = UnitSpeed.convert(fromValue: distance / time, fromUnits: .centimetersPerSecond, toUnits: appNode!.unitsScaleSpeed) * layout.scale.ratio
+          let speed = SGUnitSpeed.convert(fromValue: distance / time, fromUnits: .centimetersPerSecond, toUnits: appNode!.unitsScaleSpeed) * layout.scale.ratio
           totalSpeed += speed
           averageSamples += 1
           var result = "Last Sample: \(formatter.string(from: NSNumber(value: speed))!) \(appNode!.unitsScaleSpeed.symbol)"

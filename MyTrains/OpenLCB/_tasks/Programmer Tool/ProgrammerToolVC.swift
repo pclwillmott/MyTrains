@@ -748,12 +748,12 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
       text.delegate = self
       text.tag = 100000 + row * 10 + 0
     case columnIds[4]:
-      text.stringValue = "\(value.toBinary(numberOfDigits: 8))"
+      text.stringValue = "\(value.binary())"
       isEditable = true
       text.delegate = self
       text.tag = 100000 + row * 10 + 1
     case columnIds[5]:
-      text.stringValue = "\(value.toHex(numberOfDigits: 2))"
+      text.stringValue = "\(value.hex())"
       isEditable = true
       text.delegate = self
       text.tag = 100000 + row * 10 + 2

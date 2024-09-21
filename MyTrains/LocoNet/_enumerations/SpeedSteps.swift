@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Cocoa
 import AppKit
 
 public enum SpeedSteps : UInt8 {

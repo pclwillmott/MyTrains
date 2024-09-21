@@ -222,7 +222,7 @@ class CDIDataView: CDIView {
     case .eventid:
       
       if let eventId = UInt64(bigEndianData: bigEndianData) {
-        return eventId.toHexDotFormat(numberOfBytes: 8)
+        return eventId.dotHex(numberOfBytes: 8)
       }
       
     case .float:

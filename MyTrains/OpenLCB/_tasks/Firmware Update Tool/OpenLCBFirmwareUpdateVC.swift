@@ -33,7 +33,7 @@ class OpenLCBFirmwareUpdateVC: MyTrainsViewController, OpenLCBConfigurationToolD
     
     let title = node.userNodeName == "" ? "\(node.manufacturerName) - \(node.nodeModelName)" : node.userNodeName
     
-    self.view.window?.title = "Update Firmware - \(title) (\(node.nodeId.toHexDotFormat(numberOfBytes: 6)))"
+    self.view.window?.title = "Update Firmware - \(title) (\(node.nodeId.dotHex(numberOfBytes: 6)))"
     
     state = .idle
     

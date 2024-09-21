@@ -78,7 +78,7 @@ public class DecoderProductIdTableViewDS : NSObject, NSTableViewDataSource, NSTa
 
     switch columnName {
     case "ProductId":
-      text = "\(item.toHex(numberOfDigits: 8))"
+      text = "\(item.hex(numberOfBytes: 4)!)"
     default:
       break
     }

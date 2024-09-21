@@ -399,7 +399,7 @@ public class LayoutNode : OpenLCBNodeVirtual {
       if !item.isEliminated {
         operationalBlocks[item.nodeId] = item
       }
-      
+      /*
       if item.groupId != -1 {
         
         if var group = operationalGroups[item.groupId] {
@@ -412,7 +412,7 @@ public class LayoutNode : OpenLCBNodeVirtual {
         }
         
       }
-      
+      */
     }
     
     for (_, block) in operationalBlocks {
@@ -456,12 +456,12 @@ public class LayoutNode : OpenLCBNodeVirtual {
         continue
       }
       
-      debugLog("\(item.itemType.title) \(item.nodeId.toHexDotFormat(numberOfBytes: 6)) \(item.userNodeName)")
+      debugLog("\(item.itemType.title) \(item.nodeId.dotHex(numberOfBytes: 6)) \(item.userNodeName)")
       
       for point in item.itemType.pointsSet(orientation: item.orientation) {
         let nodeLink = item.nodeLinks[point]
         if let node = nodeLink.switchboardItem {
-          debugLog("  \(point): \(node.nodeId.toHexDotFormat(numberOfBytes: 6)) - \(node.userNodeName)")
+          debugLog("  \(point): \(node.nodeId.dotHex(numberOfBytes: 6)) - \(node.userNodeName)")
         }
       }
        

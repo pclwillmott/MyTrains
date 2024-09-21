@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SGUnitConversion
 
 public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetGatewayDelegate {
   
@@ -285,7 +286,7 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetGa
       return
     }
     
-    var step = UInt8(min(126, Int(round(UnitSpeed.convert(fromValue: Double(abs(setSpeed)), fromUnits: .metersPerSecond, toUnits: .milesPerHour)))))
+    var step = UInt8(min(126, Int(round(SGUnitSpeed.convert(fromValue: Double(abs(setSpeed)), fromUnits: .metersPerSecond, toUnits: .milesPerHour)))))
     
     // THIS SHOULD BE DONE WITH A SPEED TABLE
     

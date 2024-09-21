@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SGInteger
 
 public class LCCCANFrame : NSObject {
 
@@ -22,7 +23,7 @@ public class LCCCANFrame : NSObject {
     frame.removeLast()
     
     let section = frame.split(separator: "N", omittingEmptySubsequences: true)
-    
+    let x = UInt32(hex: "")
     header = UInt32(hex: section[0]) ?? 0
     
     if section.count == 2 {
@@ -189,13 +190,13 @@ public class LCCCANFrame : NSObject {
   public var dataAsHex : String {
     var result = ""
     for byte in data {
-      result += byte.toHex(numberOfDigits: 2)
+      result += byte.hex()
     }
     return result
   }
   
   public var message : String {
-    return ":X\(header.toHex(numberOfDigits: 8))N\(dataAsHex);"
+    return ":X\(header.hex(numberOfBytes: 4)!)N\(dataAsHex);"
   }
   
   public var frameType : OpenLCBCANFrameType {
@@ -244,9 +245,9 @@ public class LCCCANFrame : NSObject {
     
     var result = ""
     for byte in data {
-      result += " \(byte.toHex(numberOfDigits: 2))"
+      result += " \(byte.hex())"
     }
-    result = "[[\(header.toHex(numberOfDigits: 8))]\(result)"
+    result = "[[\(header.hex(numberOfBytes: 4)!)]\(result)"
     result += String(repeating: " ", count: max(0, 35 - result.count)) + "] "
     
     var showPayload = true
@@ -275,13 +276,13 @@ public class LCCCANFrame : NSObject {
                 result += "\"\(event.title)\""
               }
               else {
-                result += message.eventId!.toHexDotFormat(numberOfBytes: 8)
+                result += message.eventId!.dotHex(numberOfBytes: 8)!
               }
               showPayload = false
             }
             switch messageTypeIndicator {
             case .initializationCompleteSimpleSetSufficient, .initializationCompleteFullProtocolRequired, .verifiedNodeIDSimpleSetSufficient, .verifiedNodeIDFullProtocolRequired:
-              result += "\(UInt64(bigEndianData: message.payload)!.toHexDotFormat(numberOfBytes: 6))"
+              result += "\(UInt64(bigEndianData: message.payload)!.dotHex(numberOfBytes: 6))"
               showPayload = false
             case .datagramRejected:
               let numberOfBytesToAdd = 2 - min(2, message.payload.count)
@@ -291,7 +292,7 @@ public class LCCCANFrame : NSObject {
                 result += "\"\(error.title)\""
               }
               else {
-                result += "\(errorCode.toHex(numberOfDigits: 4))"
+                result += "\(errorCode.hex(numberOfBytes: 2)!)"
                 showPayload = false
               }
             default:
@@ -301,7 +302,7 @@ public class LCCCANFrame : NSObject {
         default:
           result += "\(message.canFrameType.title) "
           for byte in data {
-            result += "\(byte.toHex(numberOfDigits: 2)) "
+            result += "\(byte.hex()) "
           }
           showPayload = false
         }

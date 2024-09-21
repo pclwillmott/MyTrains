@@ -7822,7 +7822,7 @@ extension ProgrammerToolSettingsProperty {
 
     // ESU Smoke Unit
 
-    .smokeUnitTimeUntilPowerOff : (
+    .smokeSGUnitTimeUntilPowerOff : (
       title                : String(localized: "Time until smoke unit automatic power off"),
       section              : .esuSmokeUnit,
       controlType          : .textFieldWithSlider,
@@ -7860,7 +7860,7 @@ extension ProgrammerToolSettingsProperty {
       requiredCapabilities : [.esuSmokeUnit]
     ),
 
-    .smokeUnitTemperatureTrim : (
+    .smokeSGUnitTemperatureTrim : (
       title                : String(localized: "Temperature trim"),
       section              : .esuSmokeUnit,
       controlType          : .textFieldWithSlider,

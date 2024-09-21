@@ -401,9 +401,9 @@ public struct SoftUIntX {
     var result = lhs
     
     for index in 0 ... result.numberOfStorageUnitsUsed - 1 {
-      print(result.units[index].toHex(numberOfDigits: 16))
+      print(result.units[index].hex(numberOfBytes: 8)!)
       result.units[index] = ~result.units[index]
-      print(result.units[index].toHex(numberOfDigits: 16))
+      print(result.units[index].hex(numberOfBytes: 8)!)
     }
     
     return result

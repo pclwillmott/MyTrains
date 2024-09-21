@@ -220,7 +220,7 @@ class ConfigurationToolVC: MyTrainsViewController, OpenLCBConfigurationToolDeleg
     let title = node!.userNodeName == "" ? "\(node!.manufacturerName) - \(node!.nodeModelName)" : node!.userNodeName
     
     
-    self.view.window?.title = String(localized: "Configure \(title) (\(node!.nodeId.toHexDotFormat(numberOfBytes: 6)))")
+    self.view.window?.title = String(localized: "Configure \(title) (\(node!.nodeId.dotHex(numberOfBytes: 6)!))")
 
     if let configurationTool {
 
@@ -787,7 +787,7 @@ class ConfigurationToolVC: MyTrainsViewController, OpenLCBConfigurationToolDeleg
                 
                 message.payload.removeFirst(2)
                 
-                getNewEventIdTextField.stringValue = UInt64(bigEndianData: [UInt8](message.payload.prefix(8)))!.toHexDotFormat(numberOfBytes: 8)
+                getNewEventIdTextField.stringValue = UInt64(bigEndianData: [UInt8](message.payload.prefix(8)))!.dotHex(numberOfBytes: 8)!
                 
                 self.getNewEventIdTextField = nil
                 
@@ -904,7 +904,7 @@ class ConfigurationToolVC: MyTrainsViewController, OpenLCBConfigurationToolDeleg
                 }
                 else {
                   #if DEBUG
-                  debugLog("error: bad space or address - 0x\(thisSpace.toHex(numberOfDigits: 2))  0x\(startAddress.toHex(numberOfDigits: 8))")
+                  debugLog("error: bad space or address - 0x\(thisSpace.hex())  0x\(startAddress.hex(numberOfBytes: 4)!)")
                   #endif
                   state = .idle
                 }
@@ -957,7 +957,7 @@ class ConfigurationToolVC: MyTrainsViewController, OpenLCBConfigurationToolDeleg
                 
                 else {
                   #if DEBUG
-                  debugLog("bad address - \(startAddress.toHex(numberOfDigits: 8))")
+                  debugLog("bad address - \(startAddress.hex(numberOfBytes: 4)!)")
                   #endif
                   state = .idle
                 }
@@ -1372,7 +1372,7 @@ class ConfigurationToolVC: MyTrainsViewController, OpenLCBConfigurationToolDeleg
     
     var title = node!.userNodeName == "" ? "\(node!.manufacturerName) - \(node!.nodeModelName)" : node!.userNodeName
     
-    title = String(localized: "CDI: \(title) (\(node!.nodeId.toHexDotFormat(numberOfBytes: 6)))")
+    title = String(localized: "CDI: \(title) (\(node!.nodeId.dotHex(numberOfBytes: 6)!))")
 
     let vc = MyTrainsWindow.cdiTextView.viewController as? CDITextViewVC
     vc?.name = title

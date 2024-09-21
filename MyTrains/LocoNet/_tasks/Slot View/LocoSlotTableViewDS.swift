@@ -73,7 +73,7 @@ public class SlotTableViewDS : NSObject, NSTableViewDataSource, NSTableViewDeleg
     case ColumnIdentifiers.DirectionColumn:
       text = "\(item.direction.title)"
     case ColumnIdentifiers.ThrottleColumn:
-      text = "\(item.throttleID.toHex(numberOfDigits: 4))"
+      text = "\(item.throttleID.hex(numberOfBytes: 2)!)"
     case ColumnIdentifiers.LocomotiveColumn:
       text = "\(item.locomotiveName)"
     case ColumnIdentifiers.ConsistColumn:

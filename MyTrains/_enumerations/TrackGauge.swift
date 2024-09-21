@@ -7,6 +7,7 @@
 
 import Foundation
 import AppKit
+import SGUnitConversion
 
 public enum TrackGauge : UInt8, CaseIterable {
 
@@ -70,7 +71,7 @@ public enum TrackGauge : UInt8, CaseIterable {
     formatter.minimumFractionDigits = 0
     formatter.maximumFractionDigits = 2
 
-    let width = formatter.string(from: UnitLength.convert(fromValue: data.track, fromUnits: .millimeters, toUnits: appNode!.unitsActualLength) as NSNumber)!
+    let width = formatter.string(from: SGUnitLength.convert(fromValue: data.track, fromUnits: .millimeters, toUnits: appNode!.unitsActualLength) as NSNumber)!
     
     let result = "\(data.title) \(data.ratio.title) (\(width)\(appNode!.unitsActualLength.symbol))"
 

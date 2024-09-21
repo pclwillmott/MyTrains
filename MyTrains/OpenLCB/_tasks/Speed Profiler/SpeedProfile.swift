@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SGUnitConversion
 
 public class SpeedProfile : NSObject {
   
@@ -67,7 +68,7 @@ public class SpeedProfile : NSObject {
       locomotiveFacingDirection = .next
       locomotiveTravelDirection = .bothDirections
       minimumSamplePeriod = .sec30
-      maximumSpeed = UnitSpeed.convert(fromValue: 126.0, fromUnits: .milesPerHour, toUnits: .defaultValueScaleSpeed)
+      maximumSpeed = SGUnitSpeed.convert(fromValue: 126.0, fromUnits: .milesPerHour, toUnits: defaultValueScaleSpeed)
       useLightSensors = true
       useReedSwitches = true
       useRFIDReaders = true
@@ -196,7 +197,7 @@ public class SpeedProfile : NSObject {
   }
   
   public func commandedSampleTitle(sampleNumber:UInt16) -> String {
-    let speed = UnitSpeed.convert(fromValue: maximumSpeed * Double(sampleNumber) / Double(numberOfSamples - 1), fromUnits: .defaultValueScaleSpeed, toUnits: appNode!.unitsScaleSpeed)
+    let speed = SGUnitSpeed.convert(fromValue: maximumSpeed * Double(sampleNumber) / Double(numberOfSamples - 1), fromUnits: defaultValueScaleSpeed, toUnits: appNode!.unitsScaleSpeed)
     let formatter = NumberFormatter()
     formatter.alwaysShowsDecimalSeparator = true
     formatter.maximumFractionDigits = 3
@@ -493,7 +494,7 @@ public class SpeedProfile : NSObject {
     
     switch property {
     case .locomotiveId:
-      return "\(nodeId.toHexDotFormat(numberOfBytes: 6))"
+      return "\(nodeId.dotHex(numberOfBytes: 6))"
     case .locomotiveName:
       return name
     case .trackProtocol:
@@ -520,7 +521,7 @@ public class SpeedProfile : NSObject {
       formatter.minimumFractionDigits = 3
       formatter.numberStyle = .decimal
 
-      let value = UnitSpeed.convert(fromValue: maximumSpeed, fromUnits: .defaultValueScaleSpeed, toUnits: appNode!.unitsScaleSpeed)
+      let value = SGUnitSpeed.convert(fromValue: maximumSpeed, fromUnits: defaultValueScaleSpeed, toUnits: appNode!.unitsScaleSpeed)
       
       return formatter.string(from: NSNumber(value: value)) ?? ""
       
@@ -569,7 +570,7 @@ public class SpeedProfile : NSObject {
       return route == 0 ? "" : "\(route)"
     case .totalRouteLength:
       
-      return "\(UnitLength.convert(fromValue: routeLength, fromUnits: .defaultValueActualLength, toUnits: appNode!.unitsActualLength))"
+      return "\(SGUnitLength.convert(fromValue: routeLength, fromUnits: .centimeters, toUnits: appNode!.unitsActualLength))"
     case .routeSegments:
       return ""
     }
@@ -626,7 +627,7 @@ public class SpeedProfile : NSObject {
     case .locomotiveFacingDirection:
       locomotiveFacingDirection = RouteDirection(title: string)!
     case .maximumSpeed:
-      let temp = UnitSpeed.convert(fromValue: Double(string)!, fromUnits: appNode!.unitsScaleSpeed, toUnits: .defaultValueScaleSpeed)
+      let temp = SGUnitSpeed.convert(fromValue: Double(string)!, fromUnits: appNode!.unitsScaleSpeed, toUnits: defaultValueScaleSpeed)
       if temp != maximumSpeed {
         maximumSpeed = temp
         tableNeedsReset = true

@@ -167,10 +167,10 @@ public enum OpenLCBErrorCode : UInt16 {
       informativeText = error.title
     }
     else if isPermanentError(errorCode: errorCode) {
-      informativeText = String(localized: "Unknown permanent error with value: 0x\(errorCode.toHex(numberOfDigits: 4))")
+      informativeText = String(localized: "Unknown permanent error with value: 0x\(errorCode.hex(numberOfBytes: 2)!)")
     }
     else {
-      informativeText = String(localized: "Unknown temporary error with value: 0x\(errorCode.toHex(numberOfDigits: 4))")
+      informativeText = String(localized: "Unknown temporary error with value: 0x\(errorCode.hex(numberOfBytes: 2)!)")
     }
 
     alert.messageText = messageText

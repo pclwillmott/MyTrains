@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SGUnitConversion
 
 public class OpenLCBMemorySpace : NSObject {
   
@@ -230,19 +231,19 @@ public class OpenLCBMemorySpace : NSObject {
           
           switch unitConversionType.baseType {
           case .actualLength:
-            newValue = UnitLength.convert(fromValue: floatValue, fromUnits: UnitLength.defaultValueActualLength, toUnits: appNode.unitsActualLength)
+            newValue = SGUnitLength.convert(fromValue: floatValue, fromUnits: .centimeters, toUnits: appNode.unitsActualLength)
           case .scaleLength:
-            newValue = UnitLength.convert(fromValue: floatValue, fromUnits: UnitLength.defaultValueScaleLength, toUnits: appNode.unitsScaleLength)
+            newValue = SGUnitLength.convert(fromValue: floatValue, fromUnits: .meters, toUnits: appNode.unitsScaleLength)
           case .actualDistance:
-            newValue = UnitLength.convert(fromValue: floatValue, fromUnits: UnitLength.defaultValueActualDistance, toUnits: appNode.unitsActualDistance)
+            newValue = SGUnitLength.convert(fromValue: floatValue, fromUnits: .centimeters, toUnits: appNode.unitsActualDistance)
           case .scaleDistance:
-            newValue = UnitLength.convert(fromValue: floatValue, fromUnits: UnitLength.defaultValueScaleDistance, toUnits: appNode.unitsScaleDistance)
+            newValue = SGUnitLength.convert(fromValue: floatValue, fromUnits: .kilometers, toUnits: appNode.unitsScaleDistance)
           case .actualSpeed:
-            newValue = UnitSpeed.convert(fromValue: floatValue, fromUnits: UnitSpeed.defaultValueActualSpeed, toUnits: appNode.unitsActualSpeed)
+            newValue = SGUnitSpeed.convert(fromValue: floatValue, fromUnits: defaultValueActualSpeed, toUnits: appNode.unitsActualSpeed)
           case .scaleSpeed:
-            newValue = UnitSpeed.convert(fromValue: floatValue, fromUnits: UnitSpeed.defaultValueScaleSpeed, toUnits: appNode.unitsScaleSpeed)
+            newValue = SGUnitSpeed.convert(fromValue: floatValue, fromUnits: defaultValueScaleSpeed, toUnits: appNode.unitsScaleSpeed)
           case .time:
-            newValue = UnitTime.convert(fromValue: floatValue, fromUnits: UnitTime.defaultValue, toUnits: appNode.unitsTime)
+            newValue = SGUnitTime.convert(fromValue: floatValue, fromUnits: defaultValueTime, toUnits: appNode.unitsTime)
           default:
             break
           }
@@ -395,19 +396,19 @@ public class OpenLCBMemorySpace : NSObject {
           
           switch unitConversionType.baseType {
           case .actualLength:
-            newValue = UnitLength.convert(fromValue: floatValue, fromUnits: appNode.unitsActualLength, toUnits: UnitLength.defaultValueActualLength)
+            newValue = SGUnitLength.convert(fromValue: floatValue, fromUnits: appNode.unitsActualLength, toUnits: .centimeters)
           case .scaleLength:
-            newValue = UnitLength.convert(fromValue: floatValue, fromUnits: appNode.unitsScaleLength, toUnits: UnitLength.defaultValueScaleLength)
+            newValue = SGUnitLength.convert(fromValue: floatValue, fromUnits: appNode.unitsScaleLength, toUnits: .meters)
           case .actualDistance:
-            newValue = UnitLength.convert(fromValue: floatValue, fromUnits: appNode.unitsActualDistance, toUnits: UnitLength.defaultValueActualDistance)
+            newValue = SGUnitLength.convert(fromValue: floatValue, fromUnits: appNode.unitsActualDistance, toUnits: .centimeters)
           case .scaleDistance:
-            newValue = UnitLength.convert(fromValue: floatValue, fromUnits: appNode.unitsScaleDistance, toUnits: UnitLength.defaultValueScaleDistance)
+            newValue = SGUnitLength.convert(fromValue: floatValue, fromUnits: appNode.unitsScaleDistance, toUnits: .kilometers)
           case .actualSpeed:
-            newValue = UnitSpeed.convert(fromValue: floatValue, fromUnits: appNode.unitsActualSpeed, toUnits: UnitSpeed.defaultValueActualSpeed)
+            newValue = SGUnitSpeed.convert(fromValue: floatValue, fromUnits: appNode.unitsActualSpeed, toUnits: defaultValueActualSpeed)
           case .scaleSpeed:
-            newValue = UnitSpeed.convert(fromValue: floatValue, fromUnits: appNode.unitsScaleSpeed, toUnits: UnitSpeed.defaultValueScaleSpeed)
+            newValue = SGUnitSpeed.convert(fromValue: floatValue, fromUnits: appNode.unitsScaleSpeed, toUnits: defaultValueScaleSpeed)
           case .time:
-            newValue = UnitTime.convert(fromValue: floatValue, fromUnits: appNode.unitsTime, toUnits: UnitTime.defaultValue)
+            newValue = SGUnitTime.convert(fromValue: floatValue, fromUnits: appNode.unitsTime, toUnits: defaultValueTime)
           default:
             break
           }

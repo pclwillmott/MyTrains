@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SGUnitConversion
 
 public enum BaseUnitConversionType : UInt8 {
 
@@ -55,3 +56,12 @@ public enum UnitConversionType : UInt8 {
   }
   
 }
+
+public let defaultValueActualSpeed : SGUnitSpeed = .centimetersPerSecond
+public let defaultValueScaleSpeed  : SGUnitSpeed = .kilometersPerHour
+public let defaultValueTime        : SGUnitTime = .milliseconds
+public let defaultValueFrequency   : SGUnitFrequency = .hertz
+public let defaultValueTemperature : SGUnitTemperature = .celsius
+public let defaultValueVoltage     : SGUnitVoltage = .volts
+public let defaultValueCurrent     : SGUnitCurrent = .amps
+

@@ -36,7 +36,7 @@ public func esuCVExtract() {
       
       enumName = "\(first.lowercased())\(enumName)"
       
-//      print("  case \(enumName) = 0x\(UInt8(item.codeNMRA).toHex(numberOfDigits: 2).lowercased())")
+//      print("  case \(enumName) = 0x\(UInt8(item.codeNMRA).hex().lowercased())")
       
       print("    .\(enumName) : \"\(item.name)\",")
     }
@@ -169,7 +169,7 @@ public func esuCVExtract() {
       
       let cv31 = (item & 0xff00000000000000) >> 56
       
-//      print("\(String(format:"    case cv_%03i_%03i_%03i", cv31, cv32, cv)) = 0x\(item.toHex(numberOfDigits: 16))")
+//      print("\(String(format:"    case cv_%03i_%03i_%03i", cv31, cv32, cv)) = 0x\(item.hex(numberOfBytes: 8)!)")
     }
     
 //    print(sorted.count)

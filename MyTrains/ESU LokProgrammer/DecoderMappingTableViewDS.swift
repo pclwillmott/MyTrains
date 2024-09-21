@@ -115,7 +115,7 @@ public class DecoderMappingTableViewDS : NSObject, NSTableViewDataSource, NSTabl
     switch columnName {
     case "Address":
       let address = UInt32(row)
-      text = "\(address.toHex(numberOfDigits: 8))"
+      text = "\(address.hex(numberOfBytes: 4)!)"
     case "CV":
       if let item {
         text = ""

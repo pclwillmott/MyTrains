@@ -472,9 +472,9 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable, Codable {
   
   // Smoke Unit
   
-  case smokeUnitTimeUntilPowerOff = 105
+  case smokeSGUnitTimeUntilPowerOff = 105
   case smokeUnitFanSpeedTrim = 106
-  case smokeUnitTemperatureTrim = 107
+  case smokeSGUnitTemperatureTrim = 107
   case smokeUnitPreheatingTemperatureForSecondarySmokeUnits = 108
   case smokeChuffsDurationRelativeToTriggerDistance = 109
   case smokeChuffsMinimumDuration = 110
@@ -629,7 +629,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable, Codable {
     if let cvs = definition.cv, let mask = definition.mask, let shift = definition.shift {
       var temp = cvs.count == 1 ? "CV: " : "CVs:"
       for index in 0 ..< cvs.count {
-        result += "\(temp)                \(cvs[index])   0x\(mask[index].toHex(numberOfDigits: 2))   \(shift[index])\n"
+        result += "\(temp)                \(cvs[index])   0x\(mask[index].hex())   \(shift[index])\n"
         temp = "    "
       }
     }

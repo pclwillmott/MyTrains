@@ -626,13 +626,13 @@ class LokProgrammerVC : MyTrainsViewController, MTSerialPortDelegate, ORSSerialP
           
           switch lastCommand.packetType {
           case .getLokProgrammerManufacturerCode:
-            dump += "LokProgrammer Manufacturer Code: \(packet.dword!.toHex(numberOfDigits: 8))\n"
+            dump += "LokProgrammer Manufacturer Code: \(packet.dword!.hex(numberOfBytes: 4)!)\n"
           case .getLokProgrammerProductId:
-            dump += "LokProgrammer Product ID: \(packet.dword!.toHex(numberOfDigits: 8))\n"
+            dump += "LokProgrammer Product ID: \(packet.dword!.hex(numberOfBytes: 4)!)\n"
           case .getLokProgrammerInfoA:
-            dump += "LokProgrammer Info A: \(packet.dword!.toHex(numberOfDigits: 8))\n"
+            dump += "LokProgrammer Info A: \(packet.dword!.hex(numberOfBytes: 4)!)\n"
           case .getLokProgrammerInfoB:
-            dump += "LokProgrammer Info B: \(packet.dword!.toHex(numberOfDigits: 8))\n"
+            dump += "LokProgrammer Info B: \(packet.dword!.hex(numberOfBytes: 4)!)\n"
           case .getLokProgrammerBootCodeVersion:
             dump += "LokProgrammer Boot Code Version: \(LokPacket.versionNumber(dword: packet.dword!))\n"
           case .getLokProgrammerBootCodeDate:
@@ -642,23 +642,23 @@ class LokProgrammerVC : MyTrainsViewController, MTSerialPortDelegate, ORSSerialP
           case .getLokProgrammerACodeDate:
             dump += "LokProgrammer A Code Date: \(LokPacket.date(dword: packet.dword!))\n"
           case .getLokProgrammerInfoC:
-            dump += "LokProgrammer Info C: \(packet.dword!.toHex(numberOfDigits: 8))\n"
+            dump += "LokProgrammer Info C: \(packet.dword!.hex(numberOfBytes: 4)!)\n"
           case .readData:
             
             if let last2A {
               
               switch last2A.packetType {
               case .initReadForDecoderProductId:
-                dump += "Decoder Product ID: \(packet.dword!.toHex(numberOfDigits: 8))\n"
+                dump += "Decoder Product ID: \(packet.dword!.hex(numberOfBytes: 4)!)\n"
                 if let dword = packet.dword, let decoderType = DecoderType.esuProductIdLookup[dword] {
                   dump += "Decoder Type: \(decoderType.title)\n"
                 }
               case .initReadForDecoderManufacturerCode:
-                dump += "Decoder Manufacturer Code: \(packet.dword!.toHex(numberOfDigits: 8))\n"
+                dump += "Decoder Manufacturer Code: \(packet.dword!.hex(numberOfBytes: 4)!)\n"
               case .initReadForDecoderProductionInfo:
-                dump += "Decoder Production Info: \(packet.dword!.toHex(numberOfDigits: 8))\n"
+                dump += "Decoder Production Info: \(packet.dword!.hex(numberOfBytes: 4)!)\n"
               case .initReadForDecoderSerialNumber:
-                dump += "Decoder Serial Number: \(packet.dword!.toHex(numberOfDigits: 8))\n"
+                dump += "Decoder Serial Number: \(packet.dword!.hex(numberOfBytes: 4)!)\n"
               case .initReadForDecoderBootcodeVersion:
                 dump += "Decoder Bootcode Version: \(LokPacket.versionNumber(dword: packet.dword!))\n"
               case .initReadForDecoderFirmwareVersion:
@@ -686,7 +686,7 @@ class LokProgrammerVC : MyTrainsViewController, MTSerialPortDelegate, ORSSerialP
           }
           if address == 0x9a0 {
             for index : UInt16 in 0 ... UInt16(cvs.count) - 1 {
-              print("\(index.toHex(numberOfDigits: 4)): \(cvs[Int(index)])")
+              print("\(index.hex(numberOfBytes: 2)!): \(cvs[Int(index)])")
             }
           }
         }
@@ -706,11 +706,11 @@ class LokProgrammerVC : MyTrainsViewController, MTSerialPortDelegate, ORSSerialP
       switch packet.packetType {
       case .initReadDataBlock:
         if let sequenceNumber = packet.sequenceNumberForRead, let address = packet.address, let count = packet.numberOfBytesToRead {
-          dump += "Sequence number: \(sequenceNumber.toHex(numberOfDigits: 2)) Address: \(address.toHex(numberOfDigits: 4)) Number of bytes: \(count)\n"
+          dump += "Sequence number: \(sequenceNumber.hex()) Address: \(address.hex(numberOfBytes: 2)!) Number of bytes: \(count)\n"
         }
       case .initWriteDataBlock:
         if let address = packet.address {
-          dump += "Address: \(address.toHex(numberOfDigits: 4)) Number of bytes: \(packet.payload.count)\n"
+          dump += "Address: \(address.hex(numberOfBytes: 2)!) Number of bytes: \(packet.payload.count)\n"
         }
       case .sendServiceModePacket:
         if let dccPacket = packet.dccPacket(decoderMode: .serviceModeDirectAddressing) {
@@ -789,6 +789,9 @@ class LokProgrammerVC : MyTrainsViewController, MTSerialPortDelegate, ORSSerialP
         sendResponse(original: packet, response: "7F 7F 02 10 07 00 81")
       case .TX34_E:
         sendResponse(original: packet, response: "7F 7F 02 10 07 00 81")
+      case .TX34_F:
+        // 7F 7F 02 XX 01 00 81
+        sendResponse(original: packet, response: "7F 7F 02 0E 01 00 81") // THIS IS NOT CORRECT
       case .TX16_A:
         switch count16A {
         case 0:
@@ -806,7 +809,7 @@ class LokProgrammerVC : MyTrainsViewController, MTSerialPortDelegate, ORSSerialP
         
         for index in 0 ..< cvbufferThisWrite.count {
           if cvbufferLastWrite[index] != cvbufferThisWrite[index] {
-            print("address: \(UInt64(index).toHexDotFormat(numberOfBytes: 4)) \(cvbufferLastWrite[index].toHex(numberOfDigits: 2)) to  \(cvbufferThisWrite[index].toHex(numberOfDigits: 2))")
+            print("address: \(UInt64(index).dotHex(numberOfBytes: 4)) \(cvbufferLastWrite[index].hex()) to  \(cvbufferThisWrite[index].hex())")
           }
         }
         
@@ -919,8 +922,8 @@ class LokProgrammerVC : MyTrainsViewController, MTSerialPortDelegate, ORSSerialP
  */
         sendResponse(original: packet, response: "7F 7F 02 1A 07 00 81")
       default:
-      //  print("UNKNOWN: \(packet.packet)")
-        break
+   //     print("UNKNOWN: \(packet.hex)")
+        sendResponse(original: packet, response: "7F 7F 02 1A 07 00 81")
       }
       
     }
@@ -982,7 +985,7 @@ class LokProgrammerVC : MyTrainsViewController, MTSerialPortDelegate, ORSSerialP
     var result = ""
     
     for byte in packet {
-      result += byte.toHex(numberOfDigits: 2) + " "
+      result += byte.hex() + " "
     }
     
     return result.trimmingCharacters(in: .whitespaces)
@@ -1034,7 +1037,7 @@ class LokProgrammerVC : MyTrainsViewController, MTSerialPortDelegate, ORSSerialP
     var result = ""
     
     for byte in packet {
-      result += byte.toHex(numberOfDigits: 2) + " "
+      result += byte.hex() + " "
     }
     
     return result.trimmingCharacters(in: .whitespaces)
@@ -1126,7 +1129,7 @@ class LokProgrammerVC : MyTrainsViewController, MTSerialPortDelegate, ORSSerialP
       guard isMatched, let command else {
         return ""
       }
-      return "\(sortPageNumber) \(command.packet[3].toHex(numberOfDigits: 2)) \(command.packet[2].toHex(numberOfDigits: 2))"
+      return "\(sortPageNumber) \(command.packet[3].hex()) \(command.packet[2].hex())"
     }
     
   }
@@ -1322,6 +1325,7 @@ public enum LokPacketType : CaseIterable {
   case TX34_C
   case TX34_D
   case TX34_E
+  case TX34_F
   case TX16_A
   case TX16_B
   case TX16_C
@@ -1388,6 +1392,7 @@ public enum LokPacketType : CaseIterable {
     .TX34_C : String(localized: "TX34_C"),
     .TX34_D : String(localized: "TX34_D"),
     .TX34_E : String(localized: "TX34_E"),
+    .TX34_F : String(localized: "TX34_F"),
     .TX16_A : String(localized: "TX16_A"),
     .TX16_B : String(localized: "TX16_B"),
     .TX16_C : String(localized: "TX16_C"),
@@ -1581,6 +1586,10 @@ public class LokPacket {
             else if packet[5] == 0x64 && packet[6] == 0x64 && packet[7] == 0x04 && packet[8] == 0x02 && packet[9] == 0x00 && packet[10] == 0x00 {
               _packetType = .TX34_E
             }
+            // 7F 7F 01 02 34 0A 0A 14 0A 04 00 81
+            else if packet[5] == 0x0a && packet[6] == 0x0a && packet[7] == 0x14 && packet[8] == 0x0a && packet[9] == 0x04 && packet[10] == 0x00 {
+              _packetType = .TX34_F
+            }
           }
         case 0x10:
           if packet.count == 10 {
@@ -1730,7 +1739,7 @@ public class LokPacket {
       if !result.isEmpty {
         result += " "
       }
-      result += byte.toHex(numberOfDigits: 2)
+      result += byte.hex()
     }
     return result
   }
@@ -1895,11 +1904,11 @@ public class LokPacket {
     if result != packet {
       var temp = ""
       for byte in packet {
-        temp += byte.toHex(numberOfDigits: 2) + " "
+        temp += byte.hex() + " "
       }
       temp = ""
       for byte in result {
-        temp += byte.toHex(numberOfDigits: 2) + " "
+        temp += byte.hex() + " "
       }
     }
     

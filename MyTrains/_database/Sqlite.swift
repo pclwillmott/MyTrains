@@ -8,6 +8,7 @@
 
 import Foundation
 import SQLite3
+import SGInteger
 
 /*
  * Errors
@@ -173,7 +174,7 @@ class SqliteParameters {
       if let data = value {
         var str = ""
         for byte in data {
-          str += UInt8(byte).toHex(numberOfDigits: 2)
+          str += UInt8(byte).hex()
         }
         self.parameters[key] = " X'\(str)' "
       }
@@ -188,7 +189,7 @@ class SqliteParameters {
       if let data : [UInt8] = value {
         var str : String = ""
         for byte in data {
-          str += byte.toHex(numberOfDigits: 2)
+          str += byte.hex()
         }
         self.parameters[key] = SqliteParameters.conditionString(value: str)
       }
@@ -387,6 +388,7 @@ public class SqliteDataReader {
       var result : [UInt8] = []
       var blob = string
       while !blob.isEmpty {
+        let x = UInt8(hex: "")
         result.append(UInt8(hex: String(blob.prefix(2)))!)
         blob.removeFirst(2)
       }

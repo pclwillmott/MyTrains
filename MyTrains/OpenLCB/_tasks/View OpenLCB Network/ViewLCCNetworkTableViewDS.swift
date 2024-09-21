@@ -86,7 +86,7 @@ public class ViewLCCNetworkTableViewDS : NSObject, NSTableViewDataSource, NSTabl
     switch columnName {
     
     case ColumnIdentifiers.nodeId:
-      text = "\(item.nodeId.toHexDotFormat(numberOfBytes: 6))"
+      text = "\(item.nodeId.dotHex(numberOfBytes: 6))"
       
     case ColumnIdentifiers.manufacturer:
       text = "\(item.manufacturerName)"

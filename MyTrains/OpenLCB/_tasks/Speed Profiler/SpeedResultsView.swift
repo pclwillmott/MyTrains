@@ -6,7 +6,8 @@
 //
 
 import Foundation
-import Cocoa
+import AppKit
+import SGUnitConversion
 
 @IBDesignable
 class SpeedResultsView: NSView {
@@ -44,7 +45,7 @@ class SpeedResultsView: NSView {
     
     let context = NSGraphicsContext.current?.cgContext
     
-    let maximumSpeed = round((UnitSpeed.convert(fromValue: speedProfile.maximumSpeed, fromUnits: .defaultValueScaleSpeed, toUnits: appNode.unitsScaleSpeed) + 5) / 10.0) * 10.0
+    let maximumSpeed = round((SGUnitSpeed.convert(fromValue: speedProfile.maximumSpeed, fromUnits: defaultValueScaleSpeed, toUnits: appNode.unitsScaleSpeed) + 5) / 10.0) * 10.0
     
     let scaleMax = maximumSpeed + 10.0
     
@@ -136,9 +137,9 @@ class SpeedResultsView: NSView {
                 
                 dataSet == 1 ? speedProfile.colourForward.color.setFill() : speedProfile.colourReverse.color.setFill()
                 
-                let dx = xOffset + (bounds.width - xOffset) * CGFloat(UnitSpeed.convert(fromValue: row[0], fromUnits: .defaultValueScaleSpeed, toUnits: appNode.unitsScaleSpeed)) / scaleMax
+                let dx = xOffset + (bounds.width - xOffset) * CGFloat(SGUnitSpeed.convert(fromValue: row[0], fromUnits: defaultValueScaleSpeed, toUnits: appNode.unitsScaleSpeed)) / scaleMax
                 
-                let dy = yOffset + (bounds.height - yOffset) * CGFloat(UnitSpeed.convert(fromValue: row[dataSet], fromUnits: .defaultValueScaleSpeed, toUnits: appNode.unitsScaleSpeed)) / scaleMax
+                let dy = yOffset + (bounds.height - yOffset) * CGFloat(SGUnitSpeed.convert(fromValue: row[dataSet], fromUnits: defaultValueScaleSpeed, toUnits: appNode.unitsScaleSpeed)) / scaleMax
                 
                 let path = NSBezierPath()
                 path.move(to: NSMakePoint(dx-2, dy+2))
@@ -176,9 +177,9 @@ class SpeedResultsView: NSView {
             
             for row in samples {
               
-              let dx = xOffset + (bounds.width - xOffset) * CGFloat(UnitSpeed.convert(fromValue: row[0], fromUnits: .defaultValueScaleSpeed, toUnits: appNode.unitsScaleSpeed)) / scaleMax
+              let dx = xOffset + (bounds.width - xOffset) * CGFloat(SGUnitSpeed.convert(fromValue: row[0], fromUnits: defaultValueScaleSpeed, toUnits: appNode.unitsScaleSpeed)) / scaleMax
               
-              let dy = yOffset + (bounds.height - yOffset) * CGFloat(UnitSpeed.convert(fromValue: row[1], fromUnits: .defaultValueScaleSpeed, toUnits: appNode.unitsScaleSpeed)) / scaleMax
+              let dy = yOffset + (bounds.height - yOffset) * CGFloat(SGUnitSpeed.convert(fromValue: row[1], fromUnits: defaultValueScaleSpeed, toUnits: appNode.unitsScaleSpeed)) / scaleMax
               
               path.line(to: NSMakePoint(dx, dy))
               

@@ -81,15 +81,15 @@ public class ViewNodeInfoMemorySpaceInfoTVDS : NSObject, NSTableViewDataSource, 
     switch columnName {
       
     case ColumnIdentifiers.addressSpace:
-      text = "0x\(item.addressSpace.toHex(numberOfDigits: 2))"
+      text = "0x\(item.addressSpace.hex())"
       alignment = .center
       
     case ColumnIdentifiers.lowestAddress:
-      text = "0x\(item.lowestAddress.toHex(numberOfDigits: 8))"
+      text = "0x\(item.lowestAddress.hex(numberOfBytes: 4)!)"
       alignment = .right
     
     case ColumnIdentifiers.highestAddress:
-      text = "0x\(item.highestAddress.toHex(numberOfDigits: 8))"
+      text = "0x\(item.highestAddress.hex(numberOfBytes: 4)!)"
       alignment = .right
       
     case ColumnIdentifiers.size:

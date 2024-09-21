@@ -193,11 +193,11 @@ class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate, NS
       if let control = field.control {
         switch field.property {
         case .layoutId:
-          control.stringValue = appNode.layout?.nodeId.toHexDotFormat(numberOfBytes: 6) ?? ""
+          control.stringValue = appNode.layout?.nodeId.dotHex(numberOfBytes: 6) ?? ""
         case .layoutName:
           control.stringValue = appNode.layout?.userNodeName ?? ""
         case .panelId:
-          control.stringValue = switchboardPanel?.nodeId.toHexDotFormat(numberOfBytes: 6) ?? ""
+          control.stringValue = switchboardPanel?.nodeId.dotHex(numberOfBytes: 6) ?? ""
         case .panelName:
           control.stringValue = switchboardPanel?.userNodeName ?? ""
         case .panelDescription:
@@ -722,7 +722,7 @@ class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate, NS
     guard let textField = getTextField(button: sender), let appNode else {
       return
     }
-    textField.stringValue = appNode.nextUniqueEventId.toHexDotFormat(numberOfBytes: 8)
+    textField.stringValue = appNode.nextUniqueEventId.dotHex(numberOfBytes: 8)!
     _ = control(textField, textShouldEndEditing: NSText())
   }
   

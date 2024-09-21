@@ -139,7 +139,7 @@ public class OpenLCBNode : NSObject {
       
       guard acdiManufacturerSpaceVersion == 0x01 || acdiManufacturerSpaceVersion == 0x04 else {
         #if DEBUG
-        debugLog("invalid acdiManufacturerSpaceVersion: 0x\(acdiManufacturerSpaceVersion.toHex(numberOfDigits: 2)) \(nodeId.toHexDotFormat(numberOfBytes: 6))")
+        debugLog("invalid acdiManufacturerSpaceVersion: 0x\(acdiManufacturerSpaceVersion.hex()) \(nodeId.dotHex(numberOfBytes: 6))")
         #endif
         return nil
       }
@@ -172,7 +172,7 @@ public class OpenLCBNode : NSObject {
       
       guard acdiUserSpaceVersion == 0x01 || acdiUserSpaceVersion == 0x02 else {
         #if DEBUG
-        debugLog("invalid acdiUserSpaceVersion: 0x\(acdiUserSpaceVersion.toHex(numberOfDigits: 2))")
+        debugLog("invalid acdiUserSpaceVersion: 0x\(acdiUserSpaceVersion.hex())")
         #endif
         return nil
       }
@@ -216,7 +216,7 @@ public class OpenLCBNode : NSObject {
       
       guard acdiManufacturerSpaceVersion == 0x01 || acdiManufacturerSpaceVersion == 0x04 else {
         #if DEBUG
-        debugLog("invalid acdiManufacturerSpaceVersion: 0x\(acdiManufacturerSpaceVersion.toHex(numberOfDigits: 2)) id: \(nodeId.toHexDotFormat(numberOfBytes: 6))")
+        debugLog("invalid acdiManufacturerSpaceVersion: 0x\(acdiManufacturerSpaceVersion.hex()) id: \(nodeId.dotHex(numberOfBytes: 6))")
         debugLog("\(value)")
         #endif
         return
@@ -253,7 +253,7 @@ public class OpenLCBNode : NSObject {
       
       guard acdiUserSpaceVersion == 0x01 || acdiUserSpaceVersion == 0x02 else {
         #if DEBUG
-        debugLog("invalid acdiUserSpaceVersion: 0x(\(acdiUserSpaceVersion.toHex(numberOfDigits: 2))")
+        debugLog("invalid acdiUserSpaceVersion: 0x(\(acdiUserSpaceVersion.hex())")
         #endif
         return
       }
