@@ -152,7 +152,6 @@
 		DA5874D42C83394100B9140B /* DecoderMappingTableViewDS.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5874D32C83394100B9140B /* DecoderMappingTableViewDS.swift */; };
 		DA5874D62C835B3000B9140B /* DecoderDefinition.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5874D52C835B3000B9140B /* DecoderDefinition.swift */; };
 		DA58F00D2A45AA3700D36E90 /* LocoNetFunctionConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA58F00C2A45AA3700D36E90 /* LocoNetFunctionConstants.swift */; };
-		DA58F0112A45AE8400D36E90 /* DCCDecoderType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA58F0102A45AE8400D36E90 /* DCCDecoderType.swift */; };
 		DA595E122B89084900ADF87B /* OpenLCBNodeVirtual - Messages - Simple Node Information Protocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA595E112B89084900ADF87B /* OpenLCBNodeVirtual - Messages - Simple Node Information Protocol.swift */; };
 		DA595E142B890AD700ADF87B /* OpenLCBNodeVirtual - Messages - Memory Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA595E132B890AD700ADF87B /* OpenLCBNodeVirtual - Messages - Memory Configuration.swift */; };
 		DA595E162B891D1D00ADF87B /* OpenLCBNodeVirtual - Messages - Traction Protocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA595E152B891D1D00ADF87B /* OpenLCBNodeVirtual - Messages - Traction Protocol.swift */; };
@@ -589,7 +588,6 @@
 		DA5874D32C83394100B9140B /* DecoderMappingTableViewDS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecoderMappingTableViewDS.swift; sourceTree = "<group>"; };
 		DA5874D52C835B3000B9140B /* DecoderDefinition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecoderDefinition.swift; sourceTree = "<group>"; };
 		DA58F00C2A45AA3700D36E90 /* LocoNetFunctionConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocoNetFunctionConstants.swift; sourceTree = "<group>"; };
-		DA58F0102A45AE8400D36E90 /* DCCDecoderType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DCCDecoderType.swift; sourceTree = "<group>"; };
 		DA595E112B89084900ADF87B /* OpenLCBNodeVirtual - Messages - Simple Node Information Protocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OpenLCBNodeVirtual - Messages - Simple Node Information Protocol.swift"; sourceTree = "<group>"; };
 		DA595E132B890AD700ADF87B /* OpenLCBNodeVirtual - Messages - Memory Configuration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OpenLCBNodeVirtual - Messages - Memory Configuration.swift"; sourceTree = "<group>"; };
 		DA595E152B891D1D00ADF87B /* OpenLCBNodeVirtual - Messages - Traction Protocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OpenLCBNodeVirtual - Messages - Traction Protocol.swift"; sourceTree = "<group>"; };
@@ -1101,7 +1099,6 @@
 				DAD41AB72A3C9E54002EF847 /* DCCAddressPartition.swift */,
 				DA6A0BCB2A45C01E00BF40C9 /* DCCBinaryState.swift */,
 				DAD41AB92A3C9E80002EF847 /* DCCPacketType.swift */,
-				DA58F0102A45AE8400D36E90 /* DCCDecoderType.swift */,
 				DABC089C2B1B8DBF00260605 /* DCCCVAccessMode.swift */,
 				DA6D570B2C7CDE97009B25A5 /* DCCDecoderMode.swift */,
 			);
@@ -2325,7 +2322,6 @@
 				DA92E0782B66B09800762058 /* YesNo.swift in Sources */,
 				DAAC7E972A796705001A424E /* ProgrammerToolVC.swift in Sources */,
 				DAB0749A276EB8B1003278BE /* Database.swift in Sources */,
-				DA58F0112A45AE8400D36E90 /* DCCDecoderType.swift in Sources */,
 				DA9CF8FB2860952300825FA9 /* BlockType.swift in Sources */,
 				DA412E14278099AF00748CCD /* ThrottleVC.swift in Sources */,
 				DA58F00D2A45AA3700D36E90 /* LocoNetFunctionConstants.swift in Sources */,

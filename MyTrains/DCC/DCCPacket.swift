@@ -246,7 +246,7 @@ public class DCCPacket : NSObject {
               break
             }
           }
-        case .servericeModeAddressOnly:
+        case .serviceModeAddressOnly:
           if packet.count == 3 && (packet[0] & serviceModeMask) == serviceModeMask && (packet[0] & 0b00000111) == 0 && (packet[1] & 0b10000000) == 0 {
             switch packet[0] & 0b00001000 {
             case 0b00001000:
@@ -303,12 +303,15 @@ public class DCCPacket : NSObject {
         else if packet[0] == 0xff && packet[1] == 0 && packet[2] == 0xff {
           _packetType = .digitalDecoderIdlePacket
         }
+        else {
+          _packetType = .unknown
+        }
 
       }
 
     }
     
-    return _packetType ?? .unknown
+    return _packetType!
     
   }
   

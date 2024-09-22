@@ -16,3 +16,4 @@ public enum DCCAddressPartition : UInt8 {
   case dccAEPF      = 253
   case dccIdle      = 255
 }
+

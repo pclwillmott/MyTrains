@@ -13,7 +13,7 @@ public enum DCCDecoderMode : CaseIterable {
   
   case operationsMode
   case serviceModeDirectAddressing
-  case servericeModeAddressOnly
+  case serviceModeAddressOnly
   case serviceModePhysicalRegister
   case serviceModePagedAddressing
   
