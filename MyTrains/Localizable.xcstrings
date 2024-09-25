@@ -606,12 +606,6 @@
     "Address for consist operation" : {
 
     },
-    "Address Only Verify Address" : {
-
-    },
-    "Address Only Write Address" : {
-
-    },
     "Adjustment at higher speed steps" : {
 
     },
@@ -755,9 +749,6 @@
           }
         }
       }
-    },
-    "Analog Function Group" : {
-
     },
     "Analog Mode Motor Control" : {
 
@@ -1143,12 +1134,6 @@
           }
         }
       }
-    },
-    "Binary State Control Long Form" : {
-
-    },
-    "Binary State Control Short Form" : {
-
     },
     "Bit [7..0]" : {
 
@@ -2295,30 +2280,6 @@
     "CV" : {
 
     },
-    "CV Access Acceleration Adjustment" : {
-
-    },
-    "CV Access Decleration Adjustment" : {
-
-    },
-    "CV Access Indexed CVs" : {
-
-    },
-    "CV Access Long Address" : {
-
-    },
-    "CV Access Verify Bit" : {
-
-    },
-    "CV Access Verify Byte" : {
-
-    },
-    "CV Access Write Bit" : {
-
-    },
-    "CV Access Write Byte" : {
-
-    },
     "CV Mapping - 0x0000" : {
 
     },
@@ -2824,12 +2785,6 @@
     "Different brake distance while driving backwards" : {
 
     },
-    "Digital Decoder Idle Packet" : {
-
-    },
-    "Digital Decoder Reset Packet" : {
-
-    },
     "Digitrax BXP88" : {
       "comment" : "Used for a menu title\nUsed to create a default OpenLCB virtual name",
       "localizations" : {
@@ -2922,18 +2877,6 @@
           }
         }
       }
-    },
-    "Direct Mode Verify Bit" : {
-
-    },
-    "Direct Mode Verify Byte" : {
-
-    },
-    "Direct Mode Write Bit" : {
-
-    },
-    "Direct Mode Write Byte" : {
-
     },
     "Direction" : {
 
@@ -4407,36 +4350,6 @@
 
     },
     "Function Settings" : {
-
-    },
-    "Functions F5 to F8" : {
-
-    },
-    "Functions F9 to F12" : {
-
-    },
-    "Functions F13 to F20" : {
-
-    },
-    "Functions F21 to F28" : {
-
-    },
-    "Functions F29 to F36" : {
-
-    },
-    "Functions F37 to F44" : {
-
-    },
-    "Functions F45 to F52" : {
-
-    },
-    "Functions F53 to F60" : {
-
-    },
-    "Functions F61 to F68" : {
-
-    },
-    "Functions FL, F1 to F4" : {
 
     },
     "Gear Shift Sound" : {
@@ -6566,15 +6479,6 @@
         }
       }
     },
-    "Page Preset Instruction" : {
-
-    },
-    "Paged Mode Verify Byte" : {
-
-    },
-    "Paged Mode Write Byte" : {
-
-    },
     "Panel Description" : {
 
     },
@@ -6763,12 +6667,6 @@
 
     },
     "Physical Outputs" : {
-
-    },
-    "Physical Register Verify Byte" : {
-
-    },
-    "Physical Register Write Byte" : {
 
     },
     "Pink" : {
@@ -8461,16 +8359,10 @@
     "Speed" : {
 
     },
-    "Speed and Direction Packet" : {
-
-    },
     "Speed Constraints" : {
 
     },
     "Speed Profiler" : {
-
-    },
-    "Speed Step Control 128" : {
 
     },
     "Speed step mode" : {
@@ -8929,9 +8821,6 @@
     "Switching on threshold" : {
 
     },
-    "System Time" : {
-
-    },
     "t" : {
       "comment" : "Used for the Throttle menu key equivalent",
       "extractionState" : "stale",
@@ -9313,9 +9202,6 @@
       }
     },
     "Thunderer Whistle" : {
-
-    },
-    "Time and Date Command" : {
 
     },
     "Time between the sensor no longer being triggered and the sensor reporting such non-triggering." : {

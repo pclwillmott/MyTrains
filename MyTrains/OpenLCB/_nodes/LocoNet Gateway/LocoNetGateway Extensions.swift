@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SGDCC
 
 extension LocoNetGateway {
   
@@ -28,6 +29,20 @@ extension LocoNetGateway {
   }
 
   // MARK: HELPER COMMANDS
+  
+  public func immPacket(packet:SGDCCPacket?, repeatCount: LocoNetIMMPacketRepeat) {
+    
+    guard let packet else {
+      return
+    }
+    
+    var data = packet.packet
+    
+    data.removeLast()
+    
+    immPacket(packet: data, repeatCount: repeatCount)
+    
+  }
   
   public func immPacket(packet:[UInt8], repeatCount: LocoNetIMMPacketRepeat) {
     
@@ -489,194 +504,174 @@ extension LocoNetGateway {
     
   }
   
+  private func sgFunctions(functionsA: UInt64, functionsB: UInt64) -> [Bool] {
+    var result : [Bool] = []
+    var mask : UInt64 = 1
+    for _ in 0 ... 28 {
+      result.append((functionsA & mask) != 0)
+      mask <<= 1
+    }
+    mask = 1
+    for _ in 29 ... 68 {
+      result.append((functionsB & mask) != 0)
+      mask <<= 1
+    }
+    return result
+  }
+  
   public func dccF5F8(address:UInt16, functions: UInt64) {
     
-    var fx : UInt8 = DCCPacketType.dccF5F8.rawValue
+    let temp = sgFunctions(functionsA: functions, functionsB: 0)
     
-    fx |= functions & maskF5 == maskF5 ? 0b00000001 : 0b00000000
-    fx |= functions & maskF6 == maskF6 ? 0b00000010 : 0b00000000
-    fx |= functions & maskF7 == maskF7 ? 0b00000100 : 0b00000000
-    fx |= functions & maskF8 == maskF8 ? 0b00001000 : 0b00000000
+    var packet : SGDCCPacket?
     
-    var data : [UInt8] = dccAddress(address: address)
+    if address < 128 {
+      packet = SGDCCPacket.f5f8Control(shortAddress: UInt8(address), functions: temp)
+    }
+    else {
+      packet = SGDCCPacket.f5f8Control(longAddress: address, functions: temp)
+    }
     
-    data.append(fx)
-    
-    immPacket(packet: data, repeatCount: .repeat4)
+    immPacket(packet: packet, repeatCount: .repeat4)
     
   }
 
   public func dccF9F12(address:UInt16, functions: UInt64) {
     
-    var fx : UInt8 = DCCPacketType.dccF9F12.rawValue
+    let temp = sgFunctions(functionsA: functions, functionsB: 0)
     
-    fx |= functions & maskF9  == maskF9  ? 0b00000001 : 0b00000000
-    fx |= functions & maskF10 == maskF10 ? 0b00000010 : 0b00000000
-    fx |= functions & maskF11 == maskF11 ? 0b00000100 : 0b00000000
-    fx |= functions & maskF12 == maskF12 ? 0b00001000 : 0b00000000
+    var packet : SGDCCPacket?
     
-    var data : [UInt8] = dccAddress(address: address)
+    if address < 128 {
+      packet = SGDCCPacket.f9f12Control(shortAddress: UInt8(address), functions: temp)
+    }
+    else {
+      packet = SGDCCPacket.f9f12Control(longAddress: address, functions: temp)
+    }
     
-    data.append(fx)
-    
-    immPacket(packet: data, repeatCount: .repeat4)
-    
+    immPacket(packet: packet, repeatCount: .repeat4)
+
   }
 
   public func dccF13F20(address:UInt16, functions: UInt64) {
     
-    var fx : UInt8 = 0
+    let temp = sgFunctions(functionsA: functions, functionsB: 0)
     
-    fx |= functions & maskF13 == maskF13 ? 0b00000001 : 0b00000000
-    fx |= functions & maskF14 == maskF14 ? 0b00000010 : 0b00000000
-    fx |= functions & maskF15 == maskF15 ? 0b00000100 : 0b00000000
-    fx |= functions & maskF16 == maskF16 ? 0b00001000 : 0b00000000
-    fx |= functions & maskF17 == maskF17 ? 0b00010000 : 0b00000000
-    fx |= functions & maskF18 == maskF18 ? 0b00100000 : 0b00000000
-    fx |= functions & maskF19 == maskF19 ? 0b01000000 : 0b00000000
-    fx |= functions & maskF20 == maskF20 ? 0b10000000 : 0b00000000
+    var packet : SGDCCPacket?
+    
+    if address < 128 {
+      packet = SGDCCPacket.f13f20Control(shortAddress: UInt8(address), functions: temp)
+    }
+    else {
+      packet = SGDCCPacket.f13f20Control(longAddress: address, functions: temp)
+    }
+    
+    immPacket(packet: packet, repeatCount: .repeat4)
 
-    var data : [UInt8] = dccAddress(address: address)
-    
-    data.append(DCCPacketType.dccF13F20.rawValue)
-    data.append(fx)
-    
-    immPacket(packet: data, repeatCount: .repeat4)
-    
   }
 
   public func dccF21F28(address:UInt16, functions: UInt64) {
     
-    var fx : UInt8 = 0
+    let temp = sgFunctions(functionsA: functions, functionsB: 0)
     
-    fx |= functions & maskF21 == maskF21 ? 0b00000001 : 0b00000000
-    fx |= functions & maskF22 == maskF22 ? 0b00000010 : 0b00000000
-    fx |= functions & maskF23 == maskF23 ? 0b00000100 : 0b00000000
-    fx |= functions & maskF24 == maskF24 ? 0b00001000 : 0b00000000
-    fx |= functions & maskF25 == maskF25 ? 0b00010000 : 0b00000000
-    fx |= functions & maskF26 == maskF26 ? 0b00100000 : 0b00000000
-    fx |= functions & maskF27 == maskF27 ? 0b01000000 : 0b00000000
-    fx |= functions & maskF28 == maskF28 ? 0b10000000 : 0b00000000
+    var packet : SGDCCPacket?
+    
+    if address < 128 {
+      packet = SGDCCPacket.f21f28Control(shortAddress: UInt8(address), functions: temp)
+    }
+    else {
+      packet = SGDCCPacket.f21f28Control(longAddress: address, functions: temp)
+    }
+    
+    immPacket(packet: packet, repeatCount: .repeat4)
 
-    var data : [UInt8] = dccAddress(address: address)
-    
-    data.append(DCCPacketType.dccF21F28.rawValue)
-    data.append(fx)
-    
-    immPacket(packet: data, repeatCount: .repeat4)
-    
   }
 
   public func dccF29F36(address:UInt16, functions: UInt64) {
     
-    var fx : UInt8 = 0
+    let temp = sgFunctions(functionsA: 0, functionsB: functions)
     
-    fx |= functions & maskF29 == maskF29 ? 0b00000001 : 0b00000000
-    fx |= functions & maskF30 == maskF30 ? 0b00000010 : 0b00000000
-    fx |= functions & maskF31 == maskF31 ? 0b00000100 : 0b00000000
-    fx |= functions & maskF32 == maskF32 ? 0b00001000 : 0b00000000
-    fx |= functions & maskF33 == maskF33 ? 0b00010000 : 0b00000000
-    fx |= functions & maskF34 == maskF34 ? 0b00100000 : 0b00000000
-    fx |= functions & maskF35 == maskF35 ? 0b01000000 : 0b00000000
-    fx |= functions & maskF36 == maskF36 ? 0b10000000 : 0b00000000
+    var packet : SGDCCPacket?
+    
+    if address < 128 {
+      packet = SGDCCPacket.f29f36Control(shortAddress: UInt8(address), functions: temp)
+    }
+    else {
+      packet = SGDCCPacket.f29f36Control(longAddress: address, functions: temp)
+    }
+    
+    immPacket(packet: packet, repeatCount: .repeat4)
 
-    var data : [UInt8] = dccAddress(address: address)
-    
-    data.append(DCCPacketType.dccF29F36.rawValue)
-    data.append(fx)
-    
-    immPacket(packet: data, repeatCount: .repeat4)
-    
   }
 
   public func dccF37F44(address:UInt16, functions: UInt64) {
     
-    var fx : UInt8 = 0
+    let temp = sgFunctions(functionsA: 0, functionsB: functions)
     
-    fx |= functions & maskF37 == maskF37 ? 0b00000001 : 0b00000000
-    fx |= functions & maskF38 == maskF38 ? 0b00000010 : 0b00000000
-    fx |= functions & maskF39 == maskF39 ? 0b00000100 : 0b00000000
-    fx |= functions & maskF40 == maskF40 ? 0b00001000 : 0b00000000
-    fx |= functions & maskF41 == maskF41 ? 0b00010000 : 0b00000000
-    fx |= functions & maskF42 == maskF42 ? 0b00100000 : 0b00000000
-    fx |= functions & maskF43 == maskF43 ? 0b01000000 : 0b00000000
-    fx |= functions & maskF44 == maskF44 ? 0b10000000 : 0b00000000
+    var packet : SGDCCPacket?
+    
+    if address < 128 {
+      packet = SGDCCPacket.f29f36Control(shortAddress: UInt8(address), functions: temp)
+    }
+    else {
+      packet = SGDCCPacket.f29f36Control(longAddress: address, functions: temp)
+    }
+    
+    immPacket(packet: packet, repeatCount: .repeat4)
 
-    var data : [UInt8] = dccAddress(address: address)
-    
-    data.append(DCCPacketType.dccF37F44.rawValue)
-    data.append(fx)
-    
-    immPacket(packet: data, repeatCount: .repeat4)
-    
   }
 
   public func dccF45F52(address:UInt16, functions: UInt64) {
     
-    var fx : UInt8 = 0
+    let temp = sgFunctions(functionsA: 0, functionsB: functions)
     
-    fx |= functions & maskF45 == maskF45 ? 0b00000001 : 0b00000000
-    fx |= functions & maskF46 == maskF46 ? 0b00000010 : 0b00000000
-    fx |= functions & maskF47 == maskF47 ? 0b00000100 : 0b00000000
-    fx |= functions & maskF48 == maskF48 ? 0b00001000 : 0b00000000
-    fx |= functions & maskF49 == maskF49 ? 0b00010000 : 0b00000000
-    fx |= functions & maskF50 == maskF50 ? 0b00100000 : 0b00000000
-    fx |= functions & maskF51 == maskF51 ? 0b01000000 : 0b00000000
-    fx |= functions & maskF52 == maskF52 ? 0b10000000 : 0b00000000
+    var packet : SGDCCPacket?
+    
+    if address < 128 {
+      packet = SGDCCPacket.f45f52Control(shortAddress: UInt8(address), functions: temp)
+    }
+    else {
+      packet = SGDCCPacket.f45f52Control(longAddress: address, functions: temp)
+    }
+    
+    immPacket(packet: packet, repeatCount: .repeat4)
 
-    var data : [UInt8] = dccAddress(address: address)
-    
-    data.append(DCCPacketType.dccF45F52.rawValue)
-    data.append(fx)
-    
-    immPacket(packet: data, repeatCount: .repeat4)
-    
   }
 
   public func dccF53F60(address:UInt16, functions: UInt64) {
     
-    var fx : UInt8 = 0
+    let temp = sgFunctions(functionsA: 0, functionsB: functions)
     
-    fx |= functions & maskF53 == maskF53 ? 0b00000001 : 0b00000000
-    fx |= functions & maskF54 == maskF54 ? 0b00000010 : 0b00000000
-    fx |= functions & maskF55 == maskF55 ? 0b00000100 : 0b00000000
-    fx |= functions & maskF56 == maskF56 ? 0b00001000 : 0b00000000
-    fx |= functions & maskF57 == maskF57 ? 0b00010000 : 0b00000000
-    fx |= functions & maskF58 == maskF58 ? 0b00100000 : 0b00000000
-    fx |= functions & maskF59 == maskF59 ? 0b01000000 : 0b00000000
-    fx |= functions & maskF60 == maskF60 ? 0b10000000 : 0b00000000
+    var packet : SGDCCPacket?
+    
+    if address < 128 {
+      packet = SGDCCPacket.f53f60Control(shortAddress: UInt8(address), functions: temp)
+    }
+    else {
+      packet = SGDCCPacket.f53f60Control(longAddress: address, functions: temp)
+    }
+    
+    immPacket(packet: packet, repeatCount: .repeat4)
 
-    var data : [UInt8] = dccAddress(address: address)
-    
-    data.append(DCCPacketType.dccF53F60.rawValue)
-    data.append(fx)
-    
-    immPacket(packet: data, repeatCount: .repeat4)
-    
   }
 
   public func dccF61F68(address:UInt16, functions: UInt64) {
     
-    var fx : UInt8 = 0
+    let temp = sgFunctions(functionsA: 0, functionsB: functions)
     
-    fx |= functions & maskF61 == maskF61 ? 0b00000001 : 0b00000000
-    fx |= functions & maskF62 == maskF62 ? 0b00000010 : 0b00000000
-    fx |= functions & maskF63 == maskF63 ? 0b00000100 : 0b00000000
-    fx |= functions & maskF64 == maskF64 ? 0b00001000 : 0b00000000
-    fx |= functions & maskF65 == maskF65 ? 0b00010000 : 0b00000000
-    fx |= functions & maskF66 == maskF66 ? 0b00100000 : 0b00000000
-    fx |= functions & maskF67 == maskF67 ? 0b01000000 : 0b00000000
-    fx |= functions & maskF68 == maskF68 ? 0b10000000 : 0b00000000
+    var packet : SGDCCPacket?
+    
+    if address < 128 {
+      packet = SGDCCPacket.f61f68Control(shortAddress: UInt8(address), functions: temp)
+    }
+    else {
+      packet = SGDCCPacket.f61f68Control(longAddress: address, functions: temp)
+    }
+    
+    immPacket(packet: packet, repeatCount: .repeat4)
 
-    var data : [UInt8] = dccAddress(address: address)
-    
-    data.append(DCCPacketType.dccF61F68.rawValue)
-    data.append(fx)
-    
-    immPacket(packet: data, repeatCount: .repeat4)
-    
   }
-
+/*
   public func dccBinaryState(address:UInt16, binaryStateAddress:UInt16, state:DCCBinaryState) {
     
     var data : [UInt8] = dccAddress(address: address)
@@ -708,7 +703,7 @@ extension LocoNetGateway {
     immPacket(packet: data, repeatCount: .repeat4)
     
   }
-  
+  */
   // MARK: CV PROGRAMMING
   
   private func s7CVRWPacket(address:UInt16, cvNumber:UInt16, mode:DCCCVAccessMode) -> [UInt8] {

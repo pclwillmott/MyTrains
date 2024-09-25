@@ -8,6 +8,7 @@
 import Foundation
 import AppKit
 import ORSSerial
+import SGDCC
 
 class LokProgrammerVC : MyTrainsViewController, MTSerialPortDelegate, ORSSerialPortDelegate {
   
@@ -713,7 +714,7 @@ class LokProgrammerVC : MyTrainsViewController, MTSerialPortDelegate, ORSSerialP
           dump += "Address: \(address.hex(numberOfBytes: 2)!) Number of bytes: \(packet.payload.count)\n"
         }
       case .sendServiceModePacket:
-        if let dccPacket = packet.dccPacket(decoderMode: .serviceModeDirectAddressing) {
+        if let dccPacket = packet.dccPacket(decoderMode: .serviceModeDirectMode) {
           var extra = ""
           if let cvNumber = dccPacket.cvNumber {
             extra = "CV\(cvNumber)"
@@ -1780,7 +1781,7 @@ public class LokPacket {
     }
   }
   
-  public func dccPacket(decoderMode:DCCDecoderMode = .operationsMode) -> DCCPacket? {
+  public func dccPacket(decoderMode:SGDCCDecoderMode = .operationsMode) -> SGDCCPacket? {
     
     guard packetType == .sendServiceModePacket || packetType == .sendOperationsModePacket else {
       return nil
@@ -1794,7 +1795,7 @@ public class LokPacket {
       data.append(packet[index])
     }
     
-    return DCCPacket(packet: data, decoderMode: decoderMode)
+    return SGDCCPacket(packet: data, decoderMode: decoderMode)
     
   }
 

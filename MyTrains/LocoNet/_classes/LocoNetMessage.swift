@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SGDCC
 
 public class LocoNetMessage : NSObject {
   
@@ -119,7 +120,7 @@ public class LocoNetMessage : NSObject {
     
   }
   
-  public var dccPacket : [UInt8]? {
+  public var dccPacket : SGDCCPacket? {
     
     guard messageType == .immPacket || messageType == .s7CVRW else {
       return nil
@@ -146,7 +147,7 @@ public class LocoNetMessage : NSObject {
     
     packet.append(crc)
     
-    return packet
+    return SGDCCPacket(packet: packet)
     
   }
   
@@ -163,13 +164,11 @@ public class LocoNetMessage : NSObject {
 
     case .immPacket, .s7CVRW:
       
-      guard let packet = dccPacket, let partition = dccAddressPartition, partition == .dccBAD11 else {
+      guard let dccPacket else {
         return nil
       }
       
-      if (packet[1] & 0b10000000) == 0b10000000 && (packet[2] & 0b11110000) == 0b11100000 {
-        return packet[4]
-      }
+      return dccPacket.cvValue
       
     case .s7CVState:
       
@@ -205,15 +204,11 @@ public class LocoNetMessage : NSObject {
 
     case .immPacket, .s7CVRW:
       
-      guard let packet = dccPacket, let partition = dccAddressPartition, partition == .dccBAD11 else {
+      guard let dccPacket else {
         return nil
       }
       
-      if (packet[1] & 0b10000000) == 0b10000000 && (packet[2] & 0b11110000) == 0b11100000 {
-        var cvNumber : UInt16 = UInt16(packet[3])
-        cvNumber |= UInt16(packet[2] & 0b00000011) << 8
-        return cvNumber + 1
-      }
+      return dccPacket.cvNumber
       
     default:
       break
@@ -222,7 +217,7 @@ public class LocoNetMessage : NSObject {
     return nil
     
   }
-
+/*
   public var dccCVAccessMode : DCCCVAccessMode? {
     
     guard let packet = dccPacket, let partition = dccAddressPartition, partition == .dccBAD11 else {
@@ -237,7 +232,8 @@ public class LocoNetMessage : NSObject {
     
     return nil
   }
-  
+  */
+  /*
   public var dccBasicAccessoryDecoderAddress : UInt16? {
     
     guard let packet = dccPacket, let partition = dccAddressPartition, partition == .dccBAD11 else {
@@ -259,7 +255,7 @@ public class LocoNetMessage : NSObject {
     return nil
     
   }
-  
+  */
   public var swState : DCCSwitchState? {
     switch messageType {
     case .swState:
@@ -270,7 +266,7 @@ public class LocoNetMessage : NSObject {
       return nil
     }
   }
-  
+  /*
   public var dccAddressPartition : DCCAddressPartition? {
     
     guard let packet = dccPacket else {
@@ -297,7 +293,7 @@ public class LocoNetMessage : NSObject {
     }
     
   }
-  
+  */
   public var messageType : LocoNetMessageType {
     
     get {

@@ -1,5 +1,5 @@
 {
-  "originHash" : "d501ed30349105eb2ea535de65b5aafac1f5c9ee4e5d22cc5a5334a33719fc1a",
+  "originHash" : "bd351933de9cc470dddecc0e882193ed5b7a4dd536a817a9a8c39ce41ddc0c53",
   "pins" : [
     {
       "identity" : "orsserialport",
@@ -8,6 +8,15 @@
       "state" : {
         "revision" : "58a8cc454304e22280f184c2d2e25ecb3d5a74c5",
         "version" : "2.1.0"
+      }
+    },
+    {
+      "identity" : "sgdcc",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/pclwillmott/SGDCC",
+      "state" : {
+        "revision" : "797fc202a204d62dd14271e1751fa6aab0c181c7",
+        "version" : "0.0.4"
       }
     },
     {

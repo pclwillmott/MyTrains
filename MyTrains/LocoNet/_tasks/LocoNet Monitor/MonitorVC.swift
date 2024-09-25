@@ -287,14 +287,15 @@ class MonitorVC: MyTrainsViewController, OpenLCBLocoNetMonitorDelegate, MyTrains
         item += "cvValue: \(message.cvValue!)\n"
       case .immPacket, .s7CVRW:
         var result = ""
-        for byte in message.dccPacket! {
+        for byte in message.dccPacket!.packet {
           result += "\(byte.hex()) "
         }
-        item += "repeat: \(message.immPacketRepeatCount!) dccPacket: \(result) partition: \(message.dccAddressPartition!)"
-        
+        item += "repeat: \(message.immPacketRepeatCount!) dccPacket: \(result) "
+        /*
         if let address = message.dccBasicAccessoryDecoderAddress, let cvNumber = message.cvNumber, let cvValue = message.cvValue {
           item += " decoderAddress: \(address) cvNumber: \(cvNumber) accessMode: \(message.dccCVAccessMode!) cvValue: \(cvValue)"
         }
+         */
         
         item += "\n"
         
