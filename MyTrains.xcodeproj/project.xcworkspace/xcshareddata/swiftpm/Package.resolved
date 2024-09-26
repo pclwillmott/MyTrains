@@ -34,7 +34,7 @@
       "location" : "https://github.com/pclwillmott/SGLocoNet",
       "state" : {
         "branch" : "main",
-        "revision" : "5df45847107901cfd095d8f93f304b9325b20b06"
+        "revision" : "5615832877ba2b62d683a8241f805e7764b28c7c"
       }
     },
     {
@@ -43,7 +43,7 @@
       "location" : "https://github.com/pclwillmott/SGUnitConversion",
       "state" : {
         "branch" : "main",
-        "revision" : "806d0ab527aa842faa8a66547a5e94d54b770666"
+        "revision" : "e838bae513d695d92b3fd9b809e0cfe83c1b19cd"
       }
     }
   ],
