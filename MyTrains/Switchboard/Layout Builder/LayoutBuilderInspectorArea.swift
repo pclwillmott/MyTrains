@@ -7,6 +7,7 @@
 
 import Foundation
 import AppKit
+import SGAppKit
 
 extension LayoutBuilderVC {
   
@@ -17,7 +18,7 @@ extension LayoutBuilderVC {
     inspectorFields = LayoutInspectorProperty.inspectorPropertyFields
     
     for temp in inspectorFields {
-      if let comboBox = temp.control as? MyComboBox {
+      if let comboBox = temp.control as? SGComboBox {
         comboBox.target = self
         comboBox.action = #selector(self.cboAction(_:))
       }

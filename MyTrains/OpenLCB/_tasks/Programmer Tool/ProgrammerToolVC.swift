@@ -7,6 +7,8 @@
 
 import Foundation
 import AppKit
+import SGProgrammerCore
+import SGAppKit
 
 // https://github.com/JMRI/JMRI/blob/master/xml/decoders/esu/v4decoderInfoCVs.xml
 
@@ -50,7 +52,7 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
     pnlSettings?.subviews.removeAll()
     pnlSettings = nil
     
-    for index in 0 ... pnlSettingsView.count - 1 {
+    for index in 0 ..< pnlSettingsView.count {
       if let group = ProgrammerToolSettingsGroup(rawValue: index) {
         switch group {
         case .manualCVInput:
@@ -80,7 +82,7 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
   
   private var inspectorConstraints : [NSLayoutConstraint] = []
   
-  private var cboProgrammingTrack : MyComboBox? = MyComboBox()
+  private var cboProgrammingTrack : SGComboBox? = SGComboBox()
   
   private var pnlInspectorButtons : NSView? = NSView()
   
@@ -397,7 +399,7 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
     inspectorFields = ProgrammerToolInspectorProperty.inspectorPropertyFields
     
     for temp in inspectorFields {
-      if let comboBox = temp.control as? MyComboBox {
+      if let comboBox = temp.control as? SGComboBox {
  //       comboBox.target = self
  //       comboBox.action = #selector(self.cboAction(_:))
       }

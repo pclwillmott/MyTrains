@@ -7,6 +7,7 @@
 
 import Foundation
 import AppKit
+import SGAppKit
 
 /// The value of zero is reserved as a trap for unintialized fields. The actual rawValues have no purpose
 /// other than to uniquely identify the property and its label. Where a field is overloaded between
@@ -1675,7 +1676,7 @@ public enum LayoutInspectorProperty : Int, CaseIterable {
         checkBox.title = item.label
         field.control = checkBox
       case .comboBox:
-        let comboBox = MyComboBox()
+        let comboBox = SGComboBox()
         comboBox.isEditable = false
         field.control = comboBox
         initComboBox(property: field.property, comboBox: comboBox)
@@ -1757,7 +1758,7 @@ public enum LayoutInspectorProperty : Int, CaseIterable {
   
   // MARK: Private Class Methods
   
-  private static func initComboBox(property:LayoutInspectorProperty, comboBox:MyComboBox) {
+  private static func initComboBox(property:LayoutInspectorProperty, comboBox:SGComboBox) {
     
     switch property {
     case .orientation:

@@ -7,6 +7,7 @@
 
 import Foundation
 import AppKit
+import SGAppKit
 
 public enum LayoutButton : Int, CaseIterable {
   
@@ -22,7 +23,7 @@ public enum LayoutButton : Int, CaseIterable {
     return LayoutButton.tooltips[self]!
   }
 
-  public var icon : MyIcon {
+  public var icon : SGIcon {
     return LayoutButton.icons[self]!
   }
 
@@ -34,7 +35,7 @@ public enum LayoutButton : Int, CaseIterable {
     .fitToSize : String(localized: "Fit to Size", comment: ""),
   ]
 
-  private static let icons : [LayoutButton:MyIcon] = [
+  private static let icons : [LayoutButton:SGIcon] = [
     .zoomIn    : .zoomIn,
     .zoomOut   : .zoomOut,
     .fitToSize : .fitToSize,

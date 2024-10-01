@@ -9,6 +9,7 @@ import Foundation
 import AppKit
 import ORSSerial
 import SGDCC
+import SGProgrammerCore
 
 class LokProgrammerVC : MyTrainsViewController, MTSerialPortDelegate, ORSSerialPortDelegate {
   

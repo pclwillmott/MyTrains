@@ -7,6 +7,7 @@
 
 import Foundation
 import AppKit
+import SGAppKit
 
 public enum GroupButton : Int, CaseIterable {
   
@@ -22,7 +23,7 @@ public enum GroupButton : Int, CaseIterable {
     return GroupButton.tooltips[self]!
   }
 
-  public var icon : MyIcon {
+  public var icon : SGIcon {
     return GroupButton.icons[self]!
   }
 
@@ -34,7 +35,7 @@ public enum GroupButton : Int, CaseIterable {
     .switchToArrangeMode : String(localized: "Switch to Arrange Mode", comment: ""),
   ]
 
-  private static let icons : [GroupButton:MyIcon] = [
+  private static let icons : [GroupButton:SGIcon] = [
     .addItemToGroup      : .addToGroup,
     .removeItemFromGroup : .removeFromGroup,
     .switchToArrangeMode : .cursor,

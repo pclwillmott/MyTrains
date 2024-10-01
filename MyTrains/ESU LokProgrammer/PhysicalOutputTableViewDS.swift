@@ -30,6 +30,7 @@
 
 import Foundation
 import AppKit
+import SGProgrammerCore
 
 public protocol DecoderPhysicalOutputTableViewDSDelegate {
   func outputSelectionChanged(output:ESUDecoderPhysicalOutput)

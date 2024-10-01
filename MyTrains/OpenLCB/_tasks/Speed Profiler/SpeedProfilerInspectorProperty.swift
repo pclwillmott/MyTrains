@@ -7,6 +7,7 @@
 
 import Foundation
 import AppKit
+import SGAppKit
 
 public enum SpeedProfilerInspectorProperty : Int, CaseIterable {
   
@@ -370,7 +371,7 @@ public enum SpeedProfilerInspectorProperty : Int, CaseIterable {
           checkBox.title = item.label
           field.control = checkBox
         case .comboBox:
-          let comboBox = MyComboBox()
+          let comboBox = SGComboBox()
           comboBox.isEditable = false
           field.control = comboBox
           initComboBox(property: field.property, comboBox: comboBox)
@@ -454,7 +455,7 @@ public enum SpeedProfilerInspectorProperty : Int, CaseIterable {
 
   // MARK: Private Class Methods
   
-  private static func initComboBox(property:SpeedProfilerInspectorProperty, comboBox:MyComboBox) {
+  private static func initComboBox(property:SpeedProfilerInspectorProperty, comboBox:SGComboBox) {
     
     switch property {
     case trackProtocol:

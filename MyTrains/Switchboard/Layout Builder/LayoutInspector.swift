@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SGAppKit
 
 public enum LayoutInspector : Int, CaseIterable {
   
@@ -27,7 +28,7 @@ public enum LayoutInspector : Int, CaseIterable {
     return LayoutInspector.tooltips[self]!
   }
   
-  public var icon : MyIcon {
+  public var icon : SGIcon {
     return LayoutInspector.icons[self]!
   }
   
@@ -49,7 +50,7 @@ public enum LayoutInspector : Int, CaseIterable {
     .speedConstraints : String(localized: "Show Speed Constraints Inspector", comment: ""),
   ]
 
-  private static let icons : [LayoutInspector:MyIcon] = [
+  private static let icons : [LayoutInspector:SGIcon] = [
     .identity         : .info,
     .quickHelp        : .help,
     .attributes       : .gear,

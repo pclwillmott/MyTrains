@@ -7,6 +7,7 @@
 
 import Foundation
 import AppKit
+import SGAppKit
 
 public enum SpeedProfilerInspector : Int, CaseIterable {
   
@@ -19,9 +20,9 @@ public enum SpeedProfilerInspector : Int, CaseIterable {
   
   // MARK: Public Properties
   
-  public var button : NSButton {
+  @MainActor public var button : NSButton {
     
-    let icons : [SpeedProfilerInspector:MyIcon] = [
+    let icons : [SpeedProfilerInspector:SGIcon] = [
       .identity   : .info,
       .quickHelp  : .help,
       .settings   : .gear,

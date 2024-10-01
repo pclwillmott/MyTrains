@@ -7,6 +7,7 @@
 
 import Foundation
 import AppKit
+import SGAppKit
 
 extension LayoutBuilderVC {
   
@@ -147,11 +148,11 @@ extension LayoutBuilderVC {
       constraints.append(panelStripView.trailingAnchor.constraint(equalTo: layoutView.trailingAnchor))
       constraints.append(panelStripView.heightAnchor.constraint(equalToConstant: 20.0))
  
-      btnShowInspectorView = MyIcon.trailingThird.button(target: self, action: #selector(btnShowInspectorViewAction(_:)))
+      btnShowInspectorView = SGIcon.trailingThird.button(target: self, action: #selector(btnShowInspectorViewAction(_:)))
 
-      btnShowPaletteView = MyIcon.leadingThird.button(target: self, action: #selector(btnShowPaletteViewAction(_:)))
+      btnShowPaletteView = SGIcon.leadingThird.button(target: self, action: #selector(btnShowPaletteViewAction(_:)))
       
-      btnShowPanelView = MyIcon.bottomThird.button(target: self, action: #selector(btnShowPanelViewAction(_:)))
+      btnShowPanelView = SGIcon.bottomThird.button(target: self, action: #selector(btnShowPanelViewAction(_:)))
       
       if let btnShowPanelView, let btnShowPaletteView, let btnShowInspectorView {
         

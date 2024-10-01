@@ -7,6 +7,7 @@
 
 import Foundation
 import AppKit
+import SGAppKit
 
 class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate, NSTextFieldDelegate, MyTrainsAppDelegate, NSControlTextEditingDelegate {
   
@@ -496,7 +497,7 @@ class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate, NS
   
   internal var btnShowPanelView : NSButton?
   
-  internal var cboPanel : NSComboBox? = MyComboBox()
+  internal var cboPanel : NSComboBox? = SGComboBox()
   
   internal var btnNewPanel : NSButton? = NSButton()
   
@@ -532,13 +533,13 @@ class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate, NS
   
   internal var currentPartType : SwitchboardItemType?
   
-  internal var cboPalette : MyComboBox? = MyComboBox()
+  internal var cboPalette : SGComboBox? = SGComboBox()
   
   internal var paletteViews : [SwitchboardItemPalette:NSView] = [:]
   
   internal var groupStripView : NSView? = NSView()
   
-  internal var cboGroup : MyComboBox? = MyComboBox()
+  internal var cboGroup : SGComboBox? = SGComboBox()
   
   // MARK: Inspector Area Controls
   

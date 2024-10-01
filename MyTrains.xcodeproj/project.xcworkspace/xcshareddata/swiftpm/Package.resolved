@@ -1,5 +1,5 @@
 {
-  "originHash" : "bd351933de9cc470dddecc0e882193ed5b7a4dd536a817a9a8c39ce41ddc0c53",
+  "originHash" : "2f440b5964e3ddb645cbbd3c4360d089707539d9c6dc713c053ba4ae308fbe6b",
   "pins" : [
     {
       "identity" : "orsserialport",
@@ -11,12 +11,21 @@
       }
     },
     {
+      "identity" : "sgappkit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/pclwillmott/SGAppKit",
+      "state" : {
+        "revision" : "7f6a9f3ff3e443345800d1a45d357bc4b4ba9147",
+        "version" : "0.0.14"
+      }
+    },
+    {
       "identity" : "sgdcc",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pclwillmott/SGDCC",
       "state" : {
         "revision" : "797fc202a204d62dd14271e1751fa6aab0c181c7",
-        "version" : "0.0.4"
+        "version" : "0.0.5"
       }
     },
     {
@@ -24,8 +33,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pclwillmott/SGInteger",
       "state" : {
-        "revision" : "672efa18fce60a459ed833d0a9663e342226d50d",
-        "version" : "0.0.4"
+        "revision" : "bc2b2ac6213c74cc6a13d5018e2340f6e116861a",
+        "version" : "0.0.6"
       }
     },
     {
@@ -33,8 +42,17 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pclwillmott/SGLocoNet",
       "state" : {
-        "branch" : "main",
-        "revision" : "5615832877ba2b62d683a8241f805e7764b28c7c"
+        "revision" : "5615832877ba2b62d683a8241f805e7764b28c7c",
+        "version" : "0.0.5"
+      }
+    },
+    {
+      "identity" : "sgprogrammercore",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/pclwillmott/SGProgrammerCore",
+      "state" : {
+        "revision" : "2f1e71d54238277be814990d19c15adc2caaeeb6",
+        "version" : "0.0.15"
       }
     },
     {
@@ -42,8 +60,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pclwillmott/SGUnitConversion",
       "state" : {
-        "branch" : "main",
-        "revision" : "e838bae513d695d92b3fd9b809e0cfe83c1b19cd"
+        "revision" : "e838bae513d695d92b3fd9b809e0cfe83c1b19cd",
+        "version" : "0.0.5"
       }
     }
   ],

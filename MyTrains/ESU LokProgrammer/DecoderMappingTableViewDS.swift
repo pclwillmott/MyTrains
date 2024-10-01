@@ -30,6 +30,7 @@
 
 import Foundation
 import AppKit
+import SGProgrammerCore
 
 public class DecoderMappingTableViewDS : NSObject, NSTableViewDataSource, NSTableViewDelegate {
   

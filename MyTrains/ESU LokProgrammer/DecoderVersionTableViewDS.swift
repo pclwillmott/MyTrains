@@ -30,6 +30,7 @@
 
 import Foundation
 import AppKit
+import SGProgrammerCore
 
 public protocol DecoderVersionTableViewDSDelegate {
   func firmwareVersionChanged(firmwareVersion:[[Int]])

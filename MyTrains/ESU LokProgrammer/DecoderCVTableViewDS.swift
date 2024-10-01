@@ -30,6 +30,7 @@
 
 import Foundation
 import AppKit
+import SGProgrammerCore
 
 public class DecoderCVTableViewDS : NSObject, NSTableViewDataSource, NSTableViewDelegate {
 

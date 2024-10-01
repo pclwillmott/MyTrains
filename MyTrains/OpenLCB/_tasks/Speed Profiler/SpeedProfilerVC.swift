@@ -8,6 +8,7 @@
 import Foundation
 import AppKit
 import SGUnitConversion
+import SGAppKit
 
 private enum SpeedProfilerState {
 
@@ -246,7 +247,7 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBThrottleDelegate, NSTableV
     inspectorFields = SpeedProfilerInspectorProperty.inspectorPropertyFields
     
     for temp in inspectorFields {
-      if let comboBox = temp.control as? MyComboBox {
+      if let comboBox = temp.control as? SGComboBox {
         comboBox.target = self
         comboBox.action = #selector(self.cboAction(_:))
       }
@@ -731,7 +732,7 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBThrottleDelegate, NSTableV
   
   // MARK: Controls
   
-  private var cboLocomotive : MyComboBox? = MyComboBox()
+  private var cboLocomotive : SGComboBox? = SGComboBox()
   
   private var sptSplitView : NSSplitView? = NSSplitView()
   
@@ -747,9 +748,9 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBThrottleDelegate, NSTableV
   
   private var btnStartStop : NSButton? = NSButton()
   
-  private var btnShowValuesPanel : NSButton? = MyIcon.bottomThird.button(target: nil, action: nil)
+  private var btnShowValuesPanel : NSButton? = SGIcon.bottomThird.button(target: nil, action: nil)
   
-  private var btnShowInspectorPanel : NSButton? = MyIcon.trailingThird.button(target: nil, action: nil)
+  private var btnShowInspectorPanel : NSButton? = SGIcon.trailingThird.button(target: nil, action: nil)
   
   private var sptResultsView : NSSplitView? = NSSplitView()
   

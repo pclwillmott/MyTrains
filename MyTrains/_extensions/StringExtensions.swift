@@ -10,19 +10,8 @@ import Foundation
 extension String {
   
   public func padWithNull(length:Int) -> [UInt8] {
-      
-    var data : [UInt8] = []
-    
-    for byte in self.prefix(length - 1).utf8 {
-      data.append(byte)
-    }
-    
-    for _ in 1 ... length - data.count {
-      data.append(0)
-    }
-      
-    return data
-
+    var data = [UInt8](self.prefix(length).utf8)
+    return data + [UInt8](repeating: 0, count: length - data.count)
   }
   
   public var sortValue : String {

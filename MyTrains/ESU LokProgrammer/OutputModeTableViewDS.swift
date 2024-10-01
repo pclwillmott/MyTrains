@@ -30,6 +30,7 @@
 
 import Foundation
 import AppKit
+import SGProgrammerCore
 
 public protocol OutputModeTableViewDSDelegate {
   func supportedOutputModesChanged(outputs:[ESUDecoderPhysicalOutput: Set<ESUPhysicalOutputMode>])
@@ -45,7 +46,7 @@ public class OutputModeTableViewDS : NSObject, NSTableViewDataSource, NSTableVie
   
   public var outputModes : [ESUPhysicalOutputMode] = []
   
-  public var physicalOutput : ESUDecoderPhysicalOutput? {
+  @MainActor public var physicalOutput : ESUDecoderPhysicalOutput? {
     didSet {
       
       outputModes = []
@@ -137,7 +138,7 @@ public class OutputModeTableViewDS : NSObject, NSTableViewDataSource, NSTableVie
     
   }
   
-  @objc func checkBoxAction(_ sender:NSButton) {
+  @objc @MainActor func checkBoxAction(_ sender:NSButton) {
     
     guard definition != nil, let physicalOutput else {
       return

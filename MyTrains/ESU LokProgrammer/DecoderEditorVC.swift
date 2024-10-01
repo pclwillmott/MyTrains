@@ -30,6 +30,7 @@
 
 import Foundation
 import AppKit
+import SGProgrammerCore
 
 public let decoderInfoMasterFile = "/Users/paul/Documents/MyTrains/MyTrains/ESU LokProgrammer/DECODER_INFO.json"
 
@@ -293,6 +294,7 @@ class DecoderEditorVC : MyTrainsViewController, DecoderPropertyTableViewDSDelega
       definition = decoderTypes[decoderType]
       
       if definition == nil {
+        
         definition = DecoderDefinition(decoderType: decoderType, firmwareVersion: [], esuProductIds: [], cvs: [], defaultValues: [], mapping: [:], properties: [], esuPhysicalOutputs: [], offsetMethod: .none, esuOutputModes: [:])
       }
       
