@@ -1110,6 +1110,20 @@ public class LocoNetMessage : NSObject {
                    message[18] == 0x00 {
                   _messageType = .iplDiscover
                 }
+                else if message[4 ] & 0xf0 == 0 &&
+                   message[6 ] == 0x00 &&
+                   message[7 ] == 0x01 &&
+                   message[8 ] == 0x00 &&
+                   message[9 ] & 0xf0 == 0 &&
+                   message[10] == 0x00 &&
+                   message[13] == 0x00 &&
+                   message[14] & 0xf0 == 0 &&
+                   message[15] == 0x00 &&
+                   message[16] == 0x00 &&
+                   message[17] == 0x00 &&
+                   message[18] == 0x00 {
+                  _messageType = .s7Identify
+                }
               case 0x10:
                 if (message[4 ] & 0b11110000) == 0x00 &&
                    (message[9 ] & 0b11110000) == 0x00 &&

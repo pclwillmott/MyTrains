@@ -277,6 +277,88 @@ class MonitorVC: MyTrainsViewController, OpenLCBLocoNetMonitorDelegate, MyTrains
       item += "\(message.messageType)\n"
       
       switch message.messageType {
+        /*
+      case .getQuerySlot:
+        let slot = message.message[1] & 0x07
+        var data : [UInt8] = [
+          0xe6,
+          0x15,
+          0x01,
+          0x78 + slot,
+          0x00,
+          0x00,
+          0x00,
+          0x00,
+          0x00,
+          0x00,
+          0x00,
+          0x00,
+          0x00,
+          0x00,
+          0x1d,
+          0x00,
+          0x1d,
+          0x00,
+          0x10,
+          0x00,
+          
+        ]
+        switch slot {
+        case 0:
+          data[4] = 0b00000000
+          data[5] = 0b00100000
+          data[6] = UInt8(6998 & 0x7f)
+          data[7] = UInt8((6998 >> 7) & 0x7f)
+          data[8] = UInt8(6997 & 0x7f)
+          data[9] = UInt8((6997 >> 7) & 0x7f)
+          data[10] = UInt8(6996 & 0x7f)
+          data[11] = UInt8((6996 >> 7) & 0x7f)
+          data[12] = UInt8(6995 & 0x7f)
+          data[13] = UInt8((6995 >> 7) & 0x7f)
+          data[14] = UInt8(6997 & 0x7f)
+          data[15] = UInt8((6997 >> 7) & 0x7f)
+          data[16] = 0b00001110 // 1.6
+          data[17] = 0b00010010 // 2.2
+        case 1:
+          data[4] = 60 // 12V
+          data[5] = 70 // 14V
+          data[6] = 2 // 20A
+          data[7] = 50 // 5A
+          data[10] = 77 // 15.4v
+          data[12] = 45 // 9v
+          data[14] = UInt8(6997 & 0x7f)
+          data[15] = UInt8((6997 >> 7) & 0x7f)
+        case 2:
+          data[4] = UInt8(9999 & 0x7f)
+          data[5] = UInt8((9999 >> 7) & 0x7f)
+          data[6] = UInt8(9998 & 0x7f)
+          data[7] = UInt8((9998 >> 7) & 0x7f)
+          data[8] = UInt8(9997 & 0x7f)
+          data[9] = UInt8((9997 >> 7) & 0x7f)
+          data[10] = UInt8(9996 & 0x7f)
+          data[11] = UInt8((9996 >> 7) & 0x7f)
+          data[12] = UInt8(9995 & 0x7f)
+          data[13] = UInt8((9995 >> 7) & 0x7f)
+          data[14] = UInt8(7997 & 0x7f)
+          data[15] = UInt8((7997 >> 7) & 0x7f)
+        case 3:
+          data[4] = UInt8(7999 & 0x7f)
+          data[5] = UInt8((7999 >> 7) & 0x7f)
+          data[6] = UInt8(7998 & 0x7f)
+          data[7] = UInt8((7998 >> 7) & 0x7f)
+        case 4:
+          data[4] = UInt8(8999 & 0x7f)
+          data[5] = UInt8((8999 >> 7) & 0x7f)
+          data[6] = UInt8(8998 & 0x7f)
+          data[7] = UInt8((8998 >> 7) & 0x7f)
+          data[16] = UInt8(8997 & 0x7f)
+          data[17] = UInt8((8997 >> 7) & 0x7f)
+        default:
+          break
+        }
+        let newMessage = LocoNetMessage(data: data, appendCheckSum: true)
+        monitorNode?.sendMessage(message: newMessage)
+         */
       case .sensRepGenIn:
         item += "sensorAddress: \(message.sensorAddress!) sensorState: \(message.sensorState!)\n"
       case .setSw:

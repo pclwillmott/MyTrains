@@ -129,6 +129,7 @@ public enum LocoNetMessageType {
   case s7CVRW
   case s7CVState
   case s7Info
+  case s7Identify
   case sensRepGenIn
   case sensRepTurnIn
   case sensRepTurnOut
