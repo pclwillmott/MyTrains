@@ -151,9 +151,39 @@ public class LocoNetMessage : NSObject {
     
   }
   
+  public var lncvValue : UInt16? {
+  
+    switch messageType {
+    case .lncvDataU, .setLNCVU:
+      
+      var value = UInt16(message[11]) | (UInt16(message[12]) << 8)
+      value |= (message[6] & 0b00010000) != 0 ? 0x0080 : 0x0000
+      value |= (message[6] & 0b00100000) != 0 ? 0x8000 : 0x0000
+      return value
+      
+    default:
+      break
+    }
+    
+    return nil
+    
+  }
+  
   public var cvValue : UInt8? {
     
     switch messageType {
+      
+    case .writeCVU:
+      
+      var cv = UInt8(message[9])
+      cv |= (message[5] & 0x08) != 0 ? 0x80 : 0x00
+      return cv
+
+    case .progOnMainU:
+      
+      var cv = UInt8(message[12])
+      cv |= (message[10] & 0b00000010) != 0 ? 0x80 : 0
+      return cv
       
     case .progSlotDataP1:
 
@@ -184,9 +214,60 @@ public class LocoNetMessage : NSObject {
 
   }
   
+  public var partNumber : UInt32? {
+    
+    switch messageType {
+    case .getLNCVU, .setLNCVU, .lncvDataU:
+      var number = UInt32(message[7]) | (UInt32(message[8]) << 8)
+      number |= (message[6] & 0b00000001) != 0 ? 0x80 : 0x00
+      return number * 10
+    default:
+      break
+    }
+    
+    return nil
+    
+  }
+  
+  public var moduleAddress : UInt16? {
+    
+    switch messageType {
+    case .getLNCVU:
+      var addr = UInt16(message[11]) | (UInt16(message[12]) << 8)
+      addr |= (message[6] & 0b00010000) != 0 ? 0x0080 : 0x00
+      addr |= (message[6] & 0b00100000) != 0 ? 0x8000 : 0x00
+      return addr
+    default:
+      break
+    }
+    
+    return nil
+    
+  }
+  
+  
   public var cvNumber : UInt16? {
 
     switch messageType {
+      
+    case .getLNCVU, .lncvDataU, .setLNCVU:
+      
+      var cv = UInt16(message[9]) | (UInt16(message[10]) << 8)
+      cv |= (message[6] & 0x04) != 0 ? 0x80 : 0x00
+      return cv
+      
+    case .readCVU, .writeCVU:
+      
+      var cv = UInt16(message[7]) | (UInt16(message[8]) << 8)
+      cv |= (message[5] & 0x02) != 0 ? 0x80 : 0x00
+      return cv
+      
+    case .progOnMainU:
+      
+      var cv = UInt16(message[9]) | (UInt16(message[11]) << 8)
+      cv |= (message[5]  & 0b00001000) != 0 ? 0x0080 : 0
+      cv |= (message[10] & 0b00000001) != 0 ? 0x8000 : 0
+      return cv
       
     case .progSlotDataP1:
       
@@ -608,7 +689,7 @@ public class LocoNetMessage : NSObject {
           else if message[1] == 0x7f && message[2] == 0x40 {
             _messageType = .getOpSwDataP2
           }
-          else if message[1] < 0x78 && (message[2] & 0b10111000) == 0 {
+          else if message[1] < 0x78 && (message[2] & 0b10110100) == 0 {
             _messageType = .getLocoSlotData
           }
           
@@ -668,6 +749,9 @@ public class LocoNetMessage : NSObject {
           else if (message[1] & 0b11010000) == 0 {
             _messageType = .transRep
           }
+          else if message[1] == 0x62 && message[2] & 0b11100000 == 0 && message[3] & 0b01010000 == 0b01010000 && message[4] == 0 {
+            _messageType = .pmRepBXPA1
+          }
 
         // MARK: 0xD3
           
@@ -689,12 +773,14 @@ public class LocoNetMessage : NSObject {
             let subCode = message[3]
   
             switch subCode {
-            case 0x05 :
-              _messageType = .locoF12F20F28P2
+            case 0x05:
+              _messageType = .locoF12F20F28U
+            case 0x07:
+              _messageType = .locoF5F11U
             case 0x08:
-              _messageType = .locoF13F19P2
+              _messageType = .locoF13F19U
             case 0x09:
-              _messageType = .locoF21F27P2
+              _messageType = .locoF21F27U
             default:
               break
             }
@@ -747,6 +833,9 @@ public class LocoNetMessage : NSObject {
             }
             
           }
+          else if (message[1] & 0b11100111) == 0 {
+            _messageType = .locoBinStateU
+          }
           
         // MARK: 0xD5
           
@@ -777,10 +866,15 @@ public class LocoNetMessage : NSObject {
           
         case 0xd7:
           
-          if message[2] == 0 &&
-            (message[3] & 0b11110000) == 0 &&
-            (message[4] == 0x20 || message[4] == 0x7f) {
-            _messageType = .receiverRep
+          switch message[1] {
+          case 0x17, 0x1f, 0x12, 0x22:
+            if message[2] == 0 &&
+              (message[3] & 0b11110000) == 0 &&
+              (message[4] == 0x20 || message[4] == 0x7f || message[4] == 0x00) {
+              _messageType = .receiverRep
+            }
+          default:
+            break
           }
 
         // MARK: 0xDF
@@ -805,6 +899,19 @@ public class LocoNetMessage : NSObject {
         case 0xe5: // OPC_PEER_XFER
             
           switch message[1] {
+           
+          case 0x07:
+            
+            if message[2] == 0x01 && message[3] == 0x49 && message[4] == 0x42 && (message[5] & 0xf0) == 0x40 {
+              switch message[5] & 0x0f {
+              case 0:
+                _messageType = .exitProgTrkModeU
+              case 1:
+                _messageType = .enterProgTrkModeU
+              default:
+                break
+              }
+            }
             
           case 0x09:
             
@@ -824,6 +931,27 @@ public class LocoNetMessage : NSObject {
               _messageType = .locoRep
             }
 
+          case 0x0f:
+            
+            if message[2] == 0x05 && message[3] == 0x49 && message[4] == 0x4b && message[5] == 0x1f {
+              _messageType = .lncvDataU
+            }
+            else if message[2] == 0x00 && message[3] == 0x49 && message[4] == 0x4b {
+              
+              switch message[5] {
+              case 0x0b:
+                if message[10] == 0x00 && message[13] == 0x00 {
+                  _messageType = .dataFormatU
+                }
+              case 0x19:
+                _messageType = .ukBU
+              case 0x09:
+                _messageType = .ukDU
+              default:
+                break
+              }
+            }
+            
           case 0x10:
             
             if message[ 2] == 0x22 &&
@@ -1377,6 +1505,74 @@ public class LocoNetMessage : NSObject {
             }
 
           }
+          else if message[1] == 0x0f {
+            
+            if message[2] == 0x01 && message[3] == 0x05 && message[4] == 0x00 && (message[5] & 0xf0) == 0x20 {
+              
+              switch message[5] & 0x0f {
+              case 0x00:
+                _messageType = .setLNCVU
+              case 0x01:
+                _messageType = .getLNCVU
+              default:
+                break
+              }
+              
+            }
+            else if message[2] == 0x01 && message[3] == 0x49 && message[4] == 0x42 {
+              
+              switch message[5] {
+              case 0x0c:
+                if message[10] == 0 && message[11] == 0 && message[12] == 0 && message[13] == 0 {
+                  _messageType = .setDataFormatU
+                }
+              case 0x0d:
+                if message[9] == 0 && message[10] == 0 && message[11] == 0 && message[12] == 0 && message[13] == 0 {
+                  _messageType = .getDataFormatU
+                }
+              case 0x1a:
+                _messageType = .ukAU
+              case 0x07:
+                _messageType = .ukCU
+              default:
+                break
+              }
+            }
+            
+          }
+          else if message[1] == 0x1f {
+            
+            if message[2] == 0x01 && message[3] == 0x49 && message[4] == 0x42 {
+              
+              if (message[5] & 0b01110001) == 0x71 && message[6] == 0x5e && (message[10] & 0b01110000) == 0x70 && message[13] == 0 && message[14] == 0 && (message[15] & 0x70) == 0x10 && message[16] == 0 && message[17] == 0 && message[18] == 0 && message[19] == 0 && message[20] == 0 && message[21] == 0 && message[22] == 0 && message[23] == 0 && message[24] == 0 && message[25] == 0 && message[26] == 0 && message[27] == 0 && message[28] == 0 && message[29] == 0 {
+                _messageType = .progOnMainU
+              }
+              else if (message[5] & 0b01110011) == 0x73 && (message[6] & 0b01111100) == 0x70 && message[7] == 0x7f && message[8] == 0x7f && message[10] == 0x70 && message[12] == 0 && message[13] == 0 && message[14] == 0 && (message[15] & 0x70) == 0x10 && message[16] == 0 && message[17] == 0 && message[18] == 0 && message[19] == 0 && message[20] == 0 && message[21] == 0 && message[22] == 0 && message[23] == 0 && message[24] == 0 && message[25] == 0 && message[26] == 0 && message[27] == 0 && message[28] == 0 && message[29] == 0 {
+                
+                switch message[6] & 0x0f {
+                case 1:
+                  _messageType = .writeLocoAddrU
+                case 2:
+                  _messageType = .readLocoAddrU
+                default:
+                  break
+                }
+              }
+              else if (message[5] & 0b01110000) == 0x70 && (message[6] & 0b01111100) == 0x70 && message[10] == 0x70 && message[11] == 0 && message[12] == 0 && message[13] == 0 && message[14] == 0 && (message[15] & 0x70) == 0x10 && message[16] == 0 && message[17] == 0 && message[18] == 0 && message[19] == 0 && message[20] == 0 && message[21] == 0 && message[22] == 0 && message[23] == 0 && message[24] == 0 && message[25] == 0 && message[26] == 0 && message[27] == 0 && message[28] == 0 && message[29] == 0 {
+                
+                switch message[6] & 0x0f {
+                case 1:
+                  _messageType = .writeCVU
+                case 2:
+                  _messageType = .readCVU
+                default:
+                  break
+                }
+              }
+
+            }
+            
+          }
 
         // MARK: 0xEE
             
@@ -1543,6 +1739,8 @@ public class LocoNetMessage : NSObject {
       var bid = message[2]
       bid |= (message[1] & 0b00000001) == 0b00000001 ? 0b10000000 : 0
       return Int(bid) + 1
+    case .pmRepBXPA1:
+      return Int(((message[2] & 0b00011111) << 3) | (message[3] & 0b111)) + 1
     case .iplDevData:
       var bid = message[15]
       bid |= (message[14] & 0b00000001) == 0b00000001 ? 0b10000000 : 0
@@ -1580,10 +1778,15 @@ public class LocoNetMessage : NSObject {
   
   public var locomotiveAddress : UInt16? {
     switch messageType {
+    case .setDataFormatU, .getDataFormatU, .dataFormatU:
+      var addr = UInt16(message[7]) | (UInt16(message[8]) << 8)
+      addr |= (message[6] & 0x01) != 0 ? 0x80 : 0x00
+      addr |= (message[6] & 0x02) != 0 ? 0x80 : 0x00
+      return addr
     case .locoRep:
       let highBits = message[3] == 0x7d ? 0 : UInt16(message[3]) << 7
       return UInt16(message[4]) | highBits
-    case .locoSlotDataP1:
+    case .locoSlotDataP1, .setLocoSlotDataP1:
       var address = UInt16(message[4])
       if message[9] != 0x7f {
         address |= UInt16(message[9]) << 7
@@ -1591,8 +1794,13 @@ public class LocoNetMessage : NSObject {
       return address
     case .transRep:
       return UInt16(message[4]) | (UInt16(message[3]) << 7)
-    case .locoSlotDataP2:
+    case .locoSlotDataP2, .setLocoSlotDataP2:
       return UInt16(message[5]) | (UInt16(message[6]) << 7)
+    case .progOnMainU:
+      var addr = UInt16(message[7]) | (UInt16(message[8]) << 8)
+      addr |= (message[5] & 0b00000010) != 0 ? 0x0080 : 0
+      addr |= (message[5] & 0b00000100) != 0 ? 0x8000 : 0
+      return addr
     default:
       return nil
     }
@@ -2188,9 +2396,9 @@ public class LocoNetMessage : NSObject {
 
   public var slotStatus1 : UInt8? {
     switch messageType {
-    case .locoSlotDataP1:
+    case .locoSlotDataP1, .setLocoSlotDataP1:
       return message[3]
-    case .locoSlotDataP2:
+    case .locoSlotDataP2, .setLocoSlotDataP2:
       return message[4]
     default:
       break
@@ -2215,10 +2423,43 @@ public class LocoNetMessage : NSObject {
   }
   
   public var mobileDecoderType : SpeedSteps? {
-    guard let rawMobileDecoderType else {
-      return nil
+    
+    switch messageType {
+    case .locoSlotDataP1, .setLocoSlotDataP1:
+      return SpeedSteps(rawValue: message[3] & 0b111)
+    case .locoSlotDataP2, .setLocoSlotDataP2:
+      if message[14] & 0xf0 == 0x50 {
+        switch message[14] & 0x0f {
+        case 0:
+          return .dcc14
+        case 2:
+          return .dcc28
+        case 3:
+          return .dcc128
+        default:
+          break
+        }
+      }
+      else {
+        return SpeedSteps(rawValue: message[4] & 0b111)
+      }
+    case .setDataFormatU, .dataFormatU:
+      switch message[9] & 0x0f {
+      case 0:
+        return .dcc14
+      case 2:
+        return .dcc28
+      case 3:
+        return .dcc128
+      default:
+        break
+      }
+    default:
+      break
     }
-    return SpeedSteps(rawValue: rawMobileDecoderType)
+    
+    return nil
+    
   }
 
   public var rawMobileDecoderType : UInt8? {
@@ -2248,10 +2489,14 @@ public class LocoNetMessage : NSObject {
   
   public var speed : Int? {
     switch messageType {
-    case .locoSlotDataP1:
+    case .locoSlotDataP1, .setLocoSlotDataP1:
       return Int(message[5])
-    case .locoSlotDataP2:
+    case .locoSlotDataP2, .setLocoSlotDataP2:
       return Int(message[8])
+    case .locoSpdP1:
+      return Int(message[2])
+    case .locoSpdDirP2:
+      return Int(message[4])
     default:
       break
     }

@@ -76,16 +76,37 @@ public enum LocoNetMessageType {
   case locoDirF0F4P1
   case locoF0F6P2
   case locoF5F8P1
+
+  case locoF5F11U
+  case locoF13F19U
+  case locoF21F27U
+  case locoF12F20F28U
+  case locoBinStateU
+  case progOnMainU
+  case enterProgTrkModeU
+  case exitProgTrkModeU
+  case getLNCVU
+  case lncvDataU
+  case setLNCVU
+  case readCVU
+  case writeCVU
+  case readLocoAddrU
+  case writeLocoAddrU
+  case setDataFormatU
+  case getDataFormatU
+  case dataFormatU
+  case ukAU // Unknown A Uhlenbrock
+  case ukBU // Unknown B Uhlenbrock
+  case ukCU // Unknown C Uhlenbrock
+  case ukDU // Unknown D Uhlenbrock
+  
   case locoF7F13P2
   case locoF9F12IMMLAdr
   case locoF9F12IMMSAdr
   case locoF9F12P1
-  case locoF12F20F28P2
   case locoF13F20IMMLAdr
   case locoF13F20IMMSAdr
-  case locoF13F19P2
   case locoF14F20P2
-  case locoF21F27P2
   case locoF21F28IMMLAdr
   case locoF21F28IMMSAdr
   case locoF21F28P2
@@ -104,6 +125,7 @@ public enum LocoNetMessageType {
   case peerXfer16
   case pmRep
   case pmRepBXP88
+  case pmRepBXPA1
   case prMode
   case progCmdAccepted
   case progCmdAcceptedBlind

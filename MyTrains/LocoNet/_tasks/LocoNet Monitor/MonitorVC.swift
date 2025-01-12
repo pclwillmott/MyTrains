@@ -7,13 +7,139 @@
 
 import Foundation
 import AppKit
+import ORSSerial
+import SGDCC
 
 private enum TimeStampType : Int {
   case none = 0
   case millisecondsSinceLastMessage = 1
 }
 
-class MonitorVC: MyTrainsViewController, OpenLCBLocoNetMonitorDelegate, MyTrainsAppDelegate {
+class MonitorVC: MyTrainsViewController, OpenLCBLocoNetMonitorDelegate, MyTrainsAppDelegate, ORSSerialPortDelegate {
+  
+  func serialPortWasRemovedFromSystem(_ serialPort: ORSSerialPort) {
+    
+  }
+  
+  var snifferBuffer : String = ""
+  var processingSniffer = false
+  var snifferLock = NSLock()
+  
+  func serialPort(_ serialPort: ORSSerialPort, didReceive data: Data) {
+    
+    var bytes : [UInt8] = []
+    bytes.append(contentsOf: data)
+    bytes.append(0)
+    snifferBuffer += String(cString: bytes)
+    
+    snifferLock.lock()
+    
+    var ok = !processingSniffer
+    
+    if ok {
+      processingSniffer = true
+    }
+    
+    snifferLock.unlock()
+    
+    if !ok {
+      return
+    }
+    
+    while snifferBuffer.count >= 6 {
+      
+      var found = false
+      
+      while snifferBuffer.count > 0 {
+        if snifferBuffer.prefix(1) == "[" {
+          found = true
+          break
+        }
+        snifferBuffer.removeFirst(1)
+      }
+      
+      if !found {
+        break
+      }
+      
+      var message = ""
+      
+      found = false
+      
+      for char in snifferBuffer {
+        message += String(char)
+        if char == "]" {
+          found = true
+          break
+        }
+      }
+      
+      if !found {
+        break
+      }
+      
+      snifferBuffer.removeFirst(message.count)
+
+      message.removeFirst(1)
+      message.removeLast(1)
+      
+      var packet : [UInt8] = []
+      
+      while !message.isEmpty {
+        packet.append(UInt8(hex: message.prefix(2))!)
+        message.removeFirst(2)
+      }
+      
+      var item = ""
+      
+      if let dccPacket = SGDCCPacket(packet: packet) {
+        item = dccPacket.packetType.title
+      }
+
+      if !item.isEmpty {
+        
+        lineBuffer.append(item)
+        
+        while lineBuffer.count > 500 {
+          lineBuffer.removeFirst()
+        }
+        
+        
+        // https://www.locgeek.com/2013/01/hands-on-uhlenbrock-marco-railcomloconet/
+        // THIS LINK IS FOR GOOD INFO ON UhlenBrock 68510 MARCo Receiver
+        // See also YaMoRc site
+        
+        if !isPaused {
+          
+          var newString = ""
+
+          for line in lineBuffer {
+            newString += "\(line)\n"
+          }
+
+          txtMonitor.string = "\(newString)"
+          
+          let range = NSMakeRange(txtMonitor.string.count - 1, 0)
+
+          txtMonitor.scrollRangeToVisible(range)
+          
+        }
+
+        item += "\n"
+
+        captureWrite(message: item)
+        
+      }
+      
+    }
+    
+    snifferLock.lock()
+    processingSniffer = false
+    snifferLock.unlock()
+
+  }
+
+
   
   // MARK: Window & View Control
   
@@ -49,6 +175,8 @@ class MonitorVC: MyTrainsViewController, OpenLCBLocoNetMonitorDelegate, MyTrains
     
     super.viewWillAppear()
     
+    let x1 : UInt32 = 9999
+    
     self.view.window?.title = "LocoNet Monitor"
     
     if let monitorNode {
@@ -82,6 +210,17 @@ class MonitorVC: MyTrainsViewController, OpenLCBLocoNetMonitorDelegate, MyTrains
     
     observerId = appNode!.addObserver(observer: self)
     
+    dccSniffer = ORSSerialPort(path: "/dev/cu.usbmodem14101")
+    
+    if let dccSniffer {
+      dccSniffer.baudRate = 115200
+      dccSniffer.numberOfDataBits = 8
+      dccSniffer.numberOfStopBits = 1
+      dccSniffer.parity = .none
+      dccSniffer.open()
+      dccSniffer.delegate = self
+    }
+    
   }
   
   // MARK: Private Properties
@@ -93,6 +232,8 @@ class MonitorVC: MyTrainsViewController, OpenLCBLocoNetMonitorDelegate, MyTrains
   private var gatewayDS = ComboBoxNodeDS()
   
   private var lineBuffer : [String] = []
+  
+  private var dccSniffer : ORSSerialPort?
   
   private var captureFilename : String {
     get {
@@ -359,6 +500,32 @@ class MonitorVC: MyTrainsViewController, OpenLCBLocoNetMonitorDelegate, MyTrains
         let newMessage = LocoNetMessage(data: data, appendCheckSum: true)
         monitorNode?.sendMessage(message: newMessage)
          */
+      case .locoSlotDataP1, .setLocoSlotDataP1:
+        item += "slot: \(message.slotNumber!) speed:\(message.speed!)\nlocoAddress: \(message.locomotiveAddress!) decoderType: \(message.mobileDecoderType!.title) slotState: \(message.slotState!.title)  consistState: \(message.consistState!.title)\n"
+      case .locoSlotDataP2, .setLocoSlotDataP2:
+        item += "slot: \(message.slotNumber!) speed:\(message.speed!)\nlocoAddress: \(message.locomotiveAddress!) decoderType: \(message.mobileDecoderType!.title) slotState: \(message.slotState!.title)  consistState: \(message.consistState!.title)\n"
+      case .locoSpdP1:
+        item += "slot: \(message.slotNumber!) speed:\(message.speed!)\n"
+      case .locoSpdDirP2:
+        item += "slot: \(message.slotNumber!) speed:\(message.speed!)\n"
+      case .getDataFormatU:
+        item += "locoAddress: \(message.locomotiveAddress!)\n"
+      case .setDataFormatU, .dataFormatU:
+        item += "locoAddress: \(message.locomotiveAddress!) decoderType: \(message.mobileDecoderType!.title)\n"
+      case .readCVU:
+        item += "CV#: \(message.cvNumber!)\n"
+      case .writeCVU:
+        item += "CV#: \(message.cvNumber!) cvValue: \(message.cvValue!)\n"
+      case .lncvDataU:
+        item += "partNumber: \(message.partNumber!) cv: \(message.cvNumber!) value: \(message.lncvValue!)\n"
+      case .setLNCVU:
+        item += "partNumber: \(message.partNumber!) lncv: \(message.cvNumber!) lncvValue: \(message.lncvValue!)\n"
+      case .getLNCVU:
+        item += "partNumber: \(message.partNumber!) moduleAddr: \(message.moduleAddress!) cv: \(message.cvNumber!)\n"
+      case .progOnMainU:
+        item += "locoAddress: \(message.locomotiveAddress!) cv: \(message.cvNumber!) value: \(message.cvValue!)\n"
+      case .pmRepBXPA1:
+        item += "boardID: \(message.boardId!)\n"
       case .sensRepGenIn:
         item += "sensorAddress: \(message.sensorAddress!) sensorState: \(message.sensorState!)\n"
       case .setSw:
