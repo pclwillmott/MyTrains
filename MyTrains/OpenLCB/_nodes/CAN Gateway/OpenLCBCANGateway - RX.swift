@@ -410,6 +410,10 @@ extension OpenLCBCANGateway {
                 route = false
               }
               
+              // HACK OVERRIDE
+              
+              route = true
+              
             }
             
           }

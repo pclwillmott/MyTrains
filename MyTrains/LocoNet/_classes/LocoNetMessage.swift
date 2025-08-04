@@ -945,8 +945,10 @@ public class LocoNetMessage : NSObject {
                 }
               case 0x19:
                 _messageType = .ukBU
+              case 0x08:
+                _messageType = .softwareVersionU
               case 0x09:
-                _messageType = .ukDU
+                _messageType = .serialNumberU
               default:
                 break
               }
@@ -1532,8 +1534,10 @@ public class LocoNetMessage : NSObject {
                 }
               case 0x1a:
                 _messageType = .ukAU
+              case 0x06:
+                _messageType = .getSoftwareVersionU
               case 0x07:
-                _messageType = .ukCU
+                _messageType = .getSerialNumberU
               default:
                 break
               }
@@ -1822,6 +1826,50 @@ public class LocoNetMessage : NSObject {
     }
   }
 
+  public var softwareVersionU : Double? {
+    
+    switch messageType {
+    case .softwareVersionU:
+      
+      var number : UInt64 = 0
+      var index = 8
+      while index >= 7 {
+        number *= 100
+        number += UInt64(message[index] >> 4) * 10 + UInt64(message[index] & 0x0f)
+        index -= 1
+      }
+      return Double(number) / 1000.0
+      
+    default:
+      break
+    }
+    
+    return nil
+    
+  }
+
+  public var serialNumberU : UInt64? {
+    
+    switch messageType {
+    case .serialNumberU:
+      
+      var number : UInt64 = 0
+      var index = 7
+      while index <= 11 {
+        number *= 100
+        number += UInt64(message[index] >> 4) * 10 + UInt64(message[index] & 0x0f)
+        index += 1
+      }
+      return number
+      
+    default:
+      break
+    }
+    
+    return nil
+    
+  }
+  
   public var serialNumber : UInt16? {
     switch messageType {
     case .iplDevData:

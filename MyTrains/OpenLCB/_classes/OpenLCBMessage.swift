@@ -126,22 +126,25 @@ public class OpenLCBMessage : NSObject {
       
       payload = frame.data
       
-      if messageTypeIndicator.isAddressPresent, let alias = UInt16(bigEndianData: [payload[0] & 0x0f, payload[1]]) {
-        destinationNIDAlias = alias
-        flags = OpenLCBCANFrameFlag(rawValue: (payload[0] & 0x30) >> 4)!
-        payload.removeFirst(2)
-      }
-      
-      if messageTypeIndicator.isEventPresent, let eventPrefix = UInt16(bigEndianData: [payload[0], payload[1]]) {
-        switch eventPrefix {
-        default:
-          if let id = UInt64(bigEndianData: [UInt8](payload.prefix(8))) {
-            eventId = id
-            payload.removeFirst(8)
+      if payload.count >= 2 {
+        
+        if messageTypeIndicator.isAddressPresent && payload.count >= 2, let alias = UInt16(bigEndianData: [payload[0] & 0x0f, payload[1]]) {
+          destinationNIDAlias = alias
+          flags = OpenLCBCANFrameFlag(rawValue: (payload[0] & 0x30) >> 4)!
+          payload.removeFirst(2)
+        }
+        
+        if messageTypeIndicator.isEventPresent && payload.count >= 2, let eventPrefix = UInt16(bigEndianData: [payload[0], payload[1]]) {
+          switch eventPrefix {
+          default:
+            if let id = UInt64(bigEndianData: [UInt8](payload.prefix(8))) {
+              eventId = id
+              payload.removeFirst(8)
+            }
           }
         }
       }
-
+      
     case .datagramCompleteInFrame, .datagramFirstFrame, .datagramMiddleFrame, .datagramFinalFrame:
       
       messageTypeIndicator = .datagram
@@ -359,7 +362,7 @@ public class OpenLCBMessage : NSObject {
       text += " → \(destinationNodeId.dotHex(numberOfBytes: 6)) "
     }
     
-    text += String(repeating: " ", count: 39 - text.count)
+ //   text += String(repeating: " ", count: 39 - text.count)
     
     text += "\(messageTypeIndicator.title) "
 

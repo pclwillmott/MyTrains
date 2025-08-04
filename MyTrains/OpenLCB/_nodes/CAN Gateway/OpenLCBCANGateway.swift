@@ -448,7 +448,7 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
           }
           
           if !found {
-            return
+     //       return HACK OVERRIDE
           }
           
         }

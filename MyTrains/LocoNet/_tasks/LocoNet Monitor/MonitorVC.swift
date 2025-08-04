@@ -210,7 +210,7 @@ class MonitorVC: MyTrainsViewController, OpenLCBLocoNetMonitorDelegate, MyTrains
     
     observerId = appNode!.addObserver(observer: self)
     
-    dccSniffer = ORSSerialPort(path: "/dev/cu.usbmodem14101")
+    dccSniffer = ORSSerialPort(path: "/dev/cu.usbmodem14201")
     
     if let dccSniffer {
       dccSniffer.baudRate = 115200
@@ -500,6 +500,10 @@ class MonitorVC: MyTrainsViewController, OpenLCBLocoNetMonitorDelegate, MyTrains
         let newMessage = LocoNetMessage(data: data, appendCheckSum: true)
         monitorNode?.sendMessage(message: newMessage)
          */
+      case .softwareVersionU:
+        item += "softwareVersion: \(message.softwareVersionU!)\n"
+      case .serialNumberU:
+        item += "serialNumber: \(message.serialNumberU!)\n"
       case .locoSlotDataP1, .setLocoSlotDataP1:
         item += "slot: \(message.slotNumber!) speed:\(message.speed!)\nlocoAddress: \(message.locomotiveAddress!) decoderType: \(message.mobileDecoderType!.title) slotState: \(message.slotState!.title)  consistState: \(message.consistState!.title)\n"
       case .locoSlotDataP2, .setLocoSlotDataP2:

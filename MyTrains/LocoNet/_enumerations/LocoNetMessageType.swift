@@ -97,8 +97,10 @@ public enum LocoNetMessageType {
   case dataFormatU
   case ukAU // Unknown A Uhlenbrock
   case ukBU // Unknown B Uhlenbrock
-  case ukCU // Unknown C Uhlenbrock
-  case ukDU // Unknown D Uhlenbrock
+  case getSerialNumberU
+  case serialNumberU
+  case getSoftwareVersionU
+  case softwareVersionU
   
   case locoF7F13P2
   case locoF9F12IMMLAdr

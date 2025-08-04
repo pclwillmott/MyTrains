@@ -1251,7 +1251,7 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
       let id = getNotThrownEventId(turnoutNumber: 1) ?? 0
       return id == 0 ? "" : id.dotHex(numberOfBytes: 8)!
     case .sw1NotClosedEventId:
-      let id = getTurnoutClosedEventId(turnoutNumber: 1) ?? 0
+      let id = getNotClosedEventId(turnoutNumber: 1) ?? 0
       return id == 0 ? "" : id.dotHex(numberOfBytes: 8)!
     case .sw2ThrowEventId:
       let id = getTurnoutThrowEventId(turnoutNumber: 2)!
@@ -1269,7 +1269,7 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
       let id = getNotThrownEventId(turnoutNumber: 2) ?? 0
       return id == 0 ? "" : id.dotHex(numberOfBytes: 8)!
     case .sw2NotClosedEventId:
-      let id = getTurnoutClosedEventId(turnoutNumber: 2) ?? 0
+      let id = getNotClosedEventId(turnoutNumber: 2) ?? 0
       return id == 0 ? "" : id.dotHex(numberOfBytes: 8)!
     case .sw3ThrowEventId:
       let id = getTurnoutThrowEventId(turnoutNumber: 3)!
@@ -1287,7 +1287,7 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
       let id = getNotThrownEventId(turnoutNumber: 3) ?? 0
       return id == 0 ? "" : id.dotHex(numberOfBytes: 8)!
     case .sw3NotClosedEventId:
-      let id = getTurnoutClosedEventId(turnoutNumber: 3) ?? 0
+      let id = getNotClosedEventId(turnoutNumber: 3) ?? 0
       return id == 0 ? "" : id.dotHex(numberOfBytes: 8)!
     case .sw4ThrowEventId:
       let id = getTurnoutThrowEventId(turnoutNumber: 4)!
@@ -1305,7 +1305,7 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
       let id = getNotThrownEventId(turnoutNumber: 4) ?? 0
       return id == 0 ? "" : id.dotHex(numberOfBytes: 8)!
     case .sw4NotClosedEventId:
-      let id = getTurnoutClosedEventId(turnoutNumber: 4) ?? 0
+      let id = getNotClosedEventId(turnoutNumber: 4) ?? 0
       return id == 0 ? "" : id.dotHex(numberOfBytes: 8)!
     case .sensorActivatedEventId:
       let id = sensorActivatedEventId

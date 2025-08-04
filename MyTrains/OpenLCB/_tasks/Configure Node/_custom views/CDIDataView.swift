@@ -269,7 +269,10 @@ class CDIDataView: CDIView {
       
     case .string:
       
-      return String(cString: bigEndianData)
+      var temp = bigEndianData
+      temp.append(0)
+      
+      return String(cString: temp)
 
     default:
       #if DEBUG
