@@ -180,7 +180,7 @@ class MonitorVC: MyTrainsViewController, OpenLCBLocoNetMonitorDelegate, MyTrains
     self.view.window?.title = "LocoNet Monitor"
     
     if let monitorNode {
-      self.view.window?.title = "\(monitorNode.userNodeName) (\(monitorNode.nodeId.dotHex(numberOfBytes: 6)))"
+      self.view.window?.title = "\(monitorNode.userNodeName) (\(monitorNode.nodeId.dotHex(numberOfBytes: 6))!)"
     }
     
     monitorNode?.delegate = self

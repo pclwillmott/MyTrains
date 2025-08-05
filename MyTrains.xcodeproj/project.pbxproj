@@ -1488,8 +1488,8 @@
 				DA595E192B89270B00ADF87B /* OpenLCBNodeVirtual - Messages - Event Transport.swift */,
 				DA595E1B2B892C5D00ADF87B /* OpenLCBNodeVirtual - Messages - Message Network.swift */,
 				DA595E132B890AD700ADF87B /* OpenLCBNodeVirtual - Messages - Memory Configuration.swift */,
-				DA595E112B89084900ADF87B /* OpenLCBNodeVirtual - Messages - Simple Node Information Protocol.swift */,
 				DA595E152B891D1D00ADF87B /* OpenLCBNodeVirtual - Messages - Traction Protocol.swift */,
+				DA595E112B89084900ADF87B /* OpenLCBNodeVirtual - Messages - Simple Node Information Protocol.swift */,
 				DABC51FF2B821DD400C45423 /* OpenLCBNodeVirtual - Messages.swift */,
 				DAF3746E2A1A2A9B009E91F0 /* OpenLCBNodeVirtual.swift */,
 			);

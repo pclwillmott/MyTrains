@@ -356,10 +356,10 @@ public class OpenLCBMessage : NSObject {
     var text = ""
     
     if let sourceNodeId {
-      text += "\(sourceNodeId.dotHex(numberOfBytes: 6))"
+      text += "\(sourceNodeId.dotHex(numberOfBytes: 6)!) "
     }
     if let destinationNodeId {
-      text += " → \(destinationNodeId.dotHex(numberOfBytes: 6)) "
+      text += " → \(destinationNodeId.dotHex(numberOfBytes: 6)!) "
     }
     
  //   text += String(repeating: " ", count: 39 - text.count)
@@ -371,7 +371,7 @@ public class OpenLCBMessage : NSObject {
         text += "\"\(event.title)\" "
       }
       else {
-        text += "\(eventId.dotHex(numberOfBytes: 8)) "
+        text += "\(eventId.dotHex(numberOfBytes: 8)!) "
       }
     }
     
@@ -579,7 +579,7 @@ public class OpenLCBMessage : NSObject {
           
           let nodeId = UInt64(bigEndianData: [UInt8](data.prefix(6)))!
           
-          text += "\(nodeId.dotHex(numberOfBytes: 6)) "
+          text += "\(nodeId.dotHex(numberOfBytes: 6)!) "
           
         case .getUniqueEventIDCommand:
           
@@ -598,7 +598,7 @@ public class OpenLCBMessage : NSObject {
             
             for _ in 1 ... number {
               let eventId = UInt64(bigEndianData: [UInt8](data.prefix(8)))!
-              text += "\n\(padding) \(eventId.dotHex(numberOfBytes: 8))"
+              text += "\n\(padding) \(eventId.dotHex(numberOfBytes: 8)!)"
               data.removeFirst(8)
             }
             
@@ -616,7 +616,7 @@ public class OpenLCBMessage : NSObject {
           var data = payload
           data.removeFirst(2)
           let nodeId = UInt64(bigEndianData: [UInt8](data.prefix(6)))!
-          text += "\(nodeId.dotHex(numberOfBytes: 6))"
+          text += "\(nodeId.dotHex(numberOfBytes: 6)!)"
         }
       }
       else {
@@ -635,13 +635,13 @@ public class OpenLCBMessage : NSObject {
       }
       
     case .initializationCompleteSimpleSetSufficient, .initializationCompleteFullProtocolRequired, .verifiedNodeIDSimpleSetSufficient, .verifiedNodeIDFullProtocolRequired:
-      text += "\(UInt64(bigEndianData: payload)!.dotHex(numberOfBytes: 6))"
+      text += "\(UInt64(bigEndianData: payload)!.dotHex(numberOfBytes: 6)!)"
     
     case .verifyNodeIDGlobal, .verifyNodeIDAddressed:
       
       if !payload.isEmpty {
         let nodeId = UInt64(bigEndianData: payload)!
-        text += "\(nodeId.dotHex(numberOfBytes: 6)) "
+        text += "\(nodeId.dotHex(numberOfBytes: 6)!) "
       }
       
     case .optionalInteractionRejected, .terminateDueToError:
@@ -684,7 +684,7 @@ public class OpenLCBMessage : NSObject {
     case .identifyEventsAddressed:
       
       if let nodeId = UInt64(bigEndianData: payload) {
-        text += "\(nodeId.dotHex(numberOfBytes: 6)) "
+        text += "\(nodeId.dotHex(numberOfBytes: 6)!) "
       }
       else {
         text += payloadAsHex + " "

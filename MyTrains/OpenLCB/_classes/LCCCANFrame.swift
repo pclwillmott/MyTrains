@@ -282,7 +282,7 @@ public class LCCCANFrame : NSObject {
             }
             switch messageTypeIndicator {
             case .initializationCompleteSimpleSetSufficient, .initializationCompleteFullProtocolRequired, .verifiedNodeIDSimpleSetSufficient, .verifiedNodeIDFullProtocolRequired:
-              result += "\(UInt64(bigEndianData: message.payload)!.dotHex(numberOfBytes: 6))"
+              result += "\(UInt64(bigEndianData: message.payload)!.dotHex(numberOfBytes: 6)!)"
               showPayload = false
             case .datagramRejected:
               let numberOfBytesToAdd = 2 - min(2, message.payload.count)
