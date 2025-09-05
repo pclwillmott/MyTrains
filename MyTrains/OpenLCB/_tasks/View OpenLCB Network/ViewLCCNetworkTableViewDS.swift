@@ -86,7 +86,7 @@ public class ViewLCCNetworkTableViewDS : NSObject, NSTableViewDataSource, NSTabl
     switch columnName {
     
     case ColumnIdentifiers.nodeId:
-      text = "\(item.nodeId.dotHex(numberOfBytes: 6))"
+      text = "\(item.nodeId.dotHex(numberOfBytes: 6)!)"
       
     case ColumnIdentifiers.manufacturer:
       text = "\(item.manufacturerName)"
@@ -130,7 +130,9 @@ public class ViewLCCNetworkTableViewDS : NSObject, NSTableViewDataSource, NSTabl
         
         button.tag = row
         
-        button.isEnabled = item.isFirmwareUpgradeProtocolSupported
+        button.isEnabled = item.isFirmwareUpgradeProtocolSupported || true
+        
+        button.bezelColor = (item.isFirmwareUpgradeProtocolSupported) ? .green : .red
         
         return cell
       }

@@ -224,6 +224,7 @@ public class OpenLCBNode : NSObject {
 
       for index in 1 ... max(acdiManufacturerSpaceVersion, 0x04) {
         
+        var _x = _value
         let temp = String(cString: _value)
         _value.removeFirst(temp.utf8.count + 1)
         

@@ -50,10 +50,10 @@ class ViewNodeInfoVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate {
     nodeId = configurationTool.nodeId
     
     if node.userNodeName != "" {
-      self.view.window?.title = "\(node.userNodeName) (\(node.nodeId.dotHex(numberOfBytes: 6)))"
+      self.view.window?.title = "\(node.userNodeName) (\(node.nodeId.dotHex(numberOfBytes: 6)!))"
     }
     else {
-      self.view.window?.title = "\(node.manufacturerName) - \(node.nodeModelName) (\(node.nodeId.dotHex(numberOfBytes: 6)))"
+      self.view.window?.title = "\(node.manufacturerName) - \(node.nodeModelName) (\(node.nodeId.dotHex(numberOfBytes: 6)!))"
     }
     
     tableView.dataSource = tableViewDS
