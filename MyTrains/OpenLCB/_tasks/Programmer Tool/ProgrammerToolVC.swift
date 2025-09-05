@@ -399,17 +399,17 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
     inspectorFields = ProgrammerToolInspectorProperty.inspectorPropertyFields
     
     for temp in inspectorFields {
-      if let comboBox = temp.control as? SGComboBox {
+ //     if let comboBox = temp.control as? SGComboBox {
  //       comboBox.target = self
  //       comboBox.action = #selector(self.cboAction(_:))
-      }
-      else if let chkBox = temp.control as? NSButton {
+ //     }
+ //     else if let chkBox = temp.control as? NSButton {
  //       chkBox.target = self
  //       chkBox.action = #selector(self.chkAction(_:))
-      }
-      else if let field = temp.control as? NSTextField {
+ //     }
+ //     else if let field = temp.control as? NSTextField {
  //       field.delegate = self
-      }
+ //     }
     }
     
     propertyViews = ProgrammerToolSettingsProperty.propertyViews

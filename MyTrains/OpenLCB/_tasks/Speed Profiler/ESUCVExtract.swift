@@ -97,13 +97,13 @@ public func esuCVExtract() {
       
  //     print("  case \(enumName) = \(indexNumber) // \"\(decoderTitle)\" \"\(versionNumber)\"")
 
-      let parts2 = item.split(separator: "[")
+//      let parts2 = item.split(separator: "[")
       
  //     print("    .\(enumName) : \"\(parts2[0].trimmingCharacters(in: .whitespaces))\",")
       
       indexNumber += 1
       
-      var usingIndex = false
+ //     var usingIndex = false
       
       var cv31 : UInt8 = 0
       
@@ -119,7 +119,7 @@ public func esuCVExtract() {
           
           if line.prefix(7) == "Index: " {
             
-            usingIndex = true
+     //       usingIndex = true
             
             let parts = line.suffix(line.count - 7).split(separator: "(")
             
@@ -140,7 +140,7 @@ public func esuCVExtract() {
             
             let cv = UInt16(cvName)!
             
-            let enumName = String(format: "cv_%03i_%03i_%03i", cv31, cv32, cv)
+     //       let enumName = String(format: "cv_%03i_%03i_%03i", cv31, cv32, cv)
             
             cvsFound.insert(CV.encodeRawValue(cv31: cv31, cv32: cv32, cv: cv, indexMethod: .cv3132))
             
@@ -162,16 +162,16 @@ public func esuCVExtract() {
     
     sorted.sort {$0 < $1}
     
-    for item in sorted {
+//    for item in sorted {
       
-      let cv = ((item & 0x0000ffff00000000) >> 32) + 1
+//      let cv = ((item & 0x0000ffff00000000) >> 32) + 1
       
-      let cv32 = (item & 0x00ff000000000000) >> 48
+//      let cv32 = (item & 0x00ff000000000000) >> 48
       
-      let cv31 = (item & 0xff00000000000000) >> 56
+//      let cv31 = (item & 0xff00000000000000) >> 56
       
 //      print("\(String(format:"    case cv_%03i_%03i_%03i", cv31, cv32, cv)) = 0x\(item.hex(numberOfBytes: 8)!)")
-    }
+//    }
     
 //    print(sorted.count)
 

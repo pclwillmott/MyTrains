@@ -158,8 +158,8 @@
             filePath = "MyTrains/OpenLCB/_nodes/SwitchboardItemNode.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1587"
-            endingLineNumber = "1587"
+            startingLineNumber = "1586"
+            endingLineNumber = "1586"
             landmarkName = "SwitchboardItemNode"
             landmarkType = "3">
          </BreakpointContent>
@@ -590,8 +590,8 @@
             filePath = "MyTrains/OpenLCB/_nodes/SwitchboardItemNode.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1956"
-            endingLineNumber = "1956"
+            startingLineNumber = "1955"
+            endingLineNumber = "1955"
             landmarkName = "getEventsForProfiler(profile:)"
             landmarkType = "7">
          </BreakpointContent>

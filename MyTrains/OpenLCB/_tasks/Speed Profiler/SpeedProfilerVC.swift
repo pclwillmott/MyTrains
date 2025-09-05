@@ -500,7 +500,7 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBThrottleDelegate, NSTableV
     NSLayoutConstraint.deactivate(inspectorConstraints)
     inspectorConstraints.removeAll()
     
-    for (key, stackView) in pnlInspectorStackView {
+    for (_, stackView) in pnlInspectorStackView {
       stackView.stackView?.subviews.removeAll()
     }
     
@@ -1132,7 +1132,7 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBThrottleDelegate, NSTableV
     
     return
     
-    guard let profile, let appNode, let layout = appNode.layout else {
+    guard let profile, let appNode else {
       return
     }
     
@@ -1355,9 +1355,9 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBThrottleDelegate, NSTableV
   
   @objc func speedChanged(throttle:OpenLCBThrottle, speed:Float) {
     
-    let smps2mph : Float = 3600.0 / (1000.0 * 1.609344)
+//    let smps2mph : Float = 3600.0 / (1000.0 * 1.609344)
     
-    let _speed = speed * smps2mph
+//    let _speed = speed * smps2mph
     
     //    vsThrottle.floatValue = abs(_speed)
     
@@ -1365,9 +1365,9 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBThrottleDelegate, NSTableV
     
     //    lblCurrentSpeed.stringValue = String(format: "%.1f", vsThrottle.floatValue)
     
-    let minusZero : Float = -0.0
+//    let minusZero : Float = -0.0
     
-    let isReverse = speed.bitPattern == minusZero.bitPattern || speed < 0.0
+//    let isReverse = speed.bitPattern == minusZero.bitPattern || speed < 0.0
     
     //  radForward.state = isReverse ? .off : .on
     //  radReverse.state = isReverse ? .on : .off
@@ -1376,7 +1376,7 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBThrottleDelegate, NSTableV
   
   @objc func throttleStateChanged(throttle:OpenLCBThrottle) {
     
-    if state == .connectingToLoco, let trainNode = throttle.trainNode, throttle.throttleState == .activeController, let profile {
+    if state == .connectingToLoco, throttle.throttleState == .activeController, let profile {
       stopTimeoutTimer()
       state = .initializing
       if profile.locomotiveTravelDirection == .reverse {

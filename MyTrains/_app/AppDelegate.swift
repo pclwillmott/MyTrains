@@ -296,7 +296,7 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
       for (_, panel) in appNode!.panelList {
         if panel.panelIsVisible {
           let wc = MyTrainsWindow.panelView.windowController
-          wc.window?.setFrameAutosaveName("PanelView-\(panel.nodeId.dotHex(numberOfBytes: 6))") 
+          wc.window?.setFrameAutosaveName("PanelView-\(panel.nodeId.dotHex(numberOfBytes: 6)!)") 
           let vc = MyTrainsWindow.panelView.viewController(windowController: wc) as! PanelViewVC
           vc.switchboardView.switchboardPanel = panel
           vc.showWindow()

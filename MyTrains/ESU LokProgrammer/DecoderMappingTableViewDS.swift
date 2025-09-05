@@ -63,7 +63,7 @@ public class DecoderMappingTableViewDS : NSObject, NSTableViewDataSource, NSTabl
         
         for cv in definition.cvs {
           var found = false
-          for (key, mapping) in definition.mapping {
+          for (_, mapping) in definition.mapping {
             if mapping.contains(cv) {
               found = true
               break

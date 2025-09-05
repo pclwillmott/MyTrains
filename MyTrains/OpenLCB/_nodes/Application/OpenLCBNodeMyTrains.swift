@@ -779,8 +779,6 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
   
   public func populateSpeedProfilerBlocks(comboBox:NSComboBox) {
   
-    let selected = comboBox.objectValueOfSelectedItem
-    
     comboBox.deselectItem(at: comboBox.indexOfSelectedItem)
     
     var sorted : [SwitchboardItemNode] = []
@@ -954,7 +952,7 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
         layoutList[sourceNodeId] = layout
         layoutListUpdated()
       }
-      else if let item = locomotiveList[sourceNodeId] {
+      else if let _ = locomotiveList[sourceNodeId] {
         let node = OpenLCBNode(nodeId: sourceNodeId)
         node.encodedNodeInformation = message.payload
         locomotiveList[sourceNodeId] = node.userNodeName

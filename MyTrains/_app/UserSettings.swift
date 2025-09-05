@@ -103,7 +103,7 @@ public class UserSettings {
   }
   
   private func key(forKey:String? = nil) -> String {
-    return "\(autosave)\(node == nil ? "" : "-\(node!.nodeId.dotHex(numberOfBytes: 6))")\(forKey == nil ? "" : "-\(forKey!)")"
+    return "\(autosave)\(node == nil ? "" : "-\(node!.nodeId.dotHex(numberOfBytes: 6)!)")\(forKey == nil ? "" : "-\(forKey!)")"
   }
   
   // MARK: Public Methods

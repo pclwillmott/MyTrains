@@ -77,7 +77,6 @@ class SwitchboardSpeedProfilerView: SwitchboardView {
     if let item = getItem(event: event), item.itemType.isGroup {
       
       let flags = event.modifierFlags.intersection(.deviceIndependentFlagsMask)
-      let connections = item.itemType.connections
       
       if !item.doNotUseForSpeedProfiling {
        

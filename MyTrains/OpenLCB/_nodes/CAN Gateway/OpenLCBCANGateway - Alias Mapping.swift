@@ -144,7 +144,7 @@ extension OpenLCBCANGateway {
     
     for index in 0...15 {
       
-      debugLog("\(index):  \(((UInt64(lfsr1) << 24) | UInt64(lfsr2)).dotHex(numberOfBytes: 6)) ,terminator: ")
+      debugLog("\(index):  \(((UInt64(lfsr1) << 24) | UInt64(lfsr2)).dotHex(numberOfBytes: 6)!) ,terminator: ")
       
       let result = UInt16((lfsr1 ^ lfsr2 ^ (lfsr1 >> 12) ^ (lfsr2 >> 12) ) & 0xFFF)
       
@@ -166,7 +166,7 @@ extension OpenLCBCANGateway {
       
       //      let result = UInt16((lfsr1 ^ lfsr2 ^ (lfsr1 >> 12) ^ (lfsr2 >> 12) ) & 0xFFF)
       
-      debugLog(" 0x\(result.hex(numberOfBytes: 2))   \(((UInt64(lfsr1) << 24) | UInt64(lfsr2)).dotHex(numberOfBytes: 6))")
+      debugLog(" 0x\(result.hex(numberOfBytes: 2)!)   \(((UInt64(lfsr1) << 24) | UInt64(lfsr2)).dotHex(numberOfBytes: 6)!)")
       
     }
     

@@ -49,7 +49,7 @@ public class ClientConnection {
   private func setupReceive() {
     nwConnection.receive(minimumIncompleteLength: 1, maximumLength: 65536) { (data, _, isComplete, error) in
       if let data = data, !data.isEmpty {
-        let bytes = [UInt8](data)
+  //      let bytes = [UInt8](data)
    //     let message = String(data: data, encoding: .utf8)
       //  print("connection did receive, data: \(data as NSData) string: \(message ?? "-" )")
         DispatchQueue.main.async {

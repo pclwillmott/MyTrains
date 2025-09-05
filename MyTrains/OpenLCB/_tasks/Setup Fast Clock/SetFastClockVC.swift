@@ -125,9 +125,9 @@ class SetFastClockVC: MyTrainsViewController, OpenLCBClockDelegate, OpenLCBConfi
         
       }
       
-      for eventId in events {
+ //     for eventId in events {
  //       networkLayer.sendEvent(sourceNode: configurationTool!, eventId: eventId)
-      }
+ //     }
 
     }
 
@@ -137,9 +137,9 @@ class SetFastClockVC: MyTrainsViewController, OpenLCBClockDelegate, OpenLCBConfi
   
   @IBAction func swSwitchAction(_ sender: NSSwitch) {
 
-    guard let fastClock else {
-      return
-    }
+//    guard let fastClock else {
+//      return
+//    }
     
 //    networkLayer.sendEvent(sourceNode: configurationTool!, eventId: fastClock.encodeStopStartEvent(state: (swSwitch.state == .on ? .running : .stopped)))
 

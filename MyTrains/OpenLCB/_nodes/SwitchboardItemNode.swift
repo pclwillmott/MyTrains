@@ -1447,7 +1447,6 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
       trackFaultClearedEventId = UInt64(dotHex: string, numberOfBytes: 8) ?? 0
       eventChanged = true
     case .locationServicesEventId:
-      let x = UInt64(dotHex: string, numberOfBytes: 8)
       locationServicesEventId = UInt64(dotHex: string, numberOfBytes: 8) ?? 0
       eventChanged = true
     case .sw1ThrowEventId:
@@ -1954,7 +1953,7 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
       return result
     }
     
-    for (key, item) in appNode.switchboardItemList {
+    for (_, item) in appNode.switchboardItemList {
       
       if item.controlBlock === self {
         

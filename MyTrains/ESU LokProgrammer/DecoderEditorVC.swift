@@ -460,7 +460,7 @@ class DecoderEditorVC : MyTrainsViewController, DecoderPropertyTableViewDSDelega
     dialog.allowedContentTypes     = [.text, .plainText, .utf8PlainText]
     dialog.directoryURL            = URL(string: path)
     
-    if dialog.runModal() == NSApplication.ModalResponse.OK, let url = dialog.url, let loadType = DecoderEditorLoadType(title: cboLoadType.stringValue), let definition {
+    if dialog.runModal() == NSApplication.ModalResponse.OK, let url = dialog.url, let loadType = DecoderEditorLoadType(title: cboLoadType.stringValue) {
       
       userSettings?.set(dialog.directoryURL!.path, forKey: "DecoderEditorLoadDirectory")
       
@@ -499,7 +499,7 @@ class DecoderEditorVC : MyTrainsViewController, DecoderPropertyTableViewDSDelega
             
             var mapping : Set<CV> = []
             
-            if var temp = self.definition?.mapping[address] {
+            if let temp = self.definition?.mapping[address] {
               mapping = temp
             }
             

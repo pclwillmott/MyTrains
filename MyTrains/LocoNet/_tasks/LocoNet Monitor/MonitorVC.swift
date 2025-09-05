@@ -34,7 +34,7 @@ class MonitorVC: MyTrainsViewController, OpenLCBLocoNetMonitorDelegate, MyTrains
     
     snifferLock.lock()
     
-    var ok = !processingSniffer
+    let ok = !processingSniffer
     
     if ok {
       processingSniffer = true
@@ -175,12 +175,10 @@ class MonitorVC: MyTrainsViewController, OpenLCBLocoNetMonitorDelegate, MyTrains
     
     super.viewWillAppear()
     
-    let x1 : UInt32 = 9999
-    
     self.view.window?.title = "LocoNet Monitor"
     
     if let monitorNode {
-      self.view.window?.title = "\(monitorNode.userNodeName) (\(monitorNode.nodeId.dotHex(numberOfBytes: 6))!)"
+      self.view.window?.title = "\(monitorNode.userNodeName) (\(monitorNode.nodeId.dotHex(numberOfBytes: 6)!))"
     }
     
     monitorNode?.delegate = self

@@ -17,7 +17,7 @@ public class Client {
     self.host = NWEndpoint.Host(host)
     self.port = NWEndpoint.Port(rawValue: port)!
 //    self.interface = interface
-    let nwConnection = NWConnection(host: self.host, port: self.port, using: .tcp)
+//    let nwConnection = NWConnection(host: self.host, port: self.port, using: .tcp)
 //    connection = ClientConnection(nwConnection: nwConnection, interface: interface)
   }
   

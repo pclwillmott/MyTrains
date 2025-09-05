@@ -388,7 +388,6 @@ public class SqliteDataReader {
       var result : [UInt8] = []
       var blob = string
       while !blob.isEmpty {
-        let x = UInt8(hex: "")
         result.append(UInt8(hex: String(blob.prefix(2)))!)
         blob.removeFirst(2)
       }

@@ -10,7 +10,7 @@ import Foundation
 extension String {
   
   public func padWithNull(length:Int) -> [UInt8] {
-    var data = [UInt8](self.prefix(length).utf8)
+    let data = [UInt8](self.prefix(length).utf8)
     return data + [UInt8](repeating: 0, count: length - data.count)
   }
   

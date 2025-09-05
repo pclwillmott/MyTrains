@@ -131,9 +131,9 @@ class OpenLCBFirmwareUpdateVC: MyTrainsViewController, OpenLCBConfigurationToolD
 
   private func transferNextPart() {
     
-    guard let node else {
-      return
-    }
+//    guard let node else {
+//      return
+//    }
     
     barProgress.doubleValue += Double(data.count)
 
@@ -361,7 +361,7 @@ class OpenLCBFirmwareUpdateVC: MyTrainsViewController, OpenLCBConfigurationToolD
     state = .idle
     barProgress.doubleValue = 0.0
 
-    guard FileManager.default.fileExists(atPath: dmfPath), let node else {
+    guard FileManager.default.fileExists(atPath: dmfPath) else {
       return
     }
     

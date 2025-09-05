@@ -139,7 +139,7 @@ public class OpenLCBNode : NSObject {
       
       guard acdiManufacturerSpaceVersion == 0x01 || acdiManufacturerSpaceVersion == 0x04 else {
         #if DEBUG
-        debugLog("invalid acdiManufacturerSpaceVersion: 0x\(acdiManufacturerSpaceVersion.hex()) \(nodeId.dotHex(numberOfBytes: 6))")
+        debugLog("invalid acdiManufacturerSpaceVersion: 0x\(acdiManufacturerSpaceVersion.hex()) \(nodeId.dotHex(numberOfBytes: 6)!)")
         #endif
         return nil
       }
@@ -216,7 +216,7 @@ public class OpenLCBNode : NSObject {
       
       guard acdiManufacturerSpaceVersion == 0x01 || acdiManufacturerSpaceVersion == 0x04 else {
         #if DEBUG
-        debugLog("invalid acdiManufacturerSpaceVersion: 0x\(acdiManufacturerSpaceVersion.hex()) id: \(nodeId.dotHex(numberOfBytes: 6))")
+        debugLog("invalid acdiManufacturerSpaceVersion: 0x\(acdiManufacturerSpaceVersion.hex()) id: \(nodeId.dotHex(numberOfBytes: 6)!)")
         debugLog("\(value)")
         #endif
         return
@@ -224,7 +224,6 @@ public class OpenLCBNode : NSObject {
 
       for index in 1 ... max(acdiManufacturerSpaceVersion, 0x04) {
         
-        var _x = _value
         let temp = String(cString: _value)
         _value.removeFirst(temp.utf8.count + 1)
         

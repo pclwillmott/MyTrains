@@ -15,9 +15,9 @@ class SlotViewVC : MyTrainsViewController, OpenLCBLocoNetMonitorDelegate {
   
   override func windowWillClose(_ notification: Notification) {
     
-    guard let monitorNode else {
-      return
-    }
+//    guard let monitorNode else {
+//      return
+//    }
     
 //    appDelegate.networkLayer?.releaseLocoNetMonitor(monitor: monitorNode)
     
@@ -37,7 +37,7 @@ class SlotViewVC : MyTrainsViewController, OpenLCBLocoNetMonitorDelegate {
     self.view.window?.title = "LocoNet Slot Monitor"
     
     if let monitorNode {
-      self.view.window?.title = "\(self.view.window!.title) (\(monitorNode.nodeId.dotHex(numberOfBytes: 6)))"
+      self.view.window?.title = "\(self.view.window!.title) (\(monitorNode.nodeId.dotHex(numberOfBytes: 6)!))"
     }
     
     monitorNode?.delegate = self

@@ -163,11 +163,11 @@ class ThrottleVC: MyTrainsViewController, OpenLCBThrottleDelegate {
 
   @objc func throttleStateChanged(throttle:OpenLCBThrottle) {
     
-    self.view.window?.title = "\(throttle.userNodeName) (\(throttle.nodeId.dotHex(numberOfBytes: 6)))"
+    self.view.window?.title = "\(throttle.userNodeName) (\(throttle.nodeId.dotHex(numberOfBytes: 6)!))"
     
     if let trainNode = throttle.trainNode {
       lblSelectedLocomotive.stringValue = trainNode.userNodeName
-      lblNodeId.stringValue = "\(trainNode.nodeId.dotHex(numberOfBytes: 6)) - \(throttle.controllerInfo)"
+      lblNodeId.stringValue = "\(trainNode.nodeId.dotHex(numberOfBytes: 6)!) - \(throttle.controllerInfo)"
     }
     else {
       lblSelectedLocomotive.stringValue = "UNASSIGNED"

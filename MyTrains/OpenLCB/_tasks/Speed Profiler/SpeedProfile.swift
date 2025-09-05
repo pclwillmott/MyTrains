@@ -494,7 +494,7 @@ public class SpeedProfile : NSObject {
     
     switch property {
     case .locomotiveId:
-      return "\(nodeId.dotHex(numberOfBytes: 6))"
+      return "\(nodeId.dotHex(numberOfBytes: 6)!)"
     case .locomotiveName:
       return name
     case .trackProtocol:

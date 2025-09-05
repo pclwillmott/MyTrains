@@ -796,7 +796,7 @@ public class DMF : NSObject {
       startTimer(timeInterval: eraseDelayInSeconds, repeats: false)
     case .sendAddr:
       nextAction = .sendBlock
-      let dataRecord = dataRecords[blockIndex]
+ //     let dataRecord = dataRecords[blockIndex]
       byteIndex = 0
  //    interface?.iplSetAddr(loadAddress: dataRecord.loadOffset)
       startTimer(timeInterval: setAddrDelayInSeconds, repeats: false)
@@ -805,14 +805,14 @@ public class DMF : NSObject {
       }
     case .sendBlock:
       let dataRecord = dataRecords[blockIndex]
-      let d1 : UInt8 = dataRecord.data[byteIndex+0]
-      let d2 : UInt8 = dataRecord.data[byteIndex+1]
-      let d3 : UInt8 = dataRecord.data[byteIndex+2]
-      let d4 : UInt8 = dataRecord.data[byteIndex+3]
-      let d5 : UInt8 = dataRecord.data[byteIndex+4]
-      let d6 : UInt8 = dataRecord.data[byteIndex+5]
-      let d7 : UInt8 = dataRecord.data[byteIndex+6]
-      let d8 : UInt8 = dataRecord.data[byteIndex+7]
+//      let d1 : UInt8 = dataRecord.data[byteIndex+0]
+//      let d2 : UInt8 = dataRecord.data[byteIndex+1]
+//      let d3 : UInt8 = dataRecord.data[byteIndex+2]
+//      let d4 : UInt8 = dataRecord.data[byteIndex+3]
+//      let d5 : UInt8 = dataRecord.data[byteIndex+4]
+//      let d6 : UInt8 = dataRecord.data[byteIndex+5]
+//      let d7 : UInt8 = dataRecord.data[byteIndex+6]
+//      let d8 : UInt8 = dataRecord.data[byteIndex+7]
  //     interface?.iplDataLoad(D1: d1, D2: d2, D3: d3, D4: d4, D5: d5, D6: d6, D7: d7, D8: d8)
       byteIndex += 8
       var delay = blockDelayInSeconds
