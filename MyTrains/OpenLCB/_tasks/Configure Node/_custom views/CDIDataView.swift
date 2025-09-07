@@ -110,38 +110,60 @@ class CDIDataView: CDIView {
       
     case .int:
       
-//      if let uint = SoftUIntX(string) {
-//        if uint.size > elementSize {
-//          return false
-//        }
-//        if let max = maxValue, let maxUInt = SoftUIntX(max), uint > maxUInt {
-//          debugLog("uint: \(uint) \(elementSize) \(maxUInt)")
-//         return false
-//        }
-//       if let min = minValue, let minUInt = SoftUIntX(min), uint < minUInt {
-//          debugLog("uint: \(uint) \(elementSize) \(minUInt)")
-//          return false
-//        }
-//      }
-//      else {
-//        return false
-//      }
+      var isSigned = false
+      
+      if let min = minValue, let minInt = Int64(min) {
+        isSigned = minInt < 0
+      }
+      
+      if isSigned {
+        
+        if let int = Int64(string) {
+          
+          if int < -(Int64(((UInt64(1) << (8 * elementSize)) - 1) >> 1)) - 1 {
+            return false
+          }
+          
+          if int > (Int64(((UInt64(1) << (8 * 2)) - 1) >> 1)) {
+            return false
+          }
+          
+          if let max = maxValue, let maxInt = Int64(max), int > maxInt {
+            return false
+          }
+          
+          if let min = minValue, let minInt = Int64(min), int < minInt {
+            return false
+          }
 
-      if let uint = UInt64(string) {
-        if uint > (UInt64(1) << (8 * elementSize)) - 1 {
+        }
+        else {
           return false
         }
-        if let max = maxValue, let maxUInt = UInt64(max), uint > maxUInt {
-          return false
-        }
-        if let min = minValue, let minUInt = UInt64(min), uint < minUInt {
-          return false
-        }
+        
       }
       else {
-        return false
+        
+        if let uint = UInt64(string) {
+          
+          if uint > (UInt64(1) << (8 * elementSize)) - 1 {
+            return false
+          }
+          
+          if let max = maxValue, let maxUInt = UInt64(max), uint > maxUInt {
+            return false
+          }
+          
+          if let min = minValue, let minUInt = UInt64(min), uint < minUInt {
+            return false
+          }
+          
+        }
+        else {
+          return false
+        }
+        
       }
-
     case .float:
       
       switch elementSize {
@@ -260,11 +282,36 @@ class CDIDataView: CDIView {
       
     case .int:
       
-//      if let intValue = SoftUIntX(size: elementSize, bigEndianData: bigEndianData) {
-//        return intValue.stringValue
-//      }
-      if let intValue = UInt64(bigEndianData: bigEndianData) {
-        return "\(intValue)"
+      var isSigned = false
+      
+      if let min = minValue, let minInt = Int64(min) {
+        isSigned = minInt < 0
+      }
+
+      if let uIntValue = UInt64(bigEndianData: bigEndianData) {
+        
+        if isSigned {
+          
+          switch elementSize {
+          case 1:
+            return "\(Int8(bitPattern: UInt8(uIntValue & 0xff)))"
+          case 2:
+            return "\(Int16(bitPattern: UInt16(uIntValue & 0xffff)))"
+          case 4:
+            return "\(Int32(bitPattern: UInt32(uIntValue & 0xffffffff)))"
+          case 8:
+            return "\(Int64(bitPattern: uIntValue))"
+          default:
+            #if DEBUG
+            debugLog("CDIDataView.setString: bad int size: \(elementSize)")
+            #endif
+          }
+
+        }
+        else {
+          return "\(uIntValue)"
+        }
+        
       }
       
     case .string:
@@ -293,16 +340,30 @@ class CDIDataView: CDIView {
     switch elementType {
       
     case .int:
+
+      var isSigned = false
       
-//      if let uint = SoftUIntX(string) {
-//        var data = uint.bigEndianData
-//        data.removeFirst(uint.size - elementSize)
-//        return data
-//      }
-      if let uint = UInt64(string) {
-        var data = uint.bigEndianData
-        data.removeFirst(8 - elementSize)
-        return data
+      if let min = minValue, let minInt = Int64(min) {
+        isSigned = minInt < 0
+      }
+
+      if isSigned {
+
+        if let int = Int64(string) {
+          var data = UInt64(bitPattern: int).bigEndianData
+          data.removeFirst(8 - elementSize)
+          return data
+        }
+
+      }
+      else {
+        
+        if let uint = UInt64(string) {
+          var data = uint.bigEndianData
+          data.removeFirst(8 - elementSize)
+          return data
+        }
+        
       }
       
     case .float:

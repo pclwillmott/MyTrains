@@ -174,9 +174,9 @@
             filePath = "MyTrains/_app/AppDelegate.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "393"
-            endingLineNumber = "393"
-            landmarkName = "initiateRebootApplication()"
+            startingLineNumber = "394"
+            endingLineNumber = "394"
+            landmarkName = "updateMenuItems(state:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -206,8 +206,8 @@
             filePath = "MyTrains/_app/AppDelegate.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "187"
-            endingLineNumber = "187"
+            startingLineNumber = "188"
+            endingLineNumber = "188"
             landmarkName = "applicationDidFinishLaunching(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -254,9 +254,9 @@
             filePath = "MyTrains/_app/AppDelegate.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "360"
-            endingLineNumber = "360"
-            landmarkName = "openWindows()"
+            startingLineNumber = "361"
+            endingLineNumber = "361"
+            landmarkName = "refreshRequired()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

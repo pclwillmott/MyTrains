@@ -92,7 +92,8 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
       debugLog("failed to create checkPortsTimer")
       #endif
     }
-
+    
+ 
     state = .uninitialized
     
     networkLayer?.start()
