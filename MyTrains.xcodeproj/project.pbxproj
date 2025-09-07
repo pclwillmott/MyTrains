@@ -12,6 +12,7 @@
 		DA063397293CE8F400CEAFD1 /* SetFastClock.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA063396293CE8F400CEAFD1 /* SetFastClock.storyboard */; };
 		DA063399293CEB8700CEAFD1 /* SetFastClockVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA063398293CEB8700CEAFD1 /* SetFastClockVC.swift */; };
 		DA073F072B5FEBB20040067A /* MyTrains Switchboard Panel.xml in Resources */ = {isa = PBXBuildFile; fileRef = DA073F062B5FEBB20040067A /* MyTrains Switchboard Panel.xml */; };
+		DA07EA662E6DB1BF00C84189 /* OpenLCBSupportedProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA07EA652E6DB1BF00C84189 /* OpenLCBSupportedProtocol.swift */; };
 		DA0883FD2A76727700C2CFBD /* OpenLCBFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0883FC2A76727700C2CFBD /* OpenLCBFunction.swift */; };
 		DA0883FF2A768F2400C2CFBD /* MyTrains Train.xml in Resources */ = {isa = PBXBuildFile; fileRef = DA0883FE2A768F2400C2CFBD /* MyTrains Train.xml */; };
 		DA0946542843C06A00F1AB81 /* DMF.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0946532843C06A00F1AB81 /* DMF.swift */; };
@@ -385,6 +386,7 @@
 		DA063396293CE8F400CEAFD1 /* SetFastClock.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = SetFastClock.storyboard; sourceTree = "<group>"; };
 		DA063398293CEB8700CEAFD1 /* SetFastClockVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetFastClockVC.swift; sourceTree = "<group>"; };
 		DA073F062B5FEBB20040067A /* MyTrains Switchboard Panel.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "MyTrains Switchboard Panel.xml"; sourceTree = "<group>"; };
+		DA07EA652E6DB1BF00C84189 /* OpenLCBSupportedProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBSupportedProtocol.swift; sourceTree = "<group>"; };
 		DA0883FC2A76727700C2CFBD /* OpenLCBFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBFunction.swift; sourceTree = "<group>"; };
 		DA0883FE2A768F2400C2CFBD /* MyTrains Train.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "MyTrains Train.xml"; sourceTree = "<group>"; };
 		DA0946532843C06A00F1AB81 /* DMF.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DMF.swift; sourceTree = "<group>"; };
@@ -1576,6 +1578,7 @@
 				DA56260C29E1A13300D465CC /* OpenLCBTransportLayerState.swift */,
 				DA311BAB2A7BB8CC0019FDCE /* OpenLCBValidity.swift */,
 				DA5F7A192A3F11A7004D7EBB /* OpenLCBWellKnownEvent.swift */,
+				DA07EA652E6DB1BF00C84189 /* OpenLCBSupportedProtocol.swift */,
 			);
 			path = _enumerations;
 			sourceTree = "<group>";
@@ -1925,6 +1928,7 @@
 				DA73666B2C2070EB0074697B /* SpeedProfilerInspectorProperty.swift in Sources */,
 				DA0949482B81085C00545650 /* mtpipe.c in Sources */,
 				DA595E142B890AD700ADF87B /* OpenLCBNodeVirtual - Messages - Memory Configuration.swift in Sources */,
+				DA07EA662E6DB1BF00C84189 /* OpenLCBSupportedProtocol.swift in Sources */,
 				DAE44C5B2BB031A400BBCCE9 /* SoftUIntX.swift in Sources */,
 				DA48EE29293CEF16006C26A0 /* DayOfWeek.swift in Sources */,
 				DAAC7E932A79514E001A424E /* OpenLCBProgrammerToolDelegate.swift in Sources */,

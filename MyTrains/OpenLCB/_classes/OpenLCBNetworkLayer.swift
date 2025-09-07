@@ -480,7 +480,7 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
       
       registerNode(node: node)
 
-      if node.isConfigurationDescriptionInformationProtocolSupported {
+      if node.isConfigurationDescriptionInformationSupported {
         let vc = MyTrainsWindow.configurationTool.viewController as! ConfigurationToolVC
         vc.configurationTool = getConfigurationTool()
         vc.configurationTool?.delegate = vc

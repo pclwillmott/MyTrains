@@ -707,7 +707,7 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
     //        node.layoutNodeId = appLayoutId!
     //      }
 
-          if node.isConfigurationDescriptionInformationProtocolSupported {
+          if node.isConfigurationDescriptionInformationSupported {
             let vc = MyTrainsWindow.configurationTool.viewController as! ConfigurationToolVC
             vc.configurationTool = networkLayer!.getConfigurationTool()
             vc.configurationTool?.delegate = vc

@@ -111,7 +111,7 @@ class ViewLCCNetworkVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate
     case .protocolSupportReply:
       
       if let node = nodes[message.sourceNodeId!] {
-        node.supportedProtocols = message.payload
+        node.rawSupportedProtocols = message.payload
         reload()
       }
     

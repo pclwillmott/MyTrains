@@ -170,7 +170,7 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
     }
     set(value) {
       _cdiFilename = value
-      isConfigurationDescriptionInformationProtocolSupported = _cdiFilename != nil
+      isConfigurationDescriptionInformationSupported = _cdiFilename != nil
     }
   }
   
@@ -823,7 +823,7 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
       }
       
     case .protocolSupportInquiry:
-      sendProtocolSupportReply(destinationNodeId: sourceNodeId, data: supportedProtocols)
+      sendProtocolSupportReply(destinationNodeId: sourceNodeId, data: rawSupportedProtocols)
 
     case .datagram:
       

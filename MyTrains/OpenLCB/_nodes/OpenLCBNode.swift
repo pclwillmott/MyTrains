@@ -13,10 +13,6 @@ public class OpenLCBNode : NSObject {
   
   public init(nodeId:UInt64) {
     
-    UNDERSTOOD_BYTES = 3
-    
-    _supportedProtocols = [UInt8](repeating: 0, count: UNDERSTOOD_BYTES)
-    
     self._nodeId = nodeId
     
     super.init()
@@ -26,14 +22,9 @@ public class OpenLCBNode : NSObject {
   deinit {
     addressSpaceInformation.removeAll()
     configurationOptions = nil
-    _supportedProtocols.removeAll()
   }
   
   // MARK: Private Properties
-  
-  private let UNDERSTOOD_BYTES : Int
-  
-  private var _supportedProtocols : [UInt8]
   
   // THESE VARIABLES ARE ONLY USED FOR THE RAW OpenLCBNode. THEY FAKE THE ACDI.
   
@@ -280,306 +271,311 @@ public class OpenLCBNode : NSObject {
   
   public var configurationOptions : OpenLCBNodeConfigurationOptions? = OpenLCBNodeConfigurationOptions()
   
-  public var supportedProtocols : [UInt8] {
-    get {
-      while _supportedProtocols.count < 6 {
-        _supportedProtocols.append(0x00)
+  public var supportedProtocols : Set<OpenLCBSupportedProtocol> = []
+
+  public var supportedProtocolsAsString : String {
+    
+    var items : [String] = []
+    
+    for item in supportedProtocols {
+      items.append(item.title)
+    }
+    
+    items.sort {$0 < $1}
+    
+    var result = ""
+    
+    for item in items {
+      if !result.isEmpty {
+        result += "\n"
       }
-      return _supportedProtocols
+      result += "\(item)"
+    }
+    
+    return result
+
+  }
+  
+  public var rawSupportedProtocols : [UInt8] {
+    get {
+      var temp : UInt64 = 0
+      for item in supportedProtocols {
+        temp |= item.rawValue
+      }
+      var data = temp.bigEndianData
+      while data.last == 0 {
+        data.removeLast()
+      }
+      return data
     }
     set(value) {
-      _supportedProtocols = value
+      supportedProtocols.removeAll()
+      let temp = UInt64(bigEndianData: [UInt8]((value + [UInt8](repeating: 0, count: 8)).prefix(8)))!
+      for item in OpenLCBSupportedProtocol.allCases {
+        if temp & item.rawValue == item.rawValue {
+          supportedProtocols.insert(item)
+        }
+      }
     }
   }
   
   public var isSimpleProtocolSubsetSupported : Bool {
     get {
-      let mask : UInt8 = 0x80
-      return (_supportedProtocols[0] & mask) == mask
+      return supportedProtocols.contains(.simpleProtocolSubset)
     }
     set(value) {
-      let mask : UInt8 = 0x80
-      _supportedProtocols[0] &= ~mask
-      _supportedProtocols[0] |= value ? mask : 0x00
+      if value {
+        supportedProtocols.insert(.simpleProtocolSubset)
+      }
+      else {
+        supportedProtocols.remove(.simpleProtocolSubset)
+      }
     }
   }
   
   public var isDatagramProtocolSupported : Bool {
     get {
-      let mask : UInt8 = 0x40
-      return (_supportedProtocols[0] & mask) == mask
+      return supportedProtocols.contains(.datagramProtocol)
     }
     set(value) {
-      let mask : UInt8 = 0x40
-      _supportedProtocols[0] &= ~mask
-      _supportedProtocols[0] |= value ? mask : 0x00
+      if value {
+        supportedProtocols.insert(.datagramProtocol)
+      }
+      else {
+        supportedProtocols.remove(.datagramProtocol)
+      }
     }
   }
   
   public var isStreamProtocolSupported : Bool {
     get {
-      let mask : UInt8 = 0x20
-      return (_supportedProtocols[0] & mask) == mask
+      return supportedProtocols.contains(.streamProtocol)
     }
     set(value) {
-      let mask : UInt8 = 0x20
-      _supportedProtocols[0] &= ~mask
-      _supportedProtocols[0] |= value ? mask : 0x00
+      if value {
+        supportedProtocols.insert(.streamProtocol)
+      }
+      else {
+        supportedProtocols.remove(.streamProtocol)
+      }
     }
   }
   
   public var isMemoryConfigurationProtocolSupported : Bool {
     get {
-      let mask : UInt8 = 0x10
-      return (_supportedProtocols[0] & mask) == mask
+      return supportedProtocols.contains(.memoryConfigurationProtocol)
     }
     set(value) {
-      let mask : UInt8 = 0x10
-      _supportedProtocols[0] &= ~mask
-      _supportedProtocols[0] |= value ? mask : 0x00
+      if value {
+        supportedProtocols.insert(.memoryConfigurationProtocol)
+      }
+      else {
+        supportedProtocols.remove(.memoryConfigurationProtocol)
+      }
     }
   }
   
   public var isReservationProtocolSupported : Bool {
     get {
-      let mask : UInt8 = 0x08
-      return (_supportedProtocols[0] & mask) == mask
+      return supportedProtocols.contains(.reservationProtocol)
     }
     set(value) {
-      let mask : UInt8 = 0x08
-      _supportedProtocols[0] &= ~mask
-      _supportedProtocols[0] |= value ? mask : 0x00
+      if value {
+        supportedProtocols.insert(.reservationProtocol)
+      }
+      else {
+        supportedProtocols.remove(.reservationProtocol)
+      }
     }
   }
   
   public var isEventExchangeProtocolSupported : Bool {
     get {
-      let mask : UInt8 = 0x04
-      return (_supportedProtocols[0] & mask) == mask
+      return supportedProtocols.contains(.eventExchangeProtocol)
     }
     set(value) {
-      let mask : UInt8 = 0x04
-      _supportedProtocols[0] &= ~mask
-      _supportedProtocols[0] |= value ? mask : 0x00
+      if value {
+        supportedProtocols.insert(.eventExchangeProtocol)
+      }
+      else {
+        supportedProtocols.remove(.eventExchangeProtocol)
+      }
     }
   }
   
   public var isIdentificationSupported : Bool {
     get {
-      let mask : UInt8 = 0x02
-      return (_supportedProtocols[0] & mask) == mask
+      return supportedProtocols.contains(.identificationProtocol)
     }
     set(value) {
-      let mask : UInt8 = 0x02
-      _supportedProtocols[0] &= ~mask
-      _supportedProtocols[0] |= value ? mask : 0x00
+      if value {
+        supportedProtocols.insert(.identificationProtocol)
+      }
+      else {
+        supportedProtocols.remove(.identificationProtocol)
+      }
     }
   }
   
   public var isTeachingLearningConfigurationProtocolSupported : Bool {
     get {
-      let mask : UInt8 = 0x01
-      return (_supportedProtocols[0] & mask) == mask
+      return supportedProtocols.contains(.teachingLearningConfigurationProtocol)
     }
     set(value) {
-      let mask : UInt8 = 0x01
-      _supportedProtocols[0] &= ~mask
-      _supportedProtocols[0] |= value ? mask : 0x00
+      if value {
+        supportedProtocols.insert(.teachingLearningConfigurationProtocol)
+      }
+      else {
+        supportedProtocols.remove(.teachingLearningConfigurationProtocol)
+      }
     }
   }
   
   public var isRemoteButtonProtocolSupported : Bool {
     get {
-      let mask : UInt8 = 0x80
-      return (_supportedProtocols[1] & mask) == mask
+      return supportedProtocols.contains(.remoteButtonProtocol)
     }
     set(value) {
-      let mask : UInt8 = 0x80
-      _supportedProtocols[1] &= ~mask
-      _supportedProtocols[1] |= value ? mask : 0x00
+      if value {
+        supportedProtocols.insert(.remoteButtonProtocol)
+      }
+      else {
+        supportedProtocols.remove(.remoteButtonProtocol)
+      }
     }
   }
   
   public var isAbbreviatedDefaultCDIProtocolSupported : Bool {
     get {
-      let mask : UInt8 = 0x40
-      return (_supportedProtocols[1] & mask) == mask
+      return supportedProtocols.contains(.abbreviatedDefaultCDIProtocol)
     }
     set(value) {
-      let mask : UInt8 = 0x40
-      _supportedProtocols[1] &= ~mask
-      _supportedProtocols[1] |= value ? mask : 0x00
+      if value {
+        supportedProtocols.insert(.abbreviatedDefaultCDIProtocol)
+      }
+      else {
+        supportedProtocols.remove(.abbreviatedDefaultCDIProtocol)
+      }
     }
   }
   
   public var isDisplayProtocolSupported : Bool {
     get {
-      let mask : UInt8 = 0x20
-      return (_supportedProtocols[1] & mask) == mask
+      return supportedProtocols.contains(.displayProtocol)
     }
     set(value) {
-      let mask : UInt8 = 0x20
-      _supportedProtocols[1] &= ~mask
-      _supportedProtocols[1] |= value ? mask : 0x00
+      if value {
+        supportedProtocols.insert(.displayProtocol)
+      }
+      else {
+        supportedProtocols.remove(.displayProtocol)
+      }
     }
   }
   
   public var isSimpleNodeInformationProtocolSupported : Bool {
     get {
-      let mask : UInt8 = 0x10
-      return (_supportedProtocols[1] & mask) == mask
+      return supportedProtocols.contains(.simpleNodeInformationProtocol)
     }
     set(value) {
-      let mask : UInt8 = 0x10
-      _supportedProtocols[1] &= ~mask
-      _supportedProtocols[1] |= value ? mask : 0x00
+      if value {
+        supportedProtocols.insert(.simpleNodeInformationProtocol)
+      }
+      else {
+        supportedProtocols.remove(.simpleNodeInformationProtocol)
+      }
     }
   }
   
-  public var isConfigurationDescriptionInformationProtocolSupported : Bool {
+  public var isConfigurationDescriptionInformationSupported : Bool {
     get {
-      let mask : UInt8 = 0x08
-      return (_supportedProtocols[1] & mask) == mask
+      return supportedProtocols.contains(.configurationDescriptionInformation)
     }
     set(value) {
-      let mask : UInt8 = 0x08
-      _supportedProtocols[1] &= ~mask
-      _supportedProtocols[1] |= value ? mask : 0x00
+      if value {
+        supportedProtocols.insert(.configurationDescriptionInformation)
+      }
+      else {
+        supportedProtocols.remove(.configurationDescriptionInformation)
+      }
     }
   }
   
-  public var isTractionControlProtocolSupported : Bool {
+  public var isTrainControlProtocolSupported : Bool {
     get {
-      let mask : UInt8 = 0x04
-      return (_supportedProtocols[1] & mask) == mask
+      return supportedProtocols.contains(.trainControlProtocol)
     }
     set(value) {
-      let mask : UInt8 = 0x04
-      _supportedProtocols[1] &= ~mask
-      _supportedProtocols[1] |= value ? mask : 0x00
+      if value {
+        supportedProtocols.insert(.trainControlProtocol)
+      }
+      else {
+        supportedProtocols.remove(.trainControlProtocol)
+      }
     }
   }
   
-  public var isFunctionDescriptionInformationProtocolSupported : Bool {
+  public var isFunctionDescriptionInformationSupported : Bool {
     get {
-      let mask : UInt8 = 0x02
-      return (_supportedProtocols[1] & mask) == mask
+      return supportedProtocols.contains(.functionDescriptionInformation)
     }
     set(value) {
-      let mask : UInt8 = 0x02
-      _supportedProtocols[1] &= ~mask
-      _supportedProtocols[1] |= value ? mask : 0x00
+      if value {
+        supportedProtocols.insert(.functionDescriptionInformation)
+      }
+      else {
+        supportedProtocols.remove(.functionDescriptionInformation)
+      }
     }
   }
   
-  public var isDCCCommandStationProtocolSupported : Bool {
+  public var isFunctionConfigurationSupported : Bool {
     get {
-      let mask : UInt8 = 0x01
-      return (_supportedProtocols[1] & mask) == mask
+      return supportedProtocols.contains(.functionConfiguration)
     }
     set(value) {
-      let mask : UInt8 = 0x01
-      _supportedProtocols[1] &= ~mask
-      _supportedProtocols[1] |= value ? mask : 0x00
-    }
-  }
-  
-  public var isSimpleTrainNodeInformationProtocolSupported : Bool {
-    get {
-      let mask : UInt8 = 0x80
-      return (_supportedProtocols[2] & mask) == mask
-    }
-    set(value) {
-      let mask : UInt8 = 0x80
-      _supportedProtocols[2] &= ~mask
-      _supportedProtocols[2] |= value ? mask : 0x00
-    }
-  }
-  
-  public var isFunctionConfigurationProtocolSupported : Bool {
-    get {
-      let mask : UInt8 = 0x40
-      return (_supportedProtocols[2] & mask) == mask
-    }
-    set(value) {
-      let mask : UInt8 = 0x40
-      _supportedProtocols[2] &= ~mask
-      _supportedProtocols[2] |= value ? mask : 0x00
+      if value {
+        supportedProtocols.insert(.functionConfiguration)
+      }
+      else {
+        supportedProtocols.remove(.functionConfiguration)
+      }
     }
   }
   
   public var isFirmwareUpgradeProtocolSupported : Bool {
     get {
-      let mask : UInt8 = 0x20
-      return (_supportedProtocols[2] & mask) == mask
+      return supportedProtocols.contains(.firmwareUpgradeProtocol)
     }
     set(value) {
-      let mask : UInt8 = 0x20
-      _supportedProtocols[2] &= ~mask
-      _supportedProtocols[2] |= value ? mask : 0x00
+      if value {
+        supportedProtocols.insert(.firmwareUpgradeProtocol)
+      }
+      else {
+        supportedProtocols.remove(.firmwareUpgradeProtocol)
+      }
     }
   }
   
   public var isFirmwareUpgradeActive : Bool {
     get {
-      let mask : UInt8 = 0x10
-      return (_supportedProtocols[2] & mask) == mask
+      return supportedProtocols.contains(.firmwareUpgradeActive)
     }
     set(value) {
-      let mask : UInt8 = 0x10
-      _supportedProtocols[2] &= ~mask
-      _supportedProtocols[2] |= value ? mask : 0x00
-    }
-  }
-
-  public var supportedProtocolsInfo : [(protocol:String, supported:Bool)] {
-
-    var result : [(protocol:String, supported:Bool)] = []
-
-    result.append((String(localized:"Simple Protocol Subset"), isSimpleProtocolSubsetSupported))
-    result.append((String(localized:"Datagram Protocol"), isDatagramProtocolSupported))
-    result.append((String(localized:"Stream Protocol"), isStreamProtocolSupported))
-    result.append((String(localized:"Memory Configuration Protocol"), isMemoryConfigurationProtocolSupported))
-    result.append((String(localized:"Reservation Protocol"), isReservationProtocolSupported))
-    result.append((String(localized:"Event Exchange Protocol"), isEventExchangeProtocolSupported))
-    result.append((String(localized:"Identification Protocol"), isIdentificationSupported))
-    result.append((String(localized:"Teaching/Learning Configuration Protocol"), isTeachingLearningConfigurationProtocolSupported))
-    result.append((String(localized:"Remote Button Protocol"), isRemoteButtonProtocolSupported))
-    result.append((String(localized:"Abbreviated Default CDI Protocol"), isAbbreviatedDefaultCDIProtocolSupported))
-    result.append((String(localized:"Display Protocol"), isDisplayProtocolSupported))
-    result.append((String(localized:"Simple Node Information Protocol"), isSimpleNodeInformationProtocolSupported))
-    result.append((String(localized:"Configuration Description Information"), isConfigurationDescriptionInformationProtocolSupported))
-    result.append((String(localized:"Traction Control Protocol"), isTractionControlProtocolSupported))
-    result.append((String(localized:"Function Description Information"), isFunctionDescriptionInformationProtocolSupported))
-    result.append((String(localized:"DCC Command Station Protocol"), isDCCCommandStationProtocolSupported))
-    result.append((String(localized:"Simple Train Node Information Protocol"), isSimpleTrainNodeInformationProtocolSupported))
-    result.append((String(localized:"Function Configuration"), isFunctionConfigurationProtocolSupported))
-    result.append((String(localized:"Firmware Upgrade Protocol"), isFirmwareUpgradeProtocolSupported))
-    result.append((String(localized:"Firmware Upgrade Active"), isFirmwareUpgradeActive))
-    
-    return result
-
-  }
-  
-  public var supportedProtocolsAsString : String {
-    
-    var result : String = ""
-    
-    for proto in supportedProtocolsInfo {
-      if proto.supported {
-        result += "\(proto.protocol)\n"
+      if value {
+        supportedProtocols.insert(.firmwareUpgradeActive)
+      }
+      else {
+        supportedProtocols.remove(.firmwareUpgradeActive)
       }
     }
-    
-    return result
-
   }
-  
+
   public var possibleAddressSpaces : [UInt8] {
     
     var possibles : Set<UInt8> = []
     
-    if isConfigurationDescriptionInformationProtocolSupported {
+    if isConfigurationDescriptionInformationSupported {
       possibles.insert(OpenLCBNodeMemoryAddressSpace.cdi.rawValue)
       possibles.insert(OpenLCBNodeMemoryAddressSpace.configuration.rawValue)
     }
@@ -587,10 +583,10 @@ public class OpenLCBNode : NSObject {
       possibles.insert(OpenLCBNodeMemoryAddressSpace.acdiManufacturer.rawValue)
       possibles.insert(OpenLCBNodeMemoryAddressSpace.acdiUser.rawValue)
     }
-    if isFunctionDescriptionInformationProtocolSupported {
+    if isFunctionDescriptionInformationSupported {
       possibles.insert(OpenLCBNodeMemoryAddressSpace.fdi.rawValue)
     }
-    if isTractionControlProtocolSupported {
+    if isTrainControlProtocolSupported {
       possibles.insert(OpenLCBNodeMemoryAddressSpace.cv.rawValue)
     }
     

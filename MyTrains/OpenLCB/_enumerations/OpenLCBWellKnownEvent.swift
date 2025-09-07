@@ -28,7 +28,7 @@ public enum OpenLCBWellKnownEvent : UInt64 {
 
   case duplicateNodeIdDetected             = 0x0101000000000201
   case nodeIsATrain                        = 0x0101000000000303
-  case nodeIsATractionProxy                = 0x0101000000000304
+  case nodeIsATrainControlProxy            = 0x0101000000000304
   case firmwareCorrupted                   = 0x0101000000000601
   case firmwareUpgradeRequestedBySwitch    = 0x0101000000000602
   case defaultFastClock                    = 0x0101000001000000
@@ -72,7 +72,7 @@ public enum OpenLCBWellKnownEvent : UInt64 {
     .linkErrorCode4 : String(localized: "Link Error Code 4"),
     .duplicateNodeIdDetected : String(localized: "Duplicate Node ID Detected"),
     .nodeIsATrain : String(localized: "Node Is A Train"),
-    .nodeIsATractionProxy : String(localized: "Node Is A Traction Proxy"),
+    .nodeIsATrainControlProxy : String(localized: "Node Is A Train Control Proxy"),
     .firmwareCorrupted : String(localized: "Firmware Corrupted"),
     .firmwareUpgradeRequestedBySwitch : String(localized: "Firmware Upgrade Requested By Switch"),
     .defaultFastClock : String(localized: "Default Fast Clock"),

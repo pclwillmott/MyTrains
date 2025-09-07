@@ -115,7 +115,7 @@ public class ViewLCCNetworkTableViewDS : NSObject, NSTableViewDataSource, NSTabl
         
         button.tag = row
         
-        button.isEnabled = item.isConfigurationDescriptionInformationProtocolSupported
+        button.isEnabled = item.isConfigurationDescriptionInformationSupported
         
         return cell
         

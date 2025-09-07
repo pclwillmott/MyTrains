@@ -92,9 +92,7 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
       
       isSimpleNodeInformationProtocolSupported = true
       
-      isTractionControlProtocolSupported = true
-      
-      isSimpleTrainNodeInformationProtocolSupported = true
+      isTrainControlProtocolSupported = true
       
       if !memorySpacesInitialized {
         resetToFactoryDefaults()
@@ -420,7 +418,7 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
         memorySpace.memory.append(contentsOf: contents.utf8)
         memorySpace.memory.append(contentsOf: [UInt8](repeating: 0, count: 64))
         memorySpaces[memorySpace.space] = memorySpace
-        isFunctionDescriptionInformationProtocolSupported = true
+        isFunctionDescriptionInformationSupported = true
         
       }
       catch {

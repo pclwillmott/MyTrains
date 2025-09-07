@@ -2032,9 +2032,6 @@
     "DCC 128 Speed Steps" : {
 
     },
-    "DCC Command Station Protocol" : {
-
-    },
     "DCC Programmer Tool" : {
       "comment" : "Used for a menu title\nUsed to create a default OpenLCB virtual name",
       "localizations" : {
@@ -2747,7 +2744,7 @@
         }
       }
     },
-    "Event Exchange Protocol" : {
+    "Event Exchange (Producer/Consumer) Protocol" : {
 
     },
     "Event ID generated when the sensor is activated." : {
@@ -4706,10 +4703,10 @@
     "Node Is A MyTrains Layout" : {
 
     },
-    "Node Is A Traction Proxy" : {
+    "Node Is A Train" : {
 
     },
-    "Node Is A Train" : {
+    "Node Is A Train Control Proxy" : {
 
     },
     "Node Recorded New Log Entry" : {
@@ -6100,9 +6097,6 @@
     "Simple Train Node Ident Info Request" : {
 
     },
-    "Simple Train Node Information Protocol" : {
-
-    },
     "Single Slip" : {
       "comment" : "This is used to describe a piece of track."
     },
@@ -7011,14 +7005,14 @@
     "Traction Control Command" : {
 
     },
-    "Traction Control Protocol" : {
-
-    },
     "Traction Control Reply" : {
 
     },
     "Train" : {
       "comment" : "Used for a menu title\nUsed to create a default OpenLCB virtual name"
+    },
+    "Train Control Protocol" : {
+
     },
     "Train direction or directions to profile." : {
       "comment" : "This is used for a tooltip."
