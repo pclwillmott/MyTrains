@@ -101,7 +101,7 @@ class CDIGroupTabView : CDIGroupView {
   
   internal var buttonConstraints : [NSLayoutConstraint] = []
   
-  internal var _encodedReplicationName : String = "Tab"
+  internal var _encodedReplicationName : [String] = ["Tab"]
 
   internal var currentPage : Int {
     guard tabsToShow > 0 else {
@@ -141,43 +141,10 @@ class CDIGroupTabView : CDIGroupView {
     
   }
 
-  internal var _replicationName : String {
-    
-    var encoded = _encodedReplicationName
-    
-    while !encoded.isEmpty {
-      let cc = encoded.last!
-      if cc >= "0" && cc <= "9" {
-        encoded.removeLast()
-      }
-      else {
-        break
-      }
-    }
-    
-    return encoded
-
-  }
-  
-  internal var _noStartNumberSpecified : Bool {
-    return _encodedReplicationName == _replicationName
-  }
-  
-  internal var _replicationStartNumber : Int {
-      
-    let numberLength = _encodedReplicationName.count - _replicationName.count
-    
-    if numberLength == 0 {
-      return 1
-    }
-    
-    return Int(_encodedReplicationName.suffix(numberLength))!
-
-  }
   
   // MARK: Public Properties
   
-  public var replicationName : String {
+  public var replicationName : [String] {
     
     get {
       return _encodedReplicationName
@@ -185,9 +152,7 @@ class CDIGroupTabView : CDIGroupView {
     
     set(value) {
       _encodedReplicationName = value
-      for tab in _tabs {
-        tab.title = tabTitle(tabItem: tab.tag)
-      }
+      setTabTitles()
     }
     
   }
@@ -225,7 +190,7 @@ class CDIGroupTabView : CDIGroupView {
           stackView.trailingAnchor.constraint(equalTo: tabContentView.trailingAnchor),
           tabContentView.bottomAnchor.constraint(greaterThanOrEqualTo: stackView.bottomAnchor),
         ])
-        let tab = NSButton(title: tabTitle(tabItem: _tabs.count), target: nil, action: nil)
+        let tab = NSButton(title: "Tab", target: nil, action: nil)
         tab.translatesAutoresizingMaskIntoConstraints = false
         tab.tag = _tabs.count
         tab.isHidden = true
@@ -233,7 +198,8 @@ class CDIGroupTabView : CDIGroupView {
         tab.action = #selector(self.tabAction(_:))
         _tabs.append(tab)
       }
-      
+      setTabTitles()
+
     }
     
   }
@@ -285,16 +251,44 @@ class CDIGroupTabView : CDIGroupView {
   
   internal func setTabTitles() {
     
-    for tab in _tabs {
-      tab.title = tabTitle(tabItem: tab.tag)
+    var names = _encodedReplicationName
+    
+    var index = 0
+    
+    while index < _tabs.count && names.count > 1 {
+      _tabs[index].title = names.removeFirst()
+      index += 1
+    }
+    
+    var encoded = names[0]
+    
+    var startNumber : String = ""
+    
+    while !encoded.isEmpty {
+      let cc = encoded.last!
+      if cc.isNumber {
+        startNumber = "\(cc)\(startNumber)"
+        encoded.removeLast()
+      }
+      else {
+        break
+      }
+    }
+    
+    startNumber = startNumber.isEmpty ? "1" : startNumber
+
+    if var number = UInt64(startNumber) {
+      
+      while index < _tabs.count {
+        _tabs[index].title = "\(encoded)\(number)"
+        number += 1
+        index += 1
+      }
+      
     }
     
     needsDisplay = true
     
-  }
-  
-  internal func tabTitle(tabItem:Int) -> String {
-    return "\(_replicationName)\(_noStartNumberSpecified ? " " : "")\(_replicationStartNumber + tabItem)"
   }
   
   // MARK: Controls

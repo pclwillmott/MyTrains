@@ -51,7 +51,7 @@ public class CDIElement {
   
   public var description : [String] = []
   
-  public var repname : String = ""
+  public var repname : [String] = []
   
   public var replication : Int = 1
   

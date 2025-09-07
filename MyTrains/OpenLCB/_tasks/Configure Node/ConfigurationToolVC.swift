@@ -1124,7 +1124,7 @@ class ConfigurationToolVC: MyTrainsViewController, OpenLCBConfigurationToolDeleg
       case .description:
         element.description.append(string)
       case .repname:
-        element.repname = string
+        element.repname.append(string)
       case .min:
         element.min = string
       case .max:
