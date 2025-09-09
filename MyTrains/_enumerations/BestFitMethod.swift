@@ -73,12 +73,12 @@ public enum BestFitMethod : UInt8, CaseIterable {
       
       var m : Double?
       var b : Double?
-      var r : Double?
+//      var r : Double?
       
       if (denom != 0.0) {
         m = (n * sumxy  -  sumx * sumy) / denom;
         b = (sumy * sumx2  -  sumx * sumxy) / denom;
-        r = (sumxy - sumx * sumy / n) /    /* compute correlation coeff */
+ //       r = (sumxy - sumx * sumy / n) /    /* compute correlation coeff */
                 sqrt((sumx2 - sumx * sumx / n) *
                 (sumy2 - sumy * sumy / n))
       }

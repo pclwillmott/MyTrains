@@ -398,7 +398,7 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
     
     inspectorFields = ProgrammerToolInspectorProperty.inspectorPropertyFields
     
-    for temp in inspectorFields {
+ //   for temp in inspectorFields {
  //     if let comboBox = temp.control as? SGComboBox {
  //       comboBox.target = self
  //       comboBox.action = #selector(self.cboAction(_:))
@@ -410,7 +410,7 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
  //     else if let field = temp.control as? NSTextField {
  //       field.delegate = self
  //     }
-    }
+ //   }
     
     propertyViews = ProgrammerToolSettingsProperty.propertyViews
 

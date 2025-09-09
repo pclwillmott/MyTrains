@@ -204,9 +204,7 @@ public class OpenLCBThrottle : OpenLCBNodeVirtual, XMLParserDelegate {
     
     sendQuerySpeedsCommand(destinationNodeId: trainNode.nodeId)
     
-    for address : UInt32 in 0...68 {
-      sendQueryFunctionCommand(destinationNodeId: trainNode.nodeId, address: address)
-    }
+    fdiItems.removeAll()
     
     fdiState = .gettingFDI
     
@@ -215,9 +213,13 @@ public class OpenLCBThrottle : OpenLCBNodeVirtual, XMLParserDelegate {
     nextFDIStartAddress = 0
     
     fdi = []
-    
+
    sendReadCommand(destinationNodeId: trainNode.nodeId, addressSpace: OpenLCBNodeMemoryAddressSpace.fdi.rawValue, startAddress: nextFDIStartAddress, numberOfBytesToRead: 64)
 
+    for address : UInt32 in 0...68 {
+      sendQueryFunctionCommand(destinationNodeId: trainNode.nodeId, address: address)
+    }
+    
   }
   
   internal override func resetToFactoryDefaults() {
@@ -646,6 +648,7 @@ public class OpenLCBThrottle : OpenLCBNodeVirtual, XMLParserDelegate {
                 fdiState = .done
 
                 let newData : Data = Data(fdi)
+
                 xmlParser = XMLParser(data: newData)
                 xmlParser?.delegate = self
                 xmlParser?.parse()
@@ -660,10 +663,20 @@ public class OpenLCBThrottle : OpenLCBNodeVirtual, XMLParserDelegate {
             fdiState = .done
 
             if !fdi.isEmpty {
+              
               let newData : Data = Data(fdi)
+              /*
+              let url = URL(fileURLWithPath: "/Users/paul/Desktop/FDI FDI FDI.txt")
+              do {
+                try newData.write(to: url, options: .atomic)
+              } catch {
+                debugLog("Save failed")
+              }
+              */
               xmlParser = XMLParser(data: newData)
               xmlParser?.delegate = self
               xmlParser?.parse()
+              
             }
             
           }

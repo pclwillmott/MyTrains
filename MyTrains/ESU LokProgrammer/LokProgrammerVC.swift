@@ -1986,7 +1986,7 @@ public class LokPacket {
     let date = Date(timeIntervalSince1970: 946684800.0 + Double(dword)) // 1-1-2000
     
     dateFormatter.calendar = NSCalendar(calendarIdentifier: .ISO8601)! as Calendar
-    dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
+  //  dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
     dateFormatter.dateStyle = .long
     
     return dateFormatter.string(from: date)

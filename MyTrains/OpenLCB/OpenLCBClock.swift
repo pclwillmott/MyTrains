@@ -113,7 +113,7 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
       registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressInitialDateTime)
       registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressDefaultDateTime)
       registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressInitialRate)
-      
+      // ***** MIGHT BE HERE **********
       dateFormatter?.timeZone = Date().dateComponents.timeZone
       dateFormatter?.formatOptions = [.withFullDate, .withTime, .withColonSeparatorInTime]
       

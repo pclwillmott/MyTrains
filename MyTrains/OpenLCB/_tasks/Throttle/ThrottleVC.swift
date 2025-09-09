@@ -182,6 +182,8 @@ class ThrottleVC: MyTrainsViewController, OpenLCBThrottleDelegate {
     
     for button in buttons {
       button.isEnabled = false
+      button.title = "F\(button.tag)"
+      button.setButtonType(.pushOnPushOff)
     }
     
     momentary = []
